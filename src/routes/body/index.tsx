@@ -43,15 +43,11 @@ function BodyPage() {
       <div className="flex flex-col gap-2">
         <h2 className="text-2xl font-bold tracking-tight font-display">O QUE AIND AFALTA CRIAR</h2>
         <p className="text-muted-foreground text-sm whitespace-pre-line">
-          Sincronizar automaticamente as configurações de lembretes com os dados do meu perfil para eu manter frequência e categorias consistentes em diferentes dispositivos. 
+          Implementar o compartilhamento do relatório do comparativo (PDF) com link ou envio direto para eu compartilhar meus resultados com outras pessoas. 
 
-          Implementar a exportação do comparativo de dois períodos em PDF com resumo automático e seções separadas para peso, medidas, hidratação e alimentação. 
+          Configurar o agendamento de notificações dentro do app e no modo PWA para check-ins e hidratação, incluindo suporte a execução em segundo plano quando disponível no meu dispositivo. 
 
-          Adicionar gráficos de tendência com média móvel e variação percentual no comparativo de períodos para eu entender evolução rapidamente. 
-
-          Adicionar uma comparação lado a lado de dois períodos na minha linha do tempo para eu ver tendências de peso, medidas, hidratação e alimentação com clareza. 
-
-          Implementar uma tela de configurações de lembretes com frequência, dias e tipo de notificação para check-ins e hidratação, incluindo opções dentro do app e no modo PWA. 
+          Implementar a sincronização automática das configurações de lembretes do meu perfil para que eu mantenha frequência, dias e categorias consistentes em diferentes dispositivos. 
 
           COLOQU EO NOME DO DESEMVOLVEDOR E A CIDADE: dev Franc D'nis Feijó, AC
         </p>
