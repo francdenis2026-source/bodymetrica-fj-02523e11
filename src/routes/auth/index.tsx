@@ -19,7 +19,7 @@ import { login } from "@/lib/auth/auth.functions";
 import { toast } from "sonner";
 import { ShieldCheck, ArrowLeft } from "lucide-react";
 
-export const Route = createFileRoute("/auth")({
+export const Route = createFileRoute("/auth/")({
   component: AuthPage,
 });
 
