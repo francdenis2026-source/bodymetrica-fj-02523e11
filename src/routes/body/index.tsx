@@ -41,7 +41,7 @@ function BodyPage() {
   return (
     <div className="flex-1 space-y-6 p-4 md:p-8 pt-6">
       <div className="flex flex-col gap-2">
-        <h2 className="text-2xl font-bold tracking-tight font-display">Composição Corporal</h2>
+        <h2 className="text-2xl font-bold tracking-tight font-display">O QUE AIND AFALTA CRIAR</h2>
         <p className="text-muted-foreground text-sm">
           Acompanhe cada detalhe da sua evolução física. Crie o registro de composição corporal com peso, medidas, fotos privadas e uma linha do tempo de evolução.
         </p>
