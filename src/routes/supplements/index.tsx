@@ -10,7 +10,7 @@ import {
   CalendarDays
 } from "lucide-react";
 
-export const Route = createFileRoute("/supplements")({
+export const Route = createFileRoute("/supplements/")({
   component: SupplementsPage,
 });
 
