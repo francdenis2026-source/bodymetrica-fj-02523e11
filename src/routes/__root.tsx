@@ -6,8 +6,21 @@ import {
   useRouter,
   HeadContent,
   Scripts,
+  useLocation,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
+import { Toaster } from "@/components/ui/sonner";
+import { 
+  LayoutDashboard, 
+  Droplets, 
+  Utensils, 
+  Pill, 
+  Dumbbell, 
+  User,
+  Settings,
+  LogOut
+} from "lucide-react";
+import { cn } from "@/lib/utils";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -77,14 +90,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "Body Métrica FJ — Composição Corporal e Saúde" },
+      { name: "description", content: "Suíte completa para acompanhamento de composição corporal, alimentação, hidratação, suplementação e treinos." },
+      { name: "author", content: "Body Métrica FJ" },
+      { property: "og:title", content: "Body Métrica FJ — Composição Corporal e Saúde" },
+      { property: "og:description", content: "Suíte completa para acompanhamento de composição corporal, alimentação, hidratação, suplementação e treinos." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
       {
@@ -116,11 +128,85 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const location = useLocation();
+
+  const isPublicRoute = ["/", "/auth", "/admin/login"].includes(location.pathname);
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <div className="flex min-h-screen w-full flex-col md:flex-row bg-background">
+        {!isPublicRoute && (
+          <>
+            {/* Desktop Sidebar */}
+            <aside className="hidden md:flex w-64 flex-col border-r bg-card sticky top-0 h-screen">
+              <div className="p-6 border-b">
+                <h1 className="text-xl font-bold font-display text-primary leading-tight">
+                  Body Métrica FJ
+                </h1>
+              </div>
+              <nav className="flex-1 p-4 space-y-1">
+                <SidebarLink to="/dashboard" icon={<LayoutDashboard size={20} />} label="Início" />
+                <SidebarLink to="/body" icon={<User size={20} />} label="Corpo" />
+                <SidebarLink to="/nutrition" icon={<Utensils size={20} />} label="Alimentação" />
+                <SidebarLink to="/hydration" icon={<Droplets size={20} />} label="Hidratação" />
+                <SidebarLink to="/supplements" icon={<Pill size={20} />} label="Suplementos" />
+                <SidebarLink to="/training" icon={<Dumbbell size={20} />} label="Treino" />
+              </nav>
+              <div className="p-4 border-t space-y-1">
+                <SidebarLink to="/settings" icon={<Settings size={20} />} label="Configurações" />
+                <button className="flex w-full items-center gap-3 px-3 py-2 text-sm font-medium text-destructive hover:bg-destructive/10 rounded-md transition-colors">
+                  <LogOut size={20} />
+                  Sair
+                </button>
+              </div>
+            </aside>
+
+            {/* Mobile Bottom Nav */}
+            <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-card border-t flex items-center justify-around p-2 pb-safe">
+              <MobileNavLink to="/dashboard" icon={<LayoutDashboard size={22} />} label="Início" />
+              <MobileNavLink to="/body" icon={<User size={22} />} label="Corpo" />
+              <MobileNavLink to="/nutrition" icon={<Utensils size={22} />} label="Dieta" />
+              <MobileNavLink to="/training" icon={<Dumbbell size={22} />} label="Treino" />
+            </nav>
+          </>
+        )}
+
+        <main className={cn(
+          "flex-1 flex flex-col min-w-0",
+          !isPublicRoute && "mb-16 md:mb-0"
+        )}>
+          <Outlet />
+        </main>
+      </div>
+      <Toaster position="top-center" />
     </QueryClientProvider>
+  );
+}
+
+function SidebarLink({ to, icon, label }: { to: string; icon: React.ReactNode; label: string }) {
+  return (
+    <Link
+      to={to}
+      activeProps={{ className: "bg-primary/10 text-primary" }}
+      inactiveProps={{ className: "text-muted-foreground hover:bg-accent hover:text-foreground" }}
+      className="flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-colors"
+    >
+      {icon}
+      {label}
+    </Link>
+  );
+}
+
+function MobileNavLink({ to, icon, label }: { to: string; icon: React.ReactNode; label: string }) {
+  return (
+    <Link
+      to={to}
+      activeProps={{ className: "text-primary" }}
+      inactiveProps={{ className: "text-muted-foreground" }}
+      className="flex flex-col items-center gap-1 p-2 min-w-[64px]"
+    >
+      {icon}
+      <span className="text-[10px] font-medium">{label}</span>
+    </Link>
   );
 }
