@@ -53,6 +53,10 @@ function BodyPage() {
 
           Criar uma tela de perfil para eu ajustar peso, idade, altura, objetivos e preferências, e refletir esses dados automaticamente no cálculo de proteínas e metas. 
 
+          Criar uma tela de configurações de lembretes para eu escolher frequência, dias e tipo de notificação (dentro do app e no modo PWA) para check-ins e hidratação. 
+
+          Adicionar uma comparação lado a lado de dois períodos na minha linha do tempo para eu ver tendências de peso, medidas, hidratação e alimentação com clareza. 
+
           COLOQU EO NOME DO DESEMVOLVEDOR E A CIDADE: dev Franc D'nis Feijó, AC
         </p>
       </div>
