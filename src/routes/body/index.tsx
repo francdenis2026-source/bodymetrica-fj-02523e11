@@ -31,7 +31,7 @@ const mockWeightData = [
   { date: "13/08", weight: 82.4 },
 ];
 
-export const Route = createFileRoute("/body")({
+export const Route = createFileRoute("/body/")({
   component: BodyPage,
 });
 
