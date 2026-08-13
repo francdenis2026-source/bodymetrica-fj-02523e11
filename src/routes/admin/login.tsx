@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -86,10 +86,10 @@ function AdminLoginPage() {
                 {isLoading ? "Autenticando..." : "Entrar no Sistema"}
               </Button>
               <Button variant="ghost" size="sm" asChild className="text-xs">
-                <a href="/">
+                <Link to="/">
                   <ArrowLeft size={14} className="mr-1" />
                   Voltar para o site
-                </a>
+                </Link>
               </Button>
             </CardFooter>
           </form>
