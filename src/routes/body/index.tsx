@@ -43,15 +43,15 @@ function BodyPage() {
       <div className="flex flex-col gap-2">
         <h2 className="text-2xl font-bold tracking-tight font-display">O QUE AIND AFALTA CRIAR</h2>
         <p className="text-muted-foreground text-sm whitespace-pre-line">
-          Adicionar o módulo de alimentação para eu registrar refeições, calcular calorias e macros e visualizar gráficos por dia e por semana com dados diários consolidados. 
+          Permitir que eu ajuste manualmente e salve a fórmula do cálculo automático de proteínas por objetivo, com opção de voltar para a fórmula padrão quando eu quiser. 
 
-          Implementar o módulo de treinos para eu definir planos, registrar séries e repetições por sessão e destacar automaticamente meus PRs com base nos meus registros. 
+          Implementar uma exportação unificada em PDF e CSV com os mesmos campos, incluindo resumo do período selecionado e filtros por categorias. 
 
-          Criar uma tela de metas personalizadas com progresso visual, histórico de conquistas e check-ins semanais que eu possa atualizar. 
+          Criar uma tela de metas personalizadas onde eu possa atualizar meu progresso, registrar check-ins semanais e visualizar conquistas. 
 
-          Adicionar a exportação do meu progresso em PDF e CSV com filtros por período e categorias, incluindo um resumo do período selecionado e campos consistentes entre os dois formatos. 
+          Implementar a lógica para destacar automaticamente meus PRs com base nos meus registros de treinos e nos exercícios definidos no plano. 
 
-          Implementar o cálculo automático das quantidades de proteínas por objetivo usando meu peso, idade e metas, e permitir que eu ajuste manualmente a fórmula quando necessário.
+          Adicionar uma tela que consolide automaticamente meus dados diários de alimentação para exibir totais e gráficos por dia e por semana.
         </p>
       </div>
 
