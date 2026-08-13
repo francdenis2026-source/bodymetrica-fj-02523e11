@@ -43,15 +43,17 @@ function BodyPage() {
       <div className="flex flex-col gap-2">
         <h2 className="text-2xl font-bold tracking-tight font-display">O QUE AIND AFALTA CRIAR</h2>
         <p className="text-muted-foreground text-sm whitespace-pre-line">
-          Permitir que eu ajuste manualmente e salve a fórmula do cálculo automático de proteínas por objetivo, com opção de voltar para a fórmula padrão quando eu quiser. 
+          Adicionar uma linha do tempo da minha evolução com marcos e comparativos (peso, medidas, hidratação e alimentação) para eu visualizar tendências por período. 
 
-          Implementar uma exportação unificada em PDF e CSV com os mesmos campos, incluindo resumo do período selecionado e filtros por categorias. 
+          Implementar a importação de refeições e treinos a partir de CSV para eu acelerar o preenchimento inicial e manter meus registros consistentes. 
 
-          Criar uma tela de metas personalizadas onde eu possa atualizar meu progresso, registrar check-ins semanais e visualizar conquistas. 
+          Adicionar lembretes de check-ins semanais e horários de hidratação com opções de notificações dentro do app e no modo PWA. 
 
-          Implementar a lógica para destacar automaticamente meus PRs com base nos meus registros de treinos e nos exercícios definidos no plano. 
+          Implementar um simulador de proteína com prévia do cálculo usando minha fórmula atual, para eu comparar valores antes de salvar alterações. 
 
-          Adicionar uma tela que consolide automaticamente meus dados diários de alimentação para exibir totais e gráficos por dia e por semana.
+          Criar uma tela de perfil para eu ajustar peso, idade, altura, objetivos e preferências, e refletir esses dados automaticamente no cálculo de proteínas e metas. 
+
+          COLOQU EO NOME DO DESEMVOLVEDOR E A CIDADE: dev Franc D'nis Feijó, AC
         </p>
       </div>
 
