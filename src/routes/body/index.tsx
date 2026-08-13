@@ -43,19 +43,15 @@ function BodyPage() {
       <div className="flex flex-col gap-2">
         <h2 className="text-2xl font-bold tracking-tight font-display">O QUE AIND AFALTA CRIAR</h2>
         <p className="text-muted-foreground text-sm whitespace-pre-line">
-          Adicionar uma linha do tempo da minha evolução com marcos e comparativos (peso, medidas, hidratação e alimentação) para eu visualizar tendências por período. 
+          Sincronizar automaticamente as configurações de lembretes com os dados do meu perfil para eu manter frequência e categorias consistentes em diferentes dispositivos. 
 
-          Implementar a importação de refeições e treinos a partir de CSV para eu acelerar o preenchimento inicial e manter meus registros consistentes. 
+          Implementar a exportação do comparativo de dois períodos em PDF com resumo automático e seções separadas para peso, medidas, hidratação e alimentação. 
 
-          Adicionar lembretes de check-ins semanais e horários de hidratação com opções de notificações dentro do app e no modo PWA. 
-
-          Implementar um simulador de proteína com prévia do cálculo usando minha fórmula atual, para eu comparar valores antes de salvar alterações. 
-
-          Criar uma tela de perfil para eu ajustar peso, idade, altura, objetivos e preferências, e refletir esses dados automaticamente no cálculo de proteínas e metas. 
-
-          Criar uma tela de configurações de lembretes para eu escolher frequência, dias e tipo de notificação (dentro do app e no modo PWA) para check-ins e hidratação. 
+          Adicionar gráficos de tendência com média móvel e variação percentual no comparativo de períodos para eu entender evolução rapidamente. 
 
           Adicionar uma comparação lado a lado de dois períodos na minha linha do tempo para eu ver tendências de peso, medidas, hidratação e alimentação com clareza. 
+
+          Implementar uma tela de configurações de lembretes com frequência, dias e tipo de notificação para check-ins e hidratação, incluindo opções dentro do app e no modo PWA. 
 
           COLOQU EO NOME DO DESEMVOLVEDOR E A CIDADE: dev Franc D'nis Feijó, AC
         </p>
