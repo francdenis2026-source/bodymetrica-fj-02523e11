@@ -42,14 +42,18 @@ function BodyPage() {
     <div className="flex-1 space-y-6 p-4 md:p-8 pt-6">
       <div className="flex flex-col gap-2">
         <h2 className="text-2xl font-bold tracking-tight font-display">O QUE AIND AFALTA CRIAR</h2>
-        <p className="text-muted-foreground text-sm">
-          Adicionar um módulo de alimentação para registrar refeições, controlar calorias e macros, e visualizar gráficos por dia e por semana. 
+        <p className="text-muted-foreground text-sm whitespace-pre-line">
+          SISTEMA CRIA QUANTIDADES DE PROTEINAS NECESARIAS PARA CADA ONJETIVO, BASEADAS NOPESO, IDADE E OBJETIVOS, MACRO E MCRO NUTRIENTES; 
 
-          Implementar um módulo de treinos com planos, registro de séries e repetições por sessão e destaque automático dos meus PRs. 
+          Adicionar a exportação do meu progresso em PDF com filtros por período e por categorias, incluindo resumo do período selecionado. 
+
+          Adicionar a exportação do meu progresso em CSV com filtros por período e por categorias (peso, medidas, hidratação e alimentação). 
 
           Criar uma tela de metas personalizadas com progresso visual, histórico de conquistas e check-ins semanais. 
 
-          Implementar a exportação do meu progresso em CSV e PDF com filtros por período e por categorias (peso, medidas, hidratação e alimentação).
+          Implementar um módulo de treinos para eu definir planos, registrar séries e repetições por sessão, e destacar automaticamente meus PRs. 
+
+          Implementar um módulo de alimentação para eu registrar refeições, calcular calorias e macros, e visualizar gráficos por dia e por semana.
         </p>
       </div>
 
