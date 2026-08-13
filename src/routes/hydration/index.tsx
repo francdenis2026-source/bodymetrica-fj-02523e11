@@ -13,7 +13,7 @@ import {
   AlertTriangle
 } from "lucide-react";
 
-export const Route = createFileRoute("/hydration")({
+export const Route = createFileRoute("/hydration/")({
   component: HydrationPage,
 });
 
