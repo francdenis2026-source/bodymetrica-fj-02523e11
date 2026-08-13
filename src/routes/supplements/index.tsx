@@ -25,7 +25,7 @@ function SupplementsPage() {
         <div className="space-y-1">
           <h2 className="text-2xl font-bold tracking-tight font-display text-primary">Suplementação</h2>
           <p className="text-muted-foreground text-sm">
-            Gerenciamento de suplementos com protocolos e lembretes por horário.
+            Gerenciamento de suplementos com lista, protocolos, logs de uso e lembretes por horário.
           </p>
         </div>
         <Button size="sm" className="gap-2 bg-brand-gradient">
