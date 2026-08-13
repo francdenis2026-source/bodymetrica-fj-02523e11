@@ -13,7 +13,7 @@ import {
   Zap
 } from "lucide-react";
 
-export const Route = createFileRoute("/training")({
+export const Route = createFileRoute("/training/")({
   component: TrainingPage,
 });
 

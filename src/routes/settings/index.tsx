@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-export const Route = createFileRoute("/settings")({
+export const Route = createFileRoute("/settings/")({
   component: SettingsPage,
 });
 

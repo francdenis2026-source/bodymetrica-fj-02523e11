@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 
-export const Route = createFileRoute("/nutrition")({
+export const Route = createFileRoute("/nutrition/")({
   component: NutritionPage,
 });
 
