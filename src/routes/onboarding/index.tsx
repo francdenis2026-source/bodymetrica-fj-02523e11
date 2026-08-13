@@ -15,7 +15,7 @@ import {
 import { Progress } from "@/components/ui/progress";
 import { Link, useNavigate } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/onboarding")({
+export const Route = createFileRoute("/onboarding/")({
   component: OnboardingPage,
 });
 
