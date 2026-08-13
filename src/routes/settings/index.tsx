@@ -78,6 +78,27 @@ function SettingsPage() {
             </div>
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
+                <Label className="text-sm font-medium">Suplementos</Label>
+                <p className="text-xs text-muted-foreground">Lembretes por horário conforme protocolo.</p>
+              </div>
+              <Switch defaultChecked />
+            </div>
+            <div className="flex items-center justify-between">
+              <div className="space-y-0.5">
+                <Label className="text-sm font-medium">Peso e Medidas</Label>
+                <p className="text-xs text-muted-foreground">Lembretes para atualização de biometria.</p>
+              </div>
+              <Switch defaultChecked />
+            </div>
+            <div className="flex items-center justify-between">
+              <div className="space-y-0.5">
+                <Label className="text-sm font-medium">Treinos</Label>
+                <p className="text-xs text-muted-foreground">Notificações sobre horários de treinamento.</p>
+              </div>
+              <Switch defaultChecked />
+            </div>
+            <div className="flex items-center justify-between">
+              <div className="space-y-0.5">
                 <Label className="text-sm font-medium">Relatórios Semanais</Label>
                 <p className="text-xs text-muted-foreground">Resumo da sua evolução toda segunda-feira.</p>
               </div>

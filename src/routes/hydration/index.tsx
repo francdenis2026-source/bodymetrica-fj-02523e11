@@ -32,7 +32,7 @@ function HydrationPage() {
         <div className="space-y-1">
           <h2 className="text-2xl font-bold tracking-tight font-display text-info">Hidratação</h2>
           <p className="text-muted-foreground text-sm">
-            Mantenha seu corpo em pleno funcionamento.
+            Mantenha seu corpo em pleno funcionamento. Implemente o módulo de hidratação com metas diárias, registro por copos e histórico com gráficos.
           </p>
         </div>
         <Button variant="outline" size="icon" className="rounded-full">
