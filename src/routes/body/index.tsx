@@ -43,7 +43,13 @@ function BodyPage() {
       <div className="flex flex-col gap-2">
         <h2 className="text-2xl font-bold tracking-tight font-display">O QUE AIND AFALTA CRIAR</h2>
         <p className="text-muted-foreground text-sm">
-          Acompanhe cada detalhe da sua evolução física. Crie o registro de composição corporal com peso, medidas, fotos privadas e uma linha do tempo de evolução.
+          Adicionar exportação de relatórios do meu progresso em CSV e PDF com filtros por período e categorias (peso, medidas, hidratação e alimentação). 
+
+          Criar uma tela de metas personalizadas com progresso visual, histórico de conquistas e check-ins semanais. 
+
+          Implementar um módulo de treinos com planos, registro de séries e repetições por sessão, e destaque de PRs. 
+
+          Adicionar um módulo de alimentação com registro de refeições, controle de calorias e macros, e gráficos por dia e semana.
         </p>
       </div>
 
