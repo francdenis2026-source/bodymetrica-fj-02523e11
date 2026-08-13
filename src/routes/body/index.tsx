@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -43,7 +43,7 @@ function BodyPage() {
       <div className="flex flex-col gap-2">
         <h2 className="text-2xl font-bold tracking-tight font-display">Composição Corporal</h2>
         <p className="text-muted-foreground text-sm">
-          Acompanhe cada detalhe da sua evolução física.
+          Acompanhe cada detalhe da sua evolução física. Crie o registro de composição corporal com peso, medidas, fotos privadas e uma linha do tempo de evolução.
         </p>
       </div>
 
