@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/body")({
+export const Route = createFileRoute("/body/")({
   component: BodyPage,
 });
 

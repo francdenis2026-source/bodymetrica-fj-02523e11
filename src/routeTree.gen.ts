@@ -10,33 +10,193 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AboutIndexRouteImport } from './routes/about/index'
+import { Route as AdminLoginRouteImport } from './routes/admin/login'
+import { Route as AuthIndexRouteImport } from './routes/auth/index'
+import { Route as BodyIndexRouteImport } from './routes/body/index'
+import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
+import { Route as HydrationIndexRouteImport } from './routes/hydration/index'
+import { Route as NutritionIndexRouteImport } from './routes/nutrition/index'
+import { Route as PrivacyIndexRouteImport } from './routes/privacy/index'
+import { Route as SettingsIndexRouteImport } from './routes/settings/index'
+import { Route as SupplementsIndexRouteImport } from './routes/supplements/index'
+import { Route as TermsIndexRouteImport } from './routes/terms/index'
+import { Route as TrainingIndexRouteImport } from './routes/training/index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AboutIndexRoute = AboutIndexRouteImport.update({
+  id: '/about/',
+  path: '/about/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminLoginRoute = AdminLoginRouteImport.update({
+  id: '/admin/login',
+  path: '/admin/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthIndexRoute = AuthIndexRouteImport.update({
+  id: '/auth/',
+  path: '/auth/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BodyIndexRoute = BodyIndexRouteImport.update({
+  id: '/body/',
+  path: '/body/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardIndexRoute = DashboardIndexRouteImport.update({
+  id: '/dashboard/',
+  path: '/dashboard/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HydrationIndexRoute = HydrationIndexRouteImport.update({
+  id: '/hydration/',
+  path: '/hydration/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NutritionIndexRoute = NutritionIndexRouteImport.update({
+  id: '/nutrition/',
+  path: '/nutrition/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyIndexRoute = PrivacyIndexRouteImport.update({
+  id: '/privacy/',
+  path: '/privacy/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsIndexRoute = SettingsIndexRouteImport.update({
+  id: '/settings/',
+  path: '/settings/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SupplementsIndexRoute = SupplementsIndexRouteImport.update({
+  id: '/supplements/',
+  path: '/supplements/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermsIndexRoute = TermsIndexRouteImport.update({
+  id: '/terms/',
+  path: '/terms/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TrainingIndexRoute = TrainingIndexRouteImport.update({
+  id: '/training/',
+  path: '/training/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin/login': typeof AdminLoginRoute
+  '/about/': typeof AboutIndexRoute
+  '/auth/': typeof AuthIndexRoute
+  '/body/': typeof BodyIndexRoute
+  '/dashboard/': typeof DashboardIndexRoute
+  '/hydration/': typeof HydrationIndexRoute
+  '/nutrition/': typeof NutritionIndexRoute
+  '/privacy/': typeof PrivacyIndexRoute
+  '/settings/': typeof SettingsIndexRoute
+  '/supplements/': typeof SupplementsIndexRoute
+  '/terms/': typeof TermsIndexRoute
+  '/training/': typeof TrainingIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin/login': typeof AdminLoginRoute
+  '/about': typeof AboutIndexRoute
+  '/auth': typeof AuthIndexRoute
+  '/body': typeof BodyIndexRoute
+  '/dashboard': typeof DashboardIndexRoute
+  '/hydration': typeof HydrationIndexRoute
+  '/nutrition': typeof NutritionIndexRoute
+  '/privacy': typeof PrivacyIndexRoute
+  '/settings': typeof SettingsIndexRoute
+  '/supplements': typeof SupplementsIndexRoute
+  '/terms': typeof TermsIndexRoute
+  '/training': typeof TrainingIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin/login': typeof AdminLoginRoute
+  '/about/': typeof AboutIndexRoute
+  '/auth/': typeof AuthIndexRoute
+  '/body/': typeof BodyIndexRoute
+  '/dashboard/': typeof DashboardIndexRoute
+  '/hydration/': typeof HydrationIndexRoute
+  '/nutrition/': typeof NutritionIndexRoute
+  '/privacy/': typeof PrivacyIndexRoute
+  '/settings/': typeof SettingsIndexRoute
+  '/supplements/': typeof SupplementsIndexRoute
+  '/terms/': typeof TermsIndexRoute
+  '/training/': typeof TrainingIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/admin/login'
+    | '/about/'
+    | '/auth/'
+    | '/body/'
+    | '/dashboard/'
+    | '/hydration/'
+    | '/nutrition/'
+    | '/privacy/'
+    | '/settings/'
+    | '/supplements/'
+    | '/terms/'
+    | '/training/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/admin/login'
+    | '/about'
+    | '/auth'
+    | '/body'
+    | '/dashboard'
+    | '/hydration'
+    | '/nutrition'
+    | '/privacy'
+    | '/settings'
+    | '/supplements'
+    | '/terms'
+    | '/training'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin/login'
+    | '/about/'
+    | '/auth/'
+    | '/body/'
+    | '/dashboard/'
+    | '/hydration/'
+    | '/nutrition/'
+    | '/privacy/'
+    | '/settings/'
+    | '/supplements/'
+    | '/terms/'
+    | '/training/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminLoginRoute: typeof AdminLoginRoute
+  AboutIndexRoute: typeof AboutIndexRoute
+  AuthIndexRoute: typeof AuthIndexRoute
+  BodyIndexRoute: typeof BodyIndexRoute
+  DashboardIndexRoute: typeof DashboardIndexRoute
+  HydrationIndexRoute: typeof HydrationIndexRoute
+  NutritionIndexRoute: typeof NutritionIndexRoute
+  PrivacyIndexRoute: typeof PrivacyIndexRoute
+  SettingsIndexRoute: typeof SettingsIndexRoute
+  SupplementsIndexRoute: typeof SupplementsIndexRoute
+  TermsIndexRoute: typeof TermsIndexRoute
+  TrainingIndexRoute: typeof TrainingIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +208,107 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/about/': {
+      id: '/about/'
+      path: '/about'
+      fullPath: '/about/'
+      preLoaderRoute: typeof AboutIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/login': {
+      id: '/admin/login'
+      path: '/admin/login'
+      fullPath: '/admin/login'
+      preLoaderRoute: typeof AdminLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/': {
+      id: '/auth/'
+      path: '/auth'
+      fullPath: '/auth/'
+      preLoaderRoute: typeof AuthIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/body/': {
+      id: '/body/'
+      path: '/body'
+      fullPath: '/body/'
+      preLoaderRoute: typeof BodyIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/': {
+      id: '/dashboard/'
+      path: '/dashboard'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof DashboardIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/hydration/': {
+      id: '/hydration/'
+      path: '/hydration'
+      fullPath: '/hydration/'
+      preLoaderRoute: typeof HydrationIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/nutrition/': {
+      id: '/nutrition/'
+      path: '/nutrition'
+      fullPath: '/nutrition/'
+      preLoaderRoute: typeof NutritionIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy/': {
+      id: '/privacy/'
+      path: '/privacy'
+      fullPath: '/privacy/'
+      preLoaderRoute: typeof PrivacyIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings/': {
+      id: '/settings/'
+      path: '/settings'
+      fullPath: '/settings/'
+      preLoaderRoute: typeof SettingsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/supplements/': {
+      id: '/supplements/'
+      path: '/supplements'
+      fullPath: '/supplements/'
+      preLoaderRoute: typeof SupplementsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terms/': {
+      id: '/terms/'
+      path: '/terms'
+      fullPath: '/terms/'
+      preLoaderRoute: typeof TermsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/training/': {
+      id: '/training/'
+      path: '/training'
+      fullPath: '/training/'
+      preLoaderRoute: typeof TrainingIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminLoginRoute: AdminLoginRoute,
+  AboutIndexRoute: AboutIndexRoute,
+  AuthIndexRoute: AuthIndexRoute,
+  BodyIndexRoute: BodyIndexRoute,
+  DashboardIndexRoute: DashboardIndexRoute,
+  HydrationIndexRoute: HydrationIndexRoute,
+  NutritionIndexRoute: NutritionIndexRoute,
+  PrivacyIndexRoute: PrivacyIndexRoute,
+  SettingsIndexRoute: SettingsIndexRoute,
+  SupplementsIndexRoute: SupplementsIndexRoute,
+  TermsIndexRoute: TermsIndexRoute,
+  TrainingIndexRoute: TrainingIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
