@@ -29,7 +29,7 @@ import { syncOfflineActions } from "@/lib/offline-sync";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { AppErrorBoundary } from "@/components/ui/error-boundary";
 import { reportLovableError } from "../lib/lovable-error-reporting";
-import { isAuthenticated, clearSession } from "@/lib/auth/auth.functions";
+import { isAuthenticated, clearSession, getSession } from "@/lib/auth/auth.functions";
 import { AccessGate } from "@/components/access-gate";
 
 import appCss from "../styles.css?url";
@@ -141,10 +141,13 @@ function RootComponent() {
   const navigate = useNavigate();
   const [authChecked, setAuthChecked] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [needsVerification, setNeedsVerification] = useState(false);
 
   useEffect(() => {
     // Check initial auth state
-    setIsLoggedIn(isAuthenticated());
+    const session = getSession();
+    setIsLoggedIn(!!session);
+    setNeedsVerification(session?.needsVerification || false);
     setAuthChecked(true);
 
     if (typeof window !== "undefined" && "serviceWorker" in navigator) {
@@ -248,7 +251,7 @@ function RootComponent() {
           showSidebar && "mb-20 md:mb-0"
         )}>
           <div className="flex-1">
-            <AccessGate isAllowed={isPublicRoute || isLoggedIn}>
+            <AccessGate isAllowed={isPublicRoute || isLoggedIn} needsVerification={needsVerification}>
               <Outlet />
             </AccessGate>
           </div>

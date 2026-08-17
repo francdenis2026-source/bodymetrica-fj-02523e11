@@ -20,6 +20,7 @@ import { Input } from "@/components/ui/input";
 import { queueOfflineAction } from "@/lib/offline-sync";
 import { ModuleHeader } from "@/components/module-header";
 import { Skeleton } from "@/components/ui/skeleton";
+import { getSession } from "@/lib/auth/auth.functions";
 
 
 export const Route = createFileRoute("/nutrition/")({
@@ -29,8 +30,13 @@ export const Route = createFileRoute("/nutrition/")({
 function NutritionPage() {
   const [activeTab, setActiveTab] = useState("plan");
   const [isLoading, setIsLoading] = useState(true);
+  const [userData, setUserData] = useState<any>(null);
 
   useEffect(() => {
+    const session = getSession();
+    if (session) {
+      setUserData(session);
+    }
     const timer = setTimeout(() => setIsLoading(false), 800);
     return () => clearTimeout(timer);
   }, []);

@@ -14,10 +14,9 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { cpfSchema, formatCpf } from "@/lib/auth/utils";
-import { login, register, setSession, requestPinReset, verifyPinReset } from "@/lib/auth/auth.functions";
+import { login, register, setSession, requestPasswordReset } from "@/lib/auth/auth.functions";
 import { toast } from "sonner";
-import { ShieldCheck, ArrowLeft, Lock, UserPlus, KeyRound } from "lucide-react";
+import { ShieldCheck, ArrowLeft, Mail, UserPlus, KeyRound, Lock } from "lucide-react";
 import { ResponsiveHero } from "@/components/responsive-hero";
 import { cn } from "@/lib/utils";
 
@@ -36,84 +35,136 @@ export const Route = createFileRoute("/auth/")({
   },
 });
 
-const authSchema = z.object({
-  cpf: cpfSchema,
-  pin: z.string().length(6, "O PIN deve ter exatamente 6 dígitos"),
+const loginSchema = z.object({
+  email: z.string().email("E-mail inválido"),
+  password: z.string().min(6, "A senha deve ter pelo menos 6 caracteres"),
 });
 
 const registerSchema = z.object({
-  cpf: cpfSchema,
-  pin: z.string().length(6, "O PIN deve ter exatamente 6 dígitos"),
+  email: z.string().email("E-mail inválido"),
+  password: z.string().min(6, "A senha deve ter pelo menos 6 caracteres"),
   name: z.string().min(3, "Nome muito curto"),
 });
 
 const resetSchema = z.object({
-  cpf: cpfSchema,
-  code: z.string().length(6, "O código deve ter 6 dígitos").optional(),
-  newPin: z.string().length(6, "O novo PIN deve ter 6 dígitos").optional(),
+  email: z.string().email("E-mail inválido"),
 });
+
+const RATE_LIMIT_KEY = 'auth_attempts';
+const MAX_ATTEMPTS = 5;
+const BLOCK_TIME = 60 * 1000; // 1 minute
 
 function AuthPage() {
   const searchParams = Route.useSearch();
   const [isRegistering, setIsRegistering] = useState(searchParams.registerMode);
   const [isResetting, setIsResetting] = useState(false);
-  const [resetStep, setResetStep] = useState(1); // 1: request, 2: verify
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
+  const [isBlocked, setIsBlocked] = useState(false);
+  const [remainingSeconds, setRemainingSeconds] = useState(0);
 
-  const form = useForm<z.infer<typeof registerSchema>>({
+  const loginForm = useForm<z.infer<typeof loginSchema>>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: { email: "", password: "" },
+  });
+
+  const registerForm = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
-    defaultValues: {
-      cpf: "",
-      pin: "",
-      name: searchParams.name || "",
+    defaultValues: { 
+      email: "", 
+      password: "", 
+      name: searchParams.name || "" 
     },
   });
 
   const resetForm = useForm<z.infer<typeof resetSchema>>({
     resolver: zodResolver(resetSchema),
-    defaultValues: {
-      cpf: "",
-      code: "",
-      newPin: "",
-    },
+    defaultValues: { email: "" },
   });
 
   useEffect(() => {
     setIsRegistering(searchParams.registerMode);
-    if (searchParams.name) {
-      form.setValue("name", searchParams.name);
-    }
-  }, [searchParams.registerMode, searchParams.name, form]);
+  }, [searchParams.registerMode]);
 
-  async function onSubmit(values: z.infer<typeof registerSchema>) {
+  useEffect(() => {
+    const attemptsStr = localStorage.getItem(RATE_LIMIT_KEY);
+    const attempts = attemptsStr ? JSON.parse(attemptsStr) : { count: 0, lastAttempt: 0 };
+    
+    if (attempts.count >= MAX_ATTEMPTS) {
+      const waitTime = BLOCK_TIME - (Date.now() - attempts.lastAttempt);
+      if (waitTime > 0) {
+        setIsBlocked(true);
+        setRemainingSeconds(Math.ceil(waitTime / 1000));
+        const timer = setInterval(() => {
+          setRemainingSeconds(s => {
+            if (s <= 1) {
+              clearInterval(timer);
+              setIsBlocked(false);
+              localStorage.setItem(RATE_LIMIT_KEY, JSON.stringify({ count: 0, lastAttempt: 0 }));
+              return 0;
+            }
+            return s - 1;
+          });
+        }, 1000);
+        return () => clearInterval(timer);
+      } else {
+        localStorage.setItem(RATE_LIMIT_KEY, JSON.stringify({ count: 0, lastAttempt: 0 }));
+      }
+    }
+    return undefined;
+  }, []);
+
+  const trackAttempt = () => {
+    const attempts = JSON.parse(localStorage.getItem(RATE_LIMIT_KEY) || '{"count": 0, "lastAttempt": 0}');
+    const newCount = attempts.count + 1;
+    localStorage.setItem(RATE_LIMIT_KEY, JSON.stringify({ count: newCount, lastAttempt: Date.now() }));
+    if (newCount >= MAX_ATTEMPTS) {
+      setIsBlocked(true);
+      setRemainingSeconds(BLOCK_TIME / 1000);
+    }
+  };
+
+  async function onLoginSubmit(values: z.infer<typeof loginSchema>) {
+    if (isBlocked) return;
     setIsLoading(true);
     try {
-      if (isRegistering) {
-        const result = await register({ 
-          data: { 
-            ...values,
-            goal: searchParams.goal,
-            weight: searchParams.weight,
-            height: searchParams.height,
-            activityLevel: searchParams.activityLevel,
-          } 
-        });
-        if (result.success) {
-          setSession(result.user);
-          toast.success("Cadastro realizado com sucesso!");
-          window.location.href = "/dashboard";
-        }
+      const result = await login({ data: values });
+      if (result.success) {
+        setSession(result.user);
+        localStorage.setItem(RATE_LIMIT_KEY, '{"count": 0, "lastAttempt": 0}');
+        toast.success("Bem-vindo ao Body Métrica FJ!");
+        window.location.href = "/dashboard";
       } else {
-        const result = await login({ data: { cpf: values.cpf, pin: values.pin } });
-        if (result.success) {
-          setSession(result.user);
-          toast.success("Bem-vindo ao Body Métrica FJ!");
-          window.location.href = "/dashboard";
-        }
+        toast.error(result.message);
+        if (!result.needsVerification) trackAttempt();
       }
     } catch (error) {
-      toast.error(isRegistering ? "Erro ao cadastrar. Tente novamente." : "Erro ao entrar. Verifique seus dados.");
+      toast.error("Erro ao entrar. Verifique sua conexão.");
+      trackAttempt();
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  async function onRegisterSubmit(values: z.infer<typeof registerSchema>) {
+    setIsLoading(true);
+    try {
+      const result = await register({ 
+        data: { 
+          ...values,
+          goal: searchParams.goal,
+          weight: searchParams.weight,
+          height: searchParams.height,
+          activityLevel: searchParams.activityLevel,
+        } 
+      });
+      if (result.success) {
+        toast.success(result.message || "Cadastro realizado! Verifique seu e-mail.");
+        setIsRegistering(false);
+      } else {
+        toast.error(result.message || "Erro ao cadastrar.");
+      }
+    } catch (error) {
+      toast.error("Erro ao cadastrar. Tente novamente.");
     } finally {
       setIsLoading(false);
     }
@@ -122,31 +173,12 @@ function AuthPage() {
   async function onResetSubmit(values: z.infer<typeof resetSchema>) {
     setIsLoading(true);
     try {
-      if (resetStep === 1) {
-        const result = await requestPinReset({ data: { cpf: values.cpf } });
-        if (result.success) {
-          toast.success(result.message);
-          setResetStep(2);
-        }
+      const result = await requestPasswordReset({ data: values });
+      if (result.success) {
+        toast.success(result.message);
+        setIsResetting(false);
       } else {
-        if (!values.code || !values.newPin) {
-          toast.error("Preencha o código e o novo PIN");
-          return;
-        }
-        const result = await verifyPinReset({ 
-          data: { 
-            cpf: values.cpf, 
-            code: values.code, 
-            newPin: values.newPin 
-          } 
-        });
-        if (result.success) {
-          toast.success(result.message);
-          setIsResetting(false);
-          setResetStep(1);
-        } else {
-          toast.error(result.message);
-        }
+        toast.error(result.message);
       }
     } catch (error) {
       toast.error("Erro na recuperação. Tente novamente.");
@@ -186,170 +218,151 @@ function AuthPage() {
               {isResetting ? "RECUPERAÇÃO" : isRegistering ? "CADASTRO" : "AUTENTICAÇÃO"}
             </CardTitle>
             <CardDescription className="font-bold text-white/40 text-center uppercase text-[10px] tracking-widest px-4">
-              {isResetting 
-                ? "SOLICITE A REDEFINIÇÃO DO SEU CÓDIGO" 
-                : isRegistering 
-                  ? "CRIE SUA CONTA PROFISSIONAL" 
-                  : "INSIRA SEUS DADOS DE ACESSO PROTEGIDO"}
+              {isBlocked ? `ACESSO BLOQUEADO POR ${remainingSeconds}s` :
+               isResetting ? "SOLICITE O LINK DE REDEFINIÇÃO" : 
+               isRegistering ? "CRIE SUA CONTA PROFISSIONAL" : 
+               "INSIRA SEUS DADOS DE ACESSO PROTEGIDO"}
             </CardDescription>
           </CardHeader>
 
-          <CardContent>
-            {!isResetting ? (
-              <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                  {isRegistering && (
-                    <FormField
-                      control={form.control}
-                      name="name"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="font-black text-[10px] uppercase tracking-[0.2em] text-primary ml-1">NOME COMPLETO</FormLabel>
-                          <FormControl>
-                            <Input 
-                              placeholder="Seu Nome" 
-                              className={cn(
-                                "h-16 text-xl font-black bg-white/5 border-white/10 rounded-2xl px-6 text-white focus:ring-primary focus:border-primary transition-all placeholder:text-white/20",
-                                form.formState.errors.name && "border-destructive ring-destructive"
-                              )}
-                              {...field} 
-                              disabled={isLoading}
-                            />
-                          </FormControl>
-                          <FormMessage className="text-[10px] font-bold uppercase tracking-widest text-destructive animate-in fade-in slide-in-from-top-1" />
-                        </FormItem>
-                      )}
-                    />
-                  )}
-
+          <CardContent className="pt-8">
+            {isResetting ? (
+              <Form {...resetForm}>
+                <form onSubmit={resetForm.handleSubmit(onResetSubmit)} className="space-y-6">
                   <FormField
-                    control={form.control}
-                    name="cpf"
+                    control={resetForm.control}
+                    name="email"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="font-black text-[10px] uppercase tracking-[0.2em] text-primary ml-1">IDENTIFICAÇÃO (CPF)</FormLabel>
+                        <FormLabel className="font-black text-[10px] uppercase tracking-[0.2em] text-primary ml-1">E-MAIL</FormLabel>
                         <FormControl>
                           <Input 
-                            placeholder="000.000.000-00" 
-                            className={cn(
-                              "h-16 text-xl font-black bg-white/5 border-white/10 rounded-2xl px-6 text-white focus:ring-primary focus:border-primary transition-all placeholder:text-white/20",
-                              form.formState.errors.cpf && "border-destructive ring-destructive"
-                            )}
+                            placeholder="seu@email.com" 
+                            className="h-16 text-lg font-black bg-white/5 border-white/10 rounded-2xl px-6 text-white"
                             {...field} 
-                            onChange={(e) => field.onChange(formatCpf(e.target.value))}
                             disabled={isLoading}
                           />
                         </FormControl>
-                        <FormMessage className="text-[10px] font-bold uppercase tracking-widest text-destructive animate-in fade-in slide-in-from-top-1" />
+                        <FormMessage className="text-[10px] font-bold text-destructive uppercase tracking-widest" />
                       </FormItem>
                     )}
                   />
-
+                  <div className="flex gap-4">
+                    <Button type="button" variant="ghost" className="flex-1 h-16 font-black uppercase text-white/40" onClick={() => setIsResetting(false)}>
+                      VOLTAR
+                    </Button>
+                    <Button type="submit" className="flex-[2] h-16 text-base font-black uppercase tracking-[0.2em] bg-brand-gradient rounded-2xl" disabled={isLoading}>
+                      {isLoading ? "ENVIANDO..." : "ENVIAR LINK"}
+                    </Button>
+                  </div>
+                </form>
+              </Form>
+            ) : isRegistering ? (
+              <Form {...registerForm}>
+                <form onSubmit={registerForm.handleSubmit(onRegisterSubmit)} className="space-y-6">
                   <FormField
-                    control={form.control}
-                    name="pin"
+                    control={registerForm.control}
+                    name="name"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="font-black text-[10px] uppercase tracking-[0.2em] text-primary ml-1">CÓDIGO DE ACESSO (PIN)</FormLabel>
+                        <FormLabel className="font-black text-[10px] uppercase tracking-[0.2em] text-primary ml-1">NOME COMPLETO</FormLabel>
+                        <FormControl>
+                          <Input 
+                            placeholder="Seu Nome" 
+                            className="h-16 text-lg font-black bg-white/5 border-white/10 rounded-2xl px-6 text-white"
+                            {...field} 
+                            disabled={isLoading}
+                          />
+                        </FormControl>
+                        <FormMessage className="text-[10px] font-bold text-destructive uppercase tracking-widest" />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={registerForm.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="font-black text-[10px] uppercase tracking-[0.2em] text-primary ml-1">E-MAIL</FormLabel>
+                        <FormControl>
+                          <Input 
+                            placeholder="seu@email.com" 
+                            className="h-16 text-lg font-black bg-white/5 border-white/10 rounded-2xl px-6 text-white"
+                            {...field} 
+                            disabled={isLoading}
+                          />
+                        </FormControl>
+                        <FormMessage className="text-[10px] font-bold text-destructive uppercase tracking-widest" />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={registerForm.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="font-black text-[10px] uppercase tracking-[0.2em] text-primary ml-1">SENHA (MÍN. 6)</FormLabel>
                         <FormControl>
                           <Input 
                             type="password" 
-                            inputMode="numeric"
-                            maxLength={6}
                             placeholder="••••••" 
-                            className={cn(
-                              "h-16 text-center text-3xl tracking-[0.5em] font-black bg-white/5 border-white/10 rounded-2xl text-white focus:ring-primary focus:border-primary transition-all placeholder:text-white/20",
-                              form.formState.errors.pin && "border-destructive ring-destructive"
-                            )}
+                            className="h-16 text-lg font-black bg-white/5 border-white/10 rounded-2xl px-6 text-white"
                             {...field} 
                             disabled={isLoading}
                           />
                         </FormControl>
-                        <FormMessage className="text-[10px] font-bold uppercase tracking-widest text-destructive animate-in fade-in slide-in-from-top-1" />
+                        <FormMessage className="text-[10px] font-bold text-destructive uppercase tracking-widest" />
                       </FormItem>
                     )}
                   />
-
                   <Button type="submit" className="w-full h-16 text-base font-black uppercase tracking-[0.2em] bg-brand-gradient hover:scale-[1.02] transition-all shadow-2xl shadow-primary/30 border-none mt-4 rounded-2xl" disabled={isLoading}>
-                    {isLoading ? "PROCESSANDO..." : isRegistering ? "FINALIZAR CADASTRO" : "ACESSAR PLATAFORMA"}
+                    {isLoading ? "CADASTRANDO..." : "CRIAR CONTA"}
                   </Button>
                 </form>
               </Form>
             ) : (
-              <Form {...resetForm}>
-                <form onSubmit={resetForm.handleSubmit(onResetSubmit)} className="space-y-8">
+              <Form {...loginForm}>
+                <form onSubmit={loginForm.handleSubmit(onLoginSubmit)} className="space-y-6">
                   <FormField
-                    control={resetForm.control}
-                    name="cpf"
+                    control={loginForm.control}
+                    name="email"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="font-black text-[10px] uppercase tracking-[0.2em] text-primary ml-1">CPF PARA RECUPERAÇÃO</FormLabel>
+                        <FormLabel className="font-black text-[10px] uppercase tracking-[0.2em] text-primary ml-1">E-MAIL</FormLabel>
                         <FormControl>
                           <Input 
-                            placeholder="000.000.000-00" 
-                            className="h-16 text-xl font-black bg-white/5 border-white/10 rounded-2xl px-6 text-white"
+                            placeholder="seu@email.com" 
+                            className="h-16 text-lg font-black bg-white/5 border-white/10 rounded-2xl px-6 text-white"
                             {...field} 
-                            onChange={(e) => field.onChange(formatCpf(e.target.value))}
-                            disabled={isLoading || resetStep === 2}
+                            disabled={isLoading || isBlocked}
                           />
                         </FormControl>
+                        <FormMessage className="text-[10px] font-bold text-destructive uppercase tracking-widest" />
                       </FormItem>
                     )}
                   />
-
-                  {resetStep === 2 && (
-                    <>
-                      <FormField
-                        control={resetForm.control}
-                        name="code"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="font-black text-[10px] uppercase tracking-[0.2em] text-primary ml-1">CÓDIGO RECEBIDO</FormLabel>
-                            <FormControl>
-                              <Input 
-                                placeholder="000000" 
-                                className="h-16 text-center text-2xl font-black bg-white/5 border-white/10 rounded-2xl px-6 text-white"
-                                {...field} 
-                                disabled={isLoading}
-                              />
-                            </FormControl>
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={resetForm.control}
-                        name="newPin"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="font-black text-[10px] uppercase tracking-[0.2em] text-primary ml-1">NOVO PIN (6 DÍGITOS)</FormLabel>
-                            <FormControl>
-                              <Input 
-                                type="password"
-                                placeholder="••••••" 
-                                className="h-16 text-center text-2xl font-black bg-white/5 border-white/10 rounded-2xl px-6 text-white"
-                                {...field} 
-                                disabled={isLoading}
-                              />
-                            </FormControl>
-                          </FormItem>
-                        )}
-                      />
-                    </>
-                  )}
-
-                  <div className="flex gap-4">
-                    <Button 
-                      type="button" 
-                      variant="ghost" 
-                      className="flex-1 h-16 font-black uppercase text-white/40"
-                      onClick={() => { setIsResetting(false); setResetStep(1); }}
-                    >
-                      CANCELAR
-                    </Button>
-                    <Button type="submit" className="flex-[2] h-16 text-base font-black uppercase tracking-[0.2em] bg-brand-gradient rounded-2xl" disabled={isLoading}>
-                      {isLoading ? "CARREGANDO..." : resetStep === 1 ? "SOLICITAR" : "REDEFINIR"}
-                    </Button>
-                  </div>
+                  <FormField
+                    control={loginForm.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="font-black text-[10px] uppercase tracking-[0.2em] text-primary ml-1">SENHA</FormLabel>
+                        <FormControl>
+                          <Input 
+                            type="password" 
+                            placeholder="••••••" 
+                            className="h-16 text-lg font-black bg-white/5 border-white/10 rounded-2xl px-6 text-white"
+                            {...field} 
+                            disabled={isLoading || isBlocked}
+                          />
+                        </FormControl>
+                        <FormMessage className="text-[10px] font-bold text-destructive uppercase tracking-widest" />
+                      </FormItem>
+                    )}
+                  />
+                  <Button type="submit" className="w-full h-16 text-base font-black uppercase tracking-[0.2em] bg-brand-gradient hover:scale-[1.02] transition-all shadow-2xl shadow-primary/30 border-none mt-4 rounded-2xl" disabled={isLoading || isBlocked}>
+                    {isLoading ? "PROCESSANDO..." : "ACESSAR PLATAFORMA"}
+                  </Button>
                 </form>
               </Form>
             )}
@@ -380,11 +393,19 @@ function AuthPage() {
                       onClick={() => setIsResetting(true)}
                       className="w-full text-center text-[10px] font-black uppercase tracking-[0.2em] text-white/20 hover:text-white transition-all underline decoration-white/10 underline-offset-4"
                     >
-                      RECUPERAR PIN DE ACESSO
+                      RECUPERAR SENHA
                     </button>
                   )}
                 </div>
               </>
+            )}
+            {isResetting && (
+              <button 
+                onClick={() => setIsResetting(false)}
+                className="w-full text-center text-[10px] font-black uppercase tracking-[0.2em] text-white/20 hover:text-white transition-all"
+              >
+                VOLTAR PARA O LOGIN
+              </button>
             )}
           </CardFooter>
         </Card>

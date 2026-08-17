@@ -9,13 +9,15 @@ interface AccessGateProps {
   description?: string;
   children: React.ReactNode;
   isAllowed: boolean;
+  needsVerification?: boolean;
 }
 
 export function AccessGate({ 
   title = "ACESSO RESTRITO", 
   description = "ESTA ÁREA REQUER AUTENTICAÇÃO DE ALTO NÍVEL PARA SER ACESSADA.", 
   children, 
-  isAllowed 
+  isAllowed,
+  needsVerification = false
 }: AccessGateProps) {
   const navigate = useNavigate();
 
@@ -44,6 +46,11 @@ export function AccessGate({
 
   if (isAllowed) return <>{children}</>;
 
+  const displayTitle = needsVerification ? "E-MAIL NÃO CONFIRMADO" : title;
+  const displayDescription = needsVerification 
+    ? "POR FAVOR, CONFIRME SEU E-MAIL PARA LIBERAR O ACESSO ÀS FERRAMENTAS." 
+    : description;
+
   return (
     <div className="min-h-[60vh] flex items-center justify-center p-6 animate-in fade-in duration-700">
       <div className="surface max-w-lg w-full p-12 text-center space-y-8 relative overflow-hidden border-white/5 shadow-2xl rounded-[3rem] bg-black/40 backdrop-blur-3xl">
@@ -54,10 +61,10 @@ export function AccessGate({
 
           <div className="space-y-2">
             <h2 className="text-4xl font-black font-display tracking-tighter text-white uppercase italic">
-              {title}
+              {displayTitle}
             </h2>
             <p className="text-white/40 font-black uppercase tracking-[0.2em] text-[10px]">
-              {description}
+              {displayDescription}
             </p>
             <p className="text-primary font-black uppercase tracking-widest text-[10px] animate-pulse">
               Redirecionando para o sistema de autenticação...

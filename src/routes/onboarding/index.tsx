@@ -203,9 +203,10 @@ function OnboardingPage() {
               <div className="surface p-6 text-left space-y-3">
                 <h3 className="font-bold text-xs uppercase tracking-widest text-muted-foreground">Resumo do Perfil</h3>
                 <div className="space-y-1 text-sm">
-                  <div className="flex justify-between"><span>Objetivo:</span> <span className="font-bold">Hipertrofia</span></div>
-                  <div className="flex justify-between"><span>Peso Inicial:</span> <span className="font-bold">82 kg</span></div>
-                  <div className="flex justify-between"><span>IMC Estimado:</span> <span className="font-bold text-success">24.2 (Normal)</span></div>
+                  <div className="flex justify-between"><span>Nome:</span> <span className="font-bold">{formData.name}</span></div>
+                  <div className="flex justify-between"><span>Objetivo:</span> <span className="font-bold">{formData.goal === 'loss' ? 'Emagrecimento' : formData.goal === 'gain' ? 'Hipertrofia' : 'Manutenção'}</span></div>
+                  <div className="flex justify-between"><span>Peso Inicial:</span> <span className="font-bold">{formData.weight} kg</span></div>
+                  <div className="flex justify-between"><span>Altura:</span> <span className="font-bold">{formData.height} cm</span></div>
                 </div>
               </div>
             </div>

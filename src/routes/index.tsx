@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { isAuthenticated, getSession } from "@/lib/auth/auth.functions";
 import { 
   ArrowRight, 
   CheckCircle2, 
@@ -25,6 +26,15 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userName, setUserName] = useState("");
+
+  useEffect(() => {
+    const session = getSession();
+    setIsLoggedIn(!!session);
+    setUserName(session?.user?.name || "");
+  }, []);
+
   return (
     <div className="flex flex-col min-h-screen bg-background relative overflow-x-hidden">
       {/* Professional Full Background Image with better contrast */}
@@ -55,9 +65,15 @@ function Index() {
               </span>
             </div>
             
-            <Button variant="ghost" size="sm" asChild className="text-foreground/80 font-semibold hover:text-primary hover:bg-white/5">
-              <Link to="/auth" search={{ registerMode: false, name: "", birthDate: "", goal: "", weight: "", height: "", activityLevel: "" }}>ENTRAR</Link>
-            </Button>
+            {isLoggedIn ? (
+              <Button variant="ghost" size="sm" asChild className="text-foreground/80 font-semibold hover:text-primary hover:bg-white/5">
+                <Link to="/dashboard">DASHBOARD</Link>
+              </Button>
+            ) : (
+              <Button variant="ghost" size="sm" asChild className="text-foreground/80 font-semibold hover:text-primary hover:bg-white/5">
+                <Link to="/auth" search={{ registerMode: false, name: "", birthDate: "", goal: "", weight: "", height: "", activityLevel: "" }}>ENTRAR</Link>
+              </Button>
+            )}
           </div>
         </header>
 
@@ -84,8 +100,8 @@ function Index() {
               
               <div className="flex flex-col sm:flex-row items-center gap-4 pt-4 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300">
                 <Button size="lg" className="h-14 px-10 text-base font-black uppercase tracking-widest group w-full sm:w-auto bg-brand-gradient hover:scale-105 transition-all border-none shadow-2xl shadow-primary/40" asChild>
-                  <Link to="/auth" search={{ registerMode: false, name: "", birthDate: "", goal: "", weight: "", height: "", activityLevel: "" }}>
-                    COMEÇAR AGORA
+                  <Link to={isLoggedIn ? "/dashboard" : "/onboarding"}>
+                    {isLoggedIn ? "MEU DASHBOARD" : "COMEÇAR AGORA"}
                     <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={20} />
                   </Link>
                 </Button>
@@ -215,4 +231,3 @@ function FeatureCard({ icon, title, description, className }: { icon: React.Reac
     </div>
   );
 }
-

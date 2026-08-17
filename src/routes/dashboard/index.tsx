@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { getSession } from "@/lib/auth/auth.functions";
 
 import { 
   ArrowRight, 
@@ -31,11 +32,9 @@ function DashboardPage() {
   const [userData, setUserData] = useState<any>(null);
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const session = localStorage.getItem('bodymetrica_auth_session');
-      if (session) {
-        setUserData(JSON.parse(session));
-      }
+    const session = getSession();
+    if (session) {
+      setUserData(session);
     }
     // Simulating initial load
     const timer = setTimeout(() => setIsLoading(false), 1000);

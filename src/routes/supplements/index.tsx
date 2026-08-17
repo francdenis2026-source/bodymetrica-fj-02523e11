@@ -19,6 +19,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ModuleHeader } from "@/components/module-header";
 import { Skeleton } from "@/components/ui/skeleton";
+import { getSession } from "@/lib/auth/auth.functions";
 
 
 
@@ -28,8 +29,13 @@ export const Route = createFileRoute("/supplements/")({
 
 function SupplementsPage() {
   const [isLoading, setIsLoading] = useState(true);
+  const [userData, setUserData] = useState<any>(null);
 
   useEffect(() => {
+    const session = getSession();
+    if (session) {
+      setUserData(session);
+    }
     const timer = setTimeout(() => setIsLoading(false), 800);
     return () => clearTimeout(timer);
   }, []);

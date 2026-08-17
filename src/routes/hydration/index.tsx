@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -15,6 +15,7 @@ import {
   LifeBuoy
 } from "lucide-react";
 import { queueOfflineAction } from "@/lib/offline-sync";
+import { getSession } from "@/lib/auth/auth.functions";
 import { ModuleHeader } from "@/components/module-header";
 
 export const Route = createFileRoute("/hydration/")({
@@ -23,8 +24,16 @@ export const Route = createFileRoute("/hydration/")({
 
 function HydrationPage() {
   const [currentAmount, setCurrentAmount] = useState(1200);
+  const [userData, setUserData] = useState<any>(null);
   const goalAmount = 3000;
   const percentage = Math.round((currentAmount / goalAmount) * 100);
+
+  useEffect(() => {
+    const session = getSession();
+    if (session) {
+      setUserData(session);
+    }
+  }, []);
 
   const addWater = (amount: number) => {
     setCurrentAmount(prev => Math.min(prev + amount, 5000));

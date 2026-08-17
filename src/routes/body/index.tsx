@@ -24,6 +24,7 @@ import {
 } from "recharts";
 import { ModuleHeader } from "@/components/module-header";
 import { Skeleton } from "@/components/ui/skeleton";
+import { getSession } from "@/lib/auth/auth.functions";
 
 
 const mockWeightData = [
@@ -45,11 +46,9 @@ function BodyPage() {
   const [userData, setUserData] = useState<any>(null);
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const session = localStorage.getItem('bodymetrica_auth_session');
-      if (session) {
-        setUserData(JSON.parse(session));
-      }
+    const session = getSession();
+    if (session) {
+      setUserData(session);
     }
     const timer = setTimeout(() => setIsLoading(false), 900);
     return () => clearTimeout(timer);
@@ -106,14 +105,14 @@ function BodyPage() {
             <MetricCard 
               label="Peso" 
               value={`${userData?.profile?.weight || "82.4"} kg`} 
-              change="-0.3 kg" 
+              change={userData?.profile?.weight ? "Sincronizado" : "Padrão"} 
               trend="down" 
               icon={<Scale className="h-4 w-4 text-primary" />} 
             />
             <MetricCard 
               label="Gordura" 
               value="15.2 %" 
-              change="-0.8 %" 
+              change="Referência" 
               trend="down" 
               icon={<TrendingUp className="h-4 w-4 text-primary" />} 
             />
