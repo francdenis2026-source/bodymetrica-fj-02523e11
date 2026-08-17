@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
+import { requireAdminAuth } from "./admin.middleware";
 
 const licenseSchema = z.object({
   licenseKey: z.string().min(10, "Chave de licença inválida"),
@@ -22,12 +23,6 @@ export const validateLicense = createServerFn({ method: "POST" })
       .single();
 
     if (fetchError || !license) {
-      // Fallback for manual validation during transition or if key starts with BODY- but isn't in DB yet
-      // However, we want strict DB-backed validation now.
-      if (data.licenseKey.startsWith("BODY-") && data.licenseKey.length > 12) {
-         // Proceed with auto-creation if it doesn't exist? 
-         // For now, let's keep it strict: must be in licenses table.
-      }
       return { success: false, message: "Chave de licença inválida, já utilizada ou inexistente." };
     }
 
@@ -73,18 +68,14 @@ export const validateLicense = createServerFn({ method: "POST" })
 
 /**
  * Admin function to generate a new license key.
- * Requires admin role.
  */
 export const generateLicenseKey = createServerFn({ method: "POST" })
+  .middleware([requireAdminAuth])
   .inputValidator((data) => z.object({ 
-    userId: z.string().uuid().optional(),
     expiresInDays: z.number().default(365)
   }).parse(data))
   .handler(async ({ data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    
-    // Check if the caller is an admin (we should use middleware ideally, but let's check here for now)
-    // In a real app, use .middleware([requireAdminAuth])
     
     const randomPart = Math.random().toString(36).substring(2, 10).toUpperCase();
     const licenseKey = `BODY-${randomPart}-${Date.now().toString(36).toUpperCase()}`;
@@ -114,6 +105,7 @@ export const generateLicenseKey = createServerFn({ method: "POST" })
  * Admin function to list licenses.
  */
 export const listLicenses = createServerFn({ method: "GET" })
+  .middleware([requireAdminAuth])
   .handler(async () => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     
