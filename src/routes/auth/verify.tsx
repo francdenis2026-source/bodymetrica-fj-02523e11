@@ -1,68 +1,32 @@
-import React, { useState, useEffect } from "react";
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
+import { ModuleHeader } from "@/components/module-header";
+import { Mail, ArrowLeft, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
 import { SVGToast } from "@/components/ui/svg-toast";
-import { Mail, ArrowLeft, RefreshCw, CheckCircle2, XCircle } from "lucide-react";
-import { ResponsiveHero } from "@/components/responsive-hero";
 import { supabase } from "@/integrations/supabase/client";
+import { useState } from "react";
 
 export const Route = createFileRoute("/auth/verify")({
-  component: VerifyPage,
-  validateSearch: (search: Record<string, unknown>) => {
-    return {
-      verified: (search['verified'] as string) === 'true',
-    };
-  },
+  component: VerifyEmailPage,
 });
 
-function VerifyPage() {
-  const { verified } = Route.useSearch();
+function VerifyEmailPage() {
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
 
-  useEffect(() => {
-    if (verified) {
-      toast.custom((t) => (
-        <SVGToast 
-          type="success"
-          title="E-MAIL CONFIRMADO"
-          message="Sua conta foi ativada com sucesso! Faça login para continuar."
-          onClose={() => toast.dismiss(t)}
-        />
-      ));
-      const timer = setTimeout(() => {
-        navigate({ to: "/auth", search: { registerMode: false } as any });
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-    return undefined;
-  }, [verified, navigate]);
-
-  const handleResendLink = async () => {
+  const resendVerification = async () => {
     setIsLoading(true);
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user?.email) {
-        toast.custom((t) => (
-          <SVGToast 
-            type="error"
-            title="ERRO DE ACESSO"
-            message="Usuário não encontrado. Por favor, faça login novamente."
-            onClose={() => toast.dismiss(t)}
-          />
-        ));
-        navigate({ to: "/auth", search: {} as any } as any);
+        toast.error("E-mail não encontrado.");
         return;
       }
 
       const { error } = await supabase.auth.resend({
         type: 'signup',
         email: user.email,
-        options: {
-          emailRedirectTo: `${window.location.origin}/auth/verify?verified=true`
-        }
       });
 
       if (error) {
@@ -78,90 +42,70 @@ function VerifyPage() {
         toast.custom((t) => (
           <SVGToast 
             type="success"
-            title="LINK REENVIADO"
-            message="Um novo link de verificação foi enviado para o seu e-mail."
+            title="LINK ENVIADO"
+            message="Um novo link de confirmação foi enviado para o seu e-mail."
             onClose={() => toast.dismiss(t)}
           />
         ));
       }
     } catch (error) {
-      toast.custom((t) => (
-        <SVGToast 
-          type="error"
-          title="FALHA NA OPERAÇÃO"
-          message="Erro ao reenviar o link de ativação. Tente novamente."
-          onClose={() => toast.dismiss(t)}
-        />
-      ));
+      toast.error("Erro ao reenviar e-mail.");
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center relative p-0 overflow-hidden bg-background">
-      <ResponsiveHero 
-        imageUrl="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?auto=format&fit=crop&q=80&w=1600"
-        overlayOpacity={0.8}
-        className="absolute inset-0 z-0 h-full"
-      />
+    <div className="min-h-screen flex items-center justify-center relative p-6 bg-background overflow-hidden">
+      <div className="absolute inset-0 z-0">
+        <img 
+          src="https://images.unsplash.com/photo-1593079831268-3381b0db4a77?auto=format&fit=crop&q=80&w=1600"
+          alt="Auth background"
+          className="w-full h-full object-cover opacity-20"
+        />
+        <div className="absolute inset-0 bg-gradient-to-br from-black via-black/90 to-primary/10" />
+      </div>
 
-      <div className="relative z-10 w-full max-w-md px-4 py-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
-        <div className="text-center space-y-6 mb-12">
-          <div className="mx-auto w-24 h-24 bg-brand-gradient rounded-[2rem] flex items-center justify-center text-primary-foreground font-black text-4xl shadow-2xl border-2 border-white/20">
+      <div className="relative z-10 w-full max-w-md animate-in fade-in slide-in-from-bottom-4 duration-700">
+        <div className="text-center mb-8">
+          <div className="mx-auto w-20 h-20 bg-brand-gradient rounded-3xl flex items-center justify-center text-primary-foreground font-black text-3xl shadow-2xl border-2 border-white/20 mb-6">
             B
           </div>
-          <div>
-            <h1 className="text-4xl font-black font-display tracking-tighter text-white uppercase italic leading-none">
-              VERIFICAÇÃO DE <span className="text-gradient-brand">CONTA</span>
-            </h1>
-            <p className="text-white/60 font-black uppercase tracking-[0.3em] text-[10px] mt-4">CONFIRME SEU ACESSO</p>
-          </div>
+          <h1 className="text-4xl font-black font-display tracking-tighter text-white uppercase italic leading-none">
+            CONFIRME SEU <span className="text-gradient-brand">E-MAIL</span>
+          </h1>
         </div>
 
-        <Card className="surface border-white/5 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.6)] bg-black/60 backdrop-blur-3xl rounded-[2.5rem] overflow-hidden">
-          <CardHeader className="space-y-2 pb-10 border-b border-white/5 pt-12">
-            <div className="mx-auto w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center mb-4">
-              <Mail className="text-primary" size={32} />
+        <Card className="surface border-white/5 shadow-2xl bg-black/60 backdrop-blur-3xl rounded-[2.5rem] overflow-hidden text-center">
+          <CardHeader className="pt-10">
+            <div className="mx-auto w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-4">
+              <Mail size={32} />
             </div>
-            <CardTitle className="text-2xl font-black text-white text-center uppercase tracking-[0.1em] italic">
-              {verified ? "E-MAIL CONFIRMADO!" : "CONFIRME SEU E-MAIL"}
-            </CardTitle>
-            <CardDescription className="font-bold text-white/40 text-center uppercase text-[10px] tracking-widest px-4">
-              {verified 
-                ? "SUA CONTA FOI ATIVADA COM SUCESSO." 
-                : "ENVIAMOS UM LINK DE ATIVAÇÃO PARA VOCÊ."}
+            <CardTitle className="text-xl font-black text-white uppercase tracking-widest italic">VERIFICAÇÃO PENDENTE</CardTitle>
+            <CardDescription className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40 px-6">
+              Para sua segurança, confirme sua identidade através do link enviado ao seu e-mail.
             </CardDescription>
           </CardHeader>
-
-          <CardContent className="pt-8 space-y-6">
-            <p className="text-sm text-white/70 text-center leading-relaxed italic">
-              A licença de uso só poderá ser ativada após a confirmação do seu e-mail. Por favor, verifique sua caixa de entrada e clique no link de ativação.
+          <CardContent className="pb-10 space-y-6">
+            <p className="text-sm text-white/60 leading-relaxed italic">
+              Ainda não recebeu? Verifique sua pasta de spam ou clique no botão abaixo para reenviar.
             </p>
-
-            <div className="space-y-4">
+            
+            <div className="flex flex-col gap-4">
               <Button 
-                onClick={handleResendLink} 
+                onClick={resendVerification}
                 disabled={isLoading}
-                className="w-full h-16 text-base font-black uppercase tracking-[0.2em] bg-brand-gradient hover:scale-[1.02] transition-all shadow-2xl shadow-primary/30 border-none rounded-2xl"
+                className="h-14 w-full bg-brand-gradient border-none font-black uppercase tracking-widest rounded-2xl"
               >
-                {isLoading ? (
-                  <RefreshCw className="mr-2 animate-spin" size={20} />
-                ) : (
-                  <Mail className="mr-2" size={20} />
-                )}
-                REENVIAR LINK
+                {isLoading ? "ENVIANDO..." : "REENVIAR E-MAIL"}
               </Button>
-
+              
               <Button 
-                variant="ghost" 
-                asChild
-                className="w-full h-14 font-black uppercase tracking-widest text-white/40 hover:text-white"
+                variant="outline" 
+                className="h-14 w-full border-white/10 bg-white/5 font-black uppercase tracking-widest rounded-2xl flex items-center justify-center gap-2"
+                onClick={() => window.location.href = "/auth"}
               >
-                <Link to="/auth" search={{ registerMode: false, name: "", birthDate: "", goal: "", weight: "", height: "", activityLevel: "" } as any}>
-                  <ArrowLeft className="mr-2" size={16} />
-                  VOLTAR AO LOGIN
-                </Link>
+                <ArrowLeft size={16} /> VOLTAR AO LOGIN
               </Button>
             </div>
           </CardContent>
