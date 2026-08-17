@@ -25,6 +25,7 @@ import { Route as HydrationIndexRouteImport } from './routes/hydration/index'
 import { Route as NutritionIndexRouteImport } from './routes/nutrition/index'
 import { Route as OnboardingIndexRouteImport } from './routes/onboarding/index'
 import { Route as PrivacyIndexRouteImport } from './routes/privacy/index'
+import { Route as ProfileIndexRouteImport } from './routes/profile/index'
 import { Route as SettingsIndexRouteImport } from './routes/settings/index'
 import { Route as SupplementsIndexRouteImport } from './routes/supplements/index'
 import { Route as TermsIndexRouteImport } from './routes/terms/index'
@@ -112,6 +113,11 @@ const PrivacyIndexRoute = PrivacyIndexRouteImport.update({
   path: '/privacy/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProfileIndexRoute = ProfileIndexRouteImport.update({
+  id: '/profile/',
+  path: '/profile/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SettingsIndexRoute = SettingsIndexRouteImport.update({
   id: '/settings/',
   path: '/settings/',
@@ -160,6 +166,7 @@ export interface FileRoutesByFullPath {
   '/nutrition/': typeof NutritionIndexRoute
   '/onboarding/': typeof OnboardingIndexRoute
   '/privacy/': typeof PrivacyIndexRoute
+  '/profile/': typeof ProfileIndexRoute
   '/settings/': typeof SettingsIndexRoute
   '/supplements/': typeof SupplementsIndexRoute
   '/terms/': typeof TermsIndexRoute
@@ -183,6 +190,7 @@ export interface FileRoutesByTo {
   '/nutrition': typeof NutritionIndexRoute
   '/onboarding': typeof OnboardingIndexRoute
   '/privacy': typeof PrivacyIndexRoute
+  '/profile': typeof ProfileIndexRoute
   '/settings': typeof SettingsIndexRoute
   '/supplements': typeof SupplementsIndexRoute
   '/terms': typeof TermsIndexRoute
@@ -208,6 +216,7 @@ export interface FileRoutesById {
   '/nutrition/': typeof NutritionIndexRoute
   '/onboarding/': typeof OnboardingIndexRoute
   '/privacy/': typeof PrivacyIndexRoute
+  '/profile/': typeof ProfileIndexRoute
   '/settings/': typeof SettingsIndexRoute
   '/supplements/': typeof SupplementsIndexRoute
   '/terms/': typeof TermsIndexRoute
@@ -234,6 +243,7 @@ export interface FileRouteTypes {
     | '/nutrition/'
     | '/onboarding/'
     | '/privacy/'
+    | '/profile/'
     | '/settings/'
     | '/supplements/'
     | '/terms/'
@@ -257,6 +267,7 @@ export interface FileRouteTypes {
     | '/nutrition'
     | '/onboarding'
     | '/privacy'
+    | '/profile'
     | '/settings'
     | '/supplements'
     | '/terms'
@@ -281,6 +292,7 @@ export interface FileRouteTypes {
     | '/nutrition/'
     | '/onboarding/'
     | '/privacy/'
+    | '/profile/'
     | '/settings/'
     | '/supplements/'
     | '/terms/'
@@ -304,6 +316,7 @@ export interface RootRouteChildren {
   NutritionIndexRoute: typeof NutritionIndexRoute
   OnboardingIndexRoute: typeof OnboardingIndexRoute
   PrivacyIndexRoute: typeof PrivacyIndexRoute
+  ProfileIndexRoute: typeof ProfileIndexRoute
   SettingsIndexRoute: typeof SettingsIndexRoute
   SupplementsIndexRoute: typeof SupplementsIndexRoute
   TermsIndexRoute: typeof TermsIndexRoute
@@ -426,6 +439,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrivacyIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/profile/': {
+      id: '/profile/'
+      path: '/profile'
+      fullPath: '/profile/'
+      preLoaderRoute: typeof ProfileIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/settings/': {
       id: '/settings/'
       path: '/settings'
@@ -500,6 +520,7 @@ const rootRouteChildren: RootRouteChildren = {
   NutritionIndexRoute: NutritionIndexRoute,
   OnboardingIndexRoute: OnboardingIndexRoute,
   PrivacyIndexRoute: PrivacyIndexRoute,
+  ProfileIndexRoute: ProfileIndexRoute,
   SettingsIndexRoute: SettingsIndexRoute,
   SupplementsIndexRoute: SupplementsIndexRoute,
   TermsIndexRoute: TermsIndexRoute,
