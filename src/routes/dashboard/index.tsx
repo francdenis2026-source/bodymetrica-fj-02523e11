@@ -55,18 +55,8 @@ function DashboardPage() {
   if (isLoading) {
     return (
       <div className="flex-1 space-y-12 p-4 md:p-12 pt-10 bg-background animate-in fade-in duration-700">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
-          <div className="flex items-center gap-6">
-            <Skeleton className="w-20 h-20 rounded-3xl" />
-            <div className="space-y-3">
-              <Skeleton className="w-32 h-6" />
-              <Skeleton className="w-64 h-12 md:h-16" />
-            </div>
-          </div>
-        </div>
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-          {[1, 2, 3, 4].map(i => <Skeleton key={i} className="h-40 rounded-[2.5rem]" />)}
-        </div>
+        <PageHeaderSkeleton />
+        <StatsSkeleton />
         <div className="grid gap-6 md:grid-cols-2">
           <Skeleton className="h-80 rounded-[2.5rem]" />
           <Skeleton className="h-80 rounded-[2.5rem]" />

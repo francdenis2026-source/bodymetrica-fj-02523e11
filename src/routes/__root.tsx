@@ -45,16 +45,16 @@ import appCss from "../styles.css?url";
 function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center surface border-none p-8">
-        <h1 className="text-7xl font-black font-display text-primary tracking-tighter italic">404</h1>
-        <h2 className="mt-4 text-xl font-black uppercase tracking-widest text-foreground italic">PÁGINA NÃO ENCONTRADA</h2>
-        <p className="mt-4 text-sm text-muted-foreground leading-relaxed">
+      <div className="max-w-md w-full text-center surface border-none p-12 md:p-16 rounded-[3.5rem] shadow-[0_50px_100px_rgba(0,0,0,0.6)] animate-in fade-in zoom-in duration-700">
+        <h1 className="text-8xl md:text-9xl font-black font-display text-primary tracking-tighter italic leading-none">404</h1>
+        <h2 className="mt-6 text-2xl font-black uppercase tracking-[0.2em] text-foreground italic leading-none">PÁGINA NÃO ENCONTRADA</h2>
+        <p className="mt-6 text-base text-muted-foreground leading-tight font-medium">
           O caminho que você está tentando acessar não existe ou foi movido para uma nova zona de performance.
         </p>
-        <div className="mt-8">
+        <div className="mt-10">
           <Link
             to="/"
-            className="inline-flex items-center justify-center rounded-xl bg-primary px-8 h-12 text-xs font-black uppercase tracking-widest text-primary-foreground transition-all hover:scale-105 shadow-xl shadow-primary/20"
+            className="inline-flex items-center justify-center rounded-[1.5rem] bg-brand-gradient px-12 h-16 text-xs font-black uppercase tracking-[0.2em] text-primary-foreground transition-all hover:scale-105 shadow-[0_20px_40px_rgba(oklch(0.65_0.22_260),0.4)]"
           >
             VOLTAR AO INÍCIO
           </Link>
@@ -415,13 +415,15 @@ function RootComponent() {
         {showSidebar && (
           <>
             {/* Desktop Sidebar */}
-            <aside className="hidden md:flex w-72 flex-col border-r border-white/5 bg-card/50 backdrop-blur-2xl sticky top-0 h-screen z-40">
-              <div className="p-8 border-b border-white/5">
-                <h1 className="text-2xl font-black font-display text-primary leading-tight tracking-tighter uppercase italic">
-                  BODY MÉTTRICA
+            <aside className="hidden md:flex w-80 flex-col border-r border-white/5 bg-card/30 backdrop-blur-3xl sticky top-0 h-screen z-40">
+              <div className="p-10 border-b border-white/5 relative overflow-hidden group">
+                <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                <h1 className="relative z-10 text-2xl font-black font-display text-primary leading-none tracking-tighter uppercase italic">
+                  BODY MÉTTRICA <span className="text-foreground">FJ</span>
                 </h1>
+                <p className="relative z-10 text-[9px] font-black uppercase tracking-[0.4em] text-foreground/20 mt-2">Performance Suite</p>
               </div>
-              <nav className="flex-1 p-6 space-y-2 overflow-y-auto">
+              <nav className="flex-1 p-8 space-y-3 overflow-y-auto">
                 <SidebarLink to="/dashboard" icon={<LayoutDashboard size={22} />} label="DASHBOARD" />
                 <SidebarLink to="/goals" icon={<Target size={22} />} label="METAS" />
                 <SidebarLink to="/body" icon={<User size={22} />} label="COMPOSIÇÃO" />
@@ -434,17 +436,17 @@ function RootComponent() {
                 <SidebarLink to="/supplements" icon={<Pill size={22} />} label="PROTOCOLOS" />
                 <SidebarLink to="/training" icon={<Dumbbell size={22} />} label="PERFORMANCE" />
               </nav>
-              <div className="p-6 border-t border-white/5 space-y-4">
-                <div className="flex items-center justify-between px-4 py-2 bg-white/5 rounded-xl">
-                  <span className="text-[10px] font-black tracking-widest text-foreground/40 uppercase">TEMA</span>
+              <div className="p-8 border-t border-white/5 space-y-6">
+                <div className="flex items-center justify-between px-5 py-3 bg-white/[0.03] rounded-2xl border border-white/5">
+                  <span className="text-[10px] font-black tracking-[0.2em] text-foreground/40 uppercase">TEMA</span>
                   <ThemeToggle />
                 </div>
                 <SidebarLink to="/settings" icon={<Settings size={22} />} label="AJUSTES" />
                 <button 
                   onClick={handleLogout}
-                  className="flex w-full items-center gap-4 px-4 py-3 text-xs font-black tracking-widest text-destructive hover:bg-destructive/10 rounded-xl transition-all uppercase cursor-pointer"
+                  className="flex w-full items-center gap-5 px-5 py-4 text-[11px] font-black tracking-[0.2em] text-destructive hover:bg-destructive/10 rounded-2xl transition-all uppercase cursor-pointer group"
                 >
-                  <LogOut size={22} />
+                  <LogOut size={22} className="group-hover:-translate-x-1 transition-transform" />
                   SAIR
                 </button>
               </div>
