@@ -83,6 +83,20 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   );
 }
 
+function StatusIcon({ isOnline }: { isOnline: boolean }) {
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => setHydrated(true), []);
+
+  if (!hydrated) return <div className="w-3 h-3 rounded-full bg-muted animate-pulse" />;
+  
+  return isOnline ? (
+    <Wifi className="w-3 h-3 text-success" />
+  ) : (
+    <WifiOff className="w-3 h-3 text-destructive" />
+  );
+}
+
+
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: () => ({
     meta: [
