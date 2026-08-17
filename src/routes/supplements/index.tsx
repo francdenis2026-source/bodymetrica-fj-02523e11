@@ -19,6 +19,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ModuleHeader } from "@/components/module-header";
 import { Skeleton } from "@/components/ui/skeleton";
+import { getSession } from "@/lib/auth/auth.functions";
 
 
 

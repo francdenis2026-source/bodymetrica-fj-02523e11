@@ -15,6 +15,7 @@ import {
   LifeBuoy
 } from "lucide-react";
 import { queueOfflineAction } from "@/lib/offline-sync";
+import { getSession } from "@/lib/auth/auth.functions";
 import { ModuleHeader } from "@/components/module-header";
 
 export const Route = createFileRoute("/hydration/")({
