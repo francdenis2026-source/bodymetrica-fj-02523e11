@@ -60,53 +60,97 @@ function AboutPage() {
           </div>
         </ResponsiveHero>
 
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
           {/* O Projeto */}
-          <section className="surface p-8 md:p-10 space-y-6 border-white/5 bg-card/40 backdrop-blur-2xl rounded-[2.5rem] shadow-xl hover:shadow-primary/5 transition-all">
-            <h3 className="text-2xl font-black font-display text-primary italic uppercase tracking-tighter">
-              O PROJETO
-            </h3>
-            <p className="text-sm text-muted-foreground leading-relaxed font-medium">
-              O Body Métrica FJ nasceu da necessidade de consolidar em uma única suíte de elite todas as ferramentas necessárias para a transformação física definitiva. 
-            </p>
-            <p className="text-sm text-muted-foreground leading-relaxed font-medium">
-              Combinamos algoritmos de precisão para nutrição, monitoramento de carga em treinos e visão 360º da composição corporal, tudo operando em uma infraestrutura PWA de última geração que funciona inclusive offline.
-            </p>
-            <div className="flex flex-wrap gap-2 pt-2">
-              <span className="bg-white/5 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border border-white/5">Performance</span>
-              <span className="bg-white/5 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border border-white/5">Inteligência</span>
-              <span className="bg-white/5 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border border-white/5">Offline First</span>
+          <section className="surface p-8 md:p-12 space-y-8 border-white/5 bg-card/40 backdrop-blur-2xl rounded-[2.5rem] shadow-xl hover:shadow-primary/10 transition-all border group relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 blur-3xl group-hover:bg-primary/10 transition-colors" />
+            
+            <div className="space-y-4">
+              <h3 className="text-sm font-black uppercase tracking-[0.3em] text-primary italic">
+                A Plataforma
+              </h3>
+              <h4 className="text-3xl md:text-4xl font-black font-display text-foreground italic uppercase tracking-tighter leading-none">
+                ENGENHARIA DE <br /> PERFORMANCE.
+              </h4>
+            </div>
+
+            <div className="space-y-6">
+              <p className="text-sm text-muted-foreground leading-relaxed font-medium">
+                O Body Métrica FJ nasceu da necessidade de consolidar em uma única suíte de elite todas as ferramentas necessárias para a transformação física definitiva. 
+              </p>
+              <div className="space-y-4">
+                <div className="flex gap-4 items-start">
+                  <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                    <Zap size={14} className="text-primary" />
+                  </div>
+                  <div>
+                    <h5 className="text-[10px] font-black uppercase tracking-widest text-foreground">Inteligência Preditiva</h5>
+                    <p className="text-[11px] text-muted-foreground">Cálculos metabólicos de alta precisão baseados em bioimpedância e dados reais.</p>
+                  </div>
+                </div>
+                <div className="flex gap-4 items-start">
+                  <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                    <Globe size={14} className="text-primary" />
+                  </div>
+                  <div>
+                    <h5 className="text-[10px] font-black uppercase tracking-widest text-foreground">Ecossistema Offline</h5>
+                    <p className="text-[11px] text-muted-foreground">Sincronização inteligente que garante acesso aos seus dados mesmo sem conexão.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap gap-2 pt-4">
+              {["Performance", "Inteligência", "Offline First", "Analytics"].map(tag => (
+                <span key={tag} className="bg-white/5 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border border-white/5 text-muted-foreground group-hover:text-primary transition-colors">
+                  {tag}
+                </span>
+              ))}
             </div>
           </section>
 
           {/* O Desenvolvedor */}
-          <section className="surface p-8 md:p-10 space-y-6 border-white/5 bg-card/40 backdrop-blur-2xl rounded-[2.5rem] shadow-xl hover:shadow-primary/5 transition-all relative overflow-hidden">
-            <div className="absolute top-0 right-0 p-4 opacity-5">
-              <Code2 size={120} />
+          <section className="surface p-8 md:p-12 space-y-8 border-white/5 bg-card/40 backdrop-blur-2xl rounded-[2.5rem] shadow-xl hover:shadow-primary/10 transition-all border group relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 blur-3xl group-hover:bg-primary/10 transition-colors" />
+            
+            <div className="space-y-4">
+              <h3 className="text-sm font-black uppercase tracking-[0.3em] text-primary italic">
+                O Visionário
+              </h3>
+              <h4 className="text-3xl md:text-4xl font-black font-display text-foreground italic uppercase tracking-tighter leading-none">
+                FRANC D'NIS <br /> FEIJÓ.
+              </h4>
             </div>
-            <h3 className="text-2xl font-black font-display text-primary italic uppercase tracking-tighter">
-              DEVELOPER
-            </h3>
-            <div className="flex items-center gap-4">
-              <div className="w-16 h-16 rounded-2xl bg-brand-gradient flex items-center justify-center text-white shadow-lg border border-white/10 shrink-0">
-                <Code2 size={32} />
+
+            <div className="flex items-center gap-5">
+              <div className="w-20 h-20 rounded-2xl bg-brand-gradient flex items-center justify-center text-white shadow-lg border border-white/10 shrink-0 transform group-hover:rotate-6 transition-transform">
+                <Code2 size={40} />
               </div>
-              <div>
-                <h4 className="text-lg font-black font-display uppercase tracking-tight">Franc D'nis Feijó</h4>
-                <p className="text-[10px] text-primary font-black uppercase tracking-widest flex items-center gap-1">
-                  <MapPin size={10} /> Feijó, Acre - Brasil
-                </p>
+              <div className="space-y-1">
+                <p className="text-xs font-black uppercase tracking-widest text-foreground">Software Architect</p>
+                <div className="flex items-center gap-1.5 text-primary">
+                  <MapPin size={12} />
+                  <span className="text-[10px] font-black uppercase tracking-[0.2em]">Feijó, Acre</span>
+                </div>
               </div>
             </div>
-            <p className="text-sm text-muted-foreground leading-relaxed font-medium">
-              Especialista em arquitetura de software e desenvolvimento de soluções tecnológicas de alto impacto. Franc vem transformando o cenário digital diretamente de Feijó, no Acre, integrando Inteligência Artificial avançada com as stacks mais modernas do mercado (React, TanStack, Supabase).
-            </p>
-            <p className="text-sm text-muted-foreground leading-relaxed font-medium">
-              Sua missão é democratizar o acesso a ferramentas de precisão, unindo ciência do esporte e engenharia de dados para criar experiências que resolvem problemas reais de forma elegante e intuitiva. Este projeto reflete sua paixão por performance, tanto em código quanto em resultados físicos.
-            </p>
-            <div className="flex gap-4 pt-2">
-              <a href="#" className="text-muted-foreground hover:text-primary transition-colors flex items-center gap-1 text-[10px] font-black uppercase tracking-widest"><Code2 size={16} /> GitHub</a>
-              <a href="#" className="text-muted-foreground hover:text-primary transition-colors flex items-center gap-1 text-[10px] font-black uppercase tracking-widest"><Globe size={16} /> Portfolio</a>
+
+            <div className="space-y-4">
+              <p className="text-sm text-muted-foreground leading-relaxed font-medium">
+                Especialista em arquitetura de software e desenvolvimento de soluções tecnológicas de alto impacto. Franc vem transformando o cenário digital diretamente de Feijó, no Acre, integrando Inteligência Artificial avançada com as stacks mais modernas do mundo.
+              </p>
+              <p className="text-sm text-muted-foreground leading-relaxed font-medium">
+                Sua missão é democratizar o acesso a ferramentas de precisão, unindo ciência do esporte e engenharia de dados para criar experiências que resolvem problemas reais de forma elegante e intuitiva.
+              </p>
+            </div>
+
+            <div className="flex gap-6 pt-4">
+              <a href="#" className="text-muted-foreground hover:text-primary transition-all flex items-center gap-2 text-[10px] font-black uppercase tracking-widest hover:translate-x-1">
+                <Code2 size={16} /> GitHub
+              </a>
+              <a href="#" className="text-muted-foreground hover:text-primary transition-all flex items-center gap-2 text-[10px] font-black uppercase tracking-widest hover:translate-x-1">
+                <Globe size={16} /> Portfolio
+              </a>
             </div>
           </section>
         </div>
