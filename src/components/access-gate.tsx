@@ -9,13 +9,15 @@ interface AccessGateProps {
   description?: string;
   children: React.ReactNode;
   isAllowed: boolean;
+  needsVerification?: boolean;
 }
 
 export function AccessGate({ 
   title = "ACESSO RESTRITO", 
   description = "ESTA ÁREA REQUER AUTENTICAÇÃO DE ALTO NÍVEL PARA SER ACESSADA.", 
   children, 
-  isAllowed 
+  isAllowed,
+  needsVerification = false
 }: AccessGateProps) {
   const navigate = useNavigate();
 
