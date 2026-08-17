@@ -144,7 +144,8 @@ function AuthPage() {
     setIsLoading(true);
     try {
       // MFA Check first
-      const { data: { factors }, error: mfaError } = await supabase.auth.mfa.listFactors();
+      const { data: mfaData, error: mfaError } = await supabase.auth.mfa.listFactors();
+      const factors = mfaData?.all || [];
       
       const result = await login({ data: values });
       if (result.success) {
