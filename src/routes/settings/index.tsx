@@ -14,7 +14,9 @@ import {
   Trash2,
   ChevronRight,
   LifeBuoy,
-  Settings
+  Settings,
+  Save,
+  Clock
 } from "lucide-react";
 import { ModuleHeader } from "@/components/module-header";
 
