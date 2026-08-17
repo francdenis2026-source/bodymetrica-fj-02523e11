@@ -23,7 +23,7 @@ function AboutPage() {
       <header className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-md border-b">
         <div className="container mx-auto px-4 h-16 flex items-center gap-4">
           <Button variant="ghost" size="icon" asChild>
-            <Link to="/"><ArrowLeft size={20} /></Link>
+            <button onClick={() => window.history.back()}><ArrowLeft size={20} /></button>
           </Button>
           <h1 className="text-lg font-bold font-display">Conhecer Ferramentas</h1>
           <Button variant="outline" size="sm" className="ml-auto gap-2" asChild>
@@ -88,7 +88,7 @@ function AboutPage() {
             Crie sua conta e tenha todas essas ferramentas na palma da sua mão.
           </p>
           <Button size="lg" className="px-8 font-semibold" asChild>
-            <Link to="/auth" search={{ registerMode: true, name: "", birthDate: "" }}>Criar Conta</Link>
+            <Link to="/auth" search={{ registerMode: true, name: "", birthDate: "", goal: "", weight: "", height: "", activityLevel: "" }}>Criar Conta</Link>
           </Button>
         </section>
       </main>

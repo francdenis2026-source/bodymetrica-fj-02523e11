@@ -28,15 +28,28 @@ export const Route = createFileRoute("/dashboard/")({
 
 function DashboardPage() {
   const [isLoading, setIsLoading] = useState(true);
-  const userName = "Visitante"; // Mock data
-  const currentGoal = "Hipertrofia";
-  const weightChange = -0.5;
+  const [userData, setUserData] = useState<any>(null);
 
   useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const session = localStorage.getItem('bodymetrica_auth_session');
+      if (session) {
+        setUserData(JSON.parse(session));
+      }
+    }
     // Simulating initial load
     const timer = setTimeout(() => setIsLoading(false), 1000);
     return () => clearTimeout(timer);
   }, []);
+
+  const userName = userData?.name || "Visitante";
+  const currentGoalMap: Record<string, string> = {
+    'loss': 'Emagrecimento',
+    'gain': 'Hipertrofia',
+    'maint': 'Manutenção'
+  };
+  const currentGoal = currentGoalMap[userData?.profile?.goal] || "Hipertrofia";
+  const weightChange = -0.5;
 
   if (isLoading) {
     return (
@@ -105,7 +118,7 @@ function DashboardPage() {
               <User className="h-4 w-4 text-primary" />
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-black font-display italic tracking-tighter uppercase">82.4 kg</div>
+              <div className="text-3xl font-black font-display italic tracking-tighter uppercase">{userData?.profile?.weight || "82.4"} kg</div>
               <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
                 <TrendingUp size={12} className="text-success" />
                 {weightChange}kg desde a última semana

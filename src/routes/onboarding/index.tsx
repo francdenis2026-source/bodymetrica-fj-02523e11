@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { FormField } from "@/components/ui/form-field";
+import { toast } from "sonner";
 
 import { 
   ChevronRight, 
@@ -34,6 +35,16 @@ function OnboardingPage() {
     activityLevel: "Moderadamente ativo (3-5 dias/semana)"
   });
 
+  const validateStep = (currentStep: number) => {
+    if (currentStep === 1) {
+      return formData.name.length >= 3 && formData.birthDate.length > 0;
+    }
+    if (currentStep === 3) {
+      return formData.weight.length > 0 && formData.height.length > 0;
+    }
+    return true;
+  };
+
   const nextStep = () => setStep((s) => Math.min(s + 1, totalSteps));
   const prevStep = () => setStep((s) => Math.max(s - 1, 1));
   
@@ -45,7 +56,11 @@ function OnboardingPage() {
       search: { 
         registerMode: true,
         name: formData.name,
-        birthDate: formData.birthDate
+        birthDate: formData.birthDate,
+        goal: formData.goal,
+        weight: formData.weight,
+        height: formData.height,
+        activityLevel: formData.activityLevel
       } 
     });
   };
@@ -204,7 +219,16 @@ function OnboardingPage() {
             </Button>
           )}
           {step < 4 ? (
-            <Button className="h-12 flex-1 gap-2 text-base font-semibold" onClick={nextStep}>
+            <Button 
+              className="h-12 flex-1 gap-2 text-base font-semibold" 
+              onClick={() => {
+                if (validateStep(step)) {
+                  nextStep();
+                } else {
+                  toast.error("Por favor, preencha todos os campos obrigatórios.");
+                }
+              }}
+            >
               Próximo <ChevronRight size={18} />
             </Button>
           ) : (

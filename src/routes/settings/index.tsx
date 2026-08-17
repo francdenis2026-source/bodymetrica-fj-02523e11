@@ -152,7 +152,16 @@ function SettingsPage() {
         </Card>
 
         <div className="space-y-3 pt-4">
-          <Button variant="ghost" className="w-full justify-start text-destructive hover:bg-destructive/10 h-12 px-4 gap-3">
+          <Button 
+            variant="ghost" 
+            className="w-full justify-start text-destructive hover:bg-destructive/10 h-12 px-4 gap-3"
+            onClick={() => {
+              if (typeof window !== 'undefined') {
+                localStorage.removeItem('bodymetrica_auth_session');
+                window.location.href = '/auth';
+              }
+            }}
+          >
             <LogOut size={18} />
             Sair da Conta
           </Button>

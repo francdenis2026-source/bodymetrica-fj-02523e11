@@ -42,8 +42,15 @@ export const Route = createFileRoute("/body/")({
 function BodyPage() {
   const [activeTab, setActiveTab] = useState("overview");
   const [isLoading, setIsLoading] = useState(true);
+  const [userData, setUserData] = useState<any>(null);
 
   useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const session = localStorage.getItem('bodymetrica_auth_session');
+      if (session) {
+        setUserData(JSON.parse(session));
+      }
+    }
     const timer = setTimeout(() => setIsLoading(false), 900);
     return () => clearTimeout(timer);
   }, []);
@@ -98,7 +105,7 @@ function BodyPage() {
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             <MetricCard 
               label="Peso" 
-              value="82.4 kg" 
+              value={`${userData?.profile?.weight || "82.4"} kg`} 
               change="-0.3 kg" 
               trend="down" 
               icon={<Scale className="h-4 w-4 text-primary" />} 

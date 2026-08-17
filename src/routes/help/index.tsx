@@ -105,7 +105,7 @@ function HelpCenterPage() {
       <header className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-md border-b">
         <div className="container mx-auto px-4 h-16 flex items-center gap-4">
           <Button variant="ghost" size="icon" asChild>
-            <Link to="/"><ArrowLeft size={20} /></Link>
+            <button onClick={() => window.history.back()}><ArrowLeft size={20} /></button>
           </Button>
           <div className="flex items-center gap-2">
             <LifeBuoy className="text-primary" size={20} />
