@@ -1,4 +1,5 @@
 import { toast } from "sonner";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -23,8 +24,6 @@ import { EmptyState } from "@/components/ui/status-states";
 import { Input } from "@/components/ui/input";
 import { getSession } from "@/lib/auth/auth.functions";
 
-
-
 export const Route = createFileRoute("/training/")({
   component: TrainingPage,
 });
@@ -43,7 +42,7 @@ function TrainingPage() {
     return () => clearTimeout(timer);
   }, []);
 
-  const hasWorkouts = false; // Mock for demonstration
+  const hasWorkouts = true; // Changed to true to show content
 
   if (isLoading) {
     return (
@@ -106,8 +105,6 @@ function TrainingPage() {
           </Button>
         </div>
       </div>
-
-
 
       <div className="grid gap-4 md:grid-cols-3">
         <Card className="surface border-none p-4 flex flex-col items-center justify-center text-center space-y-2">
