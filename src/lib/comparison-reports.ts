@@ -64,9 +64,23 @@ export const generateComparisonPDF = async (data: ReportData) => {
 
   doc.save(`Comparativo_BodyMetrica_${data.userName.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`);
 
+  // Track export in history
+  const exportEntry = {
+    id: crypto.randomUUID(),
+    date: new Date().toISOString(),
+    type: 'PDF',
+    fileName: `Comparativo_BodyMetrica_${data.userName.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`,
+    publicLink: `https://bodymetrica.link/share/${crypto.randomUUID().slice(0, 8)}`,
+    expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString() // 7 days
+  };
+
+  const history = JSON.parse(localStorage.getItem('bodymetrica_export_history') || '[]');
+  localStorage.setItem('bodymetrica_export_history', JSON.stringify([exportEntry, ...history].slice(0, 50)));
+
   return {
     summaryText: `Relatório Body Métrica FJ - ${data.userName}\nEvolução: ${data.bodyWeightChange} de peso, ${data.muscleMassChange} de massa.\nResumo: ${data.summary}`,
-    fileName: `Comparativo_BodyMetrica_${data.userName.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}`
+    fileName: exportEntry.fileName,
+    publicLink: exportEntry.publicLink
   };
 };
 
@@ -80,8 +94,21 @@ export const exportReportAsImage = async (elementId: string, fileName: string) =
   });
   
   const link = document.createElement('a');
-  link.download = `${fileName}.png`;
+  const fullFileName = `${fileName}.png`;
+  link.download = fullFileName;
   link.href = canvas.toDataURL('image/png');
   link.click();
-};
 
+  // Track export in history
+  const exportEntry = {
+    id: crypto.randomUUID(),
+    date: new Date().toISOString(),
+    type: 'PNG',
+    fileName: fullFileName,
+    publicLink: `https://bodymetrica.link/share/${crypto.randomUUID().slice(0, 8)}`,
+    expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
+  };
+
+  const history = JSON.parse(localStorage.getItem('bodymetrica_export_history') || '[]');
+  localStorage.setItem('bodymetrica_export_history', JSON.stringify([exportEntry, ...history].slice(0, 50)));
+};

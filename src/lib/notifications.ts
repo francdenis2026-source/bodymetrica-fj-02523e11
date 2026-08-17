@@ -4,11 +4,17 @@ export interface NotificationSettings {
   hydration: {
     enabled: boolean;
     times: string[];
+    frequency: 'daily' | 'custom';
     threshold: number; // e.g., 0.2 means 20% left
   };
   macros: {
     enabled: boolean;
     times: string[];
+    frequency: 'daily' | 'custom';
+  };
+  adherence: {
+    enabled: boolean;
+    frequency: 'weekly' | 'daily';
   };
   weeklyReports: boolean;
 }
@@ -19,11 +25,17 @@ const DEFAULT_SETTINGS: NotificationSettings = {
   hydration: {
     enabled: true,
     times: ['08:00', '14:00', '20:00'],
+    frequency: 'daily',
     threshold: 0.2
   },
   macros: {
     enabled: true,
-    times: ['12:00', '19:00']
+    times: ['12:00', '19:00'],
+    frequency: 'daily'
+  },
+  adherence: {
+    enabled: true,
+    frequency: 'daily'
   },
   weeklyReports: false
 };
