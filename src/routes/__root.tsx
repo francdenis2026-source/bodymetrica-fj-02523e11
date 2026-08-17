@@ -7,8 +7,9 @@ import {
   HeadContent,
   Scripts,
   useLocation,
+  useNavigate,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, type ReactNode, useState } from "react";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
 import { 
@@ -28,6 +29,8 @@ import { syncOfflineActions } from "@/lib/offline-sync";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { AppErrorBoundary } from "@/components/ui/error-boundary";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { isAuthenticated, clearSession } from "@/lib/auth/auth.functions";
+import { AccessGate } from "@/components/access-gate";
 
 import appCss from "../styles.css?url";
 
@@ -135,8 +138,15 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const location = useLocation();
+  const navigate = useNavigate();
+  const [authChecked, setAuthChecked] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
+    // Check initial auth state
+    setIsLoggedIn(isAuthenticated());
+    setAuthChecked(true);
+
     if (typeof window !== "undefined" && "serviceWorker" in navigator) {
       window.addEventListener("load", () => {
         navigator.serviceWorker
@@ -168,12 +178,20 @@ function RootComponent() {
     };
   }, []);
 
-  const isPublicRoute = ["/", "/auth", "/admin/login"].includes(location.pathname);
+  const handleLogout = () => {
+    clearSession();
+    setIsLoggedIn(false);
+    toast.success("Sessão encerrada com sucesso");
+    navigate({ to: "/" });
+  };
+
+  const isPublicRoute = ["/", "/auth", "/admin/login", "/onboarding"].includes(location.pathname);
+  const showSidebar = !isPublicRoute && isLoggedIn;
 
   return (
     <QueryClientProvider client={queryClient}>
       <div className="flex min-h-screen w-full flex-col md:flex-row bg-background transition-colors duration-300">
-        {!isPublicRoute && (
+        {showSidebar && (
           <>
             {/* Desktop Sidebar */}
             <aside className="hidden md:flex w-72 flex-col border-r border-white/5 bg-card/50 backdrop-blur-2xl sticky top-0 h-screen z-40">
@@ -186,7 +204,11 @@ function RootComponent() {
                 <SidebarLink to="/dashboard" icon={<LayoutDashboard size={22} />} label="DASHBOARD" />
                 <SidebarLink to="/body" icon={<User size={22} />} label="COMPOSIÇÃO" />
                 <SidebarLink to="/nutrition" icon={<Utensils size={22} />} label="NUTRIÇÃO" />
-                <SidebarLink to="/hydration" icon={<Droplets size={22} />} label="HIDRATAÇÃO" />
+                <SidebarLink 
+                  to="/hydration" 
+                  icon={<Droplets size={22} />} 
+                  label="HIDRATAÇÃO" 
+                />
                 <SidebarLink to="/supplements" icon={<Pill size={22} />} label="PROTOCOLOS" />
                 <SidebarLink to="/training" icon={<Dumbbell size={22} />} label="PERFORMANCE" />
               </nav>
@@ -196,7 +218,10 @@ function RootComponent() {
                   <ThemeToggle />
                 </div>
                 <SidebarLink to="/settings" icon={<Settings size={22} />} label="AJUSTES" />
-                <button className="flex w-full items-center gap-4 px-4 py-3 text-xs font-black tracking-widest text-destructive hover:bg-destructive/10 rounded-xl transition-all uppercase">
+                <button 
+                  onClick={handleLogout}
+                  className="flex w-full items-center gap-4 px-4 py-3 text-xs font-black tracking-widest text-destructive hover:bg-destructive/10 rounded-xl transition-all uppercase cursor-pointer"
+                >
                   <LogOut size={22} />
                   SAIR
                 </button>
@@ -219,10 +244,12 @@ function RootComponent() {
 
         <main className={cn(
           "flex-1 flex flex-col min-w-0",
-          !isPublicRoute && "mb-20 md:mb-0"
+          showSidebar && "mb-20 md:mb-0"
         )}>
           <div className="flex-1">
-            <Outlet />
+            <AccessGate isAllowed={isPublicRoute || isLoggedIn}>
+              <Outlet />
+            </AccessGate>
           </div>
           <footer className="py-8 px-6 text-center border-t border-white/5 mt-auto bg-card/30 backdrop-blur-md">
             <p className="text-[10px] text-muted-foreground/40 uppercase tracking-[0.3em] font-black italic">
