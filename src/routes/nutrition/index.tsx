@@ -23,6 +23,7 @@ import { queueOfflineAction } from "@/lib/offline-sync";
 import { ModuleHeader } from "@/components/module-header";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PageHeaderSkeleton, StatsSkeleton } from "@/components/ui/loading-states";
+import { EmptyState } from "@/components/ui/status-states";
 import { getSession } from "@/lib/auth/auth.functions";
 
 
@@ -70,6 +71,8 @@ function NutritionPage() {
     }
   }, [isLoading, macros.protein.current, macros.protein.goal]);
 
+  const hasMacros = false; // Mock data absence for demonstration
+
   if (isLoading) {
     return (
       <div className="flex-1 space-y-12 p-4 md:p-12 pt-10 bg-background animate-in fade-in duration-700">
@@ -83,6 +86,33 @@ function NutritionPage() {
             <Skeleton className="h-64 rounded-[2.5rem]" />
             <Skeleton className="h-48 rounded-[2.5rem]" />
           </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Placeholder logic for empty state
+  const isDiaryEmpty = true; 
+
+  if (isDiaryEmpty && activeTab === "diary" && !isLoading) {
+    return (
+      <div className="flex-1 p-4 md:p-12 pt-10 bg-background animate-in fade-in duration-700">
+         <ModuleHeader 
+          title="Nutrição"
+          description="Planejamento estratégico de ingestão calórica e macronutrientes para performance máxima."
+          icon={Utensils}
+        />
+        <div className="mt-20">
+          <EmptyState 
+            icon={Utensils}
+            title="DIÁRIO VAZIO"
+            description="Nenhuma refeição registrada hoje. Mantenha a disciplina e registre seu primeiro consumo."
+            action={
+              <Button className="h-14 px-10 rounded-xl bg-brand-gradient text-xs font-black uppercase tracking-widest shadow-2xl hover:scale-105 transition-all">
+                <Plus size={18} className="mr-2" /> REGISTRAR REFEIÇÃO
+              </Button>
+            }
+          />
         </div>
       </div>
     );

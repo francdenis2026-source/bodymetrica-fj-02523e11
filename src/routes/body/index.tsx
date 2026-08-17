@@ -28,6 +28,7 @@ import {
 import { ModuleHeader } from "@/components/module-header";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PageHeaderSkeleton, StatsSkeleton } from "@/components/ui/loading-states";
+import { EmptyState } from "@/components/ui/status-states";
 import { getSession } from "@/lib/auth/auth.functions";
 
 
@@ -66,6 +67,8 @@ function BodyPage() {
     return () => clearTimeout(timer);
   }, []);
 
+  const hasMetrics = userData?.profile?.weight || false;
+
   if (isLoading) {
     return (
       <div className="flex-1 space-y-12 p-4 md:p-12 pt-10 bg-background animate-in fade-in duration-700">
@@ -74,6 +77,26 @@ function BodyPage() {
         <div className="space-y-6">
           <Skeleton className="h-80 rounded-[2.5rem]" />
           <Skeleton className="h-96 rounded-[2.5rem]" />
+        </div>
+      </div>
+    );
+  }
+
+  if (!hasMetrics && !isLoading) {
+    return (
+      <div className="flex-1 p-4 md:p-12 pt-10 bg-background animate-in fade-in duration-700">
+        <PageHeaderSkeleton />
+        <div className="mt-20">
+          <EmptyState 
+            icon={Scale}
+            title="SEM MÉTRICAS REGISTRADAS"
+            description="Você ainda não possui dados de composição corporal. Registre seu peso e medidas para começar a acompanhar sua evolução."
+            action={
+              <Button className="h-14 px-10 rounded-xl bg-brand-gradient text-xs font-black uppercase tracking-widest shadow-2xl hover:scale-105 transition-all">
+                <Plus size={18} className="mr-2" /> PRIMEIRO REGISTRO
+              </Button>
+            }
+          />
         </div>
       </div>
     );
