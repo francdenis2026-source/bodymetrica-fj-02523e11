@@ -43,7 +43,6 @@ function DashboardPage() {
             <FileDown size={14} /> Relatórios PDF
           </Button>
         </div>
-      </div>
         <Button size="icon" className="rounded-full w-12 h-12 shadow-lg bg-brand-gradient md:hidden fixed bottom-20 right-4 z-40">
           <Plus size={24} />
         </Button>
