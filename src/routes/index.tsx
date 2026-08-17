@@ -79,36 +79,34 @@ function Index() {
 
 
         {/* Hero Section */}
-        <section className="relative pt-32 pb-20 px-4 overflow-hidden min-h-[80vh] flex items-center">
-          <div className="container mx-auto max-w-6xl grid lg:grid-cols-2 gap-12 items-center">
-            <div className="text-left space-y-8">
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/20 text-primary-foreground text-xs font-black uppercase tracking-widest mb-2 animate-in fade-in slide-in-from-left-4 duration-700 border border-primary/30">
-                <Activity size={14} />
+        <section className="relative pt-32 pb-24 px-4 overflow-hidden min-h-[90vh] flex items-center">
+          <div className="container mx-auto max-w-7xl grid lg:grid-cols-2 gap-16 items-center">
+            <div className="text-left space-y-10 relative z-10">
+              <div className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full bg-primary/10 text-primary text-[10px] font-black uppercase tracking-[0.2em] mb-4 animate-in fade-in slide-in-from-left-4 duration-1000 border border-primary/20 backdrop-blur-md">
+                <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
                 <span>Alta Performance & Precisão</span>
               </div>
               
-              <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black font-display text-foreground leading-[0.95] tracking-tighter animate-in fade-in slide-in-from-left-4 duration-700 delay-75 uppercase">
+              <h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-black font-display text-foreground leading-[0.9] tracking-tighter animate-in fade-in slide-in-from-left-4 duration-1000 delay-100 uppercase">
                 DOMINE SUA <br />
                 <span className="text-gradient-brand">EVOLUÇÃO.</span>
               </h1>
               
-              <p className="text-lg md:text-xl text-foreground/70 max-w-xl leading-relaxed font-semibold animate-in fade-in slide-in-from-left-4 duration-700 delay-150">
-                A plataforma definitiva para atletas que buscam a perfeição.
-                Acompanhamento de elite para composição corporal e performance.
+              <p className="text-xl md:text-2xl text-foreground/60 max-w-xl leading-tight font-medium animate-in fade-in slide-in-from-left-4 duration-1000 delay-200">
+                A engenharia definitiva para quem busca a perfeição física. 
+                Sincronize sua biometria com inteligência preditiva.
               </p>
 
-              
-              <div className="flex flex-col sm:flex-row items-center gap-4 pt-4 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300">
-                <Button size="lg" className="h-12 md:h-14 px-8 md:px-10 text-sm md:text-base font-black uppercase tracking-widest group w-full sm:w-auto bg-brand-gradient hover:scale-105 transition-all border-none shadow-2xl shadow-primary/40" asChild>
+              <div className="flex flex-col sm:flex-row items-center gap-5 pt-6 animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-300">
+                <Button size="lg" className="h-14 md:h-16 px-10 md:px-12 text-xs md:text-sm font-black uppercase tracking-[0.2em] group w-full sm:w-auto bg-brand-gradient hover:scale-105 transition-all border-none shadow-[0_20px_50px_rgba(oklch(0.65_0.22_260),0.3)]" asChild>
                   <Link to={isLoggedIn ? "/dashboard" : "/onboarding"}>
-                    {isLoggedIn ? "MEU DASHBOARD" : "COMEÇAR AGORA"}
-                    <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={20} />
+                    {isLoggedIn ? "MEU DASHBOARD" : "ACESSAR SUÍTE"}
+                    <ArrowRight className="ml-3 group-hover:translate-x-1 transition-transform" size={20} />
                   </Link>
                 </Button>
-                <Button size="lg" variant="outline" className="h-12 md:h-14 px-8 md:px-10 text-sm md:text-base font-black uppercase tracking-widest w-full sm:w-auto backdrop-blur-md bg-white/5 border-white/10 hover:bg-white/10" asChild>
-                  <Link to="/about">DETALHES</Link>
+                <Button size="lg" variant="outline" className="h-14 md:h-16 px-10 md:px-12 text-xs md:text-sm font-black uppercase tracking-[0.2em] w-full sm:w-auto backdrop-blur-xl bg-white/[0.02] border-white/10 hover:bg-white/[0.08] hover:border-white/20 transition-all" asChild>
+                  <Link to="/about">ENGENHARIA</Link>
                 </Button>
-
               </div>
             </div>
 
