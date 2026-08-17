@@ -21,7 +21,7 @@ function VerifyPage() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user?.email) {
         toast.error("Usuário não encontrado. Por favor, faça login novamente.");
-        navigate({ to: "/auth" });
+        navigate({ to: "/auth", search: {} as any } as any);
         return;
       }
 

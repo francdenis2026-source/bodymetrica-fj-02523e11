@@ -36,7 +36,7 @@ export function AccessGate({
             height: "",
             activityLevel: ""
           } 
-        });
+        } as any);
       }, 3500);
     }
     return () => {
@@ -85,7 +85,7 @@ export function AccessGate({
                   weight: "",
                   height: "",
                   activityLevel: ""
-                }}
+                } as any}
               >
                 {needsVerification ? "VERIFICAR AGORA" : "ENTRAR AGORA"}
               </Link>
