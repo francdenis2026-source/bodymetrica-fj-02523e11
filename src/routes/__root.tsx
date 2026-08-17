@@ -282,7 +282,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       {/* Sync Status Indicator */}
-      <div className="fixed bottom-24 right-4 z-[100] flex flex-col items-end gap-2 md:top-4 md:bottom-auto">
+      <div className="fixed bottom-24 right-4 z-[100] flex flex-col items-end gap-2 md:top-auto md:bottom-8">
         <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-background/80 backdrop-blur border border-white/10 shadow-lg animate-in fade-in slide-in-from-top-2 group relative">
           {syncStatus === 'syncing' ? (
             <Loader2 className="w-3 h-3 animate-spin text-primary" />
