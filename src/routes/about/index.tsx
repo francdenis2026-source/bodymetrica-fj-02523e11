@@ -38,7 +38,7 @@ function AboutPage() {
         </div>
       </header>
 
-      <main className="relative z-10 pt-16 container mx-auto px-4 max-w-4xl space-y-12 py-12">
+      <main className="relative z-10 pt-16 container mx-auto px-4 max-w-5xl space-y-16 py-12 md:py-20">
         <ResponsiveHero 
           imageUrl="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1600"
           overlayOpacity={0.7}
