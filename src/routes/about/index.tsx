@@ -19,7 +19,15 @@ export const Route = createFileRoute("/about/")({
 
 function AboutPage() {
   return (
-    <div className="min-h-screen bg-background pb-20">
+    <div className="min-h-screen bg-background pb-20 relative overflow-hidden">
+      <div className="fixed inset-0 z-0 opacity-10 pointer-events-none">
+        <img 
+          src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=1600" 
+          alt="Background" 
+          className="w-full h-full object-cover"
+        />
+      </div>
+
       <header className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-md border-b">
         <div className="container mx-auto px-4 h-16 flex items-center gap-4">
           <Button variant="ghost" size="icon" asChild>
@@ -34,16 +42,25 @@ function AboutPage() {
         </div>
       </header>
 
-      <main className="pt-24 container mx-auto px-4 max-w-4xl space-y-12">
-        <section className="text-center space-y-4">
-          <h2 className="text-3xl font-bold font-display tracking-tight text-primary">A suíte completa para sua evolução</h2>
-          <p className="text-muted-foreground leading-relaxed max-w-2xl mx-auto">
-            O Body Métrica FJ foi projetado para transformar dados em resultados. 
-            Conheça os módulos que compõem nosso ecossistema.
-          </p>
+      <main className="relative z-10 pt-16 container mx-auto px-0 max-w-4xl space-y-12">
+        <section className="relative h-[40vh] min-h-[300px] flex items-center justify-center overflow-hidden mb-12">
+          <img 
+            src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&q=80&w=1600"
+            className="absolute inset-0 w-full h-full object-cover"
+            alt="Hero tools"
+          />
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px]" />
+          <div className="relative z-10 text-center space-y-4 px-4">
+            <h2 className="text-4xl md:text-5xl font-black font-display tracking-tighter text-white uppercase italic">
+              A SUÍTE <span className="text-primary">COMPLETA</span>
+            </h2>
+            <p className="text-white/70 font-bold uppercase tracking-[0.2em] text-xs max-w-xl mx-auto">
+              O Body Métrica FJ foi projetado para transformar dados em resultados de alta performance.
+            </p>
+          </div>
         </section>
 
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className="px-4 grid gap-6 md:grid-cols-2">
           <ToolItem 
             icon={<Target className="text-primary" />} 
             title="Gestão de Objetivos"
