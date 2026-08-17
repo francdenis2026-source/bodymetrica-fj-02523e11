@@ -12,6 +12,7 @@ import {
   Calendar,
   AlertTriangle
 } from "lucide-react";
+import { queueOfflineAction } from "@/lib/offline-sync";
 
 export const Route = createFileRoute("/hydration/")({
   component: HydrationPage,
@@ -24,6 +25,10 @@ function HydrationPage() {
 
   const addWater = (amount: number) => {
     setCurrentAmount(prev => Math.min(prev + amount, 5000));
+    queueOfflineAction({
+      type: 'WATER_LOG',
+      data: { amount, currentTotal: currentAmount + amount }
+    });
   };
 
   return (

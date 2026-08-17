@@ -22,6 +22,7 @@ import {
   LogOut
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { syncOfflineActions } from "@/lib/offline-sync";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -150,7 +151,7 @@ function RootComponent() {
 
     const handleOnline = () => {
       toast.success("Conexão restabelecida. Sincronizando dados...");
-      // In the future, trigger sync functions here
+      syncOfflineActions();
     };
 
     const handleOffline = () => {
