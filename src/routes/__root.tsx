@@ -37,7 +37,8 @@ import { isAuthenticated, clearSession, getSession, setupLogoutListener } from "
 import { AccessGate } from "@/components/access-gate";
 import { supabase } from "@/integrations/supabase/client";
 import { useServerFn } from "@tanstack/react-start";
-import { validateLicense } from "@/lib/monetization.functions";
+import { validateLicense, checkLicenseStatus } from "@/lib/monetization.functions";
+
 
 import appCss from "../styles.css?url";
 
