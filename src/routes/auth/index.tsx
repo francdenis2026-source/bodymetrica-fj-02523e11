@@ -19,6 +19,8 @@ import { login } from "@/lib/auth/auth.functions";
 import { toast } from "sonner";
 import { ShieldCheck, ArrowLeft, Lock } from "lucide-react";
 import { ResponsiveHero } from "@/components/responsive-hero";
+import { cn } from "@/lib/utils";
+
 
 export const Route = createFileRoute("/auth/")({
   component: AuthPage,
