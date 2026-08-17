@@ -24,6 +24,7 @@ export type Database = {
           height: number | null
           id: string
           name: string | null
+          theme_preference: string | null
           updated_at: string | null
           weight: number | null
         }
@@ -36,6 +37,7 @@ export type Database = {
           height?: number | null
           id: string
           name?: string | null
+          theme_preference?: string | null
           updated_at?: string | null
           weight?: number | null
         }
@@ -48,6 +50,7 @@ export type Database = {
           height?: number | null
           id?: string
           name?: string | null
+          theme_preference?: string | null
           updated_at?: string | null
           weight?: number | null
         }
