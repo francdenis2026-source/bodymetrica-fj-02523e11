@@ -180,9 +180,10 @@ function Index() {
               </div>
               
               <nav className="flex gap-8 text-sm text-muted-foreground font-medium">
+                <Link to="/about" className="hover:text-primary transition-colors">Sobre</Link>
+                <Link to="/tools" className="hover:text-primary transition-colors">Ferramentas</Link>
+                <Link to="/help" className="hover:text-primary transition-colors">Ajuda</Link>
                 <Link to="/terms" className="hover:text-primary transition-colors">Termos</Link>
-                <Link to="/privacy" className="hover:text-primary transition-colors">Privacidade</Link>
-                <Link to="/admin/login" className="hover:text-primary transition-colors">Administrativo</Link>
               </nav>
               
               <div className="flex flex-col items-center md:items-end gap-1">

@@ -5,6 +5,16 @@ import { ResponsiveHero } from "@/components/responsive-hero";
 
 export const Route = createFileRoute("/privacy/")({
   component: PrivacyPage,
+  head: () => ({
+    title: "Política de Privacidade — Body Métrica FJ",
+    meta: [
+      { name: "description", content: "Entenda como protegemos seus dados de saúde, medidas e fotos de evolução no Body Métrica FJ." },
+      { property: "og:title", content: "Política de Privacidade — Body Métrica FJ" },
+      { property: "og:description", content: "Sua privacidade é nossa prioridade. Conheça como seus dados são protegidos." },
+      { property: "og:image", content: "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&q=80&w=1200" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ]
+  })
 });
 
 function PrivacyPage() {

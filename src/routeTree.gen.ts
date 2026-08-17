@@ -26,6 +26,7 @@ import { Route as PrivacyIndexRouteImport } from './routes/privacy/index'
 import { Route as SettingsIndexRouteImport } from './routes/settings/index'
 import { Route as SupplementsIndexRouteImport } from './routes/supplements/index'
 import { Route as TermsIndexRouteImport } from './routes/terms/index'
+import { Route as ToolsIndexRouteImport } from './routes/tools/index'
 import { Route as TrainingIndexRouteImport } from './routes/training/index'
 
 const IndexRoute = IndexRouteImport.update({
@@ -113,6 +114,11 @@ const TermsIndexRoute = TermsIndexRouteImport.update({
   path: '/terms/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ToolsIndexRoute = ToolsIndexRouteImport.update({
+  id: '/tools/',
+  path: '/tools/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TrainingIndexRoute = TrainingIndexRouteImport.update({
   id: '/training/',
   path: '/training/',
@@ -137,6 +143,7 @@ export interface FileRoutesByFullPath {
   '/settings/': typeof SettingsIndexRoute
   '/supplements/': typeof SupplementsIndexRoute
   '/terms/': typeof TermsIndexRoute
+  '/tools/': typeof ToolsIndexRoute
   '/training/': typeof TrainingIndexRoute
 }
 export interface FileRoutesByTo {
@@ -156,6 +163,7 @@ export interface FileRoutesByTo {
   '/settings': typeof SettingsIndexRoute
   '/supplements': typeof SupplementsIndexRoute
   '/terms': typeof TermsIndexRoute
+  '/tools': typeof ToolsIndexRoute
   '/training': typeof TrainingIndexRoute
 }
 export interface FileRoutesById {
@@ -177,6 +185,7 @@ export interface FileRoutesById {
   '/settings/': typeof SettingsIndexRoute
   '/supplements/': typeof SupplementsIndexRoute
   '/terms/': typeof TermsIndexRoute
+  '/tools/': typeof ToolsIndexRoute
   '/training/': typeof TrainingIndexRoute
 }
 export interface FileRouteTypes {
@@ -199,6 +208,7 @@ export interface FileRouteTypes {
     | '/settings/'
     | '/supplements/'
     | '/terms/'
+    | '/tools/'
     | '/training/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -218,6 +228,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/supplements'
     | '/terms'
+    | '/tools'
     | '/training'
   id:
     | '__root__'
@@ -238,6 +249,7 @@ export interface FileRouteTypes {
     | '/settings/'
     | '/supplements/'
     | '/terms/'
+    | '/tools/'
     | '/training/'
   fileRoutesById: FileRoutesById
 }
@@ -257,6 +269,7 @@ export interface RootRouteChildren {
   SettingsIndexRoute: typeof SettingsIndexRoute
   SupplementsIndexRoute: typeof SupplementsIndexRoute
   TermsIndexRoute: typeof TermsIndexRoute
+  ToolsIndexRoute: typeof ToolsIndexRoute
   TrainingIndexRoute: typeof TrainingIndexRoute
 }
 
@@ -381,6 +394,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/tools/': {
+      id: '/tools/'
+      path: '/tools'
+      fullPath: '/tools/'
+      preLoaderRoute: typeof ToolsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/training/': {
       id: '/training/'
       path: '/training'
@@ -421,6 +441,7 @@ const rootRouteChildren: RootRouteChildren = {
   SettingsIndexRoute: SettingsIndexRoute,
   SupplementsIndexRoute: SupplementsIndexRoute,
   TermsIndexRoute: TermsIndexRoute,
+  ToolsIndexRoute: ToolsIndexRoute,
   TrainingIndexRoute: TrainingIndexRoute,
 }
 export const routeTree = rootRouteImport

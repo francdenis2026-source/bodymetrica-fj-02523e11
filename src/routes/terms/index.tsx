@@ -5,6 +5,16 @@ import { ResponsiveHero } from "@/components/responsive-hero";
 
 export const Route = createFileRoute("/terms/")({
   component: TermsPage,
+  head: () => ({
+    title: "Termos de Uso — Body Métrica FJ",
+    meta: [
+      { name: "description", content: "Leia as diretrizes legais e termos de aceitação para o uso da plataforma Body Métrica FJ." },
+      { property: "og:title", content: "Termos de Uso — Body Métrica FJ" },
+      { property: "og:description", content: "Diretrizes legais e responsabilidades de uso da nossa plataforma." },
+      { property: "og:image", content: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&q=80&w=1200" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ]
+  })
 });
 
 function TermsPage() {

@@ -19,6 +19,16 @@ import { ResponsiveHero } from "@/components/responsive-hero";
 
 export const Route = createFileRoute("/help/")({
   component: HelpCenterPage,
+  head: () => ({
+    title: "Central de Ajuda & FAQ — Body Métrica FJ",
+    meta: [
+      { name: "description", content: "Tire suas dúvidas sobre nutrição, treinos, hidratação e como usar o Body Métrica FJ." },
+      { property: "og:title", content: "Central de Ajuda — Body Métrica FJ" },
+      { property: "og:description", content: "Tudo o que você precisa saber para extrair o máximo da nossa plataforma." },
+      { property: "og:image", content: "https://images.unsplash.com/photo-1434494878577-86c23bddad63?auto=format&fit=crop&q=80&w=1200" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ]
+  })
 });
 
 interface FAQItem {

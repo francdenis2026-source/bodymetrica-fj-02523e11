@@ -5,6 +5,16 @@ import { ResponsiveHero } from "@/components/responsive-hero";
 
 export const Route = createFileRoute("/about/")({
   component: AboutPage,
+  head: () => ({
+    title: "Sobre o Body Métrica FJ — Inovação em Performance Humana",
+    meta: [
+      { name: "description", content: "Conheça o Body Métrica FJ, uma plataforma de elite criada por Franc D'nis Feijó para transformar dados em resultados físicos reais usando IA." },
+      { property: "og:title", content: "Sobre o Body Métrica FJ" },
+      { property: "og:description", content: "Conheça a história e a tecnologia por trás da plataforma de performance física definitiva." },
+      { property: "og:image", content: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1200" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ]
+  })
 });
 
 function AboutPage() {
@@ -89,14 +99,14 @@ function AboutPage() {
               </div>
             </div>
             <p className="text-sm text-muted-foreground leading-relaxed font-medium">
-              Especialista em desenvolvimento de soluções tecnológicas de alto impacto. Franc vem transformando o cenário digital no coração do Acre, utilizando ferramentas avançadas de Inteligência Artificial e stacks modernas para criar experiências que resolvem problemas reais.
+              Especialista em arquitetura de software e desenvolvimento de soluções tecnológicas de alto impacto. Franc vem transformando o cenário digital diretamente de Feijó, no Acre, integrando Inteligência Artificial avançada com as stacks mais modernas do mercado (React, TanStack, Supabase).
             </p>
             <p className="text-sm text-muted-foreground leading-relaxed font-medium">
-              Este projeto é a materialização de meses de pesquisa em ergonomia digital e ciência do esporte, entregando uma ferramenta profissional para quem não aceita menos que o topo.
+              Sua missão é democratizar o acesso a ferramentas de precisão, unindo ciência do esporte e engenharia de dados para criar experiências que resolvem problemas reais de forma elegante e intuitiva. Este projeto reflete sua paixão por performance, tanto em código quanto em resultados físicos.
             </p>
             <div className="flex gap-4 pt-2">
-              <a href="#" className="text-muted-foreground hover:text-primary transition-colors"><Github size={20} /></a>
-              <a href="#" className="text-muted-foreground hover:text-primary transition-colors"><Globe size={20} /></a>
+              <a href="#" className="text-muted-foreground hover:text-primary transition-colors flex items-center gap-1 text-[10px] font-black uppercase tracking-widest"><Github size={16} /> GitHub</a>
+              <a href="#" className="text-muted-foreground hover:text-primary transition-colors flex items-center gap-1 text-[10px] font-black uppercase tracking-widest"><Globe size={16} /> Portfolio</a>
             </div>
           </section>
         </div>
