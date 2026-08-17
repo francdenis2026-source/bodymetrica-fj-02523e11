@@ -173,7 +173,7 @@ function DashboardPage() {
               </div>
               <span className="text-[10px] text-success font-medium">08:00</span>
             </div>
-            <div className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+            <Link to="/supplements" className="flex items-center justify-between p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors cursor-pointer group">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-background flex items-center justify-center">
                   <Pill size={18} className="text-primary" />
@@ -183,8 +183,8 @@ function DashboardPage() {
                   <div className="text-xs text-muted-foreground">1 cap - Próximo</div>
                 </div>
               </div>
-              <Button size="sm" variant="ghost">Tomar</Button>
-            </div>
+              <Button size="sm" variant="ghost" className="group-hover:bg-primary/10 group-hover:text-primary">Tomar</Button>
+            </Link>
           </CardContent>
         </Card>
       </div>
