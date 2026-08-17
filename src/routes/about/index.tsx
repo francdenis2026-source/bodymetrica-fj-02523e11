@@ -176,7 +176,7 @@ function AboutPage() {
             </p>
             <div className="pt-6">
               <Button size="lg" variant="secondary" className="px-12 h-14 md:px-16 md:h-16 rounded-[1.5rem] font-black uppercase tracking-[0.2em] hover:scale-105 transition-all shadow-2xl text-xs md:text-sm" asChild>
-                <Link to="/auth" search={{ registerMode: true, name: "", birthDate: "", goal: "", weight: "", height: "", activityLevel: "" }}>FAZER PARTE DA ELITE</Link>
+                <Link to="/auth" search={{ registerMode: true, reset: false, name: "", birthDate: "", goal: "", weight: "", height: "", activityLevel: "" }}>FAZER PARTE DA ELITE</Link>
               </Button>
             </div>
           </div>
