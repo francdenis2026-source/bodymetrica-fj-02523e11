@@ -26,7 +26,7 @@ import { getSession, clearSession } from "@/lib/auth/auth.functions";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { toast } from "sonner";
 import { requestNotificationPermission, scheduleNotifications } from "@/lib/notifications";
-import { validateLicense, generateLicenseKey } from "@/lib/monetization.functions";
+import { validateLicense, generateLicenseKey, createCheckoutSession } from "@/lib/monetization.functions";
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { useNavigate } from "@tanstack/react-router";
@@ -49,6 +49,23 @@ function SettingsPage() {
   
   const validateLicenseFn = useServerFn(validateLicense);
   const generateLicenseFn = useServerFn(generateLicenseKey);
+  const createCheckoutFn = useServerFn(createCheckoutSession);
+
+  const handlePurchase = async () => {
+    setIsLoading(true);
+    try {
+      const result = await createCheckoutFn({ data: { userId: user.id } });
+      if (result.success && result.init_point) {
+        window.location.href = result.init_point;
+      } else {
+        toast.error(result.message || "Erro ao iniciar pagamento.");
+      }
+    } catch (error) {
+      toast.error("Erro na integração com Mercado Pago.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleActivateLicense = async () => {
     if (!licenseKey) {
@@ -211,7 +228,7 @@ function SettingsPage() {
                     variant="outline" 
                     size="sm" 
                     className="w-full text-[10px] font-black border-primary/30 hover:bg-primary/20"
-                    onClick={handlePurchaseSim}
+                    onClick={handlePurchase}
                     disabled={isLoading}
                   >
                     COMPRAR LICENÇA (MERCADO PAGO)

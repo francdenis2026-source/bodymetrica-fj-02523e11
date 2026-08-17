@@ -107,6 +107,7 @@ export type Database = {
           birth_date: string | null
           cpf: string | null
           created_at: string | null
+          email: string | null
           goal: string | null
           height: number | null
           id: string
@@ -123,6 +124,7 @@ export type Database = {
           birth_date?: string | null
           cpf?: string | null
           created_at?: string | null
+          email?: string | null
           goal?: string | null
           height?: number | null
           id: string
@@ -139,6 +141,7 @@ export type Database = {
           birth_date?: string | null
           cpf?: string | null
           created_at?: string | null
+          email?: string | null
           goal?: string | null
           height?: number | null
           id?: string
