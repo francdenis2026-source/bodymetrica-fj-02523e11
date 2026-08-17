@@ -401,18 +401,18 @@ function AuthPage() {
             )}
           </CardContent>
           
-          <CardFooter className="flex flex-col gap-8 border-t border-white/5 pt-10 pb-12 bg-white/[0.02]">
+          <CardFooter className="flex flex-col gap-4 border-t border-white/5 pt-6 pb-8 bg-white/[0.02]">
             {!isResetting && (
               <>
-                <div className="flex items-start gap-4 text-[10px] text-white/40 leading-relaxed font-bold uppercase tracking-widest">
-                  <ShieldCheck className="text-primary shrink-0" size={20} />
+                <div className="flex items-start gap-3 text-[8px] text-white/40 leading-relaxed font-bold uppercase tracking-widest px-2">
+                  <ShieldCheck className="text-primary shrink-0" size={16} />
                   <p>
                     Protocolo de segurança militar ativo. Criptografia de ponta a ponta.
                   </p>
                 </div>
                 
-                <div className="w-full space-y-4">
-                  <p className="text-center text-[10px] font-black text-white/30 uppercase tracking-[0.2em]">
+                <div className="w-full space-y-2">
+                  <p className="text-center text-[8px] font-black text-white/30 uppercase tracking-[0.2em]">
                     {isRegistering ? "JÁ POSSUI UMA CONTA?" : "NÃO POSSUI UMA CONTA?"}{" "}
                     <button 
                       onClick={() => setIsRegistering(!isRegistering)} 
@@ -424,7 +424,7 @@ function AuthPage() {
                   {!isRegistering && (
                     <button 
                       onClick={() => setIsResetting(true)}
-                      className="w-full text-center text-[10px] font-black uppercase tracking-[0.2em] text-white/20 hover:text-white transition-all underline decoration-white/10 underline-offset-4"
+                      className="w-full text-center text-[8px] font-black uppercase tracking-[0.2em] text-white/20 hover:text-white transition-all underline decoration-white/10 underline-offset-4"
                     >
                       RECUPERAR SENHA
                     </button>
