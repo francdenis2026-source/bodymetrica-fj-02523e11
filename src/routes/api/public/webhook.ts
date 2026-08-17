@@ -64,7 +64,10 @@ export const Route = createFileRoute('/api/public/webhook')({
             .maybeSingle();
 
           if (existingEvent?.status === 'processed') {
-            return new Response('Already processed', { status: 200 });
+            return new Response('Already processed', { 
+              status: 200,
+              headers: { 'Content-Type': 'text/plain' }
+            });
           }
 
           // 4. Record event
