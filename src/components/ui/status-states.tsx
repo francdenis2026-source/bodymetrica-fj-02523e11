@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Info, WifiOff } from "lucide-react";
-import { Button } from "./ui/button";
+import { Button } from "./button";
 
 interface OfflineStateProps {
   title?: string;

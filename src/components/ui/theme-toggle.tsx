@@ -63,7 +63,7 @@ export function ThemeToggle() {
     const { data: { session } } = await supabase.auth.getSession();
     if (session) {
       try {
-        await updateUserTheme({ theme: newTheme });
+        await updateUserTheme({ data: { theme: newTheme } });
       } catch (error) {
         console.error("Erro ao salvar tema no servidor:", error);
       }
