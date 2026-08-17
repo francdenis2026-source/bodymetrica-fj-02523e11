@@ -65,9 +65,15 @@ function Index() {
               </span>
             </div>
             
-            <Button variant="ghost" size="sm" asChild className="text-foreground/80 font-semibold hover:text-primary hover:bg-white/5">
-              <Link to="/auth" search={{ registerMode: false, name: "", birthDate: "", goal: "", weight: "", height: "", activityLevel: "" }}>ENTRAR</Link>
-            </Button>
+            {isLoggedIn ? (
+              <Button variant="ghost" size="sm" asChild className="text-foreground/80 font-semibold hover:text-primary hover:bg-white/5">
+                <Link to="/dashboard">DASHBOARD</Link>
+              </Button>
+            ) : (
+              <Button variant="ghost" size="sm" asChild className="text-foreground/80 font-semibold hover:text-primary hover:bg-white/5">
+                <Link to="/auth" search={{ registerMode: false, name: "", birthDate: "", goal: "", weight: "", height: "", activityLevel: "" }}>ENTRAR</Link>
+              </Button>
+            )}
           </div>
         </header>
 
