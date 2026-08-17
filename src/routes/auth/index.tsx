@@ -88,7 +88,7 @@ function AuthPage() {
 
   const loginForm = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
-    defaultValues: { email: "", password: "", rememberMe: false },
+    defaultValues: { email: "", password: "", rememberMe: false } as any,
   });
 
   const registerForm = useForm<z.infer<typeof registerSchema>>({
