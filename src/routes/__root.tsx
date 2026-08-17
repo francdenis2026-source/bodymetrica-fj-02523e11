@@ -29,7 +29,7 @@ import { syncOfflineActions } from "@/lib/offline-sync";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { AppErrorBoundary } from "@/components/ui/error-boundary";
 import { reportLovableError } from "../lib/lovable-error-reporting";
-import { isAuthenticated, clearSession } from "@/lib/auth/auth.functions";
+import { isAuthenticated, clearSession, getSession } from "@/lib/auth/auth.functions";
 import { AccessGate } from "@/components/access-gate";
 
 import appCss from "../styles.css?url";
