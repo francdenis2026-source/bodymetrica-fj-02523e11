@@ -21,6 +21,18 @@ import { Link, useNavigate } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/onboarding/")({
   component: OnboardingPage,
+  validateSearch: (search: Record<string, unknown>) => {
+    return {
+      registerMode: (search['registerMode'] as boolean) || undefined,
+      reset: (search['reset'] as boolean) || undefined,
+      name: (search['name'] as string) || undefined,
+      birthDate: (search['birthDate'] as string) || undefined,
+      goal: (search['goal'] as string) || undefined,
+      weight: (search['weight'] as string) || undefined,
+      height: (search['height'] as string) || undefined,
+      activityLevel: (search['activityLevel'] as string) || undefined,
+    } as any;
+  },
 });
 
 function OnboardingPage() {
@@ -56,13 +68,14 @@ function OnboardingPage() {
       to: "/auth", 
       search: { 
         registerMode: true,
+        reset: false,
         name: formData.name,
         birthDate: formData.birthDate,
         goal: formData.goal,
         weight: formData.weight,
         height: formData.height,
         activityLevel: formData.activityLevel
-      } 
+      } as any
     });
   };
 

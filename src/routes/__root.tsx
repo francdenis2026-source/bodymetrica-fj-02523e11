@@ -55,6 +55,7 @@ function NotFoundComponent() {
         <div className="mt-10">
           <Link
             to="/"
+            search={{} as any}
             className="inline-flex items-center justify-center rounded-[1.5rem] bg-brand-gradient px-12 h-16 text-xs font-black uppercase tracking-[0.2em] text-primary-foreground transition-all hover:scale-105 shadow-[0_20px_40px_rgba(oklch(0.65_0.22_260),0.4)]"
           >
             VOLTAR AO INÍCIO

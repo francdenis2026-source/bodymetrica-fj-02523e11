@@ -33,6 +33,18 @@ import { ResponsiveHero } from "@/components/responsive-hero";
 
 export const Route = createFileRoute("/")({
   component: Index,
+  validateSearch: (search: Record<string, unknown>) => {
+    return {
+      registerMode: (search['registerMode'] as boolean) || undefined,
+      reset: (search['reset'] as boolean) || undefined,
+      name: (search['name'] as string) || undefined,
+      birthDate: (search['birthDate'] as string) || undefined,
+      goal: (search['goal'] as string) || undefined,
+      weight: (search['weight'] as string) || undefined,
+      height: (search['height'] as string) || undefined,
+      activityLevel: (search['activityLevel'] as string) || undefined,
+    } as any;
+  },
   head: () => ({
     title: "Body Métrica FJ — Suíte de Composição Corporal e Saúde",
     meta: [
@@ -93,7 +105,7 @@ function Index() {
               </Button>
             ) : (
               <Button variant="ghost" size="sm" asChild className="text-foreground/80 font-semibold hover:text-primary hover:bg-white/5">
-                <Link to="/auth" search={{ registerMode: false, name: "", birthDate: "", goal: "", weight: "", height: "", activityLevel: "" }}>ENTRAR</Link>
+                <Link to="/auth" search={{ registerMode: false, reset: false, name: "", birthDate: "", goal: "", weight: "", height: "", activityLevel: "" } as any}>ENTRAR</Link>
               </Button>
             )}
           </div>

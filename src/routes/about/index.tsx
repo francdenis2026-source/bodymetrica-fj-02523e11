@@ -32,7 +32,7 @@ function AboutPage() {
       <header className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-md border-b border-white/5">
         <div className="container mx-auto px-4 h-16 flex items-center gap-4">
           <Button variant="ghost" size="icon" asChild>
-            <Link to="/"><ArrowLeft size={20} /></Link>
+            <Link to="/" search={{} as any}><ArrowLeft size={20} /></Link>
           </Button>
           <h1 className="text-lg font-bold font-display uppercase tracking-tighter italic">Sobre a Plataforma</h1>
         </div>
@@ -176,7 +176,7 @@ function AboutPage() {
             </p>
             <div className="pt-6">
               <Button size="lg" variant="secondary" className="px-12 h-14 md:px-16 md:h-16 rounded-[1.5rem] font-black uppercase tracking-[0.2em] hover:scale-105 transition-all shadow-2xl text-xs md:text-sm" asChild>
-                <Link to="/auth" search={{ registerMode: true, name: "", birthDate: "", goal: "", weight: "", height: "", activityLevel: "" }}>FAZER PARTE DA ELITE</Link>
+                <Link to="/auth" search={{ registerMode: true, reset: false, name: "", birthDate: "", goal: "", weight: "", height: "", activityLevel: "" }}>FAZER PARTE DA ELITE</Link>
               </Button>
             </div>
           </div>

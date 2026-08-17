@@ -103,7 +103,7 @@ function ToolsPage() {
       <header className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-md border-b border-white/5">
         <div className="container mx-auto px-4 h-16 flex items-center gap-4">
           <Button variant="ghost" size="icon" asChild>
-            <Link to="/"><ArrowLeft size={20} /></Link>
+            <Link to="/" search={{} as any}><ArrowLeft size={20} /></Link>
           </Button>
           <h1 className="text-lg font-bold font-display uppercase tracking-tighter italic">Nossas Ferramentas</h1>
         </div>
@@ -181,7 +181,7 @@ function ToolsPage() {
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Button size="lg" variant="secondary" className="px-10 h-14 rounded-2xl font-black uppercase tracking-widest hover:scale-105 transition-all shadow-xl w-full sm:w-auto" asChild>
-                <Link to="/auth" search={{ registerMode: true, name: "", birthDate: "", goal: "", weight: "", height: "", activityLevel: "" }}>INICIAR CADASTRO</Link>
+                <Link to="/auth" search={{ registerMode: true, reset: false, name: "", birthDate: "", goal: "", weight: "", height: "", activityLevel: "" } as any}>INICIAR CADASTRO</Link>
               </Button>
               <Button size="lg" variant="outline" className="px-10 h-14 rounded-2xl font-black uppercase tracking-widest backdrop-blur-md bg-white/5 border-white/10 hover:bg-white/10 text-white w-full sm:w-auto" asChild>
                 <Link to="/help">CENTRAL DE AJUDA</Link>

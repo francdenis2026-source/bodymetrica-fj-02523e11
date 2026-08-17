@@ -101,7 +101,7 @@ function AdminLoginPage() {
                 {isLoading ? "Autenticando..." : "Entrar no Sistema"}
               </Button>
               <Button variant="ghost" size="sm" asChild className="text-xs">
-                <Link to="/">
+                <Link to="/" search={{} as any}>
                   <ArrowLeft size={14} className="mr-1" />
                   Voltar para o site
                 </Link>
