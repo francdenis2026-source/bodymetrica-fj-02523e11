@@ -2,6 +2,10 @@
 @source "../src";
 @import "tw-animate-css";
 
+/* High-quality typography from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=Outfit:wght@400;700;900&display=swap');
+
+
 @custom-variant dark (&:is(.dark *));
 
 /*
