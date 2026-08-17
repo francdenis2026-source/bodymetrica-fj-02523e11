@@ -451,10 +451,10 @@ function RootComponent() {
                 <SidebarLink to="/settings" icon={<Settings size={20} />} label="AJUSTES" />
                 <button 
                   onClick={handleLogout}
-                  className="flex w-full items-center gap-5 px-5 py-4 text-[11px] font-black tracking-[0.2em] text-destructive hover:bg-destructive/10 rounded-2xl transition-all uppercase cursor-pointer group"
+                  className="w-full flex items-center gap-4 px-4 py-3 text-[11px] font-black tracking-widest text-destructive hover:bg-destructive/10 rounded-xl transition-all uppercase border-2 border-transparent group overflow-hidden"
                 >
-                  <LogOut size={22} className="group-hover:-translate-x-1 transition-transform" />
-                  SAIR
+                  <LogOut size={20} className="group-hover:scale-110 transition-transform shrink-0" />
+                  <span className="opacity-0 group-hover/sidebar:opacity-100 transition-opacity whitespace-nowrap">SAIR</span>
                 </button>
               </div>
             </aside>
