@@ -114,6 +114,7 @@ export type Database = {
           license_expires_at: string | null
           license_key: string | null
           license_status: string | null
+          mfa_enabled: boolean | null
           name: string | null
           theme_preference: string | null
           updated_at: string | null
@@ -131,6 +132,7 @@ export type Database = {
           license_expires_at?: string | null
           license_key?: string | null
           license_status?: string | null
+          mfa_enabled?: boolean | null
           name?: string | null
           theme_preference?: string | null
           updated_at?: string | null
@@ -148,10 +150,41 @@ export type Database = {
           license_expires_at?: string | null
           license_key?: string | null
           license_status?: string | null
+          mfa_enabled?: boolean | null
           name?: string | null
           theme_preference?: string | null
           updated_at?: string | null
           weight?: number | null
+        }
+        Relationships: []
+      }
+      security_logs: {
+        Row: {
+          action: string
+          created_at: string | null
+          details: Json | null
+          id: string
+          ip_address: string | null
+          user_agent: string | null
+          user_id: string
+        }
+        Insert: {
+          action: string
+          created_at?: string | null
+          details?: Json | null
+          id?: string
+          ip_address?: string | null
+          user_agent?: string | null
+          user_id: string
+        }
+        Update: {
+          action?: string
+          created_at?: string | null
+          details?: Json | null
+          id?: string
+          ip_address?: string | null
+          user_agent?: string | null
+          user_id?: string
         }
         Relationships: []
       }
@@ -223,6 +256,16 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      log_security_activity: {
+        Args: {
+          _action: string
+          _details?: Json
+          _ip_address?: string
+          _user_agent?: string
+          _user_id: string
+        }
+        Returns: undefined
       }
     }
     Enums: {
