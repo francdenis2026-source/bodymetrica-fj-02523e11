@@ -93,61 +93,79 @@ function SettingsPage() {
 
         <Card className="surface border-none">
           <CardHeader>
-            <CardTitle className="text-lg font-display flex items-center gap-2">
+            <CardTitle className="text-xl font-display uppercase italic flex items-center gap-2">
               <Bell size={20} className="text-primary" />
-              Notificações
+              Alertas de Performance
             </CardTitle>
+            <CardDescription className="text-[10px] font-bold uppercase tracking-widest opacity-60">Configure lembretes estratégicos para suas metas</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
-            <div className="flex items-center justify-between">
-              <div className="space-y-0.5">
-                <Label className="text-sm font-medium">Lembretes de Água</Label>
-                <p className="text-xs text-muted-foreground">Notificações periódicas para hidratação.</p>
+            <div className="space-y-6">
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label className="text-sm font-medium">Metas de Hidratação</Label>
+                    <p className="text-xs text-muted-foreground">Avisar quando faltar 20% para a meta diária</p>
+                  </div>
+                  <Switch defaultChecked />
+                </div>
+                <div className="pl-4 space-y-4 border-l-2 border-primary/20 ml-2">
+                   <div className="flex flex-col gap-3">
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
+                        <Clock size={12} /> Horários de Lembrete
+                      </span>
+                      <div className="flex flex-wrap gap-2">
+                         <Button variant="outline" size="sm" className="h-7 text-[9px] border-primary/30">08:00</Button>
+                         <Button variant="outline" size="sm" className="h-7 text-[9px] border-primary/30">14:00</Button>
+                         <Button variant="outline" size="sm" className="h-7 text-[9px] border-primary/30">20:00</Button>
+                         <Button variant="ghost" size="sm" className="h-7 w-7 p-0 rounded-full border border-dashed border-muted-foreground/30">+</Button>
+                      </div>
+                   </div>
+                </div>
               </div>
-              <Switch defaultChecked />
-            </div>
-            <div className="flex items-center justify-between">
-              <div className="space-y-0.5">
-                <Label className="text-sm font-medium">Horário das Refeições</Label>
-                <p className="text-xs text-muted-foreground">Alertas baseados no seu planejamento nutricional.</p>
+
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label className="text-sm font-medium">Macronutrientes</Label>
+                    <p className="text-xs text-muted-foreground">Avisar sobre batimento de proteínas e calorias</p>
+                  </div>
+                  <Switch defaultChecked />
+                </div>
+                <div className="pl-4 space-y-4 border-l-2 border-primary/20 ml-2">
+                   <div className="flex flex-col gap-3">
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
+                        <Clock size={12} /> Horários de Lembrete
+                      </span>
+                      <div className="flex flex-wrap gap-2">
+                         <Button variant="outline" size="sm" className="h-7 text-[9px] border-primary/30">12:00</Button>
+                         <Button variant="outline" size="sm" className="h-7 text-[9px] border-primary/30">19:00</Button>
+                         <Button variant="ghost" size="sm" className="h-7 w-7 p-0 rounded-full border border-dashed border-muted-foreground/30">+</Button>
+                      </div>
+                   </div>
+                </div>
               </div>
-              <Switch defaultChecked />
-            </div>
-            <div className="flex items-center justify-between">
-              <div className="space-y-0.5">
-                <Label className="text-sm font-medium">Suplementos</Label>
-                <p className="text-xs text-muted-foreground">Lembretes por horário conforme protocolo.</p>
+              
+              <div className="flex items-center justify-between">
+                <div className="space-y-0.5">
+                  <Label className="text-sm font-medium">Relatórios Semanais</Label>
+                  <p className="text-xs text-muted-foreground">Resumo de evolução física e performance</p>
+                </div>
+                <Switch />
               </div>
-              <Switch defaultChecked />
-            </div>
-            <div className="flex items-center justify-between">
-              <div className="space-y-0.5">
-                <Label className="text-sm font-medium">Peso e Medidas</Label>
-                <p className="text-xs text-muted-foreground">Lembretes para atualização de biometria.</p>
+
+              <div className="flex items-center justify-between pt-4 border-t border-white/5">
+                <div className="space-y-0.5">
+                  <Label className="text-sm font-medium">Tema do Sistema</Label>
+                  <p className="text-xs text-muted-foreground">Escolha entre modo claro ou escuro.</p>
+                </div>
+                <ThemeToggle />
               </div>
-              <Switch defaultChecked />
             </div>
-            <div className="flex items-center justify-between">
-              <div className="space-y-0.5">
-                <Label className="text-sm font-medium">Treinos</Label>
-                <p className="text-xs text-muted-foreground">Notificações sobre horários de treinamento.</p>
-              </div>
-              <Switch defaultChecked />
-            </div>
-            <div className="flex items-center justify-between">
-              <div className="space-y-0.5">
-                <Label className="text-sm font-medium">Relatórios Semanais</Label>
-                <p className="text-xs text-muted-foreground">Resumo da sua evolução toda segunda-feira.</p>
-              </div>
-              <Switch />
-            </div>
-            <div className="flex items-center justify-between">
-              <div className="space-y-0.5">
-                <Label className="text-sm font-medium">Tema do Sistema</Label>
-                <p className="text-xs text-muted-foreground">Escolha entre modo claro ou escuro.</p>
-              </div>
-              <ThemeToggle />
-            </div>
+
+            <Button className="w-full bg-brand-gradient border-none font-black uppercase tracking-widest h-12 gap-2 mt-4" onClick={() => toast.success("Configurações de alerta salvas")}>
+              <Save size={18} /> Salvar Preferências
+            </Button>
           </CardContent>
         </Card>
 
