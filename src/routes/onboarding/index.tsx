@@ -56,13 +56,14 @@ function OnboardingPage() {
       to: "/auth", 
       search: { 
         registerMode: true,
+        reset: false,
         name: formData.name,
         birthDate: formData.birthDate,
         goal: formData.goal,
         weight: formData.weight,
         height: formData.height,
         activityLevel: formData.activityLevel
-      } 
+      } as any
     });
   };
 
