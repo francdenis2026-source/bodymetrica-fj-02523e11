@@ -122,7 +122,7 @@ function Index() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <Link to="/about" className="group block">
               <FeatureCard 
-                icon={<Target className="text-primary" />}
+                icon={<Target size={28} />}
                 title="Objetivos Claros"
                 description="Emagrecimento, hipertrofia ou manutenção. Planos adaptados para sua meta real."
                 className="group-hover:border-primary/20 group-hover:bg-primary/5 transition-all"
@@ -130,7 +130,7 @@ function Index() {
             </Link>
             <Link to="/about" className="group block">
               <FeatureCard 
-                icon={<Zap className="text-success" />}
+                icon={<Zap size={28} />}
                 title="Acompanhamento Ágil"
                 description="Registre peso, medidas e fotos de evolução em segundos. Gráficos de tendência precisos."
                 className="group-hover:border-success/20 group-hover:bg-success/5 transition-all"
@@ -138,7 +138,7 @@ function Index() {
             </Link>
             <Link to="/about" className="group block">
               <FeatureCard 
-                icon={<ShieldCheck className="text-info" />}
+                icon={<ShieldCheck size={28} />}
                 title="Dados Protegidos"
                 description="Privacidade total para suas fotos e informações de saúde com criptografia de ponta."
                 className="group-hover:border-info/20 group-hover:bg-info/5 transition-all"
@@ -176,8 +176,8 @@ function Index() {
 function FeatureCard({ icon, title, description, className }: { icon: React.ReactNode; title: string; description: string; className?: string }) {
   return (
     <div className={cn("surface p-8 space-y-4 border border-transparent backdrop-blur-sm bg-card/80", className)}>
-      <div className="w-14 h-14 rounded-2xl bg-brand-gradient flex items-center justify-center shadow-lg border border-white/20 transform group-hover:rotate-6 transition-transform">
-        {React.cloneElement(icon as React.ReactElement, { size: 28, className: "text-white" })}
+      <div className="w-14 h-14 rounded-2xl bg-brand-gradient flex items-center justify-center shadow-lg border border-white/20 transform group-hover:rotate-6 transition-transform text-white">
+        {icon}
       </div>
       <h3 className="text-2xl font-bold font-display tracking-tight">{title}</h3>
       <p className="text-muted-foreground leading-relaxed font-medium">
