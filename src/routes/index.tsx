@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { isAuthenticated, getSession } from "@/lib/auth/auth.functions";
 import { 
   ArrowRight, 
   CheckCircle2, 
