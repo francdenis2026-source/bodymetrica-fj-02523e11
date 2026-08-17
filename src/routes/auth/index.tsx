@@ -13,8 +13,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { login, register, setSession, requestPasswordReset } from "@/lib/auth/auth.functions";
+import { login, register, setSession, requestPasswordReset, updatePassword } from "@/lib/auth/auth.functions";
 import { toast } from "sonner";
 import { SVGToast } from "@/components/ui/svg-toast";
 import { ShieldCheck, ArrowLeft, Mail, UserPlus, KeyRound, Lock } from "lucide-react";
@@ -27,6 +28,7 @@ export const Route = createFileRoute("/auth/")({
   validateSearch: (search: Record<string, unknown>) => {
     return {
       registerMode: (search['registerMode'] as boolean) || false,
+      reset: (search['reset'] as boolean) || false,
       name: (search['name'] as string) || "",
       birthDate: (search['birthDate'] as string) || "",
       goal: (search['goal'] as string) || "",
@@ -40,6 +42,7 @@ export const Route = createFileRoute("/auth/")({
 const loginSchema = z.object({
   email: z.string().email("E-mail inválido"),
   password: z.string().min(6, "A senha deve ter pelo menos 6 caracteres"),
+  rememberMe: z.boolean().default(false),
 });
 
 const registerSchema = z.object({
@@ -52,6 +55,14 @@ const resetSchema = z.object({
   email: z.string().email("E-mail inválido"),
 });
 
+const newPasswordSchema = z.object({
+  password: z.string().min(6, "A senha deve ter pelo menos 6 caracteres"),
+  confirmPassword: z.string().min(6, "A senha deve ter pelo menos 6 caracteres"),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "As senhas não coincidem",
+  path: ["confirmPassword"],
+});
+
 const RATE_LIMIT_KEY = 'auth_attempts';
 const MAX_ATTEMPTS = 5;
 const BLOCK_TIME = 60 * 1000; // 1 minute
@@ -61,13 +72,14 @@ function AuthPage() {
   const searchParams = Route.useSearch();
   const [isRegistering, setIsRegistering] = useState(searchParams.registerMode);
   const [isResetting, setIsResetting] = useState(false);
+  const [isUpdatingPassword, setIsUpdatingPassword] = useState(searchParams.reset);
   const [isLoading, setIsLoading] = useState(false);
   const [isBlocked, setIsBlocked] = useState(false);
   const [remainingSeconds, setRemainingSeconds] = useState(0);
 
   const loginForm = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
-    defaultValues: { email: "", password: "" },
+    defaultValues: { email: "", password: "", rememberMe: false },
   });
 
   const registerForm = useForm<z.infer<typeof registerSchema>>({
@@ -84,9 +96,15 @@ function AuthPage() {
     defaultValues: { email: "" },
   });
 
+  const newPasswordForm = useForm<z.infer<typeof newPasswordSchema>>({
+    resolver: zodResolver(newPasswordSchema),
+    defaultValues: { password: "", confirmPassword: "" },
+  });
+
   useEffect(() => {
     setIsRegistering(searchParams.registerMode);
-  }, [searchParams.registerMode]);
+    setIsUpdatingPassword(searchParams.reset);
+  }, [searchParams.registerMode, searchParams.reset]);
 
   useEffect(() => {
     const attemptsStr = localStorage.getItem(RATE_LIMIT_KEY);
@@ -215,6 +233,38 @@ function AuthPage() {
     }
   }
 
+  async function onNewPasswordSubmit(values: z.infer<typeof newPasswordSchema>) {
+    setIsLoading(true);
+    try {
+      const result = await updatePassword({ data: { password: values.password } });
+      if (result.success) {
+        toast.custom((t) => (
+          <SVGToast 
+            type="success"
+            title="SENHA ATUALIZADA"
+            message="Sua nova senha foi definida com sucesso. Faça login agora."
+            onClose={() => toast.dismiss(t)}
+          />
+        ));
+        setIsUpdatingPassword(false);
+        navigate({ to: "/auth" as any, search: { reset: false } as any });
+      } else {
+        toast.custom((t) => (
+          <SVGToast 
+            type="error"
+            title="ERRO"
+            message={result.message}
+            onClose={() => toast.dismiss(t)}
+          />
+        ));
+      }
+    } catch (error) {
+      toast.error("Erro ao atualizar senha. Tente novamente.");
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   return (
     <div className="min-h-screen flex items-center justify-center relative p-0 overflow-hidden bg-background">
       <div className="absolute inset-0 z-0">
@@ -248,10 +298,11 @@ function AuthPage() {
         <Card className="surface border-white/5 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.6)] bg-black/60 backdrop-blur-3xl rounded-[2rem] overflow-hidden">
           <CardHeader className="space-y-1 pb-6 border-b border-white/5 pt-8">
             <CardTitle className="text-xl font-black text-white text-center uppercase tracking-[0.2em] italic">
-              {isResetting ? "RECUPERAÇÃO" : isRegistering ? "CADASTRO" : "AUTENTICAÇÃO"}
+              {isUpdatingPassword ? "NOVA SENHA" : isResetting ? "RECUPERAÇÃO" : isRegistering ? "CADASTRO" : "AUTENTICAÇÃO"}
             </CardTitle>
             <CardDescription className="font-bold text-white/40 text-center uppercase text-[8px] tracking-widest px-4">
               {isBlocked ? `ACESSO BLOQUEADO POR ${remainingSeconds}s` :
+               isUpdatingPassword ? "DEFINA SUA NOVA SENHA DE ACESSO" :
                isResetting ? "SOLICITE O LINK DE REDEFINIÇÃO" : 
                isRegistering ? "CRIE SUA CONTA PROFISSIONAL" : 
                "INSIRA SEUS DADOS DE ACESSO PROTEGIDO"}
@@ -259,7 +310,53 @@ function AuthPage() {
           </CardHeader>
 
           <CardContent className="pt-6">
-            {isResetting ? (
+            {isUpdatingPassword ? (
+              <Form {...newPasswordForm}>
+                <form onSubmit={newPasswordForm.handleSubmit(onNewPasswordSubmit)} className="space-y-4">
+                  <FormField
+                    control={newPasswordForm.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="font-black text-[8px] uppercase tracking-[0.2em] text-primary ml-1">NOVA SENHA</FormLabel>
+                        <FormControl>
+                          <Input 
+                            type="password"
+                            placeholder="••••••" 
+                            className="h-12 text-base font-black bg-white/5 border-white/10 rounded-xl px-4 text-white"
+                            {...field} 
+                            disabled={isLoading}
+                          />
+                        </FormControl>
+                        <FormMessage className="text-[8px] font-bold text-destructive uppercase tracking-widest" />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={newPasswordForm.control}
+                    name="confirmPassword"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="font-black text-[8px] uppercase tracking-[0.2em] text-primary ml-1">CONFIRMAR SENHA</FormLabel>
+                        <FormControl>
+                          <Input 
+                            type="password"
+                            placeholder="••••••" 
+                            className="h-12 text-base font-black bg-white/5 border-white/10 rounded-xl px-4 text-white"
+                            {...field} 
+                            disabled={isLoading}
+                          />
+                        </FormControl>
+                        <FormMessage className="text-[8px] font-bold text-destructive uppercase tracking-widest" />
+                      </FormItem>
+                    )}
+                  />
+                  <Button type="submit" className="w-full h-12 text-sm font-black uppercase tracking-[0.2em] bg-brand-gradient rounded-xl" disabled={isLoading}>
+                    {isLoading ? "SALVANDO..." : "ATUALIZAR SENHA"}
+                  </Button>
+                </form>
+              </Form>
+            ) : isResetting ? (
               <Form {...resetForm}>
                 <form onSubmit={resetForm.handleSubmit(onResetSubmit)} className="space-y-4">
                   <FormField
@@ -390,6 +487,24 @@ function AuthPage() {
                           />
                         </FormControl>
                         <FormMessage className="text-[8px] font-bold text-destructive uppercase tracking-widest" />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={loginForm.control}
+                    name="rememberMe"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-row items-center space-x-2 space-y-0 px-1">
+                        <FormControl>
+                          <Checkbox
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                            className="border-white/20 bg-white/5"
+                          />
+                        </FormControl>
+                        <FormLabel className="text-[8px] font-black uppercase tracking-widest text-white/40 cursor-pointer">
+                          LEMBRAR DE MIM
+                        </FormLabel>
                       </FormItem>
                     )}
                   />
