@@ -138,6 +138,13 @@ function SettingsPage() {
               </div>
               <Switch />
             </div>
+            <div className="flex items-center justify-between">
+              <div className="space-y-0.5">
+                <Label className="text-sm font-medium">Tema do Sistema</Label>
+                <p className="text-xs text-muted-foreground">Escolha entre modo claro ou escuro.</p>
+              </div>
+              <ThemeToggle />
+            </div>
           </CardContent>
         </Card>
 
