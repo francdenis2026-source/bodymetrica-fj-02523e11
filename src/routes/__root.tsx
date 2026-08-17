@@ -1,4 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Loader2, Wifi, WifiOff } from "lucide-react";
 import {
   Outlet,
   Link,
@@ -157,6 +158,8 @@ function RootComponent() {
   const [authChecked, setAuthChecked] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [needsVerification, setNeedsVerification] = useState(false);
+  const [isOnline, setIsOnline] = useState(typeof navigator !== 'undefined' ? navigator.onLine : true);
+  const [syncStatus, setSyncStatus] = useState<'idle' | 'syncing' | 'synced'>('idle');
 
   useEffect(() => {
     // Setup cross-tab logout listener
@@ -218,11 +221,15 @@ function RootComponent() {
     }
 
     const handleOnline = () => {
+      setIsOnline(true);
+      setSyncStatus('syncing');
+      syncOfflineActions().then(() => setSyncStatus('synced'));
+      setTimeout(() => setSyncStatus('idle'), 3000);
       toast.success("Conexão restabelecida. Sincronizando dados...");
-      syncOfflineActions();
     };
 
     const handleOffline = () => {
+      setIsOnline(false);
       toast.error("Você está offline. O modo offline está ativo.");
     };
 
@@ -251,6 +258,20 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      {/* Sync Status Indicator */}
+      <div className="fixed top-4 right-4 z-[100] flex items-center gap-2 px-3 py-1.5 rounded-full bg-background/80 backdrop-blur border border-white/10 shadow-lg animate-in fade-in slide-in-from-top-2">
+        {syncStatus === 'syncing' ? (
+          <Loader2 className="w-3 h-3 animate-spin text-primary" />
+        ) : isOnline ? (
+          <Wifi className="w-3 h-3 text-success" />
+        ) : (
+          <WifiOff className="w-3 h-3 text-destructive" />
+        )}
+        <span className="text-[10px] font-black uppercase tracking-widest text-foreground/60">
+          {syncStatus === 'syncing' ? 'Sincronizando...' : isOnline ? 'Online' : 'Offline'}
+        </span>
+      </div>
+
       <div className="flex min-h-screen w-full flex-col md:flex-row bg-background transition-colors duration-300">
         {showSidebar && (
           <>
