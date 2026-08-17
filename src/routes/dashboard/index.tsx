@@ -1,8 +1,10 @@
+import * as React from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { generatePDFReport } from "@/lib/reports";
 import { exportToCSV } from "@/lib/export";
 import { Skeleton } from "@/components/ui/skeleton";
+import { PageHeaderSkeleton, StatsSkeleton } from "@/components/ui/loading-states";
 import { getSession } from "@/lib/auth/auth.functions";
 
 import { 
@@ -54,23 +56,14 @@ function DashboardPage() {
 
   if (isLoading) {
     return (
-      <div className="flex-1 space-y-12 p-4 md:p-12 pt-10 bg-background">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
-          <div className="flex items-center gap-6">
-            <Skeleton className="w-20 h-20 rounded-3xl" />
-            <div className="space-y-2">
-              <Skeleton className="w-32 h-6" />
-              <Skeleton className="w-64 h-12" />
-            </div>
-          </div>
+      <div className="flex-1 space-y-12 p-4 md:p-12 pt-10 bg-background animate-in fade-in duration-700">
+        <PageHeaderSkeleton />
+        <StatsSkeleton />
+        <div className="grid gap-6 md:grid-cols-2">
+          <Skeleton className="h-80 rounded-[2.5rem]" />
+          <Skeleton className="h-80 rounded-[2.5rem]" />
         </div>
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          {[1, 2, 3, 4].map(i => <Skeleton key={i} className="h-32 rounded-[2rem]" />)}
-        </div>
-        <div className="grid gap-4 md:grid-cols-2">
-          <Skeleton className="h-64 rounded-[2rem]" />
-          <Skeleton className="h-64 rounded-[2rem]" />
-        </div>
+        <Skeleton className="h-64 rounded-[2.5rem] w-full" />
       </div>
     );
   }

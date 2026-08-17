@@ -60,27 +60,32 @@ export function AccessGate({
   const redirectTarget = needsVerification ? "/auth/verify" : needsLicense ? "/settings" : "/auth";
 
   return (
-    <div className="min-h-[60vh] flex items-center justify-center p-6 animate-in fade-in duration-700">
-      <div className="surface max-w-lg w-full p-12 text-center space-y-8 relative overflow-hidden border-white/5 shadow-2xl rounded-[3rem] bg-black/40 backdrop-blur-3xl">
-        <div className="relative z-10 space-y-6">
-          <div className="mx-auto w-24 h-24 bg-brand-gradient rounded-3xl flex items-center justify-center text-primary-foreground shadow-2xl border-2 border-white/20 animate-pulse">
-            <Lock size={48} />
+    <div className="min-h-[80vh] flex items-center justify-center p-6 animate-in fade-in duration-700">
+      <div className="surface max-w-xl w-full p-12 md:p-20 text-center space-y-10 relative overflow-hidden border-white/5 shadow-[0_50px_100px_rgba(0,0,0,0.6)] rounded-[3.5rem] bg-black/40 backdrop-blur-3xl group">
+        <div className="absolute inset-0 bg-gradient-to-tr from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+        
+        <div className="relative z-10 space-y-8">
+          <div className="mx-auto w-28 h-28 bg-brand-gradient rounded-[2rem] flex items-center justify-center text-primary-foreground shadow-[0_20px_50px_rgba(oklch(0.65_0.22_260),0.3)] border-2 border-white/20 animate-in zoom-in duration-700">
+            <Lock size={56} className="group-hover:scale-110 transition-transform duration-500" />
           </div>
 
-          <div className="space-y-2">
-            <h2 className="text-4xl font-black font-display tracking-tighter text-white uppercase italic">
+          <div className="space-y-4">
+            <h2 className="text-5xl md:text-6xl font-black font-display tracking-tighter text-white uppercase italic leading-none">
               {displayTitle}
             </h2>
-            <p className="text-white/40 font-black uppercase tracking-[0.2em] text-[10px]">
+            <p className="text-white/40 font-bold uppercase tracking-[0.3em] text-[10px] md:text-xs max-w-sm mx-auto leading-relaxed">
               {displayDescription}
             </p>
-            <p className="text-primary font-black uppercase tracking-widest text-[10px] animate-pulse">
-              Redirecionando para o sistema de autenticação...
-            </p>
+            <div className="flex items-center justify-center gap-3 py-2">
+              <div className="w-1.5 h-1.5 rounded-full bg-primary animate-ping" />
+              <p className="text-primary font-black uppercase tracking-[0.2em] text-[10px]">
+                Sincronizando segurança...
+              </p>
+            </div>
           </div>
 
-          <div className="flex flex-col gap-4 pt-4">
-            <Button className="h-14 font-black uppercase tracking-widest bg-brand-gradient shadow-2xl shadow-primary/30 hover:scale-105 transition-all border-none rounded-2xl" asChild>
+          <div className="pt-6">
+            <Button size="lg" className="w-full sm:w-auto px-16 h-16 font-black uppercase tracking-[0.2em] bg-brand-gradient shadow-[0_20px_40px_rgba(oklch(0.65_0.22_260),0.4)] hover:scale-105 transition-all border-none rounded-[1.5rem]" asChild>
               <Link 
                 to={redirectTarget as any} 
                 search={{ 
