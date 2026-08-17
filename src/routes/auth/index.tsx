@@ -443,11 +443,11 @@ function AuthPage() {
           </CardFooter>
         </Card>
         
-        <div className="mt-8 text-center space-y-1">
-          <p className="text-[10px] text-white/40 uppercase tracking-[0.2em] font-bold">
+        <div className="mt-6 text-center space-y-1">
+          <p className="text-[8px] text-white/40 uppercase tracking-[0.2em] font-bold">
             dev Franc D'nis Feijó, AC
           </p>
-          <p className="text-[10px] text-white/30 font-medium">
+          <p className="text-[8px] text-white/30 font-medium">
             © {new Date().getFullYear()} Body Métrica FJ. Todos os direitos reservados.
           </p>
         </div>
