@@ -43,6 +43,7 @@ import {
 } from "@/lib/monetization.functions";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { SVGToast } from "@/components/ui/svg-toast";
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
