@@ -16,6 +16,7 @@ import {
   Heart
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { queueOfflineAction } from "@/lib/offline-sync";
 
 export const Route = createFileRoute("/nutrition/")({
   component: NutritionPage,
@@ -149,7 +150,17 @@ function MacroCard({ label, current, goal, unit, icon }: { label: string; curren
   );
 }
 
-function MealCard({ name, time, items, confirmed }: { name: string; time: string; items: any[]; confirmed: boolean }) {
+function MealCard({ name, time, items, confirmed: initialConfirmed }: { name: string; time: string; items: any[]; confirmed: boolean }) {
+  const [confirmed, setConfirmed] = useState(initialConfirmed);
+  
+  const handleConfirm = () => {
+    setConfirmed(true);
+    queueOfflineAction({
+      type: 'MEAL_CONFIRM',
+      data: { name, time }
+    });
+  };
+
   return (
     <Card className={`surface border-none overflow-hidden ${confirmed ? 'opacity-80' : ''}`}>
       <CardHeader className="flex flex-row items-center justify-between py-4 px-6 bg-muted/20">
@@ -162,7 +173,7 @@ function MealCard({ name, time, items, confirmed }: { name: string; time: string
         {confirmed ? (
           <span className="text-[10px] font-bold text-success uppercase">Concluído</span>
         ) : (
-          <Button size="sm" variant="ghost" className="h-7 text-xs">Confirmar</Button>
+          <Button size="sm" variant="ghost" className="h-7 text-xs" onClick={handleConfirm}>Confirmar</Button>
         )}
       </CardHeader>
       <CardContent className="p-0">
