@@ -119,7 +119,7 @@ export const register = createServerFn({ method: "POST" })
 
     return {
       success: true,
-      message: "Cadastro realizado! Verifique seu e-mail para confirmar a conta.",
+      message: "Cadastro realizado! Verifique seu e-mail para confirmar a conta. Após a confirmação, você poderá adquirir sua licença de uso.",
       user: authData.user
     };
   });
