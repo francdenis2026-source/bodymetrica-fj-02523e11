@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -100,8 +101,14 @@ function BodyPage() {
 
 
 
+        <AnimatePresence mode="wait">
         <TabsContent value="overview" className="space-y-4">
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="grid gap-4 md:grid-cols-2 lg:grid-cols-3"
+          >
             <MetricCard 
               label="Peso" 
               value={`${userData?.profile?.weight || "82.4"} kg`} 
@@ -123,7 +130,7 @@ function BodyPage() {
               trend="up" 
               icon={<TrendingUp className="h-4 w-4 text-success" />} 
             />
-          </div>
+          </motion.div>
 
           <Card className="surface border-none p-6">
             <CardHeader className="px-0 pt-0">
@@ -272,6 +279,7 @@ function BodyPage() {
             </Button>
           </div>
         </TabsContent>
+        </AnimatePresence>
       </Tabs>
     </div>
   );

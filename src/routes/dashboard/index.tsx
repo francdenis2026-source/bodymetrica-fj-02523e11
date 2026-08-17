@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
+import { generatePDFReport } from "@/lib/reports";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getSession } from "@/lib/auth/auth.functions";
 
@@ -16,8 +17,7 @@ import {
   Calendar,
   FileDown,
   LifeBuoy,
-  LayoutDashboard,
-  CheckCircle2
+  LayoutDashboard
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -104,7 +104,20 @@ function DashboardPage() {
           <Button variant="outline" className="gap-2 h-14 px-8 font-black uppercase tracking-widest border-2 bg-white/5 border-white/10 hover:bg-white/10 hover:scale-105 transition-all" asChild>
             <Link to="/help">CENTRAL DE AJUDA</Link>
           </Button>
-          <Button className="gap-3 h-14 px-8 font-black uppercase tracking-widest bg-brand-gradient shadow-2xl shadow-primary/40 hover:scale-105 transition-all border-none">
+          <Button 
+            className="gap-3 h-14 px-8 font-black uppercase tracking-widest bg-brand-gradient shadow-2xl shadow-primary/40 hover:scale-105 transition-all border-none"
+            onClick={() => generatePDFReport({
+              userName: userName,
+              period: "Últimos 30 dias",
+              weightData: [
+                { date: "01/08", weight: 84.5 },
+                { date: "15/08", weight: 82.4 }
+              ],
+              macros: { calories: 2400, protein: 180, carbs: 250, fat: 80 },
+              hydrationGoal: 3000,
+              hydrationCurrent: 1200
+            })}
+          >
             <FileDown size={20} /> RELATÓRIO PDF
           </Button>
         </div>
