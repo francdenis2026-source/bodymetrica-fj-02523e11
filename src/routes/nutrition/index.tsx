@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { toast } from "sonner";
+import { SVGToast } from "@/components/ui/svg-toast";
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -183,9 +184,14 @@ function NutritionPage() {
               <CardContent className="px-0 space-y-6">
                 <form className="space-y-8" onSubmit={(e) => {
                   e.preventDefault();
-                  toast.success("Refeição registrada com sucesso!", {
-                    description: "Os macronutrientes foram sincronizados com sua meta diária."
-                  });
+                  toast.custom((t) => (
+                    <SVGToast 
+                      type="success"
+                      title="REFEIÇÃO REGISTRADA"
+                      message="Os macronutrientes foram sincronizados com sua meta diária de elite."
+                      onClose={() => toast.dismiss(t)}
+                    />
+                  ));
                 }}>
                   <div className="space-y-3 relative">
                     <label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">BUSCA RÁPIDA DE ALIMENTOS</label>
@@ -197,10 +203,14 @@ function NutritionPage() {
                         className="pl-14 h-16 bg-white/5 border-2 border-white/10 focus:border-primary/50 transition-all rounded-[1.5rem] font-bold text-lg italic tracking-tight" 
                         onChange={(e) => {
                           if (e.target.value.length > 2) {
-                            toast.info("Sugestão: Peito de Frango (31g P | 0g C | 3g G)", { 
-                              duration: 2000,
-                              icon: <Utensils className="text-primary" size={14} />
-                            });
+                            toast.custom((t) => (
+                              <SVGToast 
+                                type="info"
+                                title="SUGESTÃO ALIMENTAR"
+                                message="Peito de Frango detectado (31g P | 0g C | 3.6g G)."
+                                onClose={() => toast.dismiss(t)}
+                              />
+                            ), { duration: 3000 });
                           }
                         }}
                       />

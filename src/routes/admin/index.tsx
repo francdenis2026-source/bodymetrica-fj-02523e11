@@ -43,6 +43,7 @@ import {
 } from "@/lib/monetization.functions";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { SVGToast } from "@/components/ui/svg-toast";
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -91,11 +92,25 @@ function AdminDashboard() {
     mutationFn: (days: number) => generateLicenseFn({ data: { expiresInDays: days } }),
     onSuccess: (result) => {
       if (result.success) {
-        toast.success(`Chave gerada: ${result.licenseKey}`);
+        toast.custom((t) => (
+          <SVGToast 
+            type="success"
+            title="CHAVE GERADA"
+            message={`Nova licença estruturada: ${result.licenseKey}`}
+            onClose={() => toast.dismiss(t)}
+          />
+        ));
         queryClient.invalidateQueries({ queryKey: ['admin-licenses'] });
         queryClient.invalidateQueries({ queryKey: ['admin-audit'] });
       } else {
-        toast.error(result.message);
+        toast.custom((t) => (
+          <SVGToast 
+            type="error"
+            title="ERRO NA GERAÇÃO"
+            message={result.message}
+            onClose={() => toast.dismiss(t)}
+          />
+        ));
       }
       setIsGenerating(false);
     }
@@ -105,11 +120,25 @@ function AdminDashboard() {
     mutationFn: (id: string) => revokeLicenseFn({ data: { licenseId: id, reason: "Revogação manual admin" } }),
     onSuccess: (result) => {
       if (result.success) {
-        toast.success(result.message);
+        toast.custom((t) => (
+          <SVGToast 
+            type="success"
+            title="LICENÇA REVOGADA"
+            message={result.message}
+            onClose={() => toast.dismiss(t)}
+          />
+        ));
         queryClient.invalidateQueries({ queryKey: ['admin-licenses'] });
         queryClient.invalidateQueries({ queryKey: ['admin-audit'] });
       } else {
-        toast.error(result.message);
+        toast.custom((t) => (
+          <SVGToast 
+            type="error"
+            title="ERRO NA REVOGAÇÃO"
+            message={result.message}
+            onClose={() => toast.dismiss(t)}
+          />
+        ));
       }
     }
   });
@@ -117,8 +146,22 @@ function AdminDashboard() {
   const updateSettingMutation = useMutation({
     mutationFn: (value: string) => updateSettingFn({ data: { key: "mercadopago_access_token", value } }),
     onSuccess: (res) => {
-      if (res.success) toast.success("API Mercado Pago atualizada!");
-      else toast.error(res.message);
+      if (res.success) toast.custom((t) => (
+        <SVGToast 
+          type="success"
+          title="CONFIGURAÇÃO SALVA"
+          message="API Mercado Pago atualizada com sucesso!"
+          onClose={() => toast.dismiss(t)}
+        />
+      ));
+      else toast.custom((t) => (
+        <SVGToast 
+          type="error"
+          title="ERRO AO SALVAR"
+          message={res.message}
+          onClose={() => toast.dismiss(t)}
+        />
+      ));
     }
   });
 
@@ -348,7 +391,14 @@ function AdminDashboard() {
                     variant="outline"
                     className="h-12 font-black uppercase tracking-widest px-8 rounded-xl"
                     onClick={() => updateSettingFn({ data: { key: "mercadopago_webhook_secret", value: mpWebhookSecret } }).then(res => {
-                      if (res.success) toast.success("Webhook Secret salvo!");
+                      if (res.success) toast.custom((t) => (
+                        <SVGToast 
+                          type="success"
+                          title="WEBHOOK CONFIGURADO"
+                          message="Secret de verificação salvo com sucesso!"
+                          onClose={() => toast.dismiss(t)}
+                        />
+                      ));
                     })}
                   >
                     SALVAR SECRET

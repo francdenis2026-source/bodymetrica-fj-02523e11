@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
+import { SVGToast } from "@/components/ui/svg-toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -43,9 +44,14 @@ function HydrationPage() {
     setCurrentAmount(prev => Math.min(newTotal, 5000));
     
     if (newTotal >= goalAmount * 0.9 && currentAmount < goalAmount * 0.9) {
-      toast.success("Parabéns! Você atingiu 90% da sua meta de hidratação!", {
-        description: "Mais um pouco e você conclui o dia.",
-      });
+      toast.custom((t) => (
+        <SVGToast 
+          type="success"
+          title="META ATINGIDA"
+          message="Parabéns! Você atingiu 90% da sua meta de hidratação! Mais um pouco e você conclui o dia."
+          onClose={() => toast.dismiss(t)}
+        />
+      ));
     }
 
     queueOfflineAction({

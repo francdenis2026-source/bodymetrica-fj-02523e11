@@ -25,6 +25,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getSession, clearSession } from "@/lib/auth/auth.functions";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { toast } from "sonner";
+import { SVGToast } from "@/components/ui/svg-toast";
 import { requestNotificationPermission, scheduleNotifications } from "@/lib/notifications";
 import { validateLicense, generateLicenseKey, createCheckoutSession } from "@/lib/monetization.functions";
 import { useState } from "react";
@@ -58,10 +59,24 @@ function SettingsPage() {
       if (result.success && result.init_point) {
         window.location.href = result.init_point;
       } else {
-        toast.error(result.message || "Erro ao iniciar pagamento.");
+        toast.custom((t) => (
+          <SVGToast 
+            type="error"
+            title="ERRO NO CHECKOUT"
+            message={result.message || "Não foi possível iniciar o processamento do pagamento."}
+            onClose={() => toast.dismiss(t)}
+          />
+        ));
       }
     } catch (error) {
-      toast.error("Erro na integração com Mercado Pago.");
+      toast.custom((t) => (
+        <SVGToast 
+          type="error"
+          title="FALHA DE INTEGRAÇÃO"
+          message="Erro na comunicação com o Mercado Pago. Tente novamente."
+          onClose={() => toast.dismiss(t)}
+        />
+      ));
     } finally {
       setIsLoading(false);
     }
@@ -69,7 +84,14 @@ function SettingsPage() {
 
   const handleActivateLicense = async () => {
     if (!licenseKey) {
-      toast.error("Por favor, insira uma chave de licença.");
+      toast.custom((t) => (
+        <SVGToast 
+          type="warning"
+          title="CHAVE AUSENTE"
+          message="Por favor, insira o código da licença para ativação."
+          onClose={() => toast.dismiss(t)}
+        />
+      ));
       return;
     }
 
@@ -77,16 +99,37 @@ function SettingsPage() {
     try {
       const result = await validateLicenseFn({ data: { licenseKey, userId: user.id } });
       if (result.success) {
-        toast.success(result.message);
+        toast.custom((t) => (
+          <SVGToast 
+            type="success"
+            title="LICENÇA ATIVADA"
+            message={result.message}
+            onClose={() => toast.dismiss(t)}
+          />
+        ));
         // Update local session
         const updatedUser = { ...session.user, licenseStatus: 'active', isLicensed: true };
         localStorage.setItem('bodymetrica_auth_session', JSON.stringify({ ...session, user: updatedUser }));
         window.location.reload();
       } else {
-        toast.error(result.message);
+        toast.custom((t) => (
+          <SVGToast 
+            type="error"
+            title="CHAVE INVÁLIDA"
+            message={result.message}
+            onClose={() => toast.dismiss(t)}
+          />
+        ));
       }
     } catch (error) {
-      toast.error("Erro ao validar licença.");
+      toast.custom((t) => (
+        <SVGToast 
+          type="error"
+          title="ERRO DE VALIDAÇÃO"
+          message="Não foi possível validar a licença no servidor."
+          onClose={() => toast.dismiss(t)}
+        />
+      ));
     } finally {
       setIsLoading(false);
     }
@@ -98,7 +141,14 @@ function SettingsPage() {
       const result = await generateLicenseFn({ data: { userId: user.id } });
       if (result.success) {
         setLicenseKey(result.licenseKey);
-        toast.success("Simulação de compra realizada! A chave foi preenchida.");
+        toast.custom((t) => (
+          <SVGToast 
+            type="success"
+            title="SIMULAÇÃO CONCLUÍDA"
+            message="Compra simulada com sucesso! A chave foi preenchida automaticamente."
+            onClose={() => toast.dismiss(t)}
+          />
+        ));
       }
     } catch (error) {
       toast.error("Erro na simulação de compra.");
