@@ -94,16 +94,17 @@ function BodyPage() {
             <div className="h-[250px] w-full mt-4">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={mockWeightData}>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="oklch(0.9 0.012 235 / 0.5)" />
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--color-border)" opacity={0.3} />
                   <XAxis 
                     dataKey="date" 
-                    stroke="oklch(0.51 0.025 240)" 
+                    stroke="var(--color-muted-foreground)" 
+
                     fontSize={12} 
                     tickLine={false} 
                     axisLine={false} 
                   />
                   <YAxis 
-                    stroke="oklch(0.51 0.025 240)" 
+                    stroke="var(--color-muted-foreground)" 
                     fontSize={12} 
                     tickLine={false} 
                     axisLine={false}
@@ -111,18 +112,21 @@ function BodyPage() {
                   />
                   <Tooltip 
                     contentStyle={{ 
-                      backgroundColor: 'oklch(1 0 0)', 
+                      backgroundColor: 'var(--color-card)', 
                       borderRadius: '12px',
-                      border: '1px solid oklch(0.9 0.012 235)',
-                      boxShadow: '0 8px 24px oklch(0.2 0.05 235 / 0.06)'
-                    }} 
+                      border: '1px solid var(--color-border)',
+                      boxShadow: 'var(--shadow-card)',
+                      color: 'var(--color-foreground)'
+                    }}
+                    itemStyle={{ color: 'var(--color-primary)' }}
                   />
+
                   <Line 
                     type="monotone" 
                     dataKey="weight" 
-                    stroke="oklch(0.45 0.09 226)" 
+                    stroke="var(--color-primary)" 
                     strokeWidth={3} 
-                    dot={{ r: 4, fill: 'oklch(0.45 0.09 226)' }}
+                    dot={{ r: 4, fill: 'var(--color-primary)' }}
                     activeDot={{ r: 6, strokeWidth: 0 }}
                   />
                 </LineChart>
