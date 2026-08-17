@@ -5,6 +5,7 @@ import { generatePDFReport } from "@/lib/reports";
 import { exportToCSV } from "@/lib/export";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PageHeaderSkeleton, StatsSkeleton } from "@/components/ui/loading-states";
+import { EmptyState } from "@/components/ui/status-states";
 import { getSession } from "@/lib/auth/auth.functions";
 
 import { 
@@ -41,18 +42,11 @@ function DashboardPage() {
       setUserData(session);
     }
     // Simulating initial load
-    const timer = setTimeout(() => setIsLoading(false), 1000);
+    const timer = setTimeout(() => setIsLoading(false), 800);
     return () => clearTimeout(timer);
   }, []);
 
-  const userName = userData?.name || "Visitante";
-  const currentGoalMap: Record<string, string> = {
-    'loss': 'Emagrecimento',
-    'gain': 'Hipertrofia',
-    'maint': 'Manutenção'
-  };
-  const currentGoal = currentGoalMap[userData?.profile?.goal] || "Hipertrofia";
-  const weightChange = -0.5;
+  const hasData = userData?.profile?.weight || false;
 
   if (isLoading) {
     return (
@@ -64,6 +58,26 @@ function DashboardPage() {
           <Skeleton className="h-80 rounded-[2.5rem]" />
         </div>
         <Skeleton className="h-64 rounded-[2.5rem] w-full" />
+      </div>
+    );
+  }
+
+  if (!hasData && !isLoading) {
+    return (
+      <div className="flex-1 p-4 md:p-12 pt-10 bg-background animate-in fade-in duration-700">
+        <PageHeaderSkeleton />
+        <div className="mt-20">
+          <EmptyState 
+            icon={LayoutDashboard}
+            title="SISTEMA PRONTO PARA OPERAÇÃO"
+            description="Nenhum registro de performance detectado. Inicie sua jornada de elite configurando seu perfil agora."
+            action={
+              <Button className="h-16 px-12 rounded-[1.5rem] bg-brand-gradient text-xs font-black uppercase tracking-[0.2em] shadow-2xl hover:scale-105 transition-all" asChild>
+                <Link to="/body">CONFIGURAR PERFIL</Link>
+              </Button>
+            }
+          />
+        </div>
       </div>
     );
   }
