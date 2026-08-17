@@ -1,17 +1,19 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
+import { supabase } from "@/integrations/supabase/client";
 
 const AUTH_KEY = 'bodymetrica_auth_session';
 
 const loginSchema = z.object({
-  cpf: z.string(),
-  pin: z.string().length(6, "PIN deve ter 6 dígitos"),
+  email: z.string().email("E-mail inválido"),
+  password: z.string().min(6, "A senha deve ter pelo menos 6 caracteres"),
 });
 
 const registerSchema = z.object({
-  cpf: z.string(),
-  pin: z.string().length(6, "PIN deve ter 6 dígitos"),
+  email: z.string().email("E-mail inválido"),
+  password: z.string().min(6, "A senha deve ter pelo menos 6 caracteres"),
   name: z.string(),
+  cpf: z.string().optional(),
   birthDate: z.string().optional(),
   goal: z.string().optional(),
   weight: z.string().optional(),
@@ -20,37 +22,43 @@ const registerSchema = z.object({
 });
 
 const resetRequestSchema = z.object({
-  cpf: z.string(),
+  email: z.string().email("E-mail inválido"),
 });
 
 const resetVerifySchema = z.object({
-  cpf: z.string(),
-  code: z.string().length(6),
-  newPin: z.string().length(6),
+  password: z.string().min(6, "A nova senha deve ter pelo menos 6 caracteres"),
 });
-
-// Mock database for reset codes (in a real app, use a DB)
-const resetCodes = new Map<string, { code: string; expires: number }>();
 
 export const login = createServerFn({ method: "POST" })
   .inputValidator((data) => loginSchema.parse(data))
   .handler(async ({ data }) => {
-    // Simulated auth
-    console.log("Login attempt:", data.cpf);
-    
+    const { data: authData, error } = await supabase.auth.signInWithPassword({
+      email: data.email,
+      password: data.password,
+    });
+
+    if (error) {
+      return { success: false, message: error.message };
+    }
+
+    if (!authData.user?.email_confirmed_at) {
+      return { success: false, message: "E-mail não verificado. Por favor, verifique sua caixa de entrada.", needsVerification: true };
+    }
+
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', authData.user.id)
+      .single();
+
     return {
       success: true,
       user: {
-        id: "user-" + Math.random().toString(36).substr(2, 9),
-        name: "Franc D'nis Feijó",
-        cpf: data.cpf,
+        id: authData.user.id,
+        email: authData.user.email,
+        name: profile?.name || authData.user.user_metadata?.name || "Usuário",
         role: "user",
-        profile: {
-          goal: 'gain',
-          weight: '82.4',
-          height: '185',
-          activityLevel: 'Muito ativo (6-7 dias/semana)'
-        }
+        profile: profile
       }
     };
   });
@@ -58,60 +66,74 @@ export const login = createServerFn({ method: "POST" })
 export const register = createServerFn({ method: "POST" })
   .inputValidator((data) => registerSchema.parse(data))
   .handler(async ({ data }) => {
-    // Simulated registration
-    console.log("Registration attempt:", data.cpf);
-    
-    return {
-      success: true,
-      user: {
-        id: "user-" + Math.random().toString(36).substr(2, 9),
-        name: data.name,
-        cpf: data.cpf,
-        role: "user",
-        profile: {
-          goal: data.goal,
-          weight: data.weight,
-          height: data.height,
-          activityLevel: data.activityLevel
+    const { data: authData, error } = await supabase.auth.signUp({
+      email: data.email,
+      password: data.password,
+      options: {
+        data: {
+          name: data.name,
         }
       }
+    });
+
+    if (error) {
+      return { success: false, message: error.message };
+    }
+
+    // Update profile with additional data if signup was successful
+    if (authData.user) {
+      await supabase
+        .from('profiles')
+        .update({
+          cpf: data.cpf,
+          birth_date: data.birthDate ? new Date(data.birthDate).toISOString() : null,
+          goal: data.goal,
+          weight: data.weight ? parseFloat(data.weight) : null,
+          height: data.height ? parseFloat(data.height) : null,
+          activity_level: data.activityLevel,
+        })
+        .eq('id', authData.user.id);
+    }
+
+    return {
+      success: true,
+      message: "Cadastro realizado! Verifique seu e-mail para confirmar a conta.",
+      user: authData.user
     };
   });
 
-export const requestPinReset = createServerFn({ method: "POST" })
+export const requestPasswordReset = createServerFn({ method: "POST" })
   .inputValidator((data) => resetRequestSchema.parse(data))
   .handler(async ({ data }) => {
-    const code = Math.floor(100000 + Math.random() * 900000).toString();
-    const expires = Date.now() + 10 * 60 * 1000; // 10 minutes
-    
-    resetCodes.set(data.cpf, { code, expires });
-    
-    console.log(`Reset code for ${data.cpf}: ${code}`);
-    
-    return { success: true, message: "Código enviado para seu canal de comunicação cadastrado." };
+    const { error } = await supabase.auth.resetPasswordForEmail(data.email, {
+      redirectTo: `${window.location.origin}/auth/reset-password`,
+    });
+
+    if (error) {
+      return { success: false, message: error.message };
+    }
+
+    return { success: true, message: "Link de recuperação enviado para o seu e-mail." };
   });
 
-export const verifyPinReset = createServerFn({ method: "POST" })
+export const updatePassword = createServerFn({ method: "POST" })
   .inputValidator((data) => resetVerifySchema.parse(data))
   .handler(async ({ data }) => {
-    const stored = resetCodes.get(data.cpf);
-    
-    if (!stored || stored.code !== data.code) {
-      return { success: false, message: "Código inválido ou expirado." };
+    const { error } = await supabase.auth.updateUser({
+      password: data.password,
+    });
+
+    if (error) {
+      return { success: false, message: error.message };
     }
-    
-    if (Date.now() > stored.expires) {
-      resetCodes.delete(data.cpf);
-      return { success: false, message: "Código expirou. Solicite um novo." };
-    }
-    
-    resetCodes.delete(data.cpf);
-    return { success: true, message: "PIN redefinido com sucesso!" };
+
+    return { success: true, message: "Senha redefinida com sucesso!" };
   });
 
 export const logout = createServerFn({ method: "POST" })
   .handler(async () => {
-    return { success: true };
+    const { error } = await supabase.auth.signOut();
+    return { success: !error };
   });
 
 // Client-side helpers
@@ -129,7 +151,6 @@ export const setSession = (user: any) => {
 export const clearSession = () => {
   if (typeof window === 'undefined') return;
   localStorage.removeItem(AUTH_KEY);
-  // Clear other sensitive data if necessary
   sessionStorage.clear();
 };
 
