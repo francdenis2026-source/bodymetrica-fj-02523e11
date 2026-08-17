@@ -18,12 +18,42 @@ import { ModuleHeader } from "@/components/module-header";
 import { Skeleton } from "@/components/ui/skeleton";
 
 
+
 export const Route = createFileRoute("/training/")({
   component: TrainingPage,
 });
 
 function TrainingPage() {
-  return (
+  const [activeTab, setActiveTab] = useState("routine");
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 900);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="flex-1 space-y-12 p-4 md:p-12 pt-10 bg-background">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
+          <div className="flex items-center gap-6">
+            <Skeleton className="w-20 h-20 rounded-3xl" />
+            <div className="space-y-2">
+              <Skeleton className="w-32 h-6" />
+              <Skeleton className="w-64 h-12" />
+            </div>
+          </div>
+        </div>
+        <div className="grid gap-4 md:grid-cols-3">
+          {[1, 2, 3].map(i => <Skeleton key={i} className="h-32 rounded-2xl" />)}
+        </div>
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {[1, 2, 3].map(i => <Skeleton key={i} className="h-48 rounded-2xl" />)}
+        </div>
+      </div>
+    );
+  }
+
     <div className="flex-1 space-y-12 p-4 md:p-12 pt-10 relative overflow-hidden bg-background">
       {/* Decorative Module Hero Image */}
       <div className="absolute top-0 right-0 w-96 h-96 opacity-[0.08] pointer-events-none -z-10 translate-x-1/4 -translate-y-1/4">

@@ -118,14 +118,15 @@ function HelpCenterPage() {
         <section className="text-center space-y-4">
           <h2 className="text-2xl font-bold font-display tracking-tight text-primary">Como podemos ajudar?</h2>
           <div className="relative max-w-md mx-auto">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={18} />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-primary" size={20} />
             <Input 
               placeholder="Busque por termos (ex: macros, treino...)" 
-              className="pl-10 h-12 shadow-sm"
+              className="pl-12 h-14 text-lg bg-white/5 border-white/10 rounded-2xl focus:ring-primary focus:border-primary transition-all placeholder:text-white/20"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
+
         </section>
 
         <section className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
