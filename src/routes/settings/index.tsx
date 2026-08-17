@@ -26,7 +26,7 @@ function SettingsPage() {
       <div className="space-y-1">
         <h2 className="text-2xl font-bold tracking-tight font-display text-primary">Configurações</h2>
         <p className="text-muted-foreground text-sm">
-          Adicionar notificações configuráveis com agendamento por horário, fuso horário e verificação de entrega/visualização pelo usuário.
+          Gerencie seu perfil, preferências de notificações e privacidade.
         </p>
       </div>
 

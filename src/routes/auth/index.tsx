@@ -136,10 +136,13 @@ function AuthPage() {
             </div>
             <p className="text-center text-sm text-muted-foreground">
               Não tem uma conta?{" "}
-              <button className="text-primary font-semibold hover:underline">
-                Falar com consultor
-              </button>
+              <Link to="/onboarding" className="text-primary font-semibold hover:underline">
+                Registrar agora
+              </Link>
             </p>
+            <button className="text-center text-xs text-primary hover:underline">
+              Esqueci minha senha
+            </button>
           </CardFooter>
         </Card>
         

@@ -9,7 +9,9 @@ import {
   Plus, 
   ChevronRight,
   TrendingUp,
-  Calendar
+  Calendar,
+  FileDown,
+  Filter
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -26,12 +28,20 @@ function DashboardPage() {
 
   return (
     <div className="flex-1 space-y-6 p-4 md:p-8 pt-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="space-y-1">
           <h2 className="text-2xl font-bold tracking-tight font-display">Olá, {userName}! 👋</h2>
           <p className="text-muted-foreground text-sm">
             Seu progresso está incrível hoje. Mantenha o foco!
           </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" size="sm" className="gap-2 h-9 text-xs">
+            <Filter size={14} /> Período
+          </Button>
+          <Button variant="outline" size="sm" className="gap-2 h-9 text-xs">
+            <FileDown size={14} /> Relatórios PDF
+          </Button>
         </div>
         <Button size="icon" className="rounded-full w-12 h-12 shadow-lg bg-brand-gradient md:hidden fixed bottom-20 right-4 z-40">
           <Plus size={24} />
