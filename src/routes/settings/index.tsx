@@ -115,7 +115,25 @@ function SettingsPage() {
                         <Clock size={12} /> Horários de Lembrete
                       </span>
                       <div className="flex flex-wrap gap-2">
-                         <Button variant="outline" size="sm" className="h-7 text-[9px] border-primary/30">08:00</Button>
+                         <Button 
+                            variant="outline" 
+                            size="sm" 
+                            className="h-7 text-[9px] border-primary/30"
+                            onClick={() => {
+                              if ("Notification" in window) {
+                                Notification.requestPermission().then(permission => {
+                                  if (permission === "granted") {
+                                    new Notification("Body Métrica FJ", {
+                                      body: "Lembrete de hidratação configurado para as 08:00",
+                                      icon: "/favicon.svg"
+                                    });
+                                  }
+                                });
+                              }
+                            }}
+                         >
+                           08:00
+                         </Button>
                          <Button variant="outline" size="sm" className="h-7 text-[9px] border-primary/30">14:00</Button>
                          <Button variant="outline" size="sm" className="h-7 text-[9px] border-primary/30">20:00</Button>
                          <Button variant="ghost" size="sm" className="h-7 w-7 p-0 rounded-full border border-dashed border-muted-foreground/30">+</Button>
