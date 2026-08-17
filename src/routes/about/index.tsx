@@ -40,31 +40,37 @@ function AboutPage() {
             icon={<Target className="text-primary" />} 
             title="Gestão de Objetivos"
             description="Defina metas de emagrecimento, hipertrofia ou manutenção com indicadores claros de progresso."
+            details="Nossa ferramenta utiliza fórmulas validadas para calcular suas necessidades calóricas baseadas em seu nível de atividade e objetivos. Você pode ajustar sua meta a qualquer momento, e o sistema recalcula automaticamente seus macronutrientes."
           />
           <ToolItem 
             icon={<BarChart3 className="text-success" />} 
             title="Composição Corporal"
             description="Acompanhamento detalhado de peso, medidas (circunferências) e percentual de gordura com gráficos de tendência."
+            details="Mantenha um histórico visual e numérico de sua evolução. O módulo permite o registro de peso diário, 7 medidas corporais chave e armazenamento seguro de fotos para comparativos de 'antes e depois' com total privacidade."
           />
           <ToolItem 
             icon={<Zap className="text-warning" />} 
             title="Treinamento"
             description="Registro de treinos, controle de carga, séries e RPE para garantir que você esteja sempre evoluindo."
+            details="Crie rotinas personalizadas e registre cada série em tempo real. O sistema rastreia o volume total de treino e destaca seus Recordes Pessoais (PRs), garantindo que o princípio da sobrecarga progressiva seja aplicado."
           />
           <ToolItem 
             icon={<ShieldCheck className="text-info" />} 
             title="Privacidade Pessoal"
             description="Seus dados de saúde e fotos de evolução são privados, criptografados e acessíveis apenas por você."
+            details="Segurança em primeiro lugar. Utilizamos criptografia de ponta e autenticação segura (PIN de 6 dígitos) para garantir que suas informações sensíveis e fotos privadas nunca sejam acessadas por terceiros."
           />
           <ToolItem 
             icon={<BookOpen className="text-primary" />} 
             title="Nutrição Integrada"
             description="Planejamento de refeições, lista de compras e substituições inteligentes adaptadas à sua realidade."
+            details="Registre sua ingestão diária e compare com seu plano. Nossa base de dados permite consultas rápidas de alimentos e o sistema de substituição ajuda a manter a dieta mesmo quando você não tem o alimento planejado em mãos."
           />
           <ToolItem 
-            icon={<Zap className="text-info" />} 
+            icon={<Droplets className="text-info" />} 
             title="Hidratação e Hábitos"
             description="Monitoramento constante de ingestão hídrica e adesão aos protocolos de suplementação."
+            details="Calcule sua meta de água ideal e receba lembretes inteligentes. O rastreador de suplementação ajuda a manter a consistência com vitaminas e ergogênicos, essencial para resultados de longo prazo."
           />
         </div>
 
