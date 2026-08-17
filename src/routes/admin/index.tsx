@@ -407,8 +407,10 @@ function WebhookEventsList({ listFn }: { listFn: any }) {
           <TableRow className="border-none">
             <TableHead className="text-[9px] font-black uppercase py-2">ID Evento</TableHead>
             <TableHead className="text-[9px] font-black uppercase py-2">Tópico</TableHead>
+            <TableHead className="text-[9px] font-black uppercase py-2">Usuário</TableHead>
             <TableHead className="text-[9px] font-black uppercase py-2">Status</TableHead>
             <TableHead className="text-[9px] font-black uppercase py-2">Data</TableHead>
+            <TableHead className="text-[9px] font-black uppercase py-2 text-right">Ação</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -416,19 +418,39 @@ function WebhookEventsList({ listFn }: { listFn: any }) {
             <TableRow key={event.id} className="border-white/5">
               <TableCell className="text-[9px] font-mono text-muted-foreground">{event.event_id}</TableCell>
               <TableCell className="text-[9px] font-black">{event.topic}</TableCell>
+              <TableCell className="text-[9px] font-mono text-muted-foreground truncate max-w-[100px]">
+                {event.processed_by_user_id || '-'}
+              </TableCell>
               <TableCell>
-                <Badge className={"text-[8px] font-black uppercase " + (event.status === 'processed' ? 'bg-success/20 text-success' : 'bg-warning/20 text-warning')}>
-                  {event.status}
-                </Badge>
+                <div className="flex flex-col gap-1">
+                  <Badge className={"text-[8px] font-black uppercase w-fit " + (event.status === 'processed' ? 'bg-success/20 text-success' : event.status === 'failed' ? 'bg-destructive/20 text-destructive' : 'bg-warning/20 text-warning')}>
+                    {event.status}
+                  </Badge>
+                  {event.failure_reason && (
+                    <span className="text-[7px] text-destructive font-bold uppercase">{event.failure_reason}</span>
+                  )}
+                </div>
               </TableCell>
               <TableCell className="text-[9px] text-muted-foreground">
                 {format(new Date(event.created_at), "dd/MM HH:mm")}
+              </TableCell>
+              <TableCell className="text-right">
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="h-6 w-6" 
+                  onClick={() => {
+                    alert(`Detalhes do Evento:\n\nMotivo: ${event.failure_reason || 'N/A'}\nErro: ${event.error_message || 'N/A'}\n\nPayload: ${JSON.stringify(event.payload, null, 2)}`);
+                  }}
+                >
+                  <Eye size={12} />
+                </Button>
               </TableCell>
             </TableRow>
           ))}
           {(!data?.events || data.events.length === 0) && (
             <TableRow>
-              <TableCell colSpan={4} className="text-center py-4 text-[10px] text-muted-foreground uppercase font-black">Nenhum evento registrado</TableCell>
+              <TableCell colSpan={6} className="text-center py-4 text-[10px] text-muted-foreground uppercase font-black">Nenhum evento registrado</TableCell>
             </TableRow>
           )}
         </TableBody>
