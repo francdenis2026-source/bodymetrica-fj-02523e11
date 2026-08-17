@@ -21,6 +21,9 @@ export interface SyncHistory {
 }
 
 export const getSyncHistory = async (): Promise<SyncHistory> => {
+  if (typeof window === 'undefined') {
+    return { lastSync: null, totalSynced: 0, failures: 0 };
+  }
   const lastSync = localStorage.getItem('last_sync_timestamp');
   const totalSynced = parseInt(localStorage.getItem('total_synced_count') || '0');
   const failures = parseInt(localStorage.getItem('sync_failures_count') || '0');
@@ -111,13 +114,15 @@ export const syncOfflineActions = async () => {
 };
 
 // Adiciona listener para sync em background se disponível
-if ('serviceWorker' in navigator && 'SyncManager' in window) {
-  navigator.serviceWorker.ready.then(registration => {
-    return (registration as any).sync.register('sync-offline-actions');
-  }).catch(() => {
-    // Fallback para quando o sync de background não é suportado
+if (typeof window !== 'undefined') {
+  if ('serviceWorker' in navigator && 'SyncManager' in window) {
+    navigator.serviceWorker.ready.then(registration => {
+      return (registration as any).sync.register('sync-offline-actions');
+    }).catch(() => {
+      // Fallback para quando o sync de background não é suportado
+      window.addEventListener('online', syncOfflineActions);
+    });
+  } else {
     window.addEventListener('online', syncOfflineActions);
-  });
-} else {
-  window.addEventListener('online', syncOfflineActions);
+  }
 }
