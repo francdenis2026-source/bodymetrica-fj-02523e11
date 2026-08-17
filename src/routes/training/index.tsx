@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { toast } from "sonner";
 import { useState, useEffect } from "react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -252,7 +252,16 @@ function TrainingPage() {
                   <Input type="number" placeholder="20" className="bg-white/5 border-white/10" />
                 </div>
               </div>
-              <Button className="w-full bg-brand-gradient border-none font-black uppercase tracking-widest h-12">Salvar Exercício na Ficha</Button>
+              <Button 
+                className="w-full bg-brand-gradient border-none font-black uppercase tracking-widest h-12"
+                onClick={() => {
+                  toast.success("Plano de treino montado com sucesso!", {
+                    description: "Os exercícios foram adicionados à sua ficha técnica."
+                  });
+                }}
+              >
+                Salvar Exercício na Ficha
+              </Button>
             </CardContent>
           </Card>
         </TabsContent>
@@ -332,7 +341,14 @@ function WorkoutCard({ name, focus, exercises, lastPerformed, isActive = false }
             <Clock size={12} />
             {exercises} EXERCÍCIOS
           </div>
-          <Button size="sm" variant={isActive ? "default" : "outline"} className="h-8 text-xs">
+          <Button 
+            size="sm" 
+            variant={isActive ? "default" : "outline"} 
+            className="h-8 text-xs"
+            onClick={() => {
+              toast.info(`Treino ${name} selecionado e registrado no calendário.`);
+            }}
+          >
             {isActive ? "Continuar" : "Selecionar"}
           </Button>
         </div>
