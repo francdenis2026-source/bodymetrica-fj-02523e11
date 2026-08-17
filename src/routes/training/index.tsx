@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -10,7 +10,8 @@ import {
   Calendar, 
   TrendingUp,
   Clock,
-  Zap
+  Zap,
+  Info
 } from "lucide-react";
 
 export const Route = createFileRoute("/training/")({
@@ -27,9 +28,16 @@ function TrainingPage() {
             Evolução de carga e consistência nos treinos.
           </p>
         </div>
-        <Button size="sm" className="gap-2 bg-brand-gradient">
-          <Play size={16} fill="currentColor" /> Iniciar Treino
-        </Button>
+        <div className="flex gap-2">
+          <Button variant="outline" size="sm" className="gap-2" asChild>
+            <Link to="/about">
+              <Info size={16} /> Entender Treinos
+            </Link>
+          </Button>
+          <Button size="sm" className="gap-2 bg-brand-gradient">
+            <Play size={16} fill="currentColor" /> Iniciar Treino
+          </Button>
+        </div>
       </div>
 
       <div className="grid gap-4 md:grid-cols-3">
