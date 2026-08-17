@@ -3,6 +3,28 @@ import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
 
 const AUTH_KEY = 'bodymetrica_auth_session';
+const LOGOUT_CHANNEL = 'bodymetrica_logout_channel';
+
+const broadcastLogout = () => {
+  if (typeof window !== 'undefined') {
+    const channel = new BroadcastChannel(LOGOUT_CHANNEL);
+    channel.postMessage('logout');
+    channel.close();
+  }
+};
+
+export const setupLogoutListener = (onLogout: () => void) => {
+  if (typeof window !== 'undefined') {
+    const channel = new BroadcastChannel(LOGOUT_CHANNEL);
+    channel.onmessage = (event) => {
+      if (event.data === 'logout') {
+        onLogout();
+      }
+    };
+    return () => channel.close();
+  }
+  return () => {};
+};
 
 const loginSchema = z.object({
   email: z.string().email("E-mail inválido"),
@@ -152,6 +174,7 @@ export const clearSession = () => {
   if (typeof window === 'undefined') return;
   localStorage.removeItem(AUTH_KEY);
   sessionStorage.clear();
+  broadcastLogout();
 };
 
 export const isAuthenticated = () => {

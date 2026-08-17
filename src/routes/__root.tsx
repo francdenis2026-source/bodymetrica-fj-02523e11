@@ -29,8 +29,9 @@ import { syncOfflineActions } from "@/lib/offline-sync";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { AppErrorBoundary } from "@/components/ui/error-boundary";
 import { reportLovableError } from "../lib/lovable-error-reporting";
-import { isAuthenticated, clearSession, getSession } from "@/lib/auth/auth.functions";
+import { isAuthenticated, clearSession, getSession, setupLogoutListener } from "@/lib/auth/auth.functions";
 import { AccessGate } from "@/components/access-gate";
+import { supabase } from "@/integrations/supabase/client";
 
 import appCss from "../styles.css?url";
 
@@ -144,6 +145,24 @@ function RootComponent() {
   const [needsVerification, setNeedsVerification] = useState(false);
 
   useEffect(() => {
+    // Setup cross-tab logout listener
+    const cleanupLogoutListener = setupLogoutListener(() => {
+      setIsLoggedIn(false);
+      queryClient.clear();
+      toast.info("Sessão encerrada em outra aba.");
+      window.location.href = "/auth";
+    });
+
+    // Supabase Auth Listener
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_OUT' || event === 'USER_UPDATED') {
+        const localSession = getSession();
+        if (!session && localSession) {
+          handleLogout();
+        }
+      }
+    });
+
     // Check initial auth state
     const session = getSession();
     setIsLoggedIn(!!session);
@@ -178,6 +197,8 @@ function RootComponent() {
     return () => {
       window.removeEventListener("online", handleOnline);
       window.removeEventListener("offline", handleOffline);
+      cleanupLogoutListener();
+      subscription.unsubscribe();
     };
   }, []);
 

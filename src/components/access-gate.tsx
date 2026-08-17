@@ -36,7 +36,7 @@ export function AccessGate({
             height: "",
             activityLevel: ""
           } 
-        });
+        } as any);
       }, 3500);
     }
     return () => {
@@ -50,6 +50,8 @@ export function AccessGate({
   const displayDescription = needsVerification 
     ? "POR FAVOR, CONFIRME SEU E-MAIL PARA LIBERAR O ACESSO ÀS FERRAMENTAS." 
     : description;
+
+  const redirectTarget = needsVerification ? "/auth/verify" : "/auth";
 
   return (
     <div className="min-h-[60vh] flex items-center justify-center p-6 animate-in fade-in duration-700">
@@ -74,7 +76,7 @@ export function AccessGate({
           <div className="flex flex-col gap-4 pt-4">
             <Button className="h-14 font-black uppercase tracking-widest bg-brand-gradient shadow-2xl shadow-primary/30 hover:scale-105 transition-all border-none rounded-2xl" asChild>
               <Link 
-                to="/auth" 
+                to={redirectTarget as any} 
                 search={{ 
                   registerMode: false, 
                   name: "", 
@@ -83,9 +85,9 @@ export function AccessGate({
                   weight: "",
                   height: "",
                   activityLevel: ""
-                }}
+                } as any}
               >
-                ENTRAR AGORA
+                {needsVerification ? "VERIFICAR AGORA" : "ENTRAR AGORA"}
               </Link>
             </Button>
           </div>
