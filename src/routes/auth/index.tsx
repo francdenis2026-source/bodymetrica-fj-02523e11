@@ -220,22 +220,6 @@ function AuthPage() {
     }
   }
 
-  async function onResetSubmit(values: z.infer<typeof resetSchema>) {
-    setIsLoading(true);
-    try {
-      const result = await requestPasswordReset({ data: values });
-      if (result.success) {
-        toast.success(result.message);
-        setIsResetting(false);
-      } else {
-        toast.error(result.message);
-      }
-    } catch (error) {
-      toast.error("Erro na recuperação. Tente novamente.");
-    } finally {
-      setIsLoading(false);
-    }
-  }
 
   async function onNewPasswordSubmit(values: z.infer<typeof newPasswordSchema>) {
     setIsLoading(true);
@@ -302,12 +286,11 @@ function AuthPage() {
         <Card className="surface border-white/5 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.6)] bg-black/60 backdrop-blur-3xl rounded-[2rem] overflow-hidden">
           <CardHeader className="space-y-1 pb-6 border-b border-white/5 pt-8">
             <CardTitle className="text-xl font-black text-white text-center uppercase tracking-[0.2em] italic">
-              {isUpdatingPassword ? "NOVA SENHA" : isResetting ? "RECUPERAÇÃO" : isRegistering ? "CADASTRO" : "AUTENTICAÇÃO"}
+              {isUpdatingPassword ? "NOVA SENHA" : isRegistering ? "CADASTRO" : "AUTENTICAÇÃO"}
             </CardTitle>
             <CardDescription className="font-bold text-white/40 text-center uppercase text-[8px] tracking-widest px-4">
               {isBlocked ? `ACESSO BLOQUEADO POR ${remainingSeconds}s` :
                isUpdatingPassword ? "DEFINA SUA NOVA SENHA DE ACESSO" :
-               isResetting ? "SOLICITE O LINK DE REDEFINIÇÃO" : 
                isRegistering ? "CRIE SUA CONTA PROFISSIONAL" : 
                "INSIRA SEUS DADOS DE ACESSO PROTEGIDO"}
             </CardDescription>
