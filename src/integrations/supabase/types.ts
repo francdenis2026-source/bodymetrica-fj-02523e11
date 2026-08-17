@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      licenses: {
+        Row: {
+          activated_at: string | null
+          created_at: string | null
+          created_by: string | null
+          expires_at: string | null
+          id: string
+          license_key: string
+          status: string
+          user_id: string | null
+        }
+        Insert: {
+          activated_at?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          expires_at?: string | null
+          id?: string
+          license_key: string
+          status?: string
+          user_id?: string | null
+        }
+        Update: {
+          activated_at?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          expires_at?: string | null
+          id?: string
+          license_key?: string
+          status?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           activity_level: string | null
