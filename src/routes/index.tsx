@@ -1,3 +1,4 @@
+import React from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -25,18 +26,20 @@ export const Route = createFileRoute("/")({
 function Index() {
   return (
     <div className="flex flex-col min-h-screen bg-background relative overflow-x-hidden">
-      {/* Background Image Layer */}
+      {/* Professional Full Background Image */}
       <div 
-        className="absolute inset-0 z-0 pointer-events-none opacity-40 grayscale-[0.2]"
+        className="fixed inset-0 z-0 pointer-events-none opacity-20 dark:opacity-10 transition-opacity duration-700"
         style={{
-          backgroundImage: 'url(/assets/homepage-bg.jpg)',
+          backgroundImage: 'url(https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
-          backgroundAttachment: 'fixed'
+          filter: 'grayscale(100%) contrast(1.1)'
         }}
       />
-      {/* Gradient Overlay for Readability */}
-      <div className="absolute inset-0 z-0 pointer-events-none bg-gradient-to-b from-background/95 via-background/80 to-background/95" />
+      
+      {/* Professional Gradient Overlay */}
+      <div className="fixed inset-0 z-0 pointer-events-none bg-gradient-to-tr from-background via-background/90 to-primary/5" />
+      
       
       <div className="relative z-10 flex flex-col flex-1">
       {/* Header */}
@@ -70,14 +73,14 @@ function Index() {
               <span>Sua evolução, documentada com precisão</span>
             </div>
             
-            <h1 className="text-4xl md:text-6xl font-bold font-display text-foreground leading-[1.1] mb-6">
-              Métricas que impulsionam <br />
-              <span className="text-gradient-brand">seu potencial físico.</span>
+            <h1 className="text-4xl md:text-7xl font-bold font-display text-foreground leading-[1.05] mb-6 tracking-tight">
+              Métricas que <br />
+              <span className="text-gradient-brand">definem o seu futuro.</span>
             </h1>
             
-            <p className="text-lg text-muted-foreground max-w-xl mb-10 leading-relaxed">
+            <p className="text-xl text-muted-foreground max-w-xl mb-10 leading-relaxed font-medium">
               A suíte definitiva para acompanhar composição corporal, alimentação, 
-              suplementação e treinos. Design profissional para objetivos reais.
+              suplementação e treinos. Design premium para resultados reais.
             </p>
             
             <div className="flex flex-col sm:flex-row items-center gap-4">
@@ -96,18 +99,18 @@ function Index() {
           <div className="relative hidden lg:block">
             <div className="relative z-10 rounded-2xl overflow-hidden shadow-2xl border-4 border-white/10 transform hover:scale-[1.02] transition-transform duration-500">
               <img 
-                src="/assets/3d/fitness-hero.jpg" 
+                src="https://images.unsplash.com/photo-1540206276907-c6928a7c9731?auto=format&fit=crop&q=80" 
                 alt="Fitness Training" 
-                className="w-full h-auto object-cover aspect-[4/3]"
+                className="w-full h-auto object-cover aspect-[4/3] scale-105 hover:scale-100 transition-transform duration-700"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
             </div>
             {/* Decorative 3D elements (CSS simulated) */}
-            <div className="absolute -top-6 -right-6 w-24 h-24 bg-brand-gradient rounded-2xl rotate-12 shadow-xl flex items-center justify-center animate-bounce duration-[3000ms]">
-              <Target size={40} className="text-white" />
+            <div className="absolute -top-6 -right-6 w-24 h-24 bg-brand-gradient rounded-2xl rotate-12 shadow-2xl flex items-center justify-center animate-bounce duration-[3000ms] border border-white/20">
+              <Target size={40} className="text-white drop-shadow-md" />
             </div>
-            <div className="absolute -bottom-6 -left-6 w-20 h-20 bg-success rounded-full -rotate-12 shadow-xl flex items-center justify-center animate-pulse">
-              <Zap size={32} className="text-white" />
+            <div className="absolute -bottom-6 -left-6 w-20 h-20 bg-success rounded-full -rotate-12 shadow-2xl flex items-center justify-center animate-pulse border border-white/20">
+              <Zap size={32} className="text-white drop-shadow-md" />
             </div>
           </div>
         </div>
@@ -119,7 +122,7 @@ function Index() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <Link to="/about" className="group block">
               <FeatureCard 
-                icon={<Target className="text-primary" />}
+                icon={<Target size={28} />}
                 title="Objetivos Claros"
                 description="Emagrecimento, hipertrofia ou manutenção. Planos adaptados para sua meta real."
                 className="group-hover:border-primary/20 group-hover:bg-primary/5 transition-all"
@@ -127,7 +130,7 @@ function Index() {
             </Link>
             <Link to="/about" className="group block">
               <FeatureCard 
-                icon={<Zap className="text-success" />}
+                icon={<Zap size={28} />}
                 title="Acompanhamento Ágil"
                 description="Registre peso, medidas e fotos de evolução em segundos. Gráficos de tendência precisos."
                 className="group-hover:border-success/20 group-hover:bg-success/5 transition-all"
@@ -135,7 +138,7 @@ function Index() {
             </Link>
             <Link to="/about" className="group block">
               <FeatureCard 
-                icon={<ShieldCheck className="text-info" />}
+                icon={<ShieldCheck size={28} />}
                 title="Dados Protegidos"
                 description="Privacidade total para suas fotos e informações de saúde com criptografia de ponta."
                 className="group-hover:border-info/20 group-hover:bg-info/5 transition-all"
@@ -172,21 +175,21 @@ function Index() {
 
 function FeatureCard({ icon, title, description, className }: { icon: React.ReactNode; title: string; description: string; className?: string }) {
   return (
-    <div className={cn("surface p-8 space-y-4 border border-transparent", className)}>
-      <div className="w-12 h-12 rounded-xl bg-background border flex items-center justify-center shadow-sm">
+    <div className={cn("surface p-8 space-y-4 border border-transparent backdrop-blur-sm bg-card/80", className)}>
+      <div className="w-14 h-14 rounded-2xl bg-brand-gradient flex items-center justify-center shadow-lg border border-white/20 transform group-hover:rotate-6 transition-transform text-white">
         {icon}
       </div>
-      <h3 className="text-xl font-bold font-display">{title}</h3>
-      <p className="text-muted-foreground leading-relaxed">
+      <h3 className="text-2xl font-bold font-display tracking-tight">{title}</h3>
+      <p className="text-muted-foreground leading-relaxed font-medium">
         {description}
       </p>
-      <ul className="space-y-2">
-        <li className="flex items-center gap-2 text-sm text-muted-foreground">
-          <CheckCircle2 size={14} className="text-success" />
+      <ul className="space-y-3 pt-2">
+        <li className="flex items-center gap-3 text-sm text-muted-foreground font-medium">
+          <CheckCircle2 size={16} className="text-success" />
           <span>Fácil de usar</span>
         </li>
-        <li className="flex items-center gap-2 text-sm text-muted-foreground">
-          <CheckCircle2 size={14} className="text-success" />
+        <li className="flex items-center gap-3 text-sm text-muted-foreground font-medium">
+          <CheckCircle2 size={16} className="text-success" />
           <span>Mobile-first</span>
         </li>
       </ul>

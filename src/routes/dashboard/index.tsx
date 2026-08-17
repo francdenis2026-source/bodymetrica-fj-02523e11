@@ -28,11 +28,16 @@ function DashboardPage() {
   const weightChange = -0.5;
 
   return (
-    <div className="flex-1 space-y-6 p-4 md:p-8 pt-6">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 relative overflow-hidden">
+      {/* Decorative Module Hero Image */}
+      <div className="absolute top-0 right-0 w-64 h-64 opacity-5 pointer-events-none -z-10 translate-x-1/4 -translate-y-1/4">
+        <TrendingUp size={256} className="text-primary" />
+      </div>
+
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 relative z-10">
         <div className="space-y-1">
-          <h2 className="text-2xl font-bold tracking-tight font-display">Olá, {userName}! 👋</h2>
-          <p className="text-muted-foreground text-sm">
+          <h2 className="text-3xl font-bold tracking-tight font-display text-primary">Olá, {userName}! 👋</h2>
+          <p className="text-muted-foreground text-sm font-medium">
             Seu progresso está incrível hoje. Mantenha o foco!
           </p>
         </div>

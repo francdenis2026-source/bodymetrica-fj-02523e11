@@ -33,8 +33,19 @@ function OnboardingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col p-6">
-      <div className="max-w-md mx-auto w-full flex-1 flex flex-col space-y-8 pt-8">
+    <div className="min-h-screen bg-background flex flex-col p-6 relative overflow-hidden">
+      {/* Hero Background for Onboarding */}
+      <div 
+        className="absolute inset-0 z-0 pointer-events-none opacity-10 dark:opacity-5"
+        style={{
+          backgroundImage: 'url(https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&q=80)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      />
+      <div className="absolute inset-0 z-0 bg-gradient-to-b from-background/90 via-background to-background" />
+
+      <div className="max-w-md mx-auto w-full flex-1 flex flex-col space-y-8 pt-8 relative z-10">
         <div className="space-y-4">
           <div className="flex items-center justify-between text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
             <span>Passo {step} de {totalSteps}</span>

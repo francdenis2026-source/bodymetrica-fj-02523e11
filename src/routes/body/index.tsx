@@ -40,10 +40,18 @@ function BodyPage() {
   const [activeTab, setActiveTab] = useState("overview");
 
   return (
-    <div className="flex-1 space-y-6 p-4 md:p-8 pt-6">
-      <div className="flex flex-col gap-2">
-        <h2 className="text-2xl font-bold tracking-tight font-display">Composição Corporal</h2>
-        <p className="text-muted-foreground text-sm max-w-2xl">
+    <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 relative">
+      {/* Decorative Module Hero Image */}
+      <div className="absolute top-0 right-0 w-64 h-64 opacity-5 pointer-events-none -z-10 translate-x-1/4 -translate-y-1/4">
+        <Scale size={256} className="text-primary" />
+      </div>
+
+      <div className="flex flex-col gap-2 relative">
+        <h2 className="text-3xl font-bold tracking-tight font-display text-primary flex items-center gap-3">
+          <Scale className="text-primary-foreground bg-brand-gradient p-1.5 rounded-lg" size={32} />
+          Composição Corporal
+        </h2>
+        <p className="text-muted-foreground text-sm max-w-2xl font-medium">
           Acompanhe sua evolução física com métricas precisas, fotos e tendências. 
           Use os dados para ajustar sua rotina e alcançar seus objetivos.
         </p>

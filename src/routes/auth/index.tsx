@@ -58,8 +58,19 @@ function AuthPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background px-4 py-12">
-      <div className="w-full max-w-md space-y-8">
+    <div className="min-h-screen flex items-center justify-center relative px-4 py-12 overflow-hidden">
+      {/* Hero Background for Login */}
+      <div 
+        className="absolute inset-0 z-0 pointer-events-none opacity-10 dark:opacity-5 transition-opacity"
+        style={{
+          backgroundImage: 'url(https://images.unsplash.com/photo-1593079831268-3381b0db4a77?auto=format&fit=crop&q=80)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      />
+      <div className="absolute inset-0 z-0 bg-gradient-to-b from-background/80 via-background to-background" />
+
+      <div className="relative z-10 w-full max-w-md space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
         <div className="text-center space-y-2">
           <Link to="/" className="inline-flex items-center text-sm text-muted-foreground hover:text-primary transition-colors mb-4">
             <ArrowLeft size={16} className="mr-1" />
@@ -68,8 +79,8 @@ function AuthPage() {
           <div className="mx-auto w-12 h-12 bg-brand-gradient rounded-xl flex items-center justify-center text-primary-foreground font-bold text-xl mb-4">
             B
           </div>
-          <h1 className="text-2xl font-bold font-display tracking-tight">Body Métrica FJ</h1>
-          <p className="text-muted-foreground">Acesse sua conta para ver sua evolução</p>
+          <h1 className="text-3xl font-bold font-display tracking-tight text-primary">Body Métrica FJ</h1>
+          <p className="text-muted-foreground font-medium">Sua evolução levada a sério.</p>
         </div>
 
         <Card className="surface border-none shadow-2xl">
