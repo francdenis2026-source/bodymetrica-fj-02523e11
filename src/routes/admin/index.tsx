@@ -9,7 +9,11 @@ import {
   ArrowUpRight,
   History,
   Lock,
-  Eye
+  Eye,
+  Plus,
+  Key,
+  Calendar,
+  AlertCircle
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -23,18 +27,54 @@ import {
   TableRow 
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { useServerFn } from "@tanstack/react-start";
+import { generateLicenseKey, listLicenses } from "@/lib/monetization.functions";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { useState } from "react";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 export const Route = createFileRoute("/admin/")({
   component: AdminDashboard,
 });
 
 function AdminDashboard() {
-  const clients = [
-    { id: 1, name: "Ana Oliveira", email: "ana.o@email.com", plan: "Premium", status: "Ativo", lastSync: "2h atrás" },
-    { id: 2, name: "Carlos Santos", email: "c.santos@email.com", plan: "Basic", status: "Inativo", lastSync: "5d atrás" },
-    { id: 3, name: "Mariana Costa", email: "mari.c@email.com", plan: "Premium", status: "Ativo", lastSync: "30min atrás" },
-    { id: 4, name: "Ricardo Lima", email: "r.lima@email.com", plan: "Pro", status: "Pendente", lastSync: "-" },
-  ];
+  const queryClient = useQueryClient();
+  const listLicensesFn = useServerFn(listLicenses);
+  const generateLicenseFn = useServerFn(generateLicenseKey);
+  const [isGenerating, setIsGenerating] = useState(false);
+
+  const { data, isLoading } = useQuery({
+    queryKey: ['admin-licenses'],
+    queryFn: () => listLicensesFn(),
+  });
+
+  const generateMutation = useMutation({
+    mutationFn: (days: number) => generateLicenseFn({ data: { expiresInDays: days } }),
+    onSuccess: (result) => {
+      if (result.success) {
+        toast.success(`Chave gerada: ${result.licenseKey}`);
+        queryClient.invalidateQueries({ queryKey: ['admin-licenses'] });
+      } else {
+        toast.error(result.message);
+      }
+      setIsGenerating(false);
+    },
+    onError: () => {
+      toast.error("Erro ao gerar chave.");
+      setIsGenerating(false);
+    }
+  });
+
+  const handleGenerate = (days: number) => {
+    setIsGenerating(true);
+    generateMutation.mutate(days);
+  };
+
+  const licenses = data?.licenses || [];
+  const activeLicenses = licenses.filter((l: any) => l.status === 'active').length;
+  const unusedLicenses = licenses.filter((l: any) => l.status === 'unused').length;
 
   return (
     <div className="flex-1 space-y-6 p-4 md:p-8 pt-6">
@@ -42,93 +82,121 @@ function AdminDashboard() {
         <div className="space-y-1">
           <h2 className="text-2xl font-bold tracking-tight font-display text-primary">Painel de Controle</h2>
           <p className="text-muted-foreground text-sm">
-            Gerenciamento administrativo de clientes, auditoria e relatórios.
+            Gerenciamento administrativo de chaves de acesso e assinaturas.
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" className="gap-2 h-9 text-xs">
-            <History size={14} /> Auditoria
+          <Button 
+            onClick={() => handleGenerate(365)} 
+            disabled={isGenerating}
+            className="gap-2 h-9 text-xs bg-brand-gradient"
+          >
+            <Plus size={14} /> Gerar Chave (1 Ano)
           </Button>
-          <Button className="gap-2 h-9 text-xs bg-brand-gradient">
-            <FileDown size={14} /> Exportar Relatórios
+          <Button 
+            onClick={() => handleGenerate(30)} 
+            variant="outline"
+            disabled={isGenerating}
+            className="gap-2 h-9 text-xs"
+          >
+            <Plus size={14} /> Gerar Chave (30 Dias)
           </Button>
         </div>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <StatsCard title="Total Clientes" value="1,284" change="+12%" icon={<Users size={16} />} />
-        <StatsCard title="Assinaturas Ativas" value="942" change="+5%" icon={<ShieldCheck size={16} />} />
-        <StatsCard title="Acessos Hoje" value="456" change="+18%" icon={<ArrowUpRight size={16} />} />
-        <StatsCard title="Logs de Auditoria" value="24" change="Críticos" icon={<Lock size={16} />} negative />
+        <StatsCard title="Total Licenças" value={licenses.length.toString()} change="Total na Base" icon={<Key size={16} />} />
+        <StatsCard title="Licenças Ativas" value={activeLicenses.toString()} change="Em Uso" icon={<ShieldCheck size={16} />} />
+        <StatsCard title="Licenças Disponíveis" value={unusedLicenses.toString()} change="Para Ativação" icon={<History size={16} />} />
+        <StatsCard title="Logs de Sistema" value="Ok" change="Status Seguro" icon={<Lock size={16} />} />
       </div>
 
       <Card className="surface border-none">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-7">
           <div className="space-y-1">
-            <CardTitle className="text-xl font-display">Gerenciamento de Clientes</CardTitle>
-            <CardDescription className="text-xs">Lista completa de usuários e status de acesso.</CardDescription>
+            <CardTitle className="text-xl font-display">Gerenciamento de Licenças</CardTitle>
+            <CardDescription className="text-xs">Chaves geradas, status de uso e expiração.</CardDescription>
           </div>
           <div className="flex items-center gap-2">
             <div className="relative w-64 hidden md:block">
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input placeholder="Buscar cliente..." className="pl-9 h-9 text-xs" />
+              <Input placeholder="Buscar por chave ou email..." className="pl-9 h-9 text-xs" />
             </div>
-            <Button variant="outline" size="icon" className="h-9 w-9">
-              <Filter size={16} />
-            </Button>
           </div>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow className="hover:bg-transparent border-muted/20">
-                <TableHead className="text-xs font-bold uppercase tracking-wider">Cliente</TableHead>
-                <TableHead className="text-xs font-bold uppercase tracking-wider">Licença / Plano</TableHead>
-                <TableHead className="text-xs font-bold uppercase tracking-wider">Status</TableHead>
-                <TableHead className="text-xs font-bold uppercase tracking-wider">Validação</TableHead>
-                <TableHead className="text-right"></TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {clients.map((client) => (
-                <TableRow key={client.id} className="border-muted/10 hover:bg-muted/5 transition-colors">
-                  <TableCell>
-                    <div className="flex flex-col">
-                      <span className="font-semibold text-sm">{client.name}</span>
-                      <span className="text-[10px] text-muted-foreground">{client.email}</span>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant="outline" className="text-[10px] font-bold uppercase px-2 py-0 border-primary/20 bg-primary/5 text-primary">
-                      {client.plan}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-1.5">
-                      <div className={`w-1.5 h-1.5 rounded-full ${
-                        client.status === 'Ativo' ? 'bg-success' : 
-                        client.status === 'Pendente' ? 'bg-warning' : 'bg-muted'
-                      }`} />
-                      <span className="text-xs">{client.status}</span>
-                    </div>
-                  </TableCell>
-                  <TableCell className="text-xs">
-                    <Badge variant="outline" className="text-[10px] border-success/20 bg-success/5 text-success">Verificado</Badge>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <Button variant="ghost" size="icon" className="h-8 w-8" asChild>
-                      <Link to="/about">
-                        <Eye size={16} className="text-muted-foreground" />
-                      </Link>
-                    </Button>
-                    <Button variant="ghost" size="icon" className="h-8 w-8">
-                      <MoreVertical size={16} className="text-muted-foreground" />
-                    </Button>
-                  </TableCell>
+          {isLoading ? (
+            <div className="flex justify-center p-8">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+            </div>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow className="hover:bg-transparent border-muted/20">
+                  <TableHead className="text-xs font-bold uppercase tracking-wider">Chave de Licença</TableHead>
+                  <TableHead className="text-xs font-bold uppercase tracking-wider">Status</TableHead>
+                  <TableHead className="text-xs font-bold uppercase tracking-wider">Usuário</TableHead>
+                  <TableHead className="text-xs font-bold uppercase tracking-wider">Expiração</TableHead>
+                  <TableHead className="text-right">Ações</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {licenses.map((license: any) => (
+                  <TableRow key={license.id} className="border-muted/10 hover:bg-muted/5 transition-colors">
+                    <TableCell className="font-mono text-xs font-bold text-primary">
+                      {license.license_key}
+                    </TableCell>
+                    <TableCell>
+                      <Badge 
+                        variant="outline" 
+                        className={`text-[10px] font-bold uppercase px-2 py-0 border-none ${
+                          license.status === 'active' ? 'bg-success/10 text-success' : 
+                          license.status === 'unused' ? 'bg-warning/10 text-warning' : 'bg-muted text-muted-foreground'
+                        }`}
+                      >
+                        {license.status === 'active' ? 'Ativo' : license.status === 'unused' ? 'Disponível' : 'Revogado'}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      {license.profiles ? (
+                        <div className="flex flex-col">
+                          <span className="font-semibold text-sm">{license.profiles.full_name || 'Usuário'}</span>
+                          <span className="text-[10px] text-muted-foreground">{license.profiles.email}</span>
+                        </div>
+                      ) : (
+                        <span className="text-xs text-muted-foreground">Não vinculada</span>
+                      )}
+                    </TableCell>
+                    <TableCell className="text-xs">
+                      <div className="flex items-center gap-1.5">
+                        <Calendar size={12} className="text-muted-foreground" />
+                        <span>
+                          {license.expires_at 
+                            ? format(new Date(license.expires_at), "dd/MM/yyyy", { locale: ptBR })
+                            : "Vitalícia / Indefinida"}
+                        </span>
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <Button variant="ghost" size="icon" className="h-8 w-8">
+                        <MoreVertical size={16} className="text-muted-foreground" />
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+                {licenses.length === 0 && (
+                  <TableRow>
+                    <TableCell colSpan={5} className="text-center p-8 text-muted-foreground">
+                      <div className="flex flex-col items-center gap-2">
+                        <AlertCircle size={32} className="opacity-20" />
+                        <p>Nenhuma licença encontrada.</p>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          )}
         </CardContent>
       </Card>
     </div>
