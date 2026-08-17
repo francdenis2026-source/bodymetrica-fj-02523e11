@@ -50,22 +50,54 @@ export const requestNotificationPermission = async () => {
 };
 
 export const scheduleNotifications = async () => {
-  if (!isBrowser || !('serviceWorker' in navigator)) return;
+  if (!isBrowser) return;
+  
+  const settings = getNotificationSettings();
+  if (!settings.hydration.enabled && !settings.macros.enabled) return;
+
+  const permission = await requestNotificationPermission();
+  if (!permission) return;
+
+  // In a real PWA context with service workers:
+  if ('serviceWorker' in navigator) {
+    const registration = await navigator.serviceWorker.ready;
+    if (registration.active) {
+      registration.active.postMessage({
+        type: 'SET_NOTIFICATION_SETTINGS',
+        settings
+      });
+    }
+  }
+
+  // Local scheduling logic (simulated for the demo)
+  console.log("Notificações agendadas localmente:", settings);
+  
+  // Example of immediate check for "near not being reached"
+  // In a real app, this would be a background task or push notification
+  const checkGoals = () => {
+    // Logic to check current hydration/macros vs goals
+    // and fire a notification if near threshold
+    console.log("Verificando proximidade de metas para notificações...");
+  };
+
+  // Run initial check
+  checkGoals();
+  
+  // Setup periodic check every 30 mins while app is open
+  setInterval(checkGoals, 30 * 60 * 1000);
+};
+
+export const sendImmediateNotification = async (title: string, options?: NotificationOptions) => {
+  if (!isBrowser || Notification.permission !== 'granted') return;
   
   const registration = await navigator.serviceWorker.ready;
-  const settings = getNotificationSettings();
-  
-  // In a real PWA, we would use the Web Push API or at least the Notification API
-  // but for periodic local reminders in a PWA, we can send the configuration to the SW.
-  // Since real "scheduling" in browsers is limited without a server, 
-  // we'll simulate the "automatic trigger when near not being reached" 
-  // by checking current progress in the main thread and firing immediate notifications.
-  
-  // However, the SW can check these settings if we send them via message.
-  if (registration.active) {
-    registration.active.postMessage({
-      type: 'SET_NOTIFICATION_SETTINGS',
-      settings
+  if (registration && 'showNotification' in registration) {
+    registration.showNotification(title, {
+      icon: '/icons/icon-192x192.png',
+      badge: '/icons/icon-192x192.png',
+      ...options
     });
+  } else {
+    new Notification(title, options);
   }
 };

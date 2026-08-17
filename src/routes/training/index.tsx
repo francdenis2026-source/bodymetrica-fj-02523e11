@@ -130,9 +130,70 @@ function TrainingPage() {
         <Tabs defaultValue="routine" className="space-y-4">
           <TabsList>
             <TabsTrigger value="routine">Fichas</TabsTrigger>
+            <TabsTrigger value="calendar">Calendário</TabsTrigger>
             <TabsTrigger value="history">Progresso & Gráficos</TabsTrigger>
             <TabsTrigger value="manage">Gerenciar Exercícios</TabsTrigger>
           </TabsList>
+
+          <TabsContent value="calendar" className="space-y-6">
+            <Card className="surface border-none p-6">
+              <div className="flex items-center justify-between mb-6">
+                <CardTitle className="text-xl font-display uppercase italic">Calendário de Treinos</CardTitle>
+                <div className="flex items-center gap-2">
+                   <Button variant="outline" size="sm" className="h-8 text-[10px] font-black uppercase">Agosto 2026</Button>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-7 gap-2 mb-2">
+                {['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'].map(day => (
+                  <div key={day} className="text-center text-[10px] font-black text-muted-foreground uppercase">{day}</div>
+                ))}
+              </div>
+              
+              <div className="grid grid-cols-7 gap-2">
+                {Array.from({ length: 31 }).map((_, i) => {
+                  const day = i + 1;
+                  const hasWorkout = [2, 4, 5, 7, 9, 11, 12, 14, 16, 18, 19, 21].includes(day);
+                  const isToday = day === 17;
+                  
+                  return (
+                    <div 
+                      key={i} 
+                      className={`
+                        aspect-square rounded-xl border flex flex-col items-center justify-center relative transition-all cursor-pointer
+                        ${isToday ? 'border-primary bg-primary/10 shadow-[0_0_15px_rgba(var(--primary),0.3)]' : 'border-white/5 bg-white/[0.02] hover:bg-white/[0.05]'}
+                      `}
+                    >
+                      <span className={`text-xs font-bold ${isToday ? 'text-primary' : 'text-foreground/60'}`}>{day}</span>
+                      {hasWorkout && (
+                        <div className="absolute bottom-1 w-1 h-1 rounded-full bg-primary" />
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="mt-8 space-y-4">
+                <h4 className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Treinos da Semana</h4>
+                <div className="space-y-2">
+                  {[
+                    { day: 'Segunda', type: 'A - Puxada', status: 'completed' },
+                    { day: 'Terça', type: 'B - Empurrada', status: 'completed' },
+                    { day: 'Quarta', type: 'Descanso', status: 'rest' },
+                    { day: 'Hoje', type: 'C - Inferiores', status: 'pending' },
+                  ].map((item, idx) => (
+                    <div key={idx} className="flex items-center justify-between p-3 rounded-xl bg-white/[0.03] border border-white/5">
+                      <div className="flex items-center gap-3">
+                        <div className={`w-2 h-2 rounded-full ${item.status === 'completed' ? 'bg-success' : item.status === 'rest' ? 'bg-muted-foreground' : 'bg-warning animate-pulse'}`} />
+                        <span className="text-[10px] font-black uppercase tracking-widest">{item.day}</span>
+                      </div>
+                      <span className="text-xs font-bold text-foreground/70">{item.type}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </Card>
+          </TabsContent>
 
           <TabsContent value="history" className="space-y-6">
             <Card className="surface border-none p-6">
