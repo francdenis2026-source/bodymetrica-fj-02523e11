@@ -78,6 +78,16 @@ export const login = createServerFn({ method: "POST" })
       .single();
 
     const isLicensed = profile?.license_status === 'active';
+    
+    // Check if user is admin
+    const { data: roleData } = await supabase
+      .from('user_roles')
+      .select('role')
+      .eq('user_id', authData.user.id)
+      .eq('role', 'admin')
+      .single();
+    
+    const role = roleData ? "admin" : "user";
 
     return {
       success: true,
@@ -85,7 +95,7 @@ export const login = createServerFn({ method: "POST" })
         id: authData.user.id,
         email: authData.user.email,
         name: profile?.name || authData.user.user_metadata?.['name'] || "Usuário",
-        role: "user",
+        role,
         profile: profile,
         isLicensed,
         licenseStatus: profile?.license_status || 'demonstrative'
