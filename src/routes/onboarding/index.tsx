@@ -40,7 +40,7 @@ function OnboardingPage() {
       <div 
         className="absolute inset-0 z-0 pointer-events-none opacity-10 dark:opacity-5"
         style={{
-          backgroundImage: 'url(https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&q=80)',
+          backgroundImage: 'url(https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&q=80&w=2000)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}
