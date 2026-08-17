@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { login, register, setSession, requestPasswordReset } from "@/lib/auth/auth.functions";
 import { toast } from "sonner";
+import { SVGToast } from "@/components/ui/svg-toast";
 import { ShieldCheck, ArrowLeft, Mail, UserPlus, KeyRound, Lock } from "lucide-react";
 import { ResponsiveHero } from "@/components/responsive-hero";
 import { cn } from "@/lib/utils";
@@ -133,7 +134,14 @@ function AuthPage() {
       if (result.success) {
         setSession(result.user);
         localStorage.setItem(RATE_LIMIT_KEY, '{"count": 0, "lastAttempt": 0}');
-        toast.success("Bem-vindo ao Body Métrica FJ!");
+        toast.custom((t) => (
+          <SVGToast 
+            type="success"
+            title="BEM-VINDO"
+            message="Sessão autenticada. Acesso liberado à suíte Body Métrica FJ."
+            onClose={() => toast.dismiss(t)}
+          />
+        ));
         
         if (!result.user.isLicensed) {
           toast.info("Acesse Ajustes para ativar sua licença e liberar o sistema.");
@@ -141,7 +149,14 @@ function AuthPage() {
         
         window.location.href = "/dashboard";
       } else {
-        toast.error(result.message);
+        toast.custom((t) => (
+          <SVGToast 
+            type="error"
+            title="FALHA NA AUTENTICAÇÃO"
+            message={result.message}
+            onClose={() => toast.dismiss(t)}
+          />
+        ));
         if (result.needsVerification) {
           // Store user email for resend functionality
           const { data } = await supabase.auth.getUser();

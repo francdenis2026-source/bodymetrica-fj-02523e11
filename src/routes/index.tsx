@@ -14,6 +14,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "sonner";
+import { SVGToast } from "@/components/ui/svg-toast";
 import { isAuthenticated, getSession } from "@/lib/auth/auth.functions";
 import { 
   ArrowRight, 
@@ -301,9 +302,21 @@ function QuickOnboarding({ isLoggedIn }: { isLoggedIn: boolean }) {
 
   const handleAction = () => {
     if (!isLoggedIn) {
-      toast.error("Acesse sua conta para registrar.", {
-        action: { label: "Login", onClick: () => window.location.href = "/auth" }
-      });
+      toast.custom((t) => (
+        <SVGToast 
+          type="error"
+          title="AUTENTICAÇÃO NECESSÁRIA"
+          message="Acesse sua conta para registrar suas métricas de performance."
+          action={{ 
+            label: "LOGIN", 
+            onClick: () => {
+              toast.dismiss(t);
+              window.location.href = "/auth";
+            }
+          }}
+          onClose={() => toast.dismiss(t)}
+        />
+      ), { duration: 5000 });
       return;
     }
     setOpen(true);
