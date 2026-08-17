@@ -43,33 +43,57 @@ function Index() {
       </header>
 
       {/* Hero Section */}
-      <section className="pt-32 pb-20 px-4">
-        <div className="container mx-auto max-w-5xl text-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6">
-            <Activity size={16} />
-            <span>Sua evolução, documentada com precisão</span>
+      <section className="relative pt-32 pb-20 px-4 overflow-hidden">
+        {/* Abstract 3D-like background shapes */}
+        <div className="absolute top-20 right-[-10%] w-[500px] h-[500px] bg-primary/5 rounded-full blur-3xl -z-10 animate-pulse" />
+        <div className="absolute bottom-0 left-[-5%] w-[400px] h-[400px] bg-success/5 rounded-full blur-3xl -z-10" />
+
+        <div className="container mx-auto max-w-6xl grid lg:grid-cols-2 gap-12 items-center">
+          <div className="text-left">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6">
+              <Activity size={16} />
+              <span>Sua evolução, documentada com precisão</span>
+            </div>
+            
+            <h1 className="text-4xl md:text-6xl font-bold font-display text-foreground leading-[1.1] mb-6">
+              Métricas que impulsionam <br />
+              <span className="text-gradient-brand">seu potencial físico.</span>
+            </h1>
+            
+            <p className="text-lg text-muted-foreground max-w-xl mb-10 leading-relaxed">
+              A suíte definitiva para acompanhar composição corporal, alimentação, 
+              suplementação e treinos. Design profissional para objetivos reais.
+            </p>
+            
+            <div className="flex flex-col sm:flex-row items-center gap-4">
+              <Button size="lg" className="h-12 px-8 text-base font-semibold group w-full sm:w-auto bg-brand-gradient hover:opacity-90 border-none" asChild>
+                <Link to="/auth">
+                  Começar Agora
+                  <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={18} />
+                </Link>
+              </Button>
+              <Button size="lg" variant="outline" className="h-12 px-8 text-base font-semibold w-full sm:w-auto" asChild>
+                <Link to="/about">Conhecer Ferramentas</Link>
+              </Button>
+            </div>
           </div>
-          
-          <h1 className="text-4xl md:text-6xl font-bold font-display text-foreground leading-[1.1] mb-6">
-            Métricas que impulsionam <br className="hidden md:block" />
-            <span className="text-gradient-brand">seu potencial físico.</span>
-          </h1>
-          
-          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed">
-            A suíte definitiva para acompanhar composição corporal, alimentação, 
-            suplementação e treinos. Design profissional para objetivos reais.
-          </p>
-          
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button size="lg" className="h-12 px-8 text-base font-semibold group w-full sm:w-auto" asChild>
-              <Link to="/auth">
-                Começar Agora
-                <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={18} />
-              </Link>
-            </Button>
-            <Button size="lg" variant="outline" className="h-12 px-8 text-base font-semibold w-full sm:w-auto" asChild>
-              <Link to="/about">Conhecer Ferramentas</Link>
-            </Button>
+
+          <div className="relative hidden lg:block">
+            <div className="relative z-10 rounded-2xl overflow-hidden shadow-2xl border-4 border-white/10 transform hover:scale-[1.02] transition-transform duration-500">
+              <img 
+                src="/assets/3d/fitness-hero.jpg" 
+                alt="Fitness Training" 
+                className="w-full h-auto object-cover aspect-[4/3]"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+            </div>
+            {/* Decorative 3D elements (CSS simulated) */}
+            <div className="absolute -top-6 -right-6 w-24 h-24 bg-brand-gradient rounded-2xl rotate-12 shadow-xl flex items-center justify-center animate-bounce duration-[3000ms]">
+              <Target size={40} className="text-white" />
+            </div>
+            <div className="absolute -bottom-6 -left-6 w-20 h-20 bg-success rounded-full -rotate-12 shadow-xl flex items-center justify-center animate-pulse">
+              <Zap size={32} className="text-white" />
+            </div>
           </div>
         </div>
       </section>
