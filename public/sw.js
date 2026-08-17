@@ -1,12 +1,15 @@
-const CACHE_NAME = 'body-metrica-v3'; // Bumped for update prompt and better assets
+const CACHE_NAME = 'body-metrica-v4';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
   '/manifest.json',
   '/favicon.svg',
   '/robots.txt',
-  '/offline.html'
+  '/offline.html',
+  '/favicon.ico'
 ];
+
+let notificationSettings = null;
 
 // Google Fonts and external resources patterns
 const GOOGLE_FONTS_URL = 'https://fonts.googleapis.com';
