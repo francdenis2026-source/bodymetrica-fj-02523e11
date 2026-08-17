@@ -34,6 +34,16 @@ function OnboardingPage() {
     activityLevel: "Moderadamente ativo (3-5 dias/semana)"
   });
 
+  const validateStep = (currentStep: number) => {
+    if (currentStep === 1) {
+      return formData.name.length >= 3 && formData.birthDate.length > 0;
+    }
+    if (currentStep === 3) {
+      return formData.weight.length > 0 && formData.height.length > 0;
+    }
+    return true;
+  };
+
   const nextStep = () => setStep((s) => Math.min(s + 1, totalSteps));
   const prevStep = () => setStep((s) => Math.max(s - 1, 1));
   
