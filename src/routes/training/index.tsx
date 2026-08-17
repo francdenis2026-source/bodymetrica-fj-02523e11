@@ -11,7 +11,8 @@ import {
   TrendingUp,
   Clock,
   Zap,
-  Info
+  Info,
+  LifeBuoy
 } from "lucide-react";
 
 export const Route = createFileRoute("/training/")({
@@ -30,8 +31,8 @@ function TrainingPage() {
         </div>
         <div className="flex gap-2">
           <Button variant="outline" size="sm" className="gap-2" asChild>
-            <Link to="/about">
-              <Info size={16} /> Entender Treinos
+            <Link to="/help">
+              <LifeBuoy size={16} /> Central de Ajuda
             </Link>
           </Button>
           <Button size="sm" className="gap-2 bg-brand-gradient">
