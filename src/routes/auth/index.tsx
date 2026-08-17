@@ -56,6 +56,7 @@ const MAX_ATTEMPTS = 5;
 const BLOCK_TIME = 60 * 1000; // 1 minute
 
 function AuthPage() {
+  const navigate = useNavigate();
   const searchParams = Route.useSearch();
   const [isRegistering, setIsRegistering] = useState(searchParams.registerMode);
   const [isResetting, setIsResetting] = useState(false);
