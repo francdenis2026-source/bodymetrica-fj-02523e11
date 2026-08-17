@@ -55,7 +55,48 @@ function SettingsPage() {
       </div>
 
 
-      <div className="max-w-2xl space-y-6">
+      <div className="max-w-2xl space-y-6 relative z-10">
+        <Card className="surface border-none overflow-hidden bg-primary/5 border border-primary/20">
+          <CardHeader>
+            <CardTitle className="text-xl font-display uppercase italic flex items-center gap-2 text-primary">
+              <Shield size={20} />
+              Licença de Uso
+            </CardTitle>
+            <CardDescription className="text-[10px] font-bold uppercase tracking-widest opacity-60">Status da sua assinatura Body Métrica FJ</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="flex items-center justify-between p-4 bg-background/50 rounded-2xl border border-white/5">
+              <div className="space-y-1">
+                <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">STATUS ATUAL</p>
+                <p className="text-sm font-black uppercase text-warning">Demonstrativo / Expirado</p>
+              </div>
+              <div className="text-right">
+                <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">VALIDADE</p>
+                <p className="text-sm font-bold uppercase">N/A</p>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label className="text-[10px] font-black uppercase tracking-widest text-primary ml-1">ATIVAR CHAVE DE LICENÇA</Label>
+                <div className="flex gap-2">
+                  <Input 
+                    placeholder="BODY-XXXX-XXXX-XXXX" 
+                    className="h-12 bg-white/5 border-white/10 rounded-xl px-4 font-mono text-xs uppercase"
+                  />
+                  <Button className="h-12 bg-brand-gradient border-none font-black uppercase tracking-widest px-6 rounded-xl">
+                    ATIVAR
+                  </Button>
+                </div>
+              </div>
+              <p className="text-[10px] text-muted-foreground leading-relaxed italic">
+                A licença de uso é enviada automaticamente após a confirmação do pagamento. 
+                Ela desbloqueia o sistema de relatórios avançados, sincronização na nuvem ilimitada e novos protocolos.
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+
         <Card className="surface border-none overflow-hidden">
           <CardHeader className="bg-muted/30 pb-6 pt-8">
             <div className="flex flex-col items-center gap-4 text-center">
