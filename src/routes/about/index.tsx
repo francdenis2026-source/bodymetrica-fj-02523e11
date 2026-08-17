@@ -105,7 +105,7 @@ function AboutPage() {
               Sua missão é democratizar o acesso a ferramentas de precisão, unindo ciência do esporte e engenharia de dados para criar experiências que resolvem problemas reais de forma elegante e intuitiva. Este projeto reflete sua paixão por performance, tanto em código quanto em resultados físicos.
             </p>
             <div className="flex gap-4 pt-2">
-              <a href="#" className="text-muted-foreground hover:text-primary transition-colors flex items-center gap-1 text-[10px] font-black uppercase tracking-widest"><Github size={16} /> GitHub</a>
+              <a href="#" className="text-muted-foreground hover:text-primary transition-colors flex items-center gap-1 text-[10px] font-black uppercase tracking-widest"><Code2 size={16} /> GitHub</a>
               <a href="#" className="text-muted-foreground hover:text-primary transition-colors flex items-center gap-1 text-[10px] font-black uppercase tracking-widest"><Globe size={16} /> Portfolio</a>
             </div>
           </section>
