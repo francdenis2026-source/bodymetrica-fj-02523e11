@@ -116,7 +116,7 @@ function AboutPage() {
             <div className="space-y-4">
               <h3 className="text-sm font-black uppercase tracking-[0.3em] text-primary italic">
                 O Visionário
-              </h4>
+              </h3>
               <h4 className="text-3xl md:text-4xl font-black font-display text-foreground italic uppercase tracking-tighter leading-none">
                 FRANC D'NIS <br /> FEIJÓ.
               </h4>
