@@ -1,4 +1,5 @@
 import { toast } from "sonner";
+import { SVGToast } from "@/components/ui/svg-toast";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 
@@ -252,9 +253,14 @@ function TrainingPage() {
               <Button 
                 className="w-full bg-brand-gradient border-none font-black uppercase tracking-widest h-12"
                 onClick={() => {
-                  toast.success("Plano de treino montado com sucesso!", {
-                    description: "Os exercícios foram adicionados à sua ficha técnica."
-                  });
+                  toast.custom((t) => (
+                    <SVGToast 
+                      type="success"
+                      title="TREINO ESTRUTURADO"
+                      message="O exercício foi adicionado à sua ficha técnica de performance."
+                      onClose={() => toast.dismiss(t)}
+                    />
+                  ));
                 }}
               >
                 Salvar Exercício na Ficha
@@ -343,7 +349,14 @@ function WorkoutCard({ name, focus, exercises, lastPerformed, isActive = false }
             variant={isActive ? "default" : "outline"} 
             className="h-8 text-xs"
             onClick={() => {
-              toast.info(`Treino ${name} selecionado e registrado no calendário.`);
+              toast.custom((t) => (
+                <SVGToast 
+                  type="info"
+                  title="TREINO SELECIONADO"
+                  message={`O ${name} foi ativado e registrado no seu calendário de elite.`}
+                  onClose={() => toast.dismiss(t)}
+                />
+              ));
             }}
           >
             {isActive ? "Continuar" : "Selecionar"}

@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+import { SVGToast } from "@/components/ui/svg-toast";
 import { ShieldAlert, ArrowLeft } from "lucide-react";
 
 export const Route = createFileRoute("/admin/login")({
@@ -28,10 +29,24 @@ function AdminLoginPage() {
       // Simulate network delay
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      toast.success("Acesso administrativo autorizado");
+      toast.custom((t) => (
+        <SVGToast 
+          type="success"
+          title="ACESSO AUTORIZADO"
+          message="Bem-vindo à central de comando administrativo."
+          onClose={() => toast.dismiss(t)}
+        />
+      ));
       navigate({ to: "/dashboard" }); // In reality would go to /admin/hub
     } catch (error) {
-      toast.error("Credenciais inválidas");
+      toast.custom((t) => (
+        <SVGToast 
+          type="error"
+          title="ACESSO NEGADO"
+          message="Credenciais administrativas inválidas ou expiradas."
+          onClose={() => toast.dismiss(t)}
+        />
+      ));
     } finally {
       setIsLoading(false);
     }

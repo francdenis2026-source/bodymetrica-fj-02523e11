@@ -3,6 +3,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
+import { SVGToast } from "@/components/ui/svg-toast";
 import { Mail, ArrowLeft, RefreshCw, CheckCircle2, XCircle } from "lucide-react";
 import { ResponsiveHero } from "@/components/responsive-hero";
 import { supabase } from "@/integrations/supabase/client";
@@ -23,7 +24,14 @@ function VerifyPage() {
 
   useEffect(() => {
     if (verified) {
-      toast.success("E-mail confirmado com sucesso! Faça login para continuar.");
+      toast.custom((t) => (
+        <SVGToast 
+          type="success"
+          title="E-MAIL CONFIRMADO"
+          message="Sua conta foi ativada com sucesso! Faça login para continuar."
+          onClose={() => toast.dismiss(t)}
+        />
+      ));
       const timer = setTimeout(() => {
         navigate({ to: "/auth", search: { registerMode: false } as any });
       }, 3000);
@@ -37,7 +45,14 @@ function VerifyPage() {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user?.email) {
-        toast.error("Usuário não encontrado. Por favor, faça login novamente.");
+        toast.custom((t) => (
+          <SVGToast 
+            type="error"
+            title="ERRO DE ACESSO"
+            message="Usuário não encontrado. Por favor, faça login novamente."
+            onClose={() => toast.dismiss(t)}
+          />
+        ));
         navigate({ to: "/auth", search: {} as any } as any);
         return;
       }
@@ -51,12 +66,33 @@ function VerifyPage() {
       });
 
       if (error) {
-        toast.error(error.message);
+        toast.custom((t) => (
+          <SVGToast 
+            type="error"
+            title="ERRO NO ENVIO"
+            message={error.message}
+            onClose={() => toast.dismiss(t)}
+          />
+        ));
       } else {
-        toast.success("Link de verificação reenviado com sucesso!");
+        toast.custom((t) => (
+          <SVGToast 
+            type="success"
+            title="LINK REENVIADO"
+            message="Um novo link de verificação foi enviado para o seu e-mail."
+            onClose={() => toast.dismiss(t)}
+          />
+        ));
       }
     } catch (error) {
-      toast.error("Erro ao reenviar o link.");
+      toast.custom((t) => (
+        <SVGToast 
+          type="error"
+          title="FALHA NA OPERAÇÃO"
+          message="Erro ao reenviar o link de ativação. Tente novamente."
+          onClose={() => toast.dismiss(t)}
+        />
+      ));
     } finally {
       setIsLoading(false);
     }

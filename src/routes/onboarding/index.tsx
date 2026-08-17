@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { FormField } from "@/components/ui/form-field";
 import { toast } from "sonner";
+import { SVGToast } from "@/components/ui/svg-toast";
 
 import { 
   ChevronRight, 
@@ -226,7 +227,14 @@ function OnboardingPage() {
                 if (validateStep(step)) {
                   nextStep();
                 } else {
-                  toast.error("Por favor, preencha todos os campos obrigatórios.");
+                  toast.custom((t) => (
+                    <SVGToast 
+                      type="warning"
+                      title="CAMPOS PENDENTES"
+                      message="Por favor, preencha todos os campos obrigatórios para continuar."
+                      onClose={() => toast.dismiss(t)}
+                    />
+                  ));
                 }
               }}
             >
