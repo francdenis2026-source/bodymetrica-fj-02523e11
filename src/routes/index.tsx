@@ -79,7 +79,7 @@ function Index() {
 
 
         {/* Hero Section */}
-        <section className="relative pt-32 pb-20 px-4 overflow-hidden">
+        <section className="relative pt-32 pb-20 px-4 overflow-hidden min-h-[80vh] flex items-center">
           <div className="container mx-auto max-w-6xl grid lg:grid-cols-2 gap-12 items-center">
             <div className="text-left space-y-8">
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/20 text-primary-foreground text-xs font-black uppercase tracking-widest mb-2 animate-in fade-in slide-in-from-left-4 duration-700 border border-primary/30">

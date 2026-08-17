@@ -310,7 +310,7 @@ function RootComponent() {
               <Outlet />
             </AccessGate>
           </div>
-          <footer className="relative py-12 px-6 text-center border-t border-white/5 mt-auto overflow-hidden">
+          <footer className="relative py-20 px-6 text-center border-t border-white/5 mt-auto overflow-hidden">
             <div className="absolute inset-0 z-0 opacity-10 grayscale pointer-events-none">
               <img 
                 src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&q=80&w=800" 
