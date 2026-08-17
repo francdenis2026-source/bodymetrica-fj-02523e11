@@ -546,12 +546,9 @@ function AuthPage() {
                     </button>
                   </p>
                   {!isRegistering && (
-                    <button 
-                      onClick={() => setIsResetting(true)}
-                      className="w-full text-center text-[8px] font-black uppercase tracking-[0.2em] text-white/20 hover:text-white transition-all underline decoration-white/10 underline-offset-4"
-                    >
-                      RECUPERAR SENHA
-                    </button>
+                    <Button variant="link" className="w-full text-[8px] font-black uppercase tracking-[0.2em] text-white/20 hover:text-white transition-all underline decoration-white/10 underline-offset-4 h-auto p-0" asChild>
+                      <Link to="/auth/recover">RECUPERAR SENHA</Link>
+                    </Button>
                   )}
                 </div>
               </>
