@@ -166,7 +166,7 @@ function RootComponent() {
   const [isOnline, setIsOnline] = useState(typeof navigator !== 'undefined' ? navigator.onLine : true);
   const [syncStatus, setSyncStatus] = useState<'idle' | 'syncing' | 'synced'>('idle');
   const [syncHistory, setSyncHistory] = useState<{lastSync: number | null, totalSynced: number, failures: number}>({lastSync: null, totalSynced: 0, failures: 0});
-  const validateLicenseFn = useServerFn(validateLicense);
+  const checkLicenseStatusFn = useServerFn(checkLicenseStatus);
 
   const handleManualSync = async () => {
     if (!isOnline) {
@@ -174,12 +174,45 @@ function RootComponent() {
       return;
     }
     setSyncStatus('syncing');
+    
+    // Polling license status during sync as well
+    const statusRes = await checkLicenseStatusFn();
+    if (statusRes.success && statusRes.changed) {
+      handleLogout();
+      return;
+    }
+
     await syncOfflineActions();
     const history = await getSyncHistory();
     setSyncHistory(history);
     setSyncStatus('synced');
     setTimeout(() => setSyncStatus('idle'), 3000);
   };
+
+  useEffect(() => {
+    // Polling license status periodically
+    const pollLicense = async () => {
+      if (isLoggedIn && isOnline) {
+        const res = await checkLicenseStatusFn();
+        if (res.success && (res.status === 'revoked' || res.status === 'expired')) {
+          handleLogout();
+          toast.error("Sua licença foi revogada ou expirou. Acesso encerrado.");
+        }
+      }
+    };
+
+    const interval = setInterval(pollLicense, 1000 * 60 * 5); // 5 minutes
+    
+    // Check when tab gains focus
+    const handleFocus = () => pollLicense();
+    window.addEventListener('focus', handleFocus);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('focus', handleFocus);
+    };
+  }, [isLoggedIn, isOnline]);
+
 
   useEffect(() => {
     getSyncHistory().then(setSyncHistory);
