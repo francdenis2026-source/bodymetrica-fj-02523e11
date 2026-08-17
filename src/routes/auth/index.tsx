@@ -86,7 +86,9 @@ function AuthPage() {
   }, [searchParams.registerMode]);
 
   useEffect(() => {
-    const attempts = JSON.parse(localStorage.getItem(RATE_LIMIT_KEY) || '{"count": 0, "lastAttempt": 0}');
+    const attemptsStr = localStorage.getItem(RATE_LIMIT_KEY);
+    const attempts = attemptsStr ? JSON.parse(attemptsStr) : { count: 0, lastAttempt: 0 };
+    
     if (attempts.count >= MAX_ATTEMPTS) {
       const waitTime = BLOCK_TIME - (Date.now() - attempts.lastAttempt);
       if (waitTime > 0) {
@@ -97,7 +99,7 @@ function AuthPage() {
             if (s <= 1) {
               clearInterval(timer);
               setIsBlocked(false);
-              localStorage.setItem(RATE_LIMIT_KEY, '{"count": 0, "lastAttempt": 0}');
+              localStorage.setItem(RATE_LIMIT_KEY, JSON.stringify({ count: 0, lastAttempt: 0 }));
               return 0;
             }
             return s - 1;
@@ -105,9 +107,10 @@ function AuthPage() {
         }, 1000);
         return () => clearInterval(timer);
       } else {
-        localStorage.setItem(RATE_LIMIT_KEY, '{"count": 0, "lastAttempt": 0}');
+        localStorage.setItem(RATE_LIMIT_KEY, JSON.stringify({ count: 0, lastAttempt: 0 }));
       }
     }
+    return undefined;
   }, []);
 
   const trackAttempt = () => {
