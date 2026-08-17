@@ -14,6 +14,54 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_settings: {
+        Row: {
+          key: string
+          updated_at: string | null
+          value: string | null
+        }
+        Insert: {
+          key: string
+          updated_at?: string | null
+          value?: string | null
+        }
+        Update: {
+          key?: string
+          updated_at?: string | null
+          value?: string | null
+        }
+        Relationships: []
+      }
+      license_audit_logs: {
+        Row: {
+          action: string
+          admin_id: string | null
+          created_at: string | null
+          details: Json | null
+          id: string
+          license_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action: string
+          admin_id?: string | null
+          created_at?: string | null
+          details?: Json | null
+          id?: string
+          license_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action?: string
+          admin_id?: string | null
+          created_at?: string | null
+          details?: Json | null
+          id?: string
+          license_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       licenses: {
         Row: {
           activated_at: string | null
@@ -22,6 +70,8 @@ export type Database = {
           expires_at: string | null
           id: string
           license_key: string
+          revoked_at: string | null
+          revoked_by: string | null
           status: string
           user_id: string | null
         }
@@ -32,6 +82,8 @@ export type Database = {
           expires_at?: string | null
           id?: string
           license_key: string
+          revoked_at?: string | null
+          revoked_by?: string | null
           status?: string
           user_id?: string | null
         }
@@ -42,6 +94,8 @@ export type Database = {
           expires_at?: string | null
           id?: string
           license_key?: string
+          revoked_at?: string | null
+          revoked_by?: string | null
           status?: string
           user_id?: string | null
         }

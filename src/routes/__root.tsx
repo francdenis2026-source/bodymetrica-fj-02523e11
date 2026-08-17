@@ -37,7 +37,8 @@ import { isAuthenticated, clearSession, getSession, setupLogoutListener } from "
 import { AccessGate } from "@/components/access-gate";
 import { supabase } from "@/integrations/supabase/client";
 import { useServerFn } from "@tanstack/react-start";
-import { validateLicense } from "@/lib/monetization.functions";
+import { validateLicense, checkLicenseStatus } from "@/lib/monetization.functions";
+
 
 import appCss from "../styles.css?url";
 
@@ -81,6 +82,20 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
     </div>
   );
 }
+
+function StatusIcon({ isOnline }: { isOnline: boolean }) {
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => setHydrated(true), []);
+
+  if (!hydrated) return <div className="w-3 h-3 rounded-full bg-muted animate-pulse" />;
+  
+  return isOnline ? (
+    <Wifi className="w-3 h-3 text-success" />
+  ) : (
+    <WifiOff className="w-3 h-3 text-destructive" />
+  );
+}
+
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: () => ({
@@ -166,7 +181,7 @@ function RootComponent() {
   const [isOnline, setIsOnline] = useState(typeof navigator !== 'undefined' ? navigator.onLine : true);
   const [syncStatus, setSyncStatus] = useState<'idle' | 'syncing' | 'synced'>('idle');
   const [syncHistory, setSyncHistory] = useState<{lastSync: number | null, totalSynced: number, failures: number}>({lastSync: null, totalSynced: 0, failures: 0});
-  const validateLicenseFn = useServerFn(validateLicense);
+  const checkLicenseStatusFn = useServerFn(checkLicenseStatus);
 
   const handleManualSync = async () => {
     if (!isOnline) {
@@ -174,12 +189,45 @@ function RootComponent() {
       return;
     }
     setSyncStatus('syncing');
+    
+    // Polling license status during sync as well
+    const statusRes = await checkLicenseStatusFn();
+    if (statusRes.success && statusRes.changed) {
+      handleLogout();
+      return;
+    }
+
     await syncOfflineActions();
     const history = await getSyncHistory();
     setSyncHistory(history);
     setSyncStatus('synced');
     setTimeout(() => setSyncStatus('idle'), 3000);
   };
+
+  useEffect(() => {
+    // Polling license status periodically
+    const pollLicense = async () => {
+      if (isLoggedIn && isOnline) {
+        const res = await checkLicenseStatusFn();
+        if (res.success && (res.status === 'revoked' || res.status === 'expired')) {
+          handleLogout();
+          toast.error("Sua licença foi revogada ou expirou. Acesso encerrado.");
+        }
+      }
+    };
+
+    const interval = setInterval(pollLicense, 1000 * 60 * 5); // 5 minutes
+    
+    // Check when tab gains focus
+    const handleFocus = () => pollLicense();
+    window.addEventListener('focus', handleFocus);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('focus', handleFocus);
+    };
+  }, [isLoggedIn, isOnline]);
+
 
   useEffect(() => {
     getSyncHistory().then(setSyncHistory);
@@ -275,15 +323,19 @@ function RootComponent() {
 
     const handleOffline = () => {
       setIsOnline(false);
-      toast.error("Você está offline. O modo offline está ativo.");
     };
 
-    window.addEventListener("online", handleOnline);
-    window.addEventListener("offline", handleOffline);
+    if (typeof window !== 'undefined') {
+      window.addEventListener("online", handleOnline);
+      window.addEventListener("offline", handleOffline);
+    }
 
     return () => {
-      window.removeEventListener("online", handleOnline);
-      window.removeEventListener("offline", handleOffline);
+      if (typeof window !== 'undefined') {
+        window.removeEventListener("online", handleOnline);
+        window.removeEventListener("offline", handleOffline);
+      }
+
       cleanupLogoutListener();
       subscription.unsubscribe();
     };
@@ -308,14 +360,13 @@ function RootComponent() {
         <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-background/80 backdrop-blur border border-white/10 shadow-lg animate-in fade-in slide-in-from-top-2 group relative">
           {syncStatus === 'syncing' ? (
             <Loader2 className="w-3 h-3 animate-spin text-primary" />
-          ) : isOnline ? (
-            <Wifi className="w-3 h-3 text-success" />
           ) : (
-            <WifiOff className="w-3 h-3 text-destructive" />
+            <StatusIcon isOnline={isOnline} />
           )}
           <span className="text-[10px] font-black uppercase tracking-widest text-foreground/60">
             {syncStatus === 'syncing' ? 'Sincronizando...' : isOnline ? 'Online' : 'Offline'}
           </span>
+
           
           {isOnline && (
             <button 

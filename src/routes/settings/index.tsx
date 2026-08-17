@@ -30,6 +30,11 @@ import { validateLicense, generateLicenseKey } from "@/lib/monetization.function
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { useNavigate } from "@tanstack/react-router";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
+import { Badge } from "@/components/ui/badge";
+import { AlertCircle } from "lucide-react";
+
 
 export const Route = createFileRoute("/settings/")({
   component: SettingsPage,
@@ -87,6 +92,9 @@ function SettingsPage() {
 
   const licenseStatus = user?.licenseStatus || 'demonstrative';
   const isLicensed = licenseStatus === 'active';
+  const expiresAt = user?.profile?.license_expires_at;
+  const daysRemaining = expiresAt ? Math.ceil((new Date(expiresAt).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)) : 0;
+  const isNearExpiration = isLicensed && daysRemaining > 0 && daysRemaining <= 7;
 
   return (
     <div className="flex-1 space-y-12 p-4 md:p-12 pt-10 relative overflow-hidden bg-background">
@@ -110,7 +118,10 @@ function SettingsPage() {
 
 
       <div className="max-w-2xl space-y-6 relative z-10">
-        <Card className="surface border-none overflow-hidden bg-primary/5 border border-primary/20">
+        <Card className={cn(
+          "surface border-none overflow-hidden border",
+          isLicensed ? "bg-primary/5 border-primary/20" : "bg-destructive/5 border-destructive/20"
+        )}>
           <CardHeader>
             <CardTitle className="text-xl font-display uppercase italic flex items-center gap-2 text-primary">
               <Shield size={20} />
@@ -119,28 +130,54 @@ function SettingsPage() {
             <CardDescription className="text-[10px] font-bold uppercase tracking-widest opacity-60">Status da sua assinatura Body Métrica FJ</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
-            <div className="flex items-center justify-between p-4 bg-background/50 rounded-2xl border border-white/5">
-              <div className="space-y-1">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="p-4 bg-background/50 rounded-2xl border border-white/5 space-y-1">
                 <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">STATUS ATUAL</p>
                 <p className={cn(
                   "text-sm font-black uppercase",
-                  isLicensed ? "text-success" : "text-warning"
+                  isLicensed ? "text-success" : "text-destructive"
                 )}>
-                  {isLicensed ? 'Licença Ativa' : 'Demonstrativo / Pendente'}
+                  {isLicensed ? 'Licença Ativa' : licenseStatus === 'revoked' ? 'Revogada' : licenseStatus === 'expired' ? 'Expirada' : 'Pendente'}
                 </p>
               </div>
-              <div className="text-right">
-                <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">VALIDADE</p>
+              <div className="p-4 bg-background/50 rounded-2xl border border-white/5 space-y-1">
+                <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">DIAS RESTANTES</p>
                 <p className="text-sm font-bold uppercase">
-                  {isLicensed ? 'Vitalícia / 1 Ano' : 'Expirada'}
+                  {isLicensed ? `${daysRemaining} DIAS` : '0 DIAS'}
                 </p>
               </div>
             </div>
 
+            {isLicensed && (
+              <div className="flex items-center justify-between p-4 bg-background/50 rounded-2xl border border-white/5">
+                <div className="space-y-1">
+                  <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">DATA DE EXPIRAÇÃO</p>
+                  <p className="text-sm font-bold uppercase">
+                    {expiresAt ? format(new Date(expiresAt), "dd 'de' MMMM, yyyy", { locale: ptBR }) : 'Não disponível'}
+                  </p>
+                </div>
+                {isNearExpiration && (
+                  <Badge className="bg-warning text-warning-foreground font-black animate-pulse">RENOVE AGORA</Badge>
+                )}
+              </div>
+            )}
+
+            {!isLicensed && (
+              <div className="p-4 bg-destructive/10 rounded-2xl border border-destructive/20 flex items-start gap-3">
+                <AlertCircle size={18} className="text-destructive shrink-0 mt-0.5" />
+                <div className="space-y-1">
+                  <p className="text-xs font-bold text-destructive uppercase tracking-widest">Acesso Restrito</p>
+                  <p className="text-[10px] text-muted-foreground leading-relaxed italic">
+                    Sua licença não está ativa. Por favor, insira uma chave válida ou realize a renovação para liberar os módulos de performance.
+                  </p>
+                </div>
+              </div>
+            )}
+
             <div className="space-y-4">
               <div className="space-y-2">
                 <Label className="text-[10px] font-black uppercase tracking-widest text-primary ml-1">
-                  {isLicensed ? "LICENÇA ATIVADA" : "ATIVAR CHAVE DE LICENÇA"}
+                  {isLicensed ? "CHAVE ATIVA" : "ATIVAR CHAVE DE LICENÇA"}
                 </Label>
                 <div className="flex gap-2">
                   <Input 
@@ -168,7 +205,7 @@ function SettingsPage() {
                     <Smartphone size={14} /> SIMULAR AQUISIÇÃO
                   </p>
                   <p className="text-[10px] text-muted-foreground leading-relaxed italic">
-                    Clique abaixo para simular o fluxo de pagamento e receber sua chave automaticamente.
+                    Clique abaixo para simular o fluxo de pagamento e receber sua chave automaticamente via Mercado Pago.
                   </p>
                   <Button 
                     variant="outline" 
@@ -177,14 +214,10 @@ function SettingsPage() {
                     onClick={handlePurchaseSim}
                     disabled={isLoading}
                   >
-                    COMPRAR LICENÇA (SIMULAÇÃO)
+                    COMPRAR LICENÇA (MERCADO PAGO)
                   </Button>
                 </div>
               )}
-              <p className="text-[10px] text-muted-foreground leading-relaxed italic">
-                A licença de uso é enviada automaticamente após a confirmação do pagamento. 
-                Ela desbloqueia o sistema de relatórios avançados, sincronização na nuvem ilimitada e novos protocolos.
-              </p>
             </div>
           </CardContent>
         </Card>
