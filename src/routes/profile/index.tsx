@@ -183,6 +183,17 @@ function ProfilePage() {
 
   return (
     <div className="flex-1 space-y-12 p-4 md:p-12 pt-10 relative overflow-hidden bg-background">
+      <div className="relative z-20 flex items-center gap-4 mb-2">
+        <Button 
+          variant="ghost" 
+          size="sm" 
+          className="rounded-xl text-[10px] font-black uppercase tracking-widest text-white/40 hover:text-primary hover:bg-primary/10"
+          onClick={() => window.history.back()}
+        >
+          <ArrowLeft size={14} className="mr-2" /> VOLTAR
+        </Button>
+      </div>
+
       <ModuleHeader 
         title="MEU PERFIL" 
         description="GERENCIE SEUS DADOS E SEGURANÇA"
