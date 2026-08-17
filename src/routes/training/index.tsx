@@ -53,8 +53,9 @@ function TrainingPage() {
       </div>
     );
   }
-
+  return (
     <div className="flex-1 space-y-12 p-4 md:p-12 pt-10 relative overflow-hidden bg-background">
+
       {/* Decorative Module Hero Image */}
       <div className="absolute top-0 right-0 w-96 h-96 opacity-[0.08] pointer-events-none -z-10 translate-x-1/4 -translate-y-1/4">
         <Dumbbell size={384} className="text-primary" />
