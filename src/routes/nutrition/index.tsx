@@ -115,7 +115,34 @@ function NutritionPage() {
         <TabsList className="grid w-full grid-cols-2 md:w-auto md:inline-grid">
           <TabsTrigger value="plan">Plano Alimentar</TabsTrigger>
           <TabsTrigger value="diary">Diário</TabsTrigger>
+          <TabsTrigger value="calculator">Calculadora Macros</TabsTrigger>
         </TabsList>
+
+        <TabsContent value="calculator" className="space-y-6">
+          <Card className="surface border-none p-8">
+            <CardHeader className="px-0 pt-0">
+              <CardTitle className="text-2xl font-black font-display uppercase tracking-tighter italic">Simulador de Macros</CardTitle>
+              <CardDescription className="text-[10px] font-bold uppercase tracking-widest opacity-60">Ajuste fino para seus objetivos de elite</CardDescription>
+            </CardHeader>
+            <CardContent className="px-0 space-y-8">
+              <div className="grid md:grid-cols-2 gap-8">
+                <div className="space-y-4">
+                  <label className="text-[10px] font-black uppercase tracking-widest opacity-60">Peso Atual (kg)</label>
+                  <Input type="number" placeholder="Ex: 80" className="h-12 bg-white/5 border-white/10" />
+                </div>
+                <div className="space-y-4">
+                  <label className="text-[10px] font-black uppercase tracking-widest opacity-60">Objetivo</label>
+                  <select className="w-full h-12 bg-white/5 border border-white/10 rounded-lg px-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary">
+                    <option>Perda de Gordura</option>
+                    <option>Ganho de Massa (Bulking)</option>
+                    <option>Manutenção</option>
+                  </select>
+                </div>
+              </div>
+              <Button className="w-full h-14 font-black uppercase tracking-widest bg-brand-gradient border-none">Calcular Estratégia</Button>
+            </CardContent>
+          </Card>
+        </TabsContent>
 
         <TabsContent value="plan" className="space-y-6">
           <div className="grid gap-6 md:grid-cols-3">
