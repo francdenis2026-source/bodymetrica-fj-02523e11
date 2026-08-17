@@ -391,3 +391,48 @@ function StatsCard({ title, value, change, icon, negative }: { title: string; va
   );
 }
 
+
+function WebhookEventsList({ listFn }: { listFn: any }) {
+  const { data, isLoading } = useQuery({
+    queryKey: ['admin-webhooks'],
+    queryFn: () => listFn(),
+  });
+
+  if (isLoading) return <div className="animate-spin h-5 w-5 border-b-2 border-primary mx-auto"></div>;
+
+  return (
+    <div className="rounded-xl border border-white/5 overflow-hidden">
+      <Table>
+        <TableHeader className="bg-white/5">
+          <TableRow className="border-none">
+            <TableHead className="text-[9px] font-black uppercase py-2">ID Evento</TableHead>
+            <TableHead className="text-[9px] font-black uppercase py-2">Tópico</TableHead>
+            <TableHead className="text-[9px] font-black uppercase py-2">Status</TableHead>
+            <TableHead className="text-[9px] font-black uppercase py-2">Data</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {(data?.events || []).map((event: any) => (
+            <TableRow key={event.id} className="border-white/5">
+              <TableCell className="text-[9px] font-mono text-muted-foreground">{event.event_id}</TableCell>
+              <TableCell className="text-[9px] font-black">{event.topic}</TableCell>
+              <TableCell>
+                <Badge className={"text-[8px] font-black uppercase " + (event.status === 'processed' ? 'bg-success/20 text-success' : 'bg-warning/20 text-warning')}>
+                  {event.status}
+                </Badge>
+              </TableCell>
+              <TableCell className="text-[9px] text-muted-foreground">
+                {format(new Date(event.created_at), "dd/MM HH:mm")}
+              </TableCell>
+            </TableRow>
+          ))}
+          {(!data?.events || data.events.length === 0) && (
+            <TableRow>
+              <TableCell colSpan={4} className="text-center py-4 text-[10px] text-muted-foreground uppercase font-black">Nenhum evento registrado</TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+    </div>
+  );
+}
