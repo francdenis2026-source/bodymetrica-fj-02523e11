@@ -45,11 +45,9 @@ function BodyPage() {
   const [userData, setUserData] = useState<any>(null);
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const session = localStorage.getItem('bodymetrica_auth_session');
-      if (session) {
-        setUserData(JSON.parse(session));
-      }
+    const session = getSession();
+    if (session) {
+      setUserData(session);
     }
     const timer = setTimeout(() => setIsLoading(false), 900);
     return () => clearTimeout(timer);
