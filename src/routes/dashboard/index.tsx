@@ -1,4 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState, useEffect } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
+
 import { 
   ArrowRight, 
   Droplets, 
@@ -25,11 +28,40 @@ export const Route = createFileRoute("/dashboard/")({
 });
 
 function DashboardPage() {
+  const [isLoading, setIsLoading] = useState(true);
   const userName = "Visitante"; // Mock data
   const currentGoal = "Hipertrofia";
   const weightChange = -0.5;
 
-  return (
+  useEffect(() => {
+    // Simulating initial load
+    const timer = setTimeout(() => setIsLoading(false), 1000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="flex-1 space-y-12 p-4 md:p-12 pt-10 bg-background">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
+          <div className="flex items-center gap-6">
+            <Skeleton className="w-20 h-20 rounded-3xl" />
+            <div className="space-y-2">
+              <Skeleton className="w-32 h-6" />
+              <Skeleton className="w-64 h-12" />
+            </div>
+          </div>
+        </div>
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          {[1, 2, 3, 4].map(i => <Skeleton key={i} className="h-32 rounded-[2rem]" />)}
+        </div>
+        <div className="grid gap-4 md:grid-cols-2">
+          <Skeleton className="h-64 rounded-[2rem]" />
+          <Skeleton className="h-64 rounded-[2rem]" />
+        </div>
+      </div>
+    );
+  }
+
     <div className="flex-1 space-y-12 p-4 md:p-12 pt-10 relative overflow-hidden bg-background">
       {/* Decorative Module Hero Image */}
       <div className="absolute top-0 right-0 w-96 h-96 opacity-[0.08] pointer-events-none -z-10 translate-x-1/4 -translate-y-1/4">
