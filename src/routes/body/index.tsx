@@ -147,7 +147,7 @@ function BodyPage() {
                     contentStyle={{ 
                       backgroundColor: 'hsl(var(--card))', 
                       borderRadius: '12px',
-                      border: '1px solid var(--color-border)',
+                      border: '1px solid hsl(var(--border))',
                       boxShadow: 'var(--shadow-card)',
                       color: 'hsl(var(--foreground))'
                     }}
