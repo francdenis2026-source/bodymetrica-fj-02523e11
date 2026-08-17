@@ -150,7 +150,7 @@ function Index() {
             </nav>
             
             <p className="text-xs text-muted-foreground/60">
-              © {new Date().getFullYear()} Body Métrica FJ. Todos os direitos reservados.
+              © {new Date().getFullYear()} Body Métrica FJ. dev Franc D'nis Feijó, AC.
             </p>
           </div>
         </div>
