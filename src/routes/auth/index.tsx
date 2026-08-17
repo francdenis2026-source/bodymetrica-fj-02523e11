@@ -473,7 +473,7 @@ function AuthPage() {
           </CardContent>
           
           <CardFooter className="flex flex-col gap-4 border-t border-white/5 pt-6 pb-8 bg-white/[0.02]">
-            {true && (
+            <>
               <>
                 <div className="flex items-start gap-3 text-[8px] text-white/40 leading-relaxed font-bold uppercase tracking-widest px-2">
                   <ShieldCheck className="text-primary shrink-0" size={16} />
@@ -499,7 +499,7 @@ function AuthPage() {
                   )}
                 </div>
               </>
-            )}
+            </>
           </CardFooter>
         </Card>
         
