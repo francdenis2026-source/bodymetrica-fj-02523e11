@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { ModuleHeader } from "@/components/module-header";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Input } from "@/components/ui/input";
 import { getSession } from "@/lib/auth/auth.functions";
 
 
@@ -111,7 +112,43 @@ function TrainingPage() {
         <TabsList>
           <TabsTrigger value="routine">Fichas</TabsTrigger>
           <TabsTrigger value="history">Histórico</TabsTrigger>
+          <TabsTrigger value="manage">Gerenciar Exercícios</TabsTrigger>
         </TabsList>
+
+        <TabsContent value="manage" className="space-y-6">
+          <Card className="surface border-none p-6">
+            <CardHeader className="px-0 pt-0">
+              <CardTitle className="text-xl font-display uppercase italic">Cadastrar Novo Exercício</CardTitle>
+            </CardHeader>
+            <CardContent className="px-0 space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Nome do Exercício</label>
+                  <Input placeholder="Ex: Supino Reto" className="bg-white/5 border-white/10" />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Grupo Muscular</label>
+                  <Input placeholder="Ex: Peitoral" className="bg-white/5 border-white/10" />
+                </div>
+              </div>
+              <div className="grid grid-cols-3 gap-4">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Séries</label>
+                  <Input type="number" placeholder="4" className="bg-white/5 border-white/10" />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Repetições</label>
+                  <Input placeholder="8-12" className="bg-white/5 border-white/10" />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Carga Inicial (kg)</label>
+                  <Input type="number" placeholder="20" className="bg-white/5 border-white/10" />
+                </div>
+              </div>
+              <Button className="w-full bg-brand-gradient border-none font-black uppercase tracking-widest h-12">Salvar Exercício na Ficha</Button>
+            </CardContent>
+          </Card>
+        </TabsContent>
 
         <TabsContent value="routine" className="space-y-6">
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">

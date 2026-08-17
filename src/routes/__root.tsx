@@ -22,7 +22,8 @@ import {
   Settings,
   LogOut,
   Moon,
-  Sun
+  Sun,
+  Target
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { syncOfflineActions } from "@/lib/offline-sync";
@@ -243,8 +244,9 @@ function RootComponent() {
     toast.success("Sessão encerrada com sucesso");
     window.location.href = "/auth";
   };
-
-  const isPublicRoute = ["/", "/auth", "/admin/login", "/onboarding", "/help", "/about", "/terms", "/privacy", "/tools"].includes(location.pathname);
+  
+  const publicRoutes = ["/", "/auth", "/auth/verify", "/terms", "/privacy", "/about", "/tools", "/help", "/goals"];
+  const isPublicRoute = publicRoutes.includes(location.pathname);
   const showSidebar = !isPublicRoute && isLoggedIn;
 
   return (
@@ -261,6 +263,7 @@ function RootComponent() {
               </div>
               <nav className="flex-1 p-6 space-y-2 overflow-y-auto">
                 <SidebarLink to="/dashboard" icon={<LayoutDashboard size={22} />} label="DASHBOARD" />
+                <SidebarLink to="/goals" icon={<Target size={22} />} label="METAS" />
                 <SidebarLink to="/body" icon={<User size={22} />} label="COMPOSIÇÃO" />
                 <SidebarLink to="/nutrition" icon={<Utensils size={22} />} label="NUTRIÇÃO" />
                 <SidebarLink 
