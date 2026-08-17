@@ -72,14 +72,14 @@ function Index() {
               <span>Sua evolução, documentada com precisão</span>
             </div>
             
-            <h1 className="text-4xl md:text-6xl font-bold font-display text-foreground leading-[1.1] mb-6">
-              Métricas que impulsionam <br />
-              <span className="text-gradient-brand">seu potencial físico.</span>
+            <h1 className="text-4xl md:text-7xl font-bold font-display text-foreground leading-[1.05] mb-6 tracking-tight">
+              Métricas que <br />
+              <span className="text-gradient-brand">definem o seu futuro.</span>
             </h1>
             
-            <p className="text-lg text-muted-foreground max-w-xl mb-10 leading-relaxed">
+            <p className="text-xl text-muted-foreground max-w-xl mb-10 leading-relaxed font-medium">
               A suíte definitiva para acompanhar composição corporal, alimentação, 
-              suplementação e treinos. Design profissional para objetivos reais.
+              suplementação e treinos. Design premium para resultados reais.
             </p>
             
             <div className="flex flex-col sm:flex-row items-center gap-4">
