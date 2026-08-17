@@ -41,15 +41,10 @@ function BodyPage() {
   return (
     <div className="flex-1 space-y-6 p-4 md:p-8 pt-6">
       <div className="flex flex-col gap-2">
-        <h2 className="text-2xl font-bold tracking-tight font-display">O QUE AIND AFALTA CRIAR</h2>
-        <p className="text-muted-foreground text-sm whitespace-pre-line">
-          Implementar o compartilhamento do relatório do comparativo (PDF) com link ou envio direto para eu compartilhar meus resultados com outras pessoas. 
-
-          Configurar o agendamento de notificações dentro do app e no modo PWA para check-ins e hidratação, incluindo suporte a execução em segundo plano quando disponível no meu dispositivo. 
-
-          Implementar a sincronização automática das configurações de lembretes do meu perfil para que eu mantenha frequência, dias e categorias consistentes em diferentes dispositivos. 
-
-          COLOQU EO NOME DO DESEMVOLVEDOR E A CIDADE: dev Franc D'nis Feijó, AC
+        <h2 className="text-2xl font-bold tracking-tight font-display">Composição Corporal</h2>
+        <p className="text-muted-foreground text-sm max-w-2xl">
+          Acompanhe sua evolução física com métricas precisas, fotos e tendências. 
+          Use os dados para ajustar sua rotina e alcançar seus objetivos.
         </p>
       </div>
 
