@@ -128,8 +128,10 @@ function ProfilePage() {
     setIsSaving(true);
     try {
       const res = await changePassword({
-        currentPassword: passwordForm.currentPassword,
-        newPassword: passwordForm.newPassword
+        data: {
+          currentPassword: passwordForm.currentPassword,
+          newPassword: passwordForm.newPassword
+        }
       });
 
       if (res.success) {
@@ -163,8 +165,6 @@ function ProfilePage() {
     const { error } = await supabase.auth.signOut({ scope: 'others' });
     if (!error) {
       toast.success("Outras sessões encerradas.");
-      const { data: { sessions: activeSessions } } = await supabase.auth.listSessions();
-      setSessions(activeSessions || []);
     }
   };
 
