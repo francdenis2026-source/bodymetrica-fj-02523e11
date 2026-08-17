@@ -58,8 +58,19 @@ function AuthPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background px-4 py-12">
-      <div className="w-full max-w-md space-y-8">
+    <div className="min-h-screen flex items-center justify-center relative px-4 py-12 overflow-hidden">
+      {/* Hero Background for Login */}
+      <div 
+        className="absolute inset-0 z-0 pointer-events-none opacity-10 dark:opacity-5 transition-opacity"
+        style={{
+          backgroundImage: 'url(https://images.unsplash.com/photo-1593079831268-3381b0db4a77?auto=format&fit=crop&q=80)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      />
+      <div className="absolute inset-0 z-0 bg-gradient-to-b from-background/80 via-background to-background" />
+
+      <div className="relative z-10 w-full max-w-md space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
         <div className="text-center space-y-2">
           <Link to="/" className="inline-flex items-center text-sm text-muted-foreground hover:text-primary transition-colors mb-4">
             <ArrowLeft size={16} className="mr-1" />
