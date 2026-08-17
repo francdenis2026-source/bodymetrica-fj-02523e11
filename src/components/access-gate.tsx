@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ShieldAlert, Lock, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Link } from '@tanstack/react-router';
+import { Link, useNavigate } from '@tanstack/react-router';
+
 
 interface AccessGateProps {
   title?: string;
