@@ -106,57 +106,70 @@ function HydrationPage() {
 
 
 
-      <div className="grid gap-6 md:grid-cols-2">
-        <Card className="surface border-none flex flex-col items-center justify-center p-8 text-center space-y-6">
-          <div className="relative w-48 h-48">
-            <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
-              <circle
-                cx="50"
-                cy="50"
-                r="45"
-                fill="none"
-                stroke="oklch(var(--info) / 0.1)"
-                strokeWidth="8"
-              />
-              <circle
-                cx="50"
-                cy="50"
-                r="45"
-                fill="none"
-                stroke="oklch(var(--info))"
-                strokeWidth="8"
-                strokeDasharray={2 * Math.PI * 45}
-                strokeDashoffset={2 * Math.PI * 45 * (1 - percentage / 100)}
-                strokeLinecap="round"
-                className="transition-all duration-700 ease-in-out"
-              />
-            </svg>
-            <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <Droplets className={isSyncing ? "text-primary animate-pulse" : "text-info"} size={24} />
-              <span className="text-3xl font-black font-display italic tracking-tighter uppercase">{percentage}%</span>
-              <span className="text-[10px] text-muted-foreground uppercase font-black tracking-widest">{isSyncing ? "SINCRONIZANDO..." : "DIÁRIO"}</span>
+      <div className="grid gap-6 md:grid-cols-3">
+        <Card className="surface border-none flex flex-col items-center justify-center p-8 text-center space-y-6 md:col-span-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full items-center">
+            <div className="relative w-48 h-48 mx-auto">
+              <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
+                <circle
+                  cx="50"
+                  cy="50"
+                  r="45"
+                  fill="none"
+                  stroke="oklch(var(--info) / 0.1)"
+                  strokeWidth="8"
+                />
+                <circle
+                  cx="50"
+                  cy="50"
+                  r="45"
+                  fill="none"
+                  stroke="oklch(var(--info))"
+                  strokeWidth="8"
+                  strokeDasharray={2 * Math.PI * 45}
+                  strokeDashoffset={2 * Math.PI * 45 * (1 - percentage / 100)}
+                  strokeLinecap="round"
+                  className="transition-all duration-700 ease-in-out"
+                />
+              </svg>
+              <div className="absolute inset-0 flex flex-col items-center justify-center">
+                <Droplets className={isSyncing ? "text-primary animate-pulse" : "text-info"} size={24} />
+                <span className="text-3xl font-black font-display italic tracking-tighter uppercase">{percentage}%</span>
+                <span className="text-[10px] text-muted-foreground uppercase font-black tracking-widest">{isSyncing ? "SINCRONIZANDO..." : "DIÁRIO"}</span>
+              </div>
+            </div>
+            
+            <div className="space-y-6 text-left">
+              <div className="space-y-1">
+                <div className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">META CALCULADA</div>
+                <div className="text-3xl font-black font-display italic tracking-tighter uppercase text-gradient-brand">{(goalAmount / 1000).toFixed(1)}L / DIA</div>
+                <p className="text-xs text-muted-foreground font-bold">Baseado em 35ml por kg de peso corporal.</p>
+              </div>
+
+              <div className="space-y-2">
+                <div className="flex justify-between text-[10px] font-black uppercase tracking-widest">
+                  <span>STATUS ATUAL</span>
+                  <span className="text-info">{(currentAmount / 1000).toFixed(1)}L REGISTRADOS</span>
+                </div>
+                <Progress value={percentage} className="h-2 bg-info/10" indicatorClassName="bg-info" />
+                <p className="text-[10px] text-muted-foreground font-bold uppercase italic">Faltam {( (goalAmount - currentAmount) / 1000 ).toFixed(1)}L para a meta de elite.</p>
+              </div>
             </div>
           </div>
-          
-          <div className="space-y-1">
-            <div className="text-2xl font-bold font-display">{(currentAmount / 1000).toFixed(1)}L / {(goalAmount / 1000).toFixed(1)}L</div>
-            <p className="text-xs text-muted-foreground">Faltam {( (goalAmount - currentAmount) / 1000 ).toFixed(1)}L para concluir</p>
-          </div>
 
-          <div className="grid grid-cols-3 gap-3 w-full max-w-xs">
-            <Button variant="outline" className="flex flex-col h-auto py-5 gap-1 min-h-[64px]" onClick={() => addWater(200)}>
-              <span className="text-xs font-bold">200ml</span>
-              <span className="text-[10px] text-muted-foreground uppercase">Copo</span>
+          <div className="grid grid-cols-3 gap-3 w-full border-t border-white/5 pt-8">
+            <Button variant="outline" className="flex flex-col h-auto py-5 gap-1 rounded-2xl border-white/5 bg-white/[0.02] hover:bg-white/5 hover:scale-105 transition-all" onClick={() => addWater(200)}>
+              <span className="text-xs font-black uppercase italic tracking-tighter">200ml</span>
+              <span className="text-[9px] text-muted-foreground uppercase font-bold">Copo</span>
             </Button>
-            <Button variant="outline" className="flex flex-col h-auto py-5 gap-1 min-h-[64px]" onClick={() => addWater(500)}>
-              <span className="text-xs font-bold">500ml</span>
-              <span className="text-[10px] text-muted-foreground uppercase">Garrafa</span>
+            <Button variant="outline" className="flex flex-col h-auto py-5 gap-1 rounded-2xl border-white/5 bg-white/[0.02] hover:bg-white/5 hover:scale-105 transition-all" onClick={() => addWater(500)}>
+              <span className="text-xs font-black uppercase italic tracking-tighter">500ml</span>
+              <span className="text-[9px] text-muted-foreground uppercase font-bold">Garrafa</span>
             </Button>
-            <Button variant="outline" className="flex flex-col h-auto py-5 gap-1 min-h-[64px]" onClick={() => addWater(1000)}>
-              <span className="text-xs font-bold">1L</span>
-              <span className="text-[10px] text-muted-foreground uppercase">Extra</span>
+            <Button variant="outline" className="flex flex-col h-auto py-5 gap-1 rounded-2xl border-white/5 bg-white/[0.02] hover:bg-white/5 hover:scale-105 transition-all" onClick={() => addWater(1000)}>
+              <span className="text-xs font-black uppercase italic tracking-tighter">1.0L</span>
+              <span className="text-[9px] text-muted-foreground uppercase font-bold">Pack</span>
             </Button>
-
           </div>
         </Card>
 
