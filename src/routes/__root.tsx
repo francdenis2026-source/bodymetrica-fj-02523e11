@@ -24,10 +24,11 @@ import {
   LogOut,
   Moon,
   Sun,
-  Target
+  Target,
+  Zap
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { syncOfflineActions } from "@/lib/offline-sync";
+import { syncOfflineActions, getSyncHistory } from "@/lib/offline-sync";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { AppErrorBoundary } from "@/components/ui/error-boundary";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -160,6 +161,24 @@ function RootComponent() {
   const [needsVerification, setNeedsVerification] = useState(false);
   const [isOnline, setIsOnline] = useState(typeof navigator !== 'undefined' ? navigator.onLine : true);
   const [syncStatus, setSyncStatus] = useState<'idle' | 'syncing' | 'synced'>('idle');
+  const [syncHistory, setSyncHistory] = useState<{lastSync: number | null, totalSynced: number, failures: number}>({lastSync: null, totalSynced: 0, failures: 0});
+
+  const handleManualSync = async () => {
+    if (!isOnline) {
+      toast.error("Não é possível sincronizar offline.");
+      return;
+    }
+    setSyncStatus('syncing');
+    await syncOfflineActions();
+    const history = await getSyncHistory();
+    setSyncHistory(history);
+    setSyncStatus('synced');
+    setTimeout(() => setSyncStatus('idle'), 3000);
+  };
+
+  useEffect(() => {
+    getSyncHistory().then(setSyncHistory);
+  }, [syncStatus]);
 
   useEffect(() => {
     // Setup cross-tab logout listener
@@ -259,17 +278,45 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       {/* Sync Status Indicator */}
-      <div className="fixed top-4 right-4 z-[100] flex items-center gap-2 px-3 py-1.5 rounded-full bg-background/80 backdrop-blur border border-white/10 shadow-lg animate-in fade-in slide-in-from-top-2">
-        {syncStatus === 'syncing' ? (
-          <Loader2 className="w-3 h-3 animate-spin text-primary" />
-        ) : isOnline ? (
-          <Wifi className="w-3 h-3 text-success" />
-        ) : (
-          <WifiOff className="w-3 h-3 text-destructive" />
-        )}
-        <span className="text-[10px] font-black uppercase tracking-widest text-foreground/60">
-          {syncStatus === 'syncing' ? 'Sincronizando...' : isOnline ? 'Online' : 'Offline'}
-        </span>
+      <div className="fixed top-4 right-4 z-[100] flex flex-col items-end gap-2">
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-background/80 backdrop-blur border border-white/10 shadow-lg animate-in fade-in slide-in-from-top-2 group relative">
+          {syncStatus === 'syncing' ? (
+            <Loader2 className="w-3 h-3 animate-spin text-primary" />
+          ) : isOnline ? (
+            <Wifi className="w-3 h-3 text-success" />
+          ) : (
+            <WifiOff className="w-3 h-3 text-destructive" />
+          )}
+          <span className="text-[10px] font-black uppercase tracking-widest text-foreground/60">
+            {syncStatus === 'syncing' ? 'Sincronizando...' : isOnline ? 'Online' : 'Offline'}
+          </span>
+          
+          {isOnline && (
+            <button 
+              onClick={handleManualSync}
+              className="ml-2 p-1 hover:bg-white/10 rounded-full transition-colors"
+              title="Sincronizar agora"
+            >
+              <Zap size={10} className="text-primary" />
+            </button>
+          )}
+
+          {/* Sync History Tooltip-like details */}
+          <div className="absolute top-full right-0 mt-2 w-48 surface p-3 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all z-[110] text-[9px] uppercase font-black tracking-tighter space-y-2">
+             <div className="flex justify-between">
+                <span className="text-muted-foreground">Última Sinc:</span>
+                <span>{syncHistory.lastSync ? new Date(syncHistory.lastSync).toLocaleTimeString() : 'Nunca'}</span>
+             </div>
+             <div className="flex justify-between">
+                <span className="text-muted-foreground">Total Enviado:</span>
+                <span className="text-success">{syncHistory.totalSynced}</span>
+             </div>
+             <div className="flex justify-between">
+                <span className="text-muted-foreground">Falhas:</span>
+                <span className="text-destructive">{syncHistory.failures}</span>
+             </div>
+          </div>
+        </div>
       </div>
 
       <div className="flex min-h-screen w-full flex-col md:flex-row bg-background transition-colors duration-300">

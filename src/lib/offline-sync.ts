@@ -10,7 +10,27 @@ export interface OfflineAction {
   type: 'WATER_LOG' | 'MEAL_CONFIRM' | 'BODY_METRIC';
   data: any;
   timestamp: number;
+  status?: 'pending' | 'failed';
+  error?: string;
 }
+
+export interface SyncHistory {
+  lastSync: number | null;
+  totalSynced: number;
+  failures: number;
+}
+
+export const getSyncHistory = async (): Promise<SyncHistory> => {
+  const lastSync = localStorage.getItem('last_sync_timestamp');
+  const totalSynced = parseInt(localStorage.getItem('total_synced_count') || '0');
+  const failures = parseInt(localStorage.getItem('sync_failures_count') || '0');
+  
+  return {
+    lastSync: lastSync ? parseInt(lastSync) : null,
+    totalSynced,
+    failures
+  };
+};
 
 const openDB = (): Promise<IDBDatabase> => {
   return new Promise((resolve, reject) => {
@@ -74,11 +94,15 @@ export const syncOfflineActions = async () => {
           // Simular sucesso
           const deleteTransaction = db.transaction(STORE_NAME, 'readwrite');
           deleteTransaction.objectStore(STORE_NAME).delete(action.id!);
+          
+          localStorage.setItem('total_synced_count', (parseInt(localStorage.getItem('total_synced_count') || '0') + 1).toString());
         } catch (err) {
           console.error("Failed to sync specific action:", err);
+          localStorage.setItem('sync_failures_count', (parseInt(localStorage.getItem('sync_failures_count') || '0') + 1).toString());
         }
       }
       
+      localStorage.setItem('last_sync_timestamp', Date.now().toString());
       toast.success(`${actions.length} registros foram sincronizados com sucesso!`);
     };
   } catch (error) {
