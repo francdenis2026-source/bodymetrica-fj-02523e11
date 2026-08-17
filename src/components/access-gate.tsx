@@ -17,6 +17,8 @@ export function AccessGate({
   children, 
   isAllowed 
 }: AccessGateProps) {
+  const navigate = useNavigate();
+
   useEffect(() => {
     if (!isAllowed) {
       const timer = setTimeout(() => {
