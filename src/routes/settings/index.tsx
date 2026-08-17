@@ -24,6 +24,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getSession, clearSession } from "@/lib/auth/auth.functions";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { toast } from "sonner";
+import { requestNotificationPermission, scheduleNotifications } from "@/lib/notifications";
 
 export const Route = createFileRoute("/settings/")({
   component: SettingsPage,
@@ -181,7 +182,13 @@ function SettingsPage() {
               </div>
             </div>
 
-            <Button className="w-full bg-brand-gradient border-none font-black uppercase tracking-widest h-12 gap-2 mt-4" onClick={() => toast.success("Configurações de alerta salvas")}>
+            <Button className="w-full bg-brand-gradient border-none font-black uppercase tracking-widest h-12 gap-2 mt-4" onClick={() => {
+              // Trigger permission and push settings
+              requestNotificationPermission().then(() => {
+                scheduleNotifications();
+                toast.success("Preferências de notificação salvas e agendadas");
+              });
+            }}>
               <Save size={18} /> Salvar Preferências
             </Button>
           </CardContent>
