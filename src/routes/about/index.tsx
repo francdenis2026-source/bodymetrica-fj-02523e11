@@ -88,7 +88,7 @@ function AboutPage() {
             Crie sua conta e tenha todas essas ferramentas na palma da sua mão.
           </p>
           <Button size="lg" className="px-8 font-semibold" asChild>
-            <Link to="/auth" search={{ registerMode: true, name: "", birthDate: "" }}>Criar Conta</Link>
+            <Link to="/auth" search={{ registerMode: true, name: "", birthDate: "", goal: "", weight: "", height: "", activityLevel: "" }}>Criar Conta</Link>
           </Button>
         </section>
       </main>
