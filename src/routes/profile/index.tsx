@@ -84,10 +84,12 @@ function ProfilePage() {
     
     try {
       const res = await updateProfile({
-        name: profileForm.name,
-        weight: parseFloat(profileForm.weight),
-        height: parseFloat(profileForm.height),
-        goal: profileForm.goal
+        data: {
+          name: profileForm.name,
+          weight: parseFloat(profileForm.weight),
+          height: parseFloat(profileForm.height),
+          goal: profileForm.goal
+        }
       });
 
       if (res.success) {
