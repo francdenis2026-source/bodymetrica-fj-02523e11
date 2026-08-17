@@ -4,15 +4,16 @@ import { safeLocalStorage, safeNavigator, safeWindow, isBrowser } from "./browse
 // Use IndexedDB for the offline queue
 const DB_NAME = 'BodyMetricaOfflineDB';
 const STORE_NAME = 'offline_queue';
-const DB_VERSION = 1;
+const DB_VERSION = 2; // Incremented for conflict handling fields
 
 export interface OfflineAction {
   id?: number;
-  type: 'WATER_LOG' | 'MEAL_CONFIRM' | 'BODY_METRIC';
+  type: 'WATER_LOG' | 'MEAL_CONFIRM' | 'BODY_METRIC' | 'TRAINING_LOG';
   data: any;
   timestamp: number;
   status?: 'pending' | 'failed';
   error?: string;
+  version?: number; // For conflict resolution
 }
 
 export interface SyncHistory {
@@ -49,6 +50,23 @@ const openDB = (): Promise<IDBDatabase> => {
   });
 };
 
+/**
+ * Conflict Resolution Logic
+ * Merges offline data with potentially updated server data.
+ * Strategy: Last Write Wins (LWW) based on timestamp, 
+ * but for metrics we might want to keep both if they are distinct events.
+ */
+const resolveConflict = (offlineAction: OfflineAction, serverState: any) => {
+  if (!serverState) return offlineAction.data;
+  
+  // Last write wins simple implementation
+  if (offlineAction.timestamp > (serverState.updated_at || 0)) {
+    return offlineAction.data;
+  }
+  
+  return serverState;
+};
+
 export const queueOfflineAction = async (action: Omit<OfflineAction, 'timestamp'>) => {
   try {
     const db = await openDB();
@@ -57,7 +75,8 @@ export const queueOfflineAction = async (action: Omit<OfflineAction, 'timestamp'
     
     const actionWithTimestamp: OfflineAction = {
       ...action,
-      timestamp: Date.now()
+      timestamp: Date.now(),
+      version: 1
     };
     
     store.add(actionWithTimestamp);
@@ -85,14 +104,19 @@ export const syncOfflineActions = async () => {
       
       console.log(`Syncing ${actions.length} offline actions...`);
       
-      // Enviar para o servidor em lote ou sequência
       for (const action of actions) {
         try {
-          console.log("Syncing action:", action);
-          // Em um app real, aqui chamaríamos a API do Supabase
-          // await supabase.from('logs').insert(action.data);
+          // 1. Fetch current server state for conflict check (Mock)
+          // const { data: serverState } = await supabase.from(table).select().eq('id', action.data.id).single();
+          const serverState = null; 
           
-          // Simular sucesso
+          // 2. Resolve conflicts
+          const resolvedData = resolveConflict(action, serverState);
+          
+          // 3. Perform the actual sync (Mock)
+          console.log("Syncing action with resolved data:", action.type, resolvedData);
+          
+          // 4. On success, remove from queue
           const deleteTransaction = db.transaction(STORE_NAME, 'readwrite');
           deleteTransaction.objectStore(STORE_NAME).delete(action.id!);
           
@@ -111,14 +135,12 @@ export const syncOfflineActions = async () => {
   }
 };
 
-// Adiciona listener para sync em background se disponível
 if (isBrowser) {
   const sw = safeNavigator.serviceWorker;
   if (sw && 'SyncManager' in window) {
     sw.ready.then(registration => {
       return (registration as any).sync.register('sync-offline-actions');
     }).catch(() => {
-      // Fallback para quando o sync de background não é suportado
       safeWindow.addEventListener('online', syncOfflineActions);
     });
   } else {
