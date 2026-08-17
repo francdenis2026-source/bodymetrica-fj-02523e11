@@ -20,8 +20,9 @@ export function AccessGate({
   const navigate = useNavigate();
 
   useEffect(() => {
+    let timer: any;
     if (!isAllowed) {
-      const timer = setTimeout(() => {
+      timer = setTimeout(() => {
         navigate({ 
           to: "/auth", 
           search: { 
@@ -35,8 +36,10 @@ export function AccessGate({
           } 
         });
       }, 3500);
-      return () => clearTimeout(timer);
     }
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
   }, [isAllowed, navigate]);
 
   if (isAllowed) return <>{children}</>;
