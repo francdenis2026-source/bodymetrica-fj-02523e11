@@ -160,6 +160,7 @@ function RootComponent() {
   const [authChecked, setAuthChecked] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [needsVerification, setNeedsVerification] = useState(false);
+  const [needsLicense, setNeedsLicense] = useState(false);
   const [isOnline, setIsOnline] = useState(typeof navigator !== 'undefined' ? navigator.onLine : true);
   const [syncStatus, setSyncStatus] = useState<'idle' | 'syncing' | 'synced'>('idle');
   const [syncHistory, setSyncHistory] = useState<{lastSync: number | null, totalSynced: number, failures: number}>({lastSync: null, totalSynced: 0, failures: 0});
@@ -204,6 +205,7 @@ function RootComponent() {
     const session = getSession();
     setIsLoggedIn(!!session);
     setNeedsVerification(session?.needsVerification || false);
+    setNeedsLicense(!!session && session.licenseStatus !== 'active');
     setAuthChecked(true);
 
     if (typeof window !== "undefined" && "serviceWorker" in navigator) {
@@ -282,7 +284,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       {/* Sync Status Indicator */}
-      <div className="fixed bottom-24 right-4 z-[100] flex flex-col items-end gap-2 md:top-auto md:bottom-8">
+      <div className="fixed bottom-24 right-4 z-[100] flex flex-col items-end gap-2 md:bottom-8 lg:right-8 transition-all duration-300">
         <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-background/80 backdrop-blur border border-white/10 shadow-lg animate-in fade-in slide-in-from-top-2 group relative">
           {syncStatus === 'syncing' ? (
             <Loader2 className="w-3 h-3 animate-spin text-primary" />
@@ -381,7 +383,11 @@ function RootComponent() {
           showSidebar && "mb-20 md:mb-0"
         )}>
           <div className="flex-1">
-            <AccessGate isAllowed={isPublicRoute || isLoggedIn} needsVerification={needsVerification}>
+            <AccessGate 
+              isAllowed={isPublicRoute || (isLoggedIn && !needsVerification && !needsLicense)} 
+              needsVerification={needsVerification}
+              needsLicense={needsLicense && !isPublicRoute}
+            >
               <Outlet />
             </AccessGate>
           </div>

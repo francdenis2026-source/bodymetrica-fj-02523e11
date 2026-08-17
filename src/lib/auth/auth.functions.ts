@@ -64,7 +64,11 @@ export const login = createServerFn({ method: "POST" })
     }
 
     if (!authData.user?.email_confirmed_at) {
-      return { success: false, message: "E-mail não verificado. Por favor, verifique sua caixa de entrada.", needsVerification: true };
+      return { 
+        success: false, 
+        message: "E-mail não verificado. Por favor, verifique sua caixa de entrada.", 
+        needsVerification: true 
+      };
     }
 
     const { data: profile } = await supabase
@@ -73,6 +77,8 @@ export const login = createServerFn({ method: "POST" })
       .eq('id', authData.user.id)
       .single();
 
+    const isLicensed = profile?.license_status === 'active';
+
     return {
       success: true,
       user: {
@@ -80,7 +86,9 @@ export const login = createServerFn({ method: "POST" })
         email: authData.user.email,
         name: profile?.name || authData.user.user_metadata?.['name'] || "Usuário",
         role: "user",
-        profile: profile
+        profile: profile,
+        isLicensed,
+        licenseStatus: profile?.license_status || 'demonstrative'
       }
     };
   });

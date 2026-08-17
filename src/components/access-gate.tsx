@@ -10,6 +10,7 @@ interface AccessGateProps {
   children: React.ReactNode;
   isAllowed: boolean;
   needsVerification?: boolean;
+  needsLicense?: boolean;
 }
 
 export function AccessGate({ 
@@ -17,7 +18,8 @@ export function AccessGate({
   description = "ESTA ÁREA REQUER AUTENTICAÇÃO DE ALTO NÍVEL PARA SER ACESSADA.", 
   children, 
   isAllowed,
-  needsVerification = false
+  needsVerification = false,
+  needsLicense = false
 }: AccessGateProps) {
   const navigate = useNavigate();
 
@@ -46,12 +48,14 @@ export function AccessGate({
 
   if (isAllowed) return <>{children}</>;
 
-  const displayTitle = needsVerification ? "E-MAIL NÃO CONFIRMADO" : title;
+  const displayTitle = needsVerification ? "E-MAIL NÃO CONFIRMADO" : needsLicense ? "LICENÇA NECESSÁRIA" : title;
   const displayDescription = needsVerification 
     ? "POR FAVOR, CONFIRME SEU E-MAIL PARA LIBERAR O ACESSO ÀS FERRAMENTAS." 
+    : needsLicense
+    ? "ESTA FERRAMENTA REQUER UMA LICENÇA ATIVA. ADQUIRA A SUA NOS AJUSTES."
     : description;
 
-  const redirectTarget = needsVerification ? "/auth/verify" : "/auth";
+  const redirectTarget = needsVerification ? "/auth/verify" : needsLicense ? "/settings" : "/auth";
 
   return (
     <div className="min-h-[60vh] flex items-center justify-center p-6 animate-in fade-in duration-700">
@@ -87,7 +91,7 @@ export function AccessGate({
                   activityLevel: ""
                 } as any}
               >
-                {needsVerification ? "VERIFICAR AGORA" : "ENTRAR AGORA"}
+                {needsVerification ? "VERIFICAR AGORA" : needsLicense ? "ADQUIRIR LICENÇA" : "ENTRAR AGORA"}
               </Link>
             </Button>
           </div>
