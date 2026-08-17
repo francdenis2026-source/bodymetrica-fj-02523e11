@@ -10,7 +10,8 @@ import {
   CalendarDays,
   Clock,
   ListChecks,
-  Info
+  Info,
+  LifeBuoy
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -30,8 +31,8 @@ function SupplementsPage() {
         </div>
         <div className="flex gap-2">
           <Button variant="outline" size="sm" className="gap-2" asChild>
-            <Link to="/about">
-              <Info size={16} /> Ajuda
+            <Link to="/help">
+              <LifeBuoy size={16} /> Central de Ajuda
             </Link>
           </Button>
           <Button size="sm" className="gap-2 bg-brand-gradient">
