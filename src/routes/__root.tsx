@@ -213,6 +213,9 @@ function RootComponent() {
           handleLogout();
           toast.error("Sua licença foi revogada ou expirou. Acesso encerrado.");
         }
+
+        // Automatic e-mail check for near expiration could be handled here via a dedicated server function
+        // but it's better handled by a background CRON job in a real production environment.
       }
     };
 
@@ -220,11 +223,15 @@ function RootComponent() {
     
     // Check when tab gains focus
     const handleFocus = () => pollLicense();
-    window.addEventListener('focus', handleFocus);
+    if (typeof window !== 'undefined') {
+      window.addEventListener('focus', handleFocus);
+    }
 
     return () => {
       clearInterval(interval);
-      window.removeEventListener('focus', handleFocus);
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('focus', handleFocus);
+      }
     };
   }, [isLoggedIn, isOnline]);
 
