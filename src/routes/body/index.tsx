@@ -22,7 +22,12 @@ import {
   Image as ImageIcon,
   Link as LinkIcon,
   Trash2,
-  Download
+  Download,
+  Search,
+  Filter,
+  Lock,
+  Eye,
+  Calendar
  } from "lucide-react";
 
 
@@ -40,6 +45,22 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { PageHeaderSkeleton, StatsSkeleton } from "@/components/ui/loading-states";
 import { EmptyState } from "@/components/ui/status-states";
 import { getSession } from "@/lib/auth/auth.functions";
+import { Input } from "@/components/ui/input";
+import { 
+  Dialog, 
+  DialogContent, 
+  DialogHeader, 
+  DialogTitle, 
+  DialogFooter,
+  DialogDescription
+} from "@/components/ui/dialog";
+import { 
+  Select, 
+  SelectContent, 
+  SelectItem, 
+  SelectTrigger, 
+  SelectValue 
+} from "@/components/ui/select";
 
 
 const mockWeightData = [
@@ -60,6 +81,12 @@ function BodyPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [userData, setUserData] = useState<any>(null);
   const [exportHistory, setExportHistory] = useState<any[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filterType, setFilterType] = useState("ALL");
+  const [isExportSettingsOpen, setIsExportSettingsOpen] = useState(false);
+  const [pendingExportType, setPendingExportType] = useState<'PDF' | 'PNG' | null>(null);
+  const [exportPassword, setExportPassword] = useState("");
+  const [exportViewLimit, setExportViewLimit] = useState("0");
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
 
