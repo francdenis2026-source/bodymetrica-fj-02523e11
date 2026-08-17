@@ -309,16 +309,28 @@ function DashboardPage() {
         <CardContent>
           <div className="flex justify-between items-end h-32 gap-2">
             {[60, 80, 45, 90, 100, 75, 85].map((val, i) => (
-              <div key={i} className="flex-1 flex flex-col items-center gap-2">
+              <div key={i} className="flex-1 flex flex-col items-center gap-2 group relative">
                 <div 
-                  className="w-full bg-primary/20 rounded-t-sm transition-all hover:bg-primary/40" 
+                  className="w-full bg-primary/20 rounded-t-sm transition-all hover:bg-primary/40 cursor-help" 
                   style={{ height: `${val}%` }}
                 />
+                <div className="absolute bottom-full mb-2 bg-card border border-white/10 p-2 rounded-lg text-[9px] font-black uppercase tracking-widest invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all whitespace-nowrap z-50 shadow-2xl">
+                  Aderência: {val}% | {val > 80 ? 'EXCELENTE' : 'EM EVOLUÇÃO'}
+                </div>
                 <span className="text-[10px] text-muted-foreground font-medium">
                   {['S', 'T', 'Q', 'Q', 'S', 'S', 'D'][i]}
                 </span>
               </div>
             ))}
+          </div>
+          <div className="mt-6 p-4 rounded-2xl bg-white/[0.02] border border-white/5 flex items-center gap-4">
+            <div className="w-10 h-10 rounded-xl bg-success/20 flex items-center justify-center">
+              <TrendingUp className="text-success" size={20} />
+            </div>
+            <div>
+              <p className="text-[10px] font-black uppercase tracking-widest text-success">INSIGHT DE PERFORMANCE</p>
+              <p className="text-xs text-foreground/70 font-bold">Sua aderência média subiu 12% esta semana. Mantenha a consistência nos treinos matinais.</p>
+            </div>
           </div>
         </CardContent>
       </Card>
