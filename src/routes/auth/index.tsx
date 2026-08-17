@@ -399,6 +399,14 @@ function AuthPage() {
                 </div>
               </>
             )}
+            {isResetting && (
+              <button 
+                onClick={() => setIsResetting(false)}
+                className="w-full text-center text-[10px] font-black uppercase tracking-[0.2em] text-white/20 hover:text-white transition-all"
+              >
+                VOLTAR PARA O LOGIN
+              </button>
+            )}
           </CardFooter>
         </Card>
         
