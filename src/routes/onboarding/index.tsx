@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { FormField } from "@/components/ui/form-field";
+
 import { 
   ChevronRight, 
   ChevronLeft, 
@@ -62,18 +64,14 @@ function OnboardingPage() {
                 <p className="text-muted-foreground text-sm">Vamos começar com o básico. Como devemos te chamar?</p>
               </div>
               <div className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="name">Nome Completo</Label>
-                  <Input id="name" placeholder="Ex: João Silva" className="h-12" />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="birth">Data de Nascimento</Label>
-                  <div className="relative">
-                    <Input id="birth" type="date" className="h-12 pr-10" />
-                    <Calendar className="absolute right-3 top-3.5 text-muted-foreground" size={18} />
-                  </div>
-                </div>
+                <FormField label="Nome Completo" placeholder="Ex: João Silva" />
+                <FormField 
+                  label="Data de Nascimento" 
+                  type="date" 
+                  description="Usamos isso para calcular suas necessidades metabólicas."
+                />
               </div>
+
             </div>
           )}
 
@@ -98,15 +96,10 @@ function OnboardingPage() {
                 <p className="text-muted-foreground text-sm">Precisamos dessas medidas para calcular suas metas iniciais.</p>
               </div>
               <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="weight">Peso (kg)</Label>
-                  <Input id="weight" type="number" placeholder="00.0" className="h-12" />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="height">Altura (cm)</Label>
-                  <Input id="height" type="number" placeholder="170" className="h-12" />
-                </div>
+                <FormField label="Peso (kg)" type="number" placeholder="00.0" />
+                <FormField label="Altura (cm)" type="number" placeholder="170" />
               </div>
+
               <div className="space-y-2">
                 <Label>Nível de Atividade Física</Label>
                 <select className="flex h-12 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
