@@ -415,39 +415,46 @@ function RootComponent() {
         {showSidebar && (
           <>
             {/* Desktop Sidebar */}
-            <aside className="hidden md:flex w-80 flex-col border-r border-white/5 bg-card/30 backdrop-blur-3xl sticky top-0 h-screen z-40">
-              <div className="p-10 border-b border-white/5 relative overflow-hidden group">
+            <aside className={cn(
+              "hidden md:flex flex-col border-r border-white/5 bg-card/30 backdrop-blur-3xl sticky top-0 h-screen z-40 transition-all duration-300",
+              "w-80 group/sidebar hover:w-80",
+              "w-20 hover:w-80" // Starts collapsed, expands on hover
+            )}>
+              <div className="p-6 border-b border-white/5 relative overflow-hidden group">
                 <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                <h1 className="relative z-10 text-2xl font-black font-display text-primary leading-none tracking-tighter uppercase italic">
-                  BODY MÉTTRICA <span className="text-foreground">FJ</span>
-                </h1>
-                <p className="relative z-10 text-[9px] font-black uppercase tracking-[0.4em] text-foreground/20 mt-2">Performance Suite</p>
+                <div className="flex items-center gap-4">
+                  <div className="min-w-[40px] h-10 bg-brand-gradient rounded-xl flex items-center justify-center text-primary-foreground font-bold shadow-xl border border-white/10 shrink-0">
+                    B
+                  </div>
+                  <div className="overflow-hidden transition-all duration-300 group-hover/sidebar:opacity-100 opacity-0 group-hover/sidebar:translate-x-0 -translate-x-4">
+                    <h1 className="text-xl font-black font-display text-primary leading-none tracking-tighter uppercase italic whitespace-nowrap">
+                      BODY MÉTTRICA <span className="text-foreground">FJ</span>
+                    </h1>
+                    <p className="text-[8px] font-black uppercase tracking-[0.4em] text-foreground/20 mt-1">Performance Suite</p>
+                  </div>
+                </div>
               </div>
-              <nav className="flex-1 p-8 space-y-3 overflow-y-auto">
-                <SidebarLink to="/dashboard" icon={<LayoutDashboard size={22} />} label="DASHBOARD" />
-                <SidebarLink to="/goals" icon={<Target size={22} />} label="METAS" />
-                <SidebarLink to="/body" icon={<User size={22} />} label="COMPOSIÇÃO" />
-                <SidebarLink to="/nutrition" icon={<Utensils size={22} />} label="NUTRIÇÃO" />
-                <SidebarLink 
-                  to="/hydration" 
-                  icon={<Droplets size={22} />} 
-                  label="HIDRATAÇÃO" 
-                />
-                <SidebarLink to="/supplements" icon={<Pill size={22} />} label="PROTOCOLOS" />
-                <SidebarLink to="/training" icon={<Dumbbell size={22} />} label="PERFORMANCE" />
+              <nav className="flex-1 p-4 space-y-2 overflow-y-auto scrollbar-none">
+                <SidebarLink to="/dashboard" icon={<LayoutDashboard size={20} />} label="DASHBOARD" />
+                <SidebarLink to="/goals" icon={<Target size={20} />} label="METAS" />
+                <SidebarLink to="/body" icon={<User size={20} />} label="COMPOSIÇÃO" />
+                <SidebarLink to="/nutrition" icon={<Utensils size={20} />} label="NUTRIÇÃO" />
+                <SidebarLink to="/hydration" icon={<Droplets size={20} />} label="HIDRATAÇÃO" />
+                <SidebarLink to="/supplements" icon={<Pill size={20} />} label="PROTOCOLOS" />
+                <SidebarLink to="/training" icon={<Dumbbell size={20} />} label="PERFORMANCE" />
               </nav>
-              <div className="p-8 border-t border-white/5 space-y-6">
-                <div className="flex items-center justify-between px-5 py-3 bg-white/[0.03] rounded-2xl border border-white/5">
-                  <span className="text-[10px] font-black tracking-[0.2em] text-foreground/40 uppercase">TEMA</span>
+              <div className="p-4 border-t border-white/5 space-y-4">
+                <div className="flex items-center justify-between px-3 py-2 bg-white/[0.03] rounded-xl border border-white/5 overflow-hidden transition-all duration-300 group-hover/sidebar:opacity-100">
+                  <span className="text-[8px] font-black tracking-[0.2em] text-foreground/40 uppercase whitespace-nowrap opacity-0 group-hover/sidebar:opacity-100 transition-opacity">TEMA</span>
                   <ThemeToggle />
                 </div>
-                <SidebarLink to="/settings" icon={<Settings size={22} />} label="AJUSTES" />
+                <SidebarLink to="/settings" icon={<Settings size={20} />} label="AJUSTES" />
                 <button 
                   onClick={handleLogout}
-                  className="flex w-full items-center gap-5 px-5 py-4 text-[11px] font-black tracking-[0.2em] text-destructive hover:bg-destructive/10 rounded-2xl transition-all uppercase cursor-pointer group"
+                  className="w-full flex items-center gap-4 px-4 py-3 text-[11px] font-black tracking-widest text-destructive hover:bg-destructive/10 rounded-xl transition-all uppercase border-2 border-transparent group overflow-hidden"
                 >
-                  <LogOut size={22} className="group-hover:-translate-x-1 transition-transform" />
-                  SAIR
+                  <LogOut size={20} className="group-hover:scale-110 transition-transform shrink-0" />
+                  <span className="opacity-0 group-hover/sidebar:opacity-100 transition-opacity whitespace-nowrap">SAIR</span>
                 </button>
               </div>
             </aside>
@@ -507,10 +514,10 @@ function SidebarLink({ to, icon, label }: { to: string; icon: React.ReactNode; l
       to={to}
       activeProps={{ className: "bg-primary text-primary-foreground shadow-xl shadow-primary/20 scale-[1.02] border-primary" }}
       inactiveProps={{ className: "text-foreground/60 hover:bg-white/5 hover:text-foreground border-transparent" }}
-      className="flex items-center gap-4 px-4 py-3 text-[11px] font-black tracking-widest rounded-xl transition-all uppercase group border-2"
+      className="flex items-center gap-4 px-4 py-3 text-[11px] font-black tracking-widest rounded-xl transition-all uppercase group border-2 overflow-hidden whitespace-nowrap"
     >
-      <span className="group-hover:scale-110 transition-transform">{icon}</span>
-      {label}
+      <span className="group-hover:scale-110 transition-transform shrink-0">{icon}</span>
+      <span className="opacity-0 group-hover/sidebar:opacity-100 transition-opacity duration-300">{label}</span>
     </Link>
   );
 }
