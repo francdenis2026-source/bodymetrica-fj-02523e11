@@ -28,15 +28,28 @@ export const Route = createFileRoute("/dashboard/")({
 
 function DashboardPage() {
   const [isLoading, setIsLoading] = useState(true);
-  const userName = "Visitante"; // Mock data
-  const currentGoal = "Hipertrofia";
-  const weightChange = -0.5;
+  const [userData, setUserData] = useState<any>(null);
 
   useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const session = localStorage.getItem('bodymetrica_auth_session');
+      if (session) {
+        setUserData(JSON.parse(session));
+      }
+    }
     // Simulating initial load
     const timer = setTimeout(() => setIsLoading(false), 1000);
     return () => clearTimeout(timer);
   }, []);
+
+  const userName = userData?.name || "Visitante";
+  const currentGoalMap: Record<string, string> = {
+    'loss': 'Emagrecimento',
+    'gain': 'Hipertrofia',
+    'maint': 'Manutenção'
+  };
+  const currentGoal = currentGoalMap[userData?.profile?.goal] || "Hipertrofia";
+  const weightChange = -0.5;
 
   if (isLoading) {
     return (
