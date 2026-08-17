@@ -105,7 +105,7 @@ function BodyPage() {
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             <MetricCard 
               label="Peso" 
-              value="82.4 kg" 
+              value={`${userData?.profile?.weight || "82.4"} kg`} 
               change="-0.3 kg" 
               trend="down" 
               icon={<Scale className="h-4 w-4 text-primary" />} 
