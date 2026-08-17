@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { exportToCSV } from "@/lib/export";
 import { toast } from "sonner";
+import { SVGToast } from "@/components/ui/svg-toast";
 import { generateComparisonPDF, exportReportAsImage } from "@/lib/comparison-reports";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -192,7 +193,14 @@ function BodyPage() {
     setExportPassword("");
     setExportViewLimit("0");
     setExportExpiration("7");
-    toast.success(`${pendingExportType} gerado com sucesso!`);
+    toast.custom((t) => (
+      <SVGToast 
+        type="success"
+        title="EXPORTAÇÃO CONCLUÍDA"
+        message={`${pendingExportType} gerado com sucesso para sua evolução física.`}
+        onClose={() => toast.dismiss(t)}
+      />
+    ));
   };
 
   return (

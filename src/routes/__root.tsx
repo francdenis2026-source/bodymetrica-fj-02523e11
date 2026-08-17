@@ -13,6 +13,7 @@ import {
 import { useEffect, type ReactNode, useState } from "react";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
+import { SVGToast } from "@/components/ui/svg-toast";
 import { 
   LayoutDashboard, 
   Droplets, 
@@ -187,7 +188,14 @@ function RootComponent() {
 
   const handleManualSync = async () => {
     if (!isOnline) {
-      toast.error("Não é possível sincronizar offline.");
+      toast.custom((t) => (
+        <SVGToast 
+          type="error"
+          title="ERRO DE CONEXÃO"
+          message="Não é possível sincronizar offline. Verifique sua rede."
+          onClose={() => toast.dismiss(t)}
+        />
+      ));
       return;
     }
     setSyncStatus('syncing');
@@ -213,7 +221,14 @@ function RootComponent() {
         const res = await checkLicenseStatusFn();
         if (res.success && (res.status === 'revoked' || res.status === 'expired')) {
           handleLogout();
-          toast.error("Sua licença foi revogada ou expirou. Acesso encerrado.");
+          toast.custom((t) => (
+            <SVGToast 
+              type="error"
+              title="LICENÇA EXPIRADA"
+              message="Sua licença foi revogada ou expirou. Acesso encerrado."
+              onClose={() => toast.dismiss(t)}
+            />
+          ));
         }
 
         // Automatic e-mail check for near expiration could be handled here via a dedicated server function
@@ -304,13 +319,18 @@ function RootComponent() {
               if (newWorker) {
                 newWorker.addEventListener('statechange', () => {
                   if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                    toast.info("Nova versão disponível!", {
-                      action: {
-                        label: "Atualizar",
-                        onClick: () => window.location.reload()
-                      },
-                      duration: 10000
-                    });
+                    toast.custom((t) => (
+                      <SVGToast 
+                        type="info"
+                        title="ATUALIZAÇÃO DISPONÍVEL"
+                        message="Uma nova versão da suíte de performance está disponível."
+                        action={{
+                          label: "ATUALIZAR",
+                          onClick: () => window.location.reload()
+                        }}
+                        onClose={() => toast.dismiss(t)}
+                      />
+                    ), { duration: 10000 });
                   }
                 });
               }
@@ -328,7 +348,14 @@ function RootComponent() {
       setSyncStatus('syncing');
       syncOfflineActions().then(() => setSyncStatus('synced'));
       setTimeout(() => setSyncStatus('idle'), 3000);
-      toast.success("Conexão restabelecida. Sincronizando dados...");
+      toast.custom((t) => (
+        <SVGToast 
+          type="success"
+          title="SINCRO ESTRUTURAL"
+          message="Conexão restabelecida. Sincronizando dados de performance..."
+          onClose={() => toast.dismiss(t)}
+        />
+      ));
     };
 
     const handleOffline = () => {
@@ -359,7 +386,14 @@ function RootComponent() {
     clearSession();
     setIsLoggedIn(false);
     queryClient.clear();
-    toast.success("Sessão encerrada com sucesso");
+    toast.custom((t) => (
+      <SVGToast 
+        type="success"
+        title="SESSÃO ENCERRADA"
+        message="Logout realizado com sucesso. Até a próxima evolução."
+        onClose={() => toast.dismiss(t)}
+      />
+    ));
     window.location.href = "/auth";
   };
   
