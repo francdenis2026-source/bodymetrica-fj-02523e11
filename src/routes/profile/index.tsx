@@ -13,7 +13,10 @@ import {
   AlertTriangle,
   ChevronRight,
   Clock,
-  ArrowLeft
+  ArrowLeft,
+  Activity,
+  Lock,
+  RefreshCw
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -22,8 +25,26 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { SVGToast } from "@/components/ui/svg-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { getSession, updateProfile, changePassword } from "@/lib/auth/auth.functions";
+import { 
+  getSession, 
+  updateProfile, 
+  changePassword, 
+  changeEmail,
+  deleteAccount,
+  getSecurityLogs,
+  logoutSession
+} from "@/lib/auth/auth.functions";
 import { Skeleton } from "@/components/ui/skeleton";
+import { 
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Badge } from "@/components/ui/badge";
 
 export const Route = createFileRoute("/profile/")({
   component: ProfilePage,
