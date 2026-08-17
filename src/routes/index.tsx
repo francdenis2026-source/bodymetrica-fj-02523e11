@@ -56,7 +56,7 @@ function Index() {
             </div>
             
             <Button variant="ghost" size="sm" asChild className="text-foreground/80 font-semibold hover:text-primary hover:bg-white/5">
-              <Link to="/auth" search={{ registerMode: false, name: "", birthDate: "" }}>ENTRAR</Link>
+              <Link to="/auth" search={{ registerMode: false, name: "", birthDate: "", goal: "", weight: "", height: "", activityLevel: "" }}>ENTRAR</Link>
             </Button>
           </div>
         </header>
