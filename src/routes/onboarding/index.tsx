@@ -25,13 +25,29 @@ function OnboardingPage() {
   const [step, setStep] = useState(1);
   const totalSteps = 4;
   const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    name: "",
+    birthDate: "",
+    goal: "gain",
+    weight: "",
+    height: "",
+    activityLevel: "Moderadamente ativo (3-5 dias/semana)"
+  });
 
   const nextStep = () => setStep((s) => Math.min(s + 1, totalSteps));
   const prevStep = () => setStep((s) => Math.max(s - 1, 1));
   
   const finish = () => {
-    // In a real app, save data here
-    navigate({ to: "/dashboard" });
+    // Navigate to completion screen (step 5 if we had one) or redirect
+    // For now, we go to final register step
+    navigate({ 
+      to: "/auth", 
+      search: { 
+        registerMode: true,
+        name: formData.name,
+        birthDate: formData.birthDate
+      } 
+    });
   };
 
   return (
@@ -64,14 +80,20 @@ function OnboardingPage() {
                 <p className="text-muted-foreground text-sm">Vamos começar com o básico. Como devemos te chamar?</p>
               </div>
               <div className="space-y-4">
-                <FormField label="Nome Completo" placeholder="Ex: João Silva" />
+                <FormField 
+                  label="Nome Completo" 
+                  placeholder="Ex: João Silva" 
+                  value={formData.name}
+                  onChange={(e: any) => setFormData({...formData, name: e.target.value})}
+                />
                 <FormField 
                   label="Data de Nascimento" 
                   type="date" 
+                  value={formData.birthDate}
+                  onChange={(e: any) => setFormData({...formData, birthDate: e.target.value})}
                   description="Usamos isso para calcular suas necessidades metabólicas."
                 />
               </div>
-
             </div>
           )}
 
@@ -82,9 +104,30 @@ function OnboardingPage() {
                 <p className="text-muted-foreground text-sm">O que você deseja alcançar com o Body Métrica FJ?</p>
               </div>
               <div className="grid gap-4">
-                <GoalOption id="loss" icon={<Scale />} title="Emagrecimento" description="Foco em perda de gordura e definição." />
-                <GoalOption id="gain" icon={<Target />} title="Hipertrofia" description="Foco em ganho de massa muscular." isActive />
-                <GoalOption id="maint" icon={<User />} title="Manutenção" description="Manter o peso e melhorar a saúde." />
+                <GoalOption 
+                  id="loss" 
+                  icon={<Scale />} 
+                  title="Emagrecimento" 
+                  description="Foco em perda de gordura e definição." 
+                  isActive={formData.goal === 'loss'}
+                  onClick={() => setFormData({...formData, goal: 'loss'})}
+                />
+                <GoalOption 
+                  id="gain" 
+                  icon={<Target />} 
+                  title="Hipertrofia" 
+                  description="Foco em ganho de massa muscular." 
+                  isActive={formData.goal === 'gain'}
+                  onClick={() => setFormData({...formData, goal: 'gain'})}
+                />
+                <GoalOption 
+                  id="maint" 
+                  icon={<User />} 
+                  title="Manutenção" 
+                  description="Manter o peso e melhorar a saúde." 
+                  isActive={formData.goal === 'maint'}
+                  onClick={() => setFormData({...formData, goal: 'maint'})}
+                />
               </div>
             </div>
           )}
@@ -96,16 +139,32 @@ function OnboardingPage() {
                 <p className="text-muted-foreground text-sm">Precisamos dessas medidas para calcular suas metas iniciais.</p>
               </div>
               <div className="grid grid-cols-2 gap-4">
-                <FormField label="Peso (kg)" type="number" placeholder="00.0" />
-                <FormField label="Altura (cm)" type="number" placeholder="170" />
+                <FormField 
+                  label="Peso (kg)" 
+                  type="number" 
+                  placeholder="00.0" 
+                  value={formData.weight}
+                  onChange={(e: any) => setFormData({...formData, weight: e.target.value})}
+                />
+                <FormField 
+                  label="Altura (cm)" 
+                  type="number" 
+                  placeholder="170" 
+                  value={formData.height}
+                  onChange={(e: any) => setFormData({...formData, height: e.target.value})}
+                />
               </div>
 
               <div className="space-y-2">
                 <Label>Nível de Atividade Física</Label>
-                <select className="flex h-12 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+                <select 
+                  className="flex h-12 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                  value={formData.activityLevel}
+                  onChange={(e) => setFormData({...formData, activityLevel: e.target.value})}
+                >
                   <option>Sedentário (pouco ou nenhum exercício)</option>
                   <option>Levemente ativo (1-3 dias/semana)</option>
-                  <option selected>Moderadamente ativo (3-5 dias/semana)</option>
+                  <option>Moderadamente ativo (3-5 dias/semana)</option>
                   <option>Muito ativo (6-7 dias/semana)</option>
                   <option>Extremamente ativo (trabalho braçal + treino)</option>
                 </select>
@@ -159,12 +218,10 @@ function OnboardingPage() {
   );
 }
 
-function GoalOption({ id, icon, title, description, isActive: initialActive = false }: { id: string; icon: React.ReactNode; title: string; description: string; isActive?: boolean }) {
-  const [isActive, setIsActive] = useState(initialActive);
-  
+function GoalOption({ id, icon, title, description, isActive, onClick }: { id: string; icon: React.ReactNode; title: string; description: string; isActive: boolean; onClick: () => void }) {
   return (
     <button 
-      onClick={() => setIsActive(!isActive)}
+      onClick={onClick}
       className={`w-full text-left p-4 rounded-xl border-2 transition-all flex items-center gap-4 ${isActive ? 'border-primary bg-primary/5 ring-1 ring-primary' : 'border-transparent surface hover:border-primary/20'}`}
     >
       <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${isActive ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'}`}>
