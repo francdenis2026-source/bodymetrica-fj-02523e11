@@ -80,7 +80,7 @@ function AuthPage() {
   const navigate = useNavigate();
   const searchParams = Route.useSearch();
   const [isRegistering, setIsRegistering] = useState(searchParams.registerMode);
-  const [isResetting, setIsResetting] = useState(false);
+  
   const [isUpdatingPassword, setIsUpdatingPassword] = useState(searchParams.reset);
   const [isLoading, setIsLoading] = useState(false);
   const [isBlocked, setIsBlocked] = useState(false);
@@ -98,11 +98,6 @@ function AuthPage() {
       password: "", 
       name: searchParams.name || "" 
     },
-  });
-
-  const resetForm = useForm<z.infer<typeof resetSchema>>({
-    resolver: zodResolver(resetSchema),
-    defaultValues: { email: "" },
   });
 
   const newPasswordForm = useForm<z.infer<typeof newPasswordSchema>>({
