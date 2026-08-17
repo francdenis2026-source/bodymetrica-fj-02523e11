@@ -68,6 +68,15 @@ function DashboardPage() {
     );
   }
 
+  const userName = userData?.name || "Visitante";
+  const currentGoalMap: Record<string, string> = {
+    'loss': 'Emagrecimento',
+    'gain': 'Hipertrofia',
+    'maint': 'Manutenção'
+  };
+  const currentGoal = currentGoalMap[userData?.profile?.goal] || "Hipertrofia";
+  const weightChange = -0.5;
+
   return (
     <div className="flex-1 space-y-12 p-4 md:p-12 pt-10 relative overflow-hidden bg-background">
       {/* Decorative Module Hero Image */}
