@@ -182,6 +182,48 @@ export const logout = createServerFn({ method: "POST" })
     return { success: !error };
   });
 
+export const updateProfile = createServerFn({ method: "POST" })
+  .inputValidator((data) => z.object({
+    name: z.string().optional(),
+    goal: z.string().optional(),
+    weight: z.number().optional(),
+    height: z.number().optional(),
+    activityLevel: z.string().optional(),
+  }).parse(data))
+  .handler(async ({ data }) => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return { success: false, message: "Não autenticado" };
+
+    const { error } = await supabase
+      .from('profiles')
+      .update({
+        name: data.name ?? null,
+        goal: data.goal ?? null,
+        weight: data.weight ?? null,
+        height: data.height ?? null,
+        activity_level: data.activityLevel ?? null,
+      })
+      .eq('id', user.id);
+
+    return { success: !error, message: error?.message };
+  });
+
+export const changePassword = createServerFn({ method: "POST" })
+  .inputValidator((data) => z.object({
+    currentPassword: z.string(),
+    newPassword: z.string().min(6),
+  }).parse(data))
+  .handler(async ({ data }) => {
+    // Supabase standard update handles password hashing
+    const { error } = await supabase.auth.updateUser({
+      password: data.newPassword,
+    });
+
+    
+    return { success: !error, message: error?.message };
+  });
+
+
 // Client-side helpers
 export const getSession = () => {
   if (typeof window === 'undefined') return null;
