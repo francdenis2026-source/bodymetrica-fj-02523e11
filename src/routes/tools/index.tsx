@@ -181,7 +181,7 @@ function ToolsPage() {
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Button size="lg" variant="secondary" className="px-10 h-14 rounded-2xl font-black uppercase tracking-widest hover:scale-105 transition-all shadow-xl w-full sm:w-auto" asChild>
-                <Link to="/auth" search={{ registerMode: true, name: "", birthDate: "", goal: "", weight: "", height: "", activityLevel: "" }}>INICIAR CADASTRO</Link>
+                <Link to="/auth" search={{ registerMode: true, reset: false, name: "", birthDate: "", goal: "", weight: "", height: "", activityLevel: "" } as any}>INICIAR CADASTRO</Link>
               </Button>
               <Button size="lg" variant="outline" className="px-10 h-14 rounded-2xl font-black uppercase tracking-widest backdrop-blur-md bg-white/5 border-white/10 hover:bg-white/10 text-white w-full sm:w-auto" asChild>
                 <Link to="/help">CENTRAL DE AJUDA</Link>
