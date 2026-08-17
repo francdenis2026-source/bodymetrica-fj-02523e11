@@ -214,12 +214,11 @@ export const changePassword = createServerFn({ method: "POST" })
     newPassword: z.string().min(6),
   }).parse(data))
   .handler(async ({ data }) => {
-    // Note: Supabase JS client doesn't have a direct "verify current password" function
-    // in its client-side SDK without re-authenticating. 
-    // For this flow, we will assume re-auth or similar verification logic.
+    // Supabase standard update handles password hashing
     const { error } = await supabase.auth.updateUser({
       password: data.newPassword,
     });
+
     
     return { success: !error, message: error?.message };
   });
