@@ -251,7 +251,7 @@ function RootComponent() {
           showSidebar && "mb-20 md:mb-0"
         )}>
           <div className="flex-1">
-            <AccessGate isAllowed={isPublicRoute || isLoggedIn}>
+            <AccessGate isAllowed={isPublicRoute || isLoggedIn} needsVerification={needsVerification}>
               <Outlet />
             </AccessGate>
           </div>
