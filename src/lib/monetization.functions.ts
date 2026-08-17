@@ -180,10 +180,12 @@ export const revokeLicense = createServerFn({ method: "POST" })
         .update({ license_status: 'revoked' })
         .eq('id', license.user_id);
       
-      // Notify user via email (simulated)
-      const { sendLicenseEmail } = await import("./email.functions");
-      // Use cast to bypass TS missing email column error if it's not in the types but expected in the logic
-      sendLicenseEmail({ data: { email: 'user@example.com', type: 'revoked', details: { reason: data.reason } } }).catch(console.error);
+      // Notify user via email
+      const { data: userData } = await supabaseAdmin.from('profiles').select('email').eq('id', license.user_id).single();
+      if (userData?.email) {
+        const { sendLicenseEmail } = await import("./email.functions");
+        sendLicenseEmail({ data: { email: userData.email, type: 'revoked', details: { reason: data.reason } } }).catch(console.error);
+      }
     }
 
     // Audit log
