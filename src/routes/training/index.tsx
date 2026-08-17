@@ -14,6 +14,7 @@ import {
   Info,
   LifeBuoy
 } from "lucide-react";
+import { ModuleHeader } from "@/components/module-header";
 
 export const Route = createFileRoute("/training/")({
   component: TrainingPage,
@@ -21,33 +22,30 @@ export const Route = createFileRoute("/training/")({
 
 function TrainingPage() {
   return (
-    <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 relative">
+    <div className="flex-1 space-y-8 p-4 md:p-8 pt-6 relative overflow-hidden">
       {/* Decorative Module Hero Image */}
-      <div className="absolute top-0 right-0 w-64 h-64 opacity-5 pointer-events-none -z-10 translate-x-1/4 -translate-y-1/4">
-        <Dumbbell size={256} className="text-primary" />
+      <div className="absolute top-0 right-0 w-96 h-96 opacity-[0.03] pointer-events-none -z-10 translate-x-1/4 -translate-y-1/4">
+        <Dumbbell size={384} className="text-primary" />
       </div>
 
-      <div className="flex items-center justify-between relative">
-        <div className="space-y-1">
-          <h2 className="text-3xl font-bold tracking-tight font-display text-primary flex items-center gap-3">
-            <Dumbbell className="text-primary-foreground bg-brand-gradient p-1.5 rounded-lg" size={32} />
-            Treinos
-          </h2>
-          <p className="text-muted-foreground text-sm font-medium">
-            Evolução de carga e consistência nos treinos.
-          </p>
-        </div>
-        <div className="flex gap-2">
-          <Button variant="outline" size="sm" className="gap-2" asChild>
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <ModuleHeader 
+          title="Treinos"
+          description="Evolução estratégica de carga, consistência e performance nos seus treinamentos."
+          icon={Dumbbell}
+        />
+        <div className="flex gap-2 relative z-10">
+          <Button variant="outline" size="sm" className="gap-2 h-10 px-4 font-semibold border-2" asChild>
             <Link to="/help">
-              <LifeBuoy size={16} /> Central de Ajuda
+              <LifeBuoy size={18} /> Ajuda
             </Link>
           </Button>
-          <Button size="sm" className="gap-2 bg-brand-gradient">
-            <Play size={16} fill="currentColor" /> Iniciar Treino
+          <Button size="sm" className="gap-2 h-10 px-4 font-semibold bg-brand-gradient shadow-lg shadow-primary/20">
+            <Play size={18} fill="currentColor" /> Iniciar Treino
           </Button>
         </div>
       </div>
+
 
       <div className="grid gap-4 md:grid-cols-3">
         <Card className="surface border-none p-4 flex flex-col items-center justify-center text-center space-y-2">

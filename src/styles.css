@@ -161,14 +161,17 @@
   body {
     background-color: var(--color-background);
     background-image: 
-      radial-gradient(at 0% 0%, oklch(0.45 0.09 226 / 0.03) 0px, transparent 50%),
-      radial-gradient(at 100% 0%, oklch(0.6 0.16 152 / 0.03) 0px, transparent 50%);
+      radial-gradient(at 0% 0%, oklch(0.45 0.09 226 / 0.05) 0px, transparent 50%),
+      radial-gradient(at 100% 0%, oklch(0.6 0.16 152 / 0.05) 0px, transparent 50%),
+      radial-gradient(at 50% 100%, oklch(0.45 0.09 226 / 0.02) 0px, transparent 50%);
     background-attachment: fixed;
     color: var(--color-foreground);
     font-family: var(--font-sans);
-    font-feature-settings: "cv11", "ss01";
+    font-feature-settings: "cv11", "ss01", "cv08";
     text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
   }
+
 
   h1,
   h2,
