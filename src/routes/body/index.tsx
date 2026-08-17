@@ -147,6 +147,51 @@ function BodyPage() {
   }
 
 
+  const filteredHistory = exportHistory.filter(item => {
+    const matchesSearch = (item.fileName || "").toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesFilter = filterType === "ALL" || item.type === filterType;
+    return matchesSearch && matchesFilter;
+  });
+
+  const handleExportClick = (type: 'PDF' | 'PNG') => {
+    setPendingExportType(type);
+    setIsExportSettingsOpen(true);
+  };
+
+  const executeExport = async () => {
+    const options = {
+      password: exportPassword || undefined,
+      viewLimit: parseInt(exportViewLimit) > 0 ? parseInt(exportViewLimit) : undefined
+    };
+
+    if (pendingExportType === 'PDF') {
+      await generateComparisonPDF({
+        userName: userData?.name || "Usuário",
+        period: "Mensal",
+        bodyWeightChange: "-2.6 kg",
+        muscleMassChange: "+0.5 kg",
+        fatPercentChange: "-1.2%",
+        weightData: [],
+        macros: { calories: 2400, protein: 180, carbs: 250, fat: 80 },
+        hydrationGoal: 3000,
+        hydrationCurrent: 2100,
+        summary: "Sua aderência semanal atingiu 92%, com foco excelente na ingestão proteica. Recomendamos manter o volume de treino atual, pois a resposta muscular está acima da média para o período.",
+        ...options
+      });
+    } else if (pendingExportType === 'PNG') {
+      await exportReportAsImage('comparison-report-content', 'Evolucao_BodyMetrica', options);
+    }
+
+    // Refresh history
+    const history = JSON.parse(localStorage.getItem('bodymetrica_export_history') || '[]');
+    setExportHistory(history);
+    
+    setIsExportSettingsOpen(false);
+    setExportPassword("");
+    setExportViewLimit("0");
+    toast.success(`${pendingExportType} gerado com sucesso!`);
+  };
+
   return (
     <div 
       ref={scrollContainerRef}
@@ -373,7 +418,7 @@ function BodyPage() {
                     variant="ghost" 
                     size="icon" 
                     title="Exportar como Imagem"
-                    onClick={() => exportReportAsImage('comparison-report-content', 'Evolucao_BodyMetrica')}
+                  onClick={() => handleExportClick('PNG')}
                   >
                     <ImageIcon size={16} />
                   </Button>
@@ -412,18 +457,7 @@ function BodyPage() {
               <Button 
                 variant="outline" 
                 className="gap-2"
-                onClick={() => generateComparisonPDF({
-                  userName: userData?.name || "Usuário",
-                  period: "Mensal",
-                  bodyWeightChange: "-2.6 kg",
-                  muscleMassChange: "+0.5 kg",
-                  fatPercentChange: "-1.2%",
-                  weightData: [],
-                  macros: { calories: 2400, protein: 180, carbs: 250, fat: 80 },
-                  hydrationGoal: 3000,
-                  hydrationCurrent: 2100,
-                  summary: "Sua aderência semanal atingiu 92%, com foco excelente na ingestão proteica. Recomendamos manter o volume de treino atual, pois a resposta muscular está acima da média para o período."
-                })}
+                onClick={() => handleExportClick('PDF')}
               >
                 Ver Comparativo Antes e Depois
               </Button>
@@ -435,18 +469,41 @@ function BodyPage() {
           <Card className="surface border-none p-6">
             <CardHeader className="px-0 pt-0">
               <CardTitle className="text-xl font-black font-display uppercase italic tracking-tighter">HISTÓRICO DE EXPORTAÇÕES</CardTitle>
-              <p className="text-[10px] font-bold text-foreground/40 uppercase tracking-widest">LINKS PÚBLICOS E DOWNLOADS REALIZADOS</p>
+              <div className="flex flex-col md:flex-row gap-4 mt-6">
+                <div className="relative flex-1">
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" size={16} />
+                  <Input 
+                    placeholder="BUSCAR NO HISTÓRICO..." 
+                    className="pl-12 h-12 bg-white/5 border-white/10 text-[10px] font-black uppercase tracking-widest"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                </div>
+                <Select value={filterType} onValueChange={setFilterType}>
+                  <SelectTrigger className="w-full md:w-[180px] h-12 bg-white/5 border-white/10 rounded-xl text-[10px] font-black uppercase tracking-widest px-6">
+                    <div className="flex items-center gap-2">
+                      <Filter size={14} />
+                      <SelectValue placeholder="FILTRAR" />
+                    </div>
+                  </SelectTrigger>
+                  <SelectContent className="bg-background border-white/10 rounded-xl">
+                    <SelectItem value="ALL" className="text-[10px] font-black uppercase tracking-widest focus:bg-primary/20">TODOS</SelectItem>
+                    <SelectItem value="PDF" className="text-[10px] font-black uppercase tracking-widest focus:bg-primary/20">PDF</SelectItem>
+                    <SelectItem value="PNG" className="text-[10px] font-black uppercase tracking-widest focus:bg-primary/20">IMAGEM</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </CardHeader>
             <CardContent className="px-0 pt-6">
-              {exportHistory.length === 0 ? (
+              {filteredHistory.length === 0 ? (
                 <EmptyState 
                   icon={FileDown}
-                  title="NENHUMA EXPORTAÇÃO"
-                  description="Seus relatórios gerados aparecerão aqui para acesso rápido e compartilhamento."
+                  title={searchQuery || filterType !== "ALL" ? "NENHUM RESULTADO" : "NENHUMA EXPORTAÇÃO"}
+                  description={searchQuery || filterType !== "ALL" ? "Tente ajustar seus filtros ou busca." : "Seus relatórios gerados aparecerão aqui para acesso rápido e compartilhamento."}
                 />
               ) : (
                 <div className="space-y-4">
-                  {exportHistory.map((item) => (
+                  {filteredHistory.map((item) => (
                     <div key={item.id} className="flex items-center justify-between p-6 rounded-[1.5rem] bg-white/[0.03] border border-white/5 group hover:bg-white/5 transition-all">
                       <div className="flex gap-4 items-center">
                         <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${item.type === 'PDF' ? 'bg-primary/10 text-primary' : 'bg-success/10 text-success'}`}>
@@ -456,6 +513,18 @@ function BodyPage() {
                           <div className="text-xs font-black uppercase tracking-widest">{item.fileName}</div>
                           <div className="text-[9px] font-bold text-muted-foreground uppercase mt-1">
                             {new Date(item.date).toLocaleDateString()} • Expira em: {new Date(item.expiresAt).toLocaleDateString()}
+                          </div>
+                          <div className="flex gap-2 mt-2">
+                            {item.password && (
+                              <div className="flex items-center gap-1 text-[8px] font-black text-primary uppercase tracking-widest bg-primary/10 px-2 py-0.5 rounded-full">
+                                <Lock size={10} /> PROTEGIDO
+                              </div>
+                            )}
+                            {item.viewLimit && (
+                              <div className="flex items-center gap-1 text-[8px] font-black text-info uppercase tracking-widest bg-info/10 px-2 py-0.5 rounded-full">
+                                <Eye size={10} /> {item.viewsCount || 0}/{item.viewLimit} VISUALIZAÇÕES
+                              </div>
+                            )}
                           </div>
                         </div>
                       </div>
@@ -502,6 +571,66 @@ function BodyPage() {
 
         </AnimatePresence>
       </Tabs>
+
+      <Dialog open={isExportSettingsOpen} onOpenChange={setIsExportSettingsOpen}>
+        <DialogContent className="surface border-white/10 bg-background/95 backdrop-blur-3xl rounded-[2.5rem] p-8 max-w-md">
+          <DialogHeader className="space-y-3">
+            <DialogTitle className="text-xl font-black font-display tracking-tighter italic uppercase text-primary">Configurações de Segurança</DialogTitle>
+            <DialogDescription className="text-[10px] font-bold text-foreground/40 uppercase tracking-widest leading-relaxed">
+              Adicione uma camada extra de proteção ao seu link público de {pendingExportType}.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-6 py-6">
+            <div className="space-y-3">
+              <label className="text-[10px] font-black uppercase tracking-widest text-foreground/60 flex items-center gap-2">
+                <Lock size={14} className="text-primary" /> Senha de Acesso (Opcional)
+              </label>
+              <Input 
+                type="password"
+                placeholder="DIGITE UMA SENHA..."
+                className="h-14 bg-white/5 border-white/10 focus:border-primary/50 text-xs font-black tracking-[0.2em]"
+                value={exportPassword}
+                onChange={(e) => setExportPassword(e.target.value)}
+              />
+            </div>
+            
+            <div className="space-y-3">
+              <label className="text-[10px] font-black uppercase tracking-widest text-foreground/60 flex items-center gap-2">
+                <Eye size={14} className="text-info" /> Limite de Visualizações (Opcional)
+              </label>
+              <Select value={exportViewLimit} onValueChange={setExportViewLimit}>
+                <SelectTrigger className="h-14 bg-white/5 border-white/10 focus:border-info/50 text-[10px] font-black uppercase tracking-[0.2em] px-6">
+                  <SelectValue placeholder="SEM LIMITE" />
+                </SelectTrigger>
+                <SelectContent className="bg-background border-white/10 rounded-xl">
+                  <SelectItem value="0" className="text-[10px] font-black uppercase tracking-widest focus:bg-primary/20">SEM LIMITE</SelectItem>
+                  <SelectItem value="1" className="text-[10px] font-black uppercase tracking-widest focus:bg-primary/20">1 VISUALIZAÇÃO</SelectItem>
+                  <SelectItem value="5" className="text-[10px] font-black uppercase tracking-widest focus:bg-primary/20">5 VISUALIZAÇÕES</SelectItem>
+                  <SelectItem value="10" className="text-[10px] font-black uppercase tracking-widest focus:bg-primary/20">10 VISUALIZAÇÕES</SelectItem>
+                  <SelectItem value="50" className="text-[10px] font-black uppercase tracking-widest focus:bg-primary/20">50 VISUALIZAÇÕES</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          <DialogFooter className="gap-3">
+            <Button 
+              variant="outline" 
+              className="h-14 px-8 rounded-xl font-black uppercase tracking-widest text-[10px] border-white/10 hover:bg-white/5"
+              onClick={() => setIsExportSettingsOpen(false)}
+            >
+              Cancelar
+            </Button>
+            <Button 
+              className="h-14 flex-1 rounded-xl font-black uppercase tracking-widest text-[10px] bg-brand-gradient shadow-2xl hover:scale-[1.02] transition-all"
+              onClick={executeExport}
+            >
+              Gerar {pendingExportType}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
