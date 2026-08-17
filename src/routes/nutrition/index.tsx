@@ -12,6 +12,7 @@ import {
   ChevronRight, 
   Search, 
   Info,
+  History as HistoryIcon,
   LifeBuoy,
   Calendar,
   Heart
@@ -126,7 +127,7 @@ function NutritionPage() {
                 <CardDescription className="text-[10px] font-bold uppercase tracking-widest opacity-60">Histórico de consumo e validação de macros</CardDescription>
               </div>
               <Button size="sm" variant="outline" className="text-[10px] font-bold uppercase tracking-widest">
-                <History size={14} className="mr-2" /> Histórico
+                <HistoryIcon size={14} className="mr-2" /> Histórico
               </Button>
             </CardHeader>
             <CardContent className="px-0 space-y-4">
