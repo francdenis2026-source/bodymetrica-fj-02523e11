@@ -375,11 +375,12 @@ function RootComponent() {
           {syncStatus === 'syncing' ? (
             <Loader2 className="w-3 h-3 animate-spin text-primary" />
           ) : (
-            <StatusIcon isOnline={isOnline} />
+            <StatusIcon isOnline={actualIsOnline} />
           )}
           <span className="text-[10px] font-black uppercase tracking-widest text-foreground/60">
-            {syncStatus === 'syncing' ? 'Sincronizando...' : isOnline ? 'Online' : 'Offline'}
+            {syncStatus === 'syncing' ? 'Sincronizando...' : actualIsOnline ? 'Online' : 'Offline'}
           </span>
+
 
           
           {isOnline && (
