@@ -30,6 +30,11 @@ import { validateLicense, generateLicenseKey } from "@/lib/monetization.function
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { useNavigate } from "@tanstack/react-router";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
+import { Badge } from "@/components/ui/badge";
+import { AlertCircle } from "lucide-react";
+
 
 export const Route = createFileRoute("/settings/")({
   component: SettingsPage,
