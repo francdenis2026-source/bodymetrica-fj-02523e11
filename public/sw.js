@@ -1,10 +1,11 @@
-const CACHE_NAME = 'body-metrica-v2'; // Bump version
+const CACHE_NAME = 'body-metrica-v3'; // Bumped for update prompt and better assets
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
   '/manifest.json',
   '/favicon.svg',
-  '/robots.txt'
+  '/robots.txt',
+  '/offline.html'
 ];
 
 // Google Fonts and external resources patterns
@@ -85,9 +86,9 @@ self.addEventListener('fetch', (event) => {
           return response;
         })
         .catch(() => {
-          // Return index.html for navigation requests (SPA support offline)
+          // Return offline.html for navigation requests
           if (event.request.mode === 'navigate') {
-            return caches.match('/');
+            return caches.match('/offline.html');
           }
           return null;
         });
