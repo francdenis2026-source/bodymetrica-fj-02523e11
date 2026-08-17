@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { exportToCSV } from "@/lib/export";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -12,7 +13,8 @@ import {
   Camera,
   TrendingUp,
   Info,
-  LifeBuoy
+  LifeBuoy,
+  FileDown
  } from "lucide-react";
 import { 
   LineChart, 
@@ -207,6 +209,13 @@ function BodyPage() {
                 </Button>
                 <Button className="gap-2 h-12 px-6 font-black uppercase tracking-widest bg-brand-gradient shadow-2xl shadow-primary/40 hover:scale-105 transition-all border-none">
                   <Plus size={18} /> REGISTRAR
+                </Button>
+                <Button 
+                  variant="outline"
+                  className="gap-2 h-12 px-6 font-black uppercase tracking-widest border-2 bg-white/5 border-white/10"
+                  onClick={() => exportToCSV(mockWeightData, 'Peso_BodyMetrica')}
+                >
+                  <FileDown size={18} /> CSV
                 </Button>
               </div>
             </CardHeader>
