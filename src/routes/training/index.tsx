@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { ModuleHeader } from "@/components/module-header";
 import { Skeleton } from "@/components/ui/skeleton";
+import { PageHeaderSkeleton, StatsSkeleton } from "@/components/ui/loading-states";
 import { Input } from "@/components/ui/input";
 import { getSession } from "@/lib/auth/auth.functions";
 
@@ -43,22 +44,13 @@ function TrainingPage() {
 
   if (isLoading) {
     return (
-      <div className="flex-1 space-y-12 p-4 md:p-12 pt-10 bg-background">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
-          <div className="flex items-center gap-6">
-            <Skeleton className="w-20 h-20 rounded-3xl" />
-            <div className="space-y-2">
-              <Skeleton className="w-32 h-6" />
-              <Skeleton className="w-64 h-12" />
-            </div>
-          </div>
+      <div className="flex-1 space-y-12 p-4 md:p-12 pt-10 bg-background animate-in fade-in duration-700">
+        <PageHeaderSkeleton />
+        <StatsSkeleton count={3} />
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {[1, 2, 3].map(i => <Skeleton key={i} className="h-64 rounded-[2.5rem]" />)}
         </div>
-        <div className="grid gap-4 md:grid-cols-3">
-          {[1, 2, 3].map(i => <Skeleton key={i} className="h-32 rounded-2xl" />)}
-        </div>
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {[1, 2, 3].map(i => <Skeleton key={i} className="h-48 rounded-2xl" />)}
-        </div>
+        <Skeleton className="h-96 rounded-[2.5rem] w-full" />
       </div>
     );
   }
