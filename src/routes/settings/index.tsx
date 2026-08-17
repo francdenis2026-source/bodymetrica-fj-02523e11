@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -12,7 +12,8 @@ import {
   Smartphone,
   Download,
   Trash2,
-  ChevronRight
+  ChevronRight,
+  LifeBuoy
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
@@ -50,6 +51,15 @@ function SettingsPage() {
               <SettingsLink icon={<User size={18} />} label="Dados Pessoais" />
               <SettingsLink icon={<Smartphone size={18} />} label="Dispositivos Conectados" />
               <SettingsLink icon={<Download size={18} />} label="Exportar Meus Dados (LGPD)" />
+              <Link to="/help" className="flex w-full items-center justify-between px-6 py-4 hover:bg-muted/30 transition-colors group">
+                <div className="flex items-center gap-4">
+                  <div className="text-muted-foreground group-hover:text-primary transition-colors">
+                    <LifeBuoy size={18} />
+                  </div>
+                  <span className="text-sm font-medium">Central de Ajuda (FAQ)</span>
+                </div>
+                <ChevronRight size={16} className="text-muted-foreground group-hover:translate-x-1 transition-transform" />
+              </Link>
             </div>
           </CardContent>
         </Card>
