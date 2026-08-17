@@ -33,6 +33,18 @@ import { ResponsiveHero } from "@/components/responsive-hero";
 
 export const Route = createFileRoute("/")({
   component: Index,
+  validateSearch: (search: Record<string, unknown>) => {
+    return {
+      registerMode: (search['registerMode'] as boolean) || false,
+      reset: (search['reset'] as boolean) || false,
+      name: (search['name'] as string) || "",
+      birthDate: (search['birthDate'] as string) || "",
+      goal: (search['goal'] as string) || "",
+      weight: (search['weight'] as string) || "",
+      height: (search['height'] as string) || "",
+      activityLevel: (search['activityLevel'] as string) || "",
+    };
+  },
   head: () => ({
     title: "Body Métrica FJ — Suíte de Composição Corporal e Saúde",
     meta: [
