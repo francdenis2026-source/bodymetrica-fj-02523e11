@@ -42,7 +42,7 @@ function AdminDashboard() {
         <div className="space-y-1">
           <h2 className="text-2xl font-bold tracking-tight font-display text-primary">Painel de Controle</h2>
           <p className="text-muted-foreground text-sm">
-            Configurar perfis de acesso e permissões no painel administrativo, incluindo auditoria de ações e trilha de eventos por usuário.
+            Gerenciamento administrativo de clientes, auditoria e relatórios.
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -66,7 +66,7 @@ function AdminDashboard() {
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-7">
           <div className="space-y-1">
             <CardTitle className="text-xl font-display">Gerenciamento de Clientes</CardTitle>
-            <CardDescription className="text-xs">Implementar exportação de relatórios em CSV e PDF no dashboard administrativo com filtros por período e status.</CardDescription>
+            <CardDescription className="text-xs">Lista completa de usuários e status de acesso.</CardDescription>
           </div>
           <div className="flex items-center gap-2">
             <div className="relative w-64 hidden md:block">
