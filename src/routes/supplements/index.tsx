@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -28,9 +28,16 @@ function SupplementsPage() {
             Gerenciamento de protocolos e estoque de suplementos.
           </p>
         </div>
-        <Button size="sm" className="gap-2 bg-brand-gradient">
-          <Plus size={16} /> Adicionar
-        </Button>
+        <div className="flex gap-2">
+          <Button variant="outline" size="sm" className="gap-2" asChild>
+            <Link to="/about">
+              <Info size={16} /> Ajuda
+            </Link>
+          </Button>
+          <Button size="sm" className="gap-2 bg-brand-gradient">
+            <Plus size={16} /> Adicionar
+          </Button>
+        </div>
       </div>
 
       <Tabs defaultValue="protocol" className="space-y-6">
