@@ -14,8 +14,8 @@ export interface ReportData {
   hydrationGoal: number;
   hydrationCurrent: number;
   summary: string;
-  password?: string;
-  viewLimit?: number;
+  password?: string | null;
+  viewLimit?: number | null;
 }
 
 export const generateComparisonPDF = async (data: ReportData) => {
@@ -89,7 +89,7 @@ export const generateComparisonPDF = async (data: ReportData) => {
   };
 };
 
-export const exportReportAsImage = async (elementId: string, fileName: string, options?: { password?: string, viewLimit?: number }) => {
+export const exportReportAsImage = async (elementId: string, fileName: string, options?: { password?: string | null, viewLimit?: number | null }) => {
   const element = document.getElementById(elementId);
   if (!element) return;
   
