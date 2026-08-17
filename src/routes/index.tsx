@@ -41,7 +41,7 @@ function Index() {
       <div 
         className="fixed inset-0 z-0 pointer-events-none opacity-40 transition-opacity duration-700"
         style={{
-          backgroundImage: 'url(https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=2000)',
+          backgroundImage: 'url(https://images.unsplash.com/photo-1599058917232-d750c1859d7c?auto=format&fit=crop&q=80&w=2000)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           filter: 'contrast(1.2) brightness(0.6)'
@@ -115,25 +115,17 @@ function Index() {
             <div className="relative hidden lg:block animate-in fade-in zoom-in-95 duration-1000">
               <div className="relative z-10 rounded-2xl overflow-hidden shadow-2xl border-4 border-white/20 transform hover:scale-[1.02] transition-transform duration-500">
                 <img 
-                  src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=1200" 
-                  alt="Performance Body Building" 
+                  src="https://images.unsplash.com/photo-1599058917232-d750c1859d7c?auto=format&fit=crop&q=80&w=1200" 
+                  alt="Performance Training" 
                   className="w-full h-auto object-cover aspect-[4/3] scale-105 hover:scale-100 transition-transform duration-1000"
                   fetchPriority="high"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
                 <div className="absolute bottom-6 left-6 right-6">
                   <p className="text-white text-lg font-bold font-display drop-shadow-md">
-                    Profissionalismo em cada detalhe.
+                    Alta precisão em dados corporais.
                   </p>
                 </div>
-              </div>
-              
-              {/* Decorative 3D elements */}
-              <div className="absolute -top-6 -right-6 w-24 h-24 bg-brand-gradient rounded-2xl rotate-12 shadow-2xl flex items-center justify-center animate-bounce duration-[3000ms] border border-white/20 z-20">
-                <Target size={40} className="text-white drop-shadow-md" />
-              </div>
-              <div className="absolute -bottom-6 -left-6 w-20 h-20 bg-success rounded-full -rotate-12 shadow-2xl flex items-center justify-center animate-pulse border border-white/20 z-20">
-                <Zap size={32} className="text-white drop-shadow-md" />
               </div>
             </div>
           </div>
