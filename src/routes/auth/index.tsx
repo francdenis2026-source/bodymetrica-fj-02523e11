@@ -228,20 +228,20 @@ function AuthPage() {
 
         {/* Removed redundant hero overlay that was causing layout issues */}
 
-      <div className="relative z-10 w-full max-w-md px-4 py-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
-        <div className="text-center space-y-6 mb-12">
-          <Link to="/" className="inline-flex items-center text-[10px] font-black uppercase tracking-[0.2em] text-white/50 hover:text-white transition-all mb-4 backdrop-blur-3xl bg-black/40 px-6 py-2 rounded-full border border-white/10 hover:border-primary/50">
-            <ArrowLeft size={14} className="mr-2" />
+      <div className="relative z-10 w-full max-w-sm px-6 py-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+        <div className="text-center space-y-4 mb-6">
+          <Link to="/" className="inline-flex items-center text-[10px] font-black uppercase tracking-[0.2em] text-white/50 hover:text-white transition-all mb-2 backdrop-blur-3xl bg-black/40 px-4 py-1.5 rounded-full border border-white/10 hover:border-primary/50">
+            <ArrowLeft size={12} className="mr-2" />
             VOLTAR AO INÍCIO
           </Link>
-          <div className="mx-auto w-24 h-24 bg-brand-gradient rounded-[2rem] flex items-center justify-center text-primary-foreground font-black text-4xl shadow-2xl border-2 border-white/20 transform rotate-3 hover:rotate-0 transition-transform duration-500">
+          <div className="mx-auto w-16 h-16 bg-brand-gradient rounded-[1.25rem] flex items-center justify-center text-primary-foreground font-black text-2xl shadow-2xl border-2 border-white/20 transform rotate-3 hover:rotate-0 transition-transform duration-500">
             B
           </div>
           <div>
-            <h1 className="text-5xl md:text-6xl font-black font-display tracking-tighter text-white uppercase italic leading-none">
+            <h1 className="text-4xl font-black font-display tracking-tighter text-white uppercase italic leading-none">
               BODY <span className="text-gradient-brand">MÉTTRICA</span>
             </h1>
-            <p className="text-white/60 font-black uppercase tracking-[0.3em] text-[10px] mt-4">PERFORMANCE & RESULTADOS</p>
+            <p className="text-white/60 font-black uppercase tracking-[0.3em] text-[8px] mt-2">PERFORMANCE & RESULTADOS</p>
           </div>
         </div>
 
