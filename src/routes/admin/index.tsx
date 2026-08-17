@@ -360,7 +360,10 @@ function AdminDashboard() {
               </div>
 
               <div className="pt-6 border-t border-white/5">
-                <h3 className="text-sm font-black uppercase tracking-widest mb-4">Eventos de Webhook Recentes</h3>
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-sm font-black uppercase tracking-widest">Eventos de Webhook Recentes</h3>
+                  <Badge variant="outline" className="text-[9px] uppercase font-bold text-muted-foreground">Monitoramento em Tempo Real</Badge>
+                </div>
                 <WebhookEventsList listFn={listWebhookEventsFn} />
               </div>
             </CardContent>
