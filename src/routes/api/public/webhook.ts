@@ -64,7 +64,10 @@ export const Route = createFileRoute('/api/public/webhook')({
             .maybeSingle();
 
           if (existingEvent?.status === 'processed') {
-            return new Response('Already processed', { status: 200 });
+            return new Response('Already processed', { 
+              status: 200,
+              headers: { 'Content-Type': 'text/plain' }
+            });
           }
 
           // 4. Record event
@@ -72,7 +75,8 @@ export const Route = createFileRoute('/api/public/webhook')({
             event_id: eventId,
             topic: topic || 'unknown',
             payload: body,
-            status: 'pending'
+            status: 'pending',
+            processed_by_user_id: body.external_reference || (body.data && body.data.external_reference) || null
           }, { onConflict: 'event_id' });
 
           if (topic === 'payment') {
@@ -102,7 +106,11 @@ export const Route = createFileRoute('/api/public/webhook')({
               
               if (!userId) {
                 console.error('[Webhook] Missing external_reference');
-                await supabaseAdmin.from('webhook_events').update({ status: 'failed' }).eq('event_id', eventId);
+                await supabaseAdmin.from('webhook_events').update({ 
+                  status: 'failed',
+                  failure_reason: 'missing_user_reference',
+                  error_message: 'O campo external_reference não foi encontrado no payload do pagamento.'
+                }).eq('event_id', eventId);
                 return new Response('Missing external_reference', { status: 400 });
               }
 
@@ -138,7 +146,8 @@ export const Route = createFileRoute('/api/public/webhook')({
               // Mark as processed
               await supabaseAdmin.from('webhook_events').update({ 
                 status: 'processed', 
-                processed_at: new Date().toISOString() 
+                processed_at: new Date().toISOString(),
+                processed_by_user_id: userId
               }).eq('event_id', eventId);
             }
           }

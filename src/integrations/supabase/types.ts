@@ -176,28 +176,37 @@ export type Database = {
       webhook_events: {
         Row: {
           created_at: string | null
+          error_message: string | null
           event_id: string
+          failure_reason: string | null
           id: string
           payload: Json
           processed_at: string | null
+          processed_by_user_id: string | null
           status: string
           topic: string
         }
         Insert: {
           created_at?: string | null
+          error_message?: string | null
           event_id: string
+          failure_reason?: string | null
           id?: string
           payload: Json
           processed_at?: string | null
+          processed_by_user_id?: string | null
           status?: string
           topic: string
         }
         Update: {
           created_at?: string | null
+          error_message?: string | null
           event_id?: string
+          failure_reason?: string | null
           id?: string
           payload?: Json
           processed_at?: string | null
+          processed_by_user_id?: string | null
           status?: string
           topic?: string
         }
