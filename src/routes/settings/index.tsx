@@ -26,7 +26,7 @@ import { getSession, clearSession } from "@/lib/auth/auth.functions";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { toast } from "sonner";
 import { requestNotificationPermission, scheduleNotifications } from "@/lib/notifications";
-import { validateLicense, generateLicenseAfterPayment } from "@/lib/monetization.functions";
+import { validateLicense, generateLicenseKey } from "@/lib/monetization.functions";
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { useNavigate } from "@tanstack/react-router";
@@ -43,7 +43,7 @@ function SettingsPage() {
   const [isLoading, setIsLoading] = useState(false);
   
   const validateLicenseFn = useServerFn(validateLicense);
-  const generateLicenseFn = useServerFn(generateLicenseAfterPayment);
+  const generateLicenseFn = useServerFn(generateLicenseKey);
 
   const handleActivateLicense = async () => {
     if (!licenseKey) {

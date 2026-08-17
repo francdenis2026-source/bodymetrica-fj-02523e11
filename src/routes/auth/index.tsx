@@ -136,7 +136,7 @@ function AuthPage() {
         toast.success("Bem-vindo ao Body Métrica FJ!");
         
         if (!result.user.isLicensed) {
-          toast.info("Ative sua licença para desbloquear todas as ferramentas.");
+          toast.info("Acesse Ajustes para ativar sua licença e liberar o sistema.");
         }
         
         window.location.href = "/dashboard";

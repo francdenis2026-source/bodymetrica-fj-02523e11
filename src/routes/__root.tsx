@@ -36,6 +36,8 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { isAuthenticated, clearSession, getSession, setupLogoutListener } from "@/lib/auth/auth.functions";
 import { AccessGate } from "@/components/access-gate";
 import { supabase } from "@/integrations/supabase/client";
+import { useServerFn } from "@tanstack/react-start";
+import { validateLicense } from "@/lib/monetization.functions";
 
 import appCss from "../styles.css?url";
 
@@ -164,6 +166,7 @@ function RootComponent() {
   const [isOnline, setIsOnline] = useState(typeof navigator !== 'undefined' ? navigator.onLine : true);
   const [syncStatus, setSyncStatus] = useState<'idle' | 'syncing' | 'synced'>('idle');
   const [syncHistory, setSyncHistory] = useState<{lastSync: number | null, totalSynced: number, failures: number}>({lastSync: null, totalSynced: 0, failures: 0});
+  const validateLicenseFn = useServerFn(validateLicense);
 
   const handleManualSync = async () => {
     if (!isOnline) {
@@ -192,11 +195,28 @@ function RootComponent() {
     });
 
     // Supabase Auth Listener
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === 'SIGNED_OUT' || event === 'USER_UPDATED') {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === 'SIGNED_OUT' || event === 'USER_UPDATED' || event === 'SIGNED_IN') {
         const localSession = getSession();
-        if (!session && localSession) {
+        if (event === 'SIGNED_OUT' && localSession) {
           handleLogout();
+        } else if (session) {
+           // Refresh local license status from DB if possible
+           const { data: profile } = await supabase.from('profiles').select('license_status').eq('id', session.user.id).single();
+           if (profile) {
+             const updatedSession = { 
+               ...localSession, 
+               user: { 
+                 ...localSession?.user, 
+                 ...session.user, 
+                 licenseStatus: profile.license_status,
+                 isLicensed: profile.license_status === 'active'
+               } 
+             };
+             localStorage.setItem('bodymetrica_auth_session', JSON.stringify(updatedSession));
+             setIsLoggedIn(true);
+             setNeedsLicense(profile.license_status !== 'active');
+           }
         }
       }
     });
