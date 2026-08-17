@@ -34,11 +34,19 @@ function HydrationPage() {
   };
 
   return (
-    <div className="flex-1 space-y-6 p-4 md:p-8 pt-6">
-      <div className="flex items-center justify-between">
+    <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 relative">
+      {/* Decorative Module Hero Image */}
+      <div className="absolute top-0 right-0 w-64 h-64 opacity-5 pointer-events-none -z-10 translate-x-1/4 -translate-y-1/4">
+        <Droplets size={256} className="text-info" />
+      </div>
+
+      <div className="flex items-center justify-between relative">
         <div className="space-y-1">
-          <h2 className="text-2xl font-bold tracking-tight font-display text-info">Hidratação</h2>
-          <p className="text-muted-foreground text-sm">
+          <h2 className="text-3xl font-bold tracking-tight font-display text-info flex items-center gap-3">
+            <Droplets className="text-info-foreground bg-info p-1.5 rounded-lg" size={32} />
+            Hidratação
+          </h2>
+          <p className="text-muted-foreground text-sm font-medium">
             Mantenha seu corpo em pleno funcionamento com controle diário.
           </p>
         </div>
