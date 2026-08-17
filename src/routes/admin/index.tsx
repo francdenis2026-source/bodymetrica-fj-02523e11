@@ -38,7 +38,8 @@ import {
   revokeLicense, 
   updateAdminSetting, 
   getAdminSetting, 
-  listAuditLogs 
+  listAuditLogs,
+  listWebhookEvents 
 } from "@/lib/monetization.functions";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -60,9 +61,11 @@ function AdminDashboard() {
   const updateSettingFn = useServerFn(updateAdminSetting);
   const getSettingFn = useServerFn(getAdminSetting);
   const listAuditLogsFn = useServerFn(listAuditLogs);
+  const listWebhookEventsFn = useServerFn(listWebhookEvents);
   
   const [isGenerating, setIsGenerating] = useState(false);
   const [mpAccessToken, setMpAccessToken] = useState("");
+  const [mpWebhookSecret, setMpWebhookSecret] = useState("");
 
   const { data: licensesData, isLoading: isLoadingLicenses } = useQuery({
     queryKey: ['admin-licenses'],
@@ -78,6 +81,10 @@ function AdminDashboard() {
     getSettingFn({ data: "mercadopago_access_token" }).then(res => {
       if (res.success) setMpAccessToken(res.value);
     });
+    getSettingFn({ data: "mercadopago_webhook_secret" }).then(res => {
+      if (res.success) setMpWebhookSecret(res.value);
+    });
+
   }, []);
 
   const generateMutation = useMutation({
@@ -163,7 +170,7 @@ function AdminDashboard() {
         <TabsList className="bg-muted/50 p-1">
           <TabsTrigger value="licenses" className="text-xs uppercase font-black">Licenças</TabsTrigger>
           <TabsTrigger value="audit" className="text-xs uppercase font-black">Auditoria</TabsTrigger>
-          <TabsTrigger value="settings" className="text-xs uppercase font-black">API Pagamento</TabsTrigger>
+          <TabsTrigger value="settings" className="text-xs uppercase font-black">API Pagamento / Webhook</TabsTrigger>
         </TabsList>
 
         <TabsContent value="licenses">
@@ -307,7 +314,7 @@ function AdminDashboard() {
               </CardTitle>
               <CardDescription className="text-xs">Configure as credenciais para processamento de pagamentos e renovação automática.</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-6">
+            <CardContent className="space-y-8">
               <div className="space-y-2">
                 <Label className="text-[10px] font-black uppercase tracking-widest text-primary ml-1">Access Token (Produção)</Label>
                 <div className="flex gap-2">
@@ -322,14 +329,42 @@ function AdminDashboard() {
                     className="h-12 bg-primary font-black uppercase tracking-widest px-8 rounded-xl"
                     onClick={() => updateSettingMutation.mutate(mpAccessToken)}
                   >
-                    SALVAR
+                    SALVAR TOKEN
+                  </Button>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-[10px] font-black uppercase tracking-widest text-primary ml-1">Webhook Secret (Verification)</Label>
+                <div className="flex gap-2">
+                  <Input 
+                    type="password"
+                    placeholder="Assinatura secreta do Webhook..." 
+                    className="h-12 bg-white/5 border-white/10 rounded-xl px-4 font-mono text-xs"
+                    value={mpWebhookSecret}
+                    onChange={(e) => setMpWebhookSecret(e.target.value)}
+                  />
+                  <Button 
+                    variant="outline"
+                    className="h-12 font-black uppercase tracking-widest px-8 rounded-xl"
+                    onClick={() => updateSettingFn({ data: { key: "mercadopago_webhook_secret", value: mpWebhookSecret } }).then(res => {
+                      if (res.success) toast.success("Webhook Secret salvo!");
+                    })}
+                  >
+                    SALVAR SECRET
                   </Button>
                 </div>
                 <p className="text-[9px] text-muted-foreground italic px-1">
-                  Este token é usado para gerar links de pagamento e validar Webhooks de ativação.
+                  Usado para validar a integridade das requisições vindas do Mercado Pago.
                 </p>
               </div>
+
+              <div className="pt-6 border-t border-white/5">
+                <h3 className="text-sm font-black uppercase tracking-widest mb-4">Eventos de Webhook Recentes</h3>
+                <WebhookEventsList listFn={listWebhookEventsFn} />
+              </div>
             </CardContent>
+
           </Card>
         </TabsContent>
       </Tabs>
@@ -356,3 +391,48 @@ function StatsCard({ title, value, change, icon, negative }: { title: string; va
   );
 }
 
+
+function WebhookEventsList({ listFn }: { listFn: any }) {
+  const { data, isLoading } = useQuery({
+    queryKey: ['admin-webhooks'],
+    queryFn: () => listFn(),
+  });
+
+  if (isLoading) return <div className="animate-spin h-5 w-5 border-b-2 border-primary mx-auto"></div>;
+
+  return (
+    <div className="rounded-xl border border-white/5 overflow-hidden">
+      <Table>
+        <TableHeader className="bg-white/5">
+          <TableRow className="border-none">
+            <TableHead className="text-[9px] font-black uppercase py-2">ID Evento</TableHead>
+            <TableHead className="text-[9px] font-black uppercase py-2">Tópico</TableHead>
+            <TableHead className="text-[9px] font-black uppercase py-2">Status</TableHead>
+            <TableHead className="text-[9px] font-black uppercase py-2">Data</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {(data?.events || []).map((event: any) => (
+            <TableRow key={event.id} className="border-white/5">
+              <TableCell className="text-[9px] font-mono text-muted-foreground">{event.event_id}</TableCell>
+              <TableCell className="text-[9px] font-black">{event.topic}</TableCell>
+              <TableCell>
+                <Badge className={"text-[8px] font-black uppercase " + (event.status === 'processed' ? 'bg-success/20 text-success' : 'bg-warning/20 text-warning')}>
+                  {event.status}
+                </Badge>
+              </TableCell>
+              <TableCell className="text-[9px] text-muted-foreground">
+                {format(new Date(event.created_at), "dd/MM HH:mm")}
+              </TableCell>
+            </TableRow>
+          ))}
+          {(!data?.events || data.events.length === 0) && (
+            <TableRow>
+              <TableCell colSpan={4} className="text-center py-4 text-[10px] text-muted-foreground uppercase font-black">Nenhum evento registrado</TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+    </div>
+  );
+}

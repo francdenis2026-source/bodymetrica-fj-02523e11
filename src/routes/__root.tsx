@@ -178,7 +178,9 @@ function RootComponent() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [needsVerification, setNeedsVerification] = useState(false);
   const [needsLicense, setNeedsLicense] = useState(false);
-  const [isOnline, setIsOnline] = useState(typeof navigator !== 'undefined' ? navigator.onLine : true);
+  const [isOnline, setIsOnline] = useState(true); // Default to true to match server for hydration
+  const [actualIsOnline, setActualIsOnline] = useState(true);
+
   const [syncStatus, setSyncStatus] = useState<'idle' | 'syncing' | 'synced'>('idle');
   const [syncHistory, setSyncHistory] = useState<{lastSync: number | null, totalSynced: number, failures: number}>({lastSync: null, totalSynced: 0, failures: 0});
   const checkLicenseStatusFn = useServerFn(checkLicenseStatus);
@@ -322,6 +324,7 @@ function RootComponent() {
 
     const handleOnline = () => {
       setIsOnline(true);
+      setActualIsOnline(true);
       setSyncStatus('syncing');
       syncOfflineActions().then(() => setSyncStatus('synced'));
       setTimeout(() => setSyncStatus('idle'), 3000);
@@ -330,12 +333,16 @@ function RootComponent() {
 
     const handleOffline = () => {
       setIsOnline(false);
+      setActualIsOnline(false);
     };
 
     if (typeof window !== 'undefined') {
+      setIsOnline(navigator.onLine);
+      setActualIsOnline(navigator.onLine);
       window.addEventListener("online", handleOnline);
       window.addEventListener("offline", handleOffline);
     }
+
 
     return () => {
       if (typeof window !== 'undefined') {
@@ -368,11 +375,12 @@ function RootComponent() {
           {syncStatus === 'syncing' ? (
             <Loader2 className="w-3 h-3 animate-spin text-primary" />
           ) : (
-            <StatusIcon isOnline={isOnline} />
+            <StatusIcon isOnline={actualIsOnline} />
           )}
           <span className="text-[10px] font-black uppercase tracking-widest text-foreground/60">
-            {syncStatus === 'syncing' ? 'Sincronizando...' : isOnline ? 'Online' : 'Offline'}
+            {syncStatus === 'syncing' ? 'Sincronizando...' : actualIsOnline ? 'Online' : 'Offline'}
           </span>
+
 
           
           {isOnline && (

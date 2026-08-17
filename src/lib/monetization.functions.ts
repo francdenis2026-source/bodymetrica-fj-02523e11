@@ -355,3 +355,22 @@ export const listAuditLogs = createServerFn({ method: "GET" })
     return { success: true, logs: data };
   });
 
+/**
+ * Webhook events list
+ */
+export const listWebhookEvents = createServerFn({ method: "GET" })
+  .middleware([requireAdminAuth])
+  .handler(async () => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data, error } = await supabaseAdmin
+      .from('webhook_events')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(50);
+
+    if (error) return { success: false, message: "Erro ao buscar eventos de webhook." };
+    return { success: true, events: data };
+  });
+
+
+
