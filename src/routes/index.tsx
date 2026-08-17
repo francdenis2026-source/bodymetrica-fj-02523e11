@@ -29,66 +29,70 @@ function Index() {
     <div className="flex flex-col min-h-screen bg-background relative overflow-x-hidden">
       {/* Professional Full Background Image with better contrast */}
       <div 
-        className="fixed inset-0 z-0 pointer-events-none opacity-25 dark:opacity-15 transition-opacity duration-700"
+        className="fixed inset-0 z-0 pointer-events-none opacity-40 transition-opacity duration-700"
         style={{
-          backgroundImage: 'url(https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=1600)',
+          backgroundImage: 'url(https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=2000)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
-          filter: 'grayscale(100%) contrast(1.1) brightness(0.8)'
+          filter: 'contrast(1.2) brightness(0.6)'
         }}
       />
       
       {/* Professional Gradient Overlay */}
-      <div className="fixed inset-0 z-0 pointer-events-none bg-gradient-to-tr from-background via-background/95 to-primary/10" />
+      <div className="fixed inset-0 z-0 pointer-events-none bg-gradient-to-tr from-background via-background/80 to-primary/20" />
+
       
       <div className="relative z-10 flex flex-col flex-1">
         {/* Header */}
-        <header className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-md border-b">
+        <header className="fixed top-0 w-full z-50 bg-background/60 backdrop-blur-xl border-b border-white/5">
           <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-brand-gradient rounded-lg flex items-center justify-center text-primary-foreground font-bold shadow-md">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-brand-gradient rounded-xl flex items-center justify-center text-primary-foreground font-bold shadow-xl border border-white/10">
                 B
               </div>
-              <span className="text-xl font-bold font-display text-primary tracking-tight">
-                Body Métrica FJ
+              <span className="text-2xl font-bold font-display text-foreground tracking-tighter">
+                BODY MÉTTRICA FJ
               </span>
             </div>
             
-            <Button variant="ghost" size="sm" asChild className="text-muted-foreground font-medium hover:text-primary">
-              <Link to="/auth">Entrar</Link>
+            <Button variant="ghost" size="sm" asChild className="text-foreground/80 font-semibold hover:text-primary hover:bg-white/5">
+              <Link to="/auth">ENTRAR</Link>
             </Button>
           </div>
         </header>
 
+
         {/* Hero Section */}
         <section className="relative pt-32 pb-20 px-4 overflow-hidden">
           <div className="container mx-auto max-w-6xl grid lg:grid-cols-2 gap-12 items-center">
-            <div className="text-left space-y-6">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-semibold mb-2 animate-in fade-in slide-in-from-left-4 duration-700">
-                <Activity size={16} />
-                <span>Sua evolução, documentada com precisão</span>
+            <div className="text-left space-y-8">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/20 text-primary-foreground text-xs font-black uppercase tracking-widest mb-2 animate-in fade-in slide-in-from-left-4 duration-700 border border-primary/30">
+                <Activity size={14} />
+                <span>Alta Performance & Precisão</span>
               </div>
               
-              <h1 className="text-4xl md:text-7xl font-bold font-display text-foreground leading-[1.05] tracking-tight animate-in fade-in slide-in-from-left-4 duration-700 delay-75">
-                Métricas que <br />
-                <span className="text-gradient-brand">definem o seu futuro.</span>
+              <h1 className="text-5xl md:text-8xl font-black font-display text-foreground leading-[0.95] tracking-tighter animate-in fade-in slide-in-from-left-4 duration-700 delay-75 uppercase">
+                DOMINE SUA <br />
+                <span className="text-gradient-brand">EVOLUÇÃO.</span>
               </h1>
               
-              <p className="text-xl text-muted-foreground max-w-xl leading-relaxed font-medium animate-in fade-in slide-in-from-left-4 duration-700 delay-150">
-                A suíte definitiva para acompanhar composição corporal, alimentação, 
-                suplementação e treinos. Design premium para resultados reais.
+              <p className="text-xl text-foreground/70 max-w-xl leading-relaxed font-semibold animate-in fade-in slide-in-from-left-4 duration-700 delay-150">
+                A plataforma definitiva para atletas que buscam a perfeição.
+                Acompanhamento de elite para composição corporal e performance.
               </p>
+
               
               <div className="flex flex-col sm:flex-row items-center gap-4 pt-4 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300">
-                <Button size="lg" className="h-12 px-8 text-base font-semibold group w-full sm:w-auto bg-brand-gradient hover:opacity-90 border-none shadow-lg shadow-primary/20" asChild>
+                <Button size="lg" className="h-14 px-10 text-base font-black uppercase tracking-widest group w-full sm:w-auto bg-brand-gradient hover:scale-105 transition-all border-none shadow-2xl shadow-primary/40" asChild>
                   <Link to="/auth">
-                    Começar Agora
-                    <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={18} />
+                    COMEÇAR AGORA
+                    <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={20} />
                   </Link>
                 </Button>
-                <Button size="lg" variant="outline" className="h-12 px-8 text-base font-semibold w-full sm:w-auto backdrop-blur-sm" asChild>
-                  <Link to="/about">Conhecer Ferramentas</Link>
+                <Button size="lg" variant="outline" className="h-14 px-10 text-base font-black uppercase tracking-widest w-full sm:w-auto backdrop-blur-md bg-white/5 border-white/10 hover:bg-white/10" asChild>
+                  <Link to="/about">DETALHES</Link>
                 </Button>
+
               </div>
             </div>
 
