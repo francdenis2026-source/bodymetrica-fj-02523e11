@@ -186,7 +186,7 @@ function RootComponent() {
     window.location.href = "/auth";
   };
 
-  const isPublicRoute = ["/", "/auth", "/admin/login", "/onboarding"].includes(location.pathname);
+  const isPublicRoute = ["/", "/auth", "/admin/login", "/onboarding", "/help", "/about"].includes(location.pathname);
   const showSidebar = !isPublicRoute && isLoggedIn;
 
   return (
