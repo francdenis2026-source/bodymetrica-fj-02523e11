@@ -21,25 +21,28 @@ export const Route = createFileRoute("/supplements/")({
 
 function SupplementsPage() {
   return (
-    <div className="flex-1 space-y-6 p-4 md:p-8 pt-6">
-      <div className="flex items-center justify-between">
-        <div className="space-y-1">
-          <h2 className="text-2xl font-bold tracking-tight font-display text-primary">Suplementação</h2>
-          <p className="text-muted-foreground text-sm">
-            Gerenciamento de protocolos e estoque de suplementos.
-          </p>
-        </div>
-        <div className="flex gap-2">
-          <Button variant="outline" size="sm" className="gap-2" asChild>
-            <Link to="/help">
-              <LifeBuoy size={16} /> Central de Ajuda
-            </Link>
+    <div className="flex-1 space-y-12 p-4 md:p-12 pt-10 relative overflow-hidden bg-background">
+      {/* Decorative Module Hero Image */}
+      <div className="absolute top-0 right-0 w-96 h-96 opacity-[0.08] pointer-events-none -z-10 translate-x-1/4 -translate-y-1/4">
+        <Pill size={384} className="text-primary" />
+      </div>
+
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 relative z-10 animate-in fade-in slide-in-from-left-4 duration-700">
+        <ModuleHeader 
+          title="Protocolos"
+          description="Gestão avançada de suplementação para otimização metabólica e performance celular."
+          icon={Pill}
+        />
+        <div className="flex flex-wrap justify-center gap-4 relative z-10">
+          <Button variant="outline" className="gap-2 h-14 px-8 font-black uppercase tracking-widest border-2 bg-white/5 border-white/10 hover:bg-white/10 hover:scale-105 transition-all" asChild>
+            <Link to="/help">CENTRAL DE AJUDA</Link>
           </Button>
-          <Button size="sm" className="gap-2 bg-brand-gradient">
-            <Plus size={16} /> Adicionar
+          <Button className="gap-3 h-14 px-8 font-black uppercase tracking-widest bg-brand-gradient shadow-2xl shadow-primary/40 hover:scale-105 transition-all border-none">
+            <Plus size={20} /> ADICIONAR PROTOCOLO
           </Button>
         </div>
       </div>
+
 
       <Tabs defaultValue="protocol" className="space-y-6">
         <TabsList className="grid w-full grid-cols-3 md:w-auto md:inline-grid">

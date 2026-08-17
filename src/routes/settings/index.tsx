@@ -23,13 +23,25 @@ export const Route = createFileRoute("/settings/")({
 
 function SettingsPage() {
   return (
-    <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 pb-24">
-      <div className="space-y-1">
-        <h2 className="text-2xl font-bold tracking-tight font-display text-primary">Configurações</h2>
-        <p className="text-muted-foreground text-sm">
-          Gerencie seu perfil, preferências de notificações e privacidade.
-        </p>
+    <div className="flex-1 space-y-12 p-4 md:p-12 pt-10 relative overflow-hidden bg-background">
+      {/* Decorative Module Hero Image */}
+      <div className="absolute top-0 right-0 w-96 h-96 opacity-[0.08] pointer-events-none -z-10 translate-x-1/4 -translate-y-1/4">
+        <Settings size={384} className="text-primary" />
       </div>
+
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 relative z-10 animate-in fade-in slide-in-from-left-4 duration-700">
+        <ModuleHeader 
+          title="Ajustes"
+          description="Personalize sua experiência na plataforma e gerencie suas preferências de performance."
+          icon={Settings}
+        />
+        <div className="flex gap-4">
+          <Button variant="outline" className="gap-2 h-14 px-8 font-black uppercase tracking-widest border-2 bg-white/5 border-white/10 hover:bg-white/10 hover:scale-105 transition-all" asChild>
+            <Link to="/help">CENTRAL DE AJUDA</Link>
+          </Button>
+        </div>
+      </div>
+
 
       <div className="max-w-2xl space-y-6">
         <Card className="surface border-none overflow-hidden">
