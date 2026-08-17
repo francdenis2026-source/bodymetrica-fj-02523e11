@@ -80,9 +80,10 @@ function DashboardPage() {
             <h2 className="text-4xl md:text-7xl font-black tracking-tighter font-display text-foreground uppercase italic leading-none">
               OLÁ, <span className="text-gradient-brand">{userName}</span>
             </h2>
-            <p className="text-foreground/60 text-lg md:text-xl font-bold tracking-tight">
-              Sua evolução está em alta. O foco hoje é o segredo do sucesso.
+            <p className="text-foreground/60 text-lg md:text-2xl font-black tracking-tight leading-none uppercase italic">
+              SUA EVOLUÇÃO ESTÁ EM ALTA. O FOCO HOJE É O SEGREDO DO SUCESSO.
             </p>
+
           </div>
         </div>
         
@@ -104,7 +105,7 @@ function DashboardPage() {
               <User className="h-4 w-4 text-primary" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">82.4 kg</div>
+              <div className="text-3xl font-black font-display italic tracking-tighter uppercase">82.4 kg</div>
               <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
                 <TrendingUp size={12} className="text-success" />
                 {weightChange}kg desde a última semana
@@ -120,7 +121,7 @@ function DashboardPage() {
               <ArrowRight className="h-4 w-4 text-primary" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{currentGoal}</div>
+              <div className="text-3xl font-black font-display italic tracking-tighter uppercase">{currentGoal}</div>
               <div className="mt-2">
                 <div className="flex justify-between text-[10px] mb-1">
                   <span>Progresso</span>
@@ -139,7 +140,7 @@ function DashboardPage() {
               <Droplets className="h-4 w-4 text-info" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">1.2L / 3.0L</div>
+              <div className="text-3xl font-black font-display italic tracking-tighter uppercase">1.2L / 3.0L</div>
               <div className="mt-2">
                 <Progress value={40} className="h-1.5" />
               </div>
@@ -154,7 +155,7 @@ function DashboardPage() {
               <Dumbbell className="h-4 w-4 text-warning" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">Puxada (A)</div>
+              <div className="text-3xl font-black font-display italic tracking-tighter uppercase">Puxada (A)</div>
               <p className="text-xs text-muted-foreground mt-1">
                 Programado para hoje às 18:00
               </p>
