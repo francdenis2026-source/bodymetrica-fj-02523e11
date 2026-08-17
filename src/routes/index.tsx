@@ -56,7 +56,7 @@ function Index() {
             </div>
             
             <Button variant="ghost" size="sm" asChild className="text-foreground/80 font-semibold hover:text-primary hover:bg-white/5">
-              <Link to="/auth">ENTRAR</Link>
+              <Link to="/auth" search={{ registerMode: false, name: "", birthDate: "" }}>ENTRAR</Link>
             </Button>
           </div>
         </header>
@@ -84,7 +84,7 @@ function Index() {
               
               <div className="flex flex-col sm:flex-row items-center gap-4 pt-4 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300">
                 <Button size="lg" className="h-14 px-10 text-base font-black uppercase tracking-widest group w-full sm:w-auto bg-brand-gradient hover:scale-105 transition-all border-none shadow-2xl shadow-primary/40" asChild>
-                  <Link to="/auth">
+                  <Link to="/auth" search={{ registerMode: false, name: "", birthDate: "" }}>
                     COMEÇAR AGORA
                     <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={20} />
                   </Link>

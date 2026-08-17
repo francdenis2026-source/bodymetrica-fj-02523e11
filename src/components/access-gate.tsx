@@ -44,7 +44,7 @@ export function AccessGate({
 
           <div className="flex flex-col gap-4 pt-4">
             <Button className="h-14 font-black uppercase tracking-widest bg-brand-gradient shadow-2xl shadow-primary/30 hover:scale-105 transition-all border-none rounded-2xl" asChild>
-              <Link to="/auth">
+              <Link to="/auth" search={{ registerMode: false, name: "", birthDate: "" }}>
                 ENTRAR AGORA
                 <ArrowRight className="ml-2" size={18} />
               </Link>

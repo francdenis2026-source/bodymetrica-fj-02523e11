@@ -25,9 +25,9 @@ export const Route = createFileRoute("/auth/")({
   component: AuthPage,
   validateSearch: (search: Record<string, unknown>) => {
     return {
-      registerMode: (search.registerMode as boolean) || false,
-      name: (search.name as string) || "",
-      birthDate: (search.birthDate as string) || "",
+      registerMode: (search['registerMode'] as boolean) || false,
+      name: (search['name'] as string) || "",
+      birthDate: (search['birthDate'] as string) || "",
     };
   },
 });
@@ -53,7 +53,7 @@ function AuthPage() {
   const navigate = useNavigate();
 
   const form = useForm<RegisterFormValues>({
-    resolver: zodResolver(isRegistering ? registerSchema : authSchema),
+    resolver: zodResolver(registerSchema),
     defaultValues: {
       cpf: "",
       pin: "",
