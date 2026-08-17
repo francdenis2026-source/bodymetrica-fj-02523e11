@@ -9,11 +9,27 @@ import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/auth/verify")({
   component: VerifyPage,
+  validateSearch: (search: Record<string, unknown>) => {
+    return {
+      verified: (search['verified'] as string) === 'true',
+    };
+  },
 });
 
 function VerifyPage() {
+  const { verified } = Route.useSearch();
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (verified) {
+      toast.success("E-mail confirmado com sucesso! Faça login para continuar.");
+      const timer = setTimeout(() => {
+        navigate({ to: "/auth", search: { registerMode: false } as any });
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [verified, navigate]);
 
   const handleResendLink = async () => {
     setIsLoading(true);
@@ -29,7 +45,7 @@ function VerifyPage() {
         type: 'signup',
         email: user.email,
         options: {
-          emailRedirectTo: `${window.location.origin}/auth`
+          emailRedirectTo: `${window.location.origin}/auth/verify?verified=true`
         }
       });
 
@@ -72,10 +88,12 @@ function VerifyPage() {
               <Mail className="text-primary" size={32} />
             </div>
             <CardTitle className="text-2xl font-black text-white text-center uppercase tracking-[0.1em] italic">
-              CONFIRME SEU E-MAIL
+              {verified ? "E-MAIL CONFIRMADO!" : "CONFIRME SEU E-MAIL"}
             </CardTitle>
             <CardDescription className="font-bold text-white/40 text-center uppercase text-[10px] tracking-widest px-4">
-              ENVIAMOS UM LINK DE ATIVAÇÃO PARA VOCÊ.
+              {verified 
+                ? "SUA CONTA FOI ATIVADA COM SUCESSO." 
+                : "ENVIAMOS UM LINK DE ATIVAÇÃO PARA VOCÊ."}
             </CardDescription>
           </CardHeader>
 
