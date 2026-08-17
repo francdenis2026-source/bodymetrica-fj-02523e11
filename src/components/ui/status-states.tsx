@@ -47,12 +47,12 @@ export function EmptyState({
   action?: React.ReactNode 
 }) {
   return (
-    <div className="flex flex-col items-center justify-center p-12 text-center surface border-dashed border-white/5">
-      <div className="w-20 h-20 rounded-full bg-primary/5 flex items-center justify-center mb-6">
-        <Icon className="w-10 h-10 text-primary/40" />
+    <div className="flex flex-col items-center justify-center p-12 md:p-20 text-center surface border-dashed border-white/10 animate-in fade-in zoom-in duration-500 min-h-[400px]">
+      <div className="w-24 h-24 rounded-[2rem] bg-brand-gradient flex items-center justify-center mb-8 shadow-2xl border border-white/10 group">
+        <Icon className="w-12 h-12 text-white group-hover:scale-110 transition-transform" />
       </div>
-      <h3 className="text-2xl font-black font-display tracking-tight text-foreground uppercase italic mb-3">{title}</h3>
-      <p className="text-base text-muted-foreground max-w-md mb-8 leading-relaxed">
+      <h3 className="text-3xl font-black font-display tracking-tighter text-foreground uppercase italic mb-4 leading-none">{title}</h3>
+      <p className="text-lg text-muted-foreground max-w-lg mb-10 leading-tight font-medium">
         {description}
       </p>
       {action}
