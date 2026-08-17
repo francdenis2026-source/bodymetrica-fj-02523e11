@@ -14,7 +14,6 @@ import {
   TrendingUp,
   Calendar,
   FileDown,
-  Filter,
   LifeBuoy,
   LayoutDashboard
 } from "lucide-react";
@@ -62,6 +61,7 @@ function DashboardPage() {
     );
   }
 
+  return (
     <div className="flex-1 space-y-12 p-4 md:p-12 pt-10 relative overflow-hidden bg-background">
       {/* Decorative Module Hero Image */}
       <div className="absolute top-0 right-0 w-96 h-96 opacity-[0.08] pointer-events-none -z-10 translate-x-1/4 -translate-y-1/4">
@@ -96,9 +96,7 @@ function DashboardPage() {
         </div>
       </div>
 
-
-
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 relative z-10">
         <Link to="/body" className="block transition-transform active:scale-[0.98]">
           <Card className="surface border-none hover:bg-accent/5 transition-colors cursor-pointer h-full">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -165,7 +163,7 @@ function DashboardPage() {
         </Link>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-4 md:grid-cols-2 relative z-10">
         <Card className="surface border-none">
           <CardHeader>
             <CardTitle className="text-lg font-display flex items-center gap-2">
@@ -237,7 +235,7 @@ function DashboardPage() {
         </Card>
       </div>
 
-      <Card className="surface border-none">
+      <Card className="surface border-none relative z-10">
         <CardHeader>
           <CardTitle className="text-lg font-display flex items-center gap-2">
             <Calendar size={20} className="text-primary" />
