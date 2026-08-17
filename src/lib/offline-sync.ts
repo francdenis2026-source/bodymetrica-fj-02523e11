@@ -1,4 +1,5 @@
 import { toast } from "sonner";
+import { safeLocalStorage, safeNavigator, safeWindow, isBrowser } from "./browser-utils";
 
 // Use IndexedDB for the offline queue
 const DB_NAME = 'BodyMetricaOfflineDB';
@@ -21,12 +22,9 @@ export interface SyncHistory {
 }
 
 export const getSyncHistory = async (): Promise<SyncHistory> => {
-  if (typeof window === 'undefined') {
-    return { lastSync: null, totalSynced: 0, failures: 0 };
-  }
-  const lastSync = localStorage.getItem('last_sync_timestamp');
-  const totalSynced = parseInt(localStorage.getItem('total_synced_count') || '0');
-  const failures = parseInt(localStorage.getItem('sync_failures_count') || '0');
+  const lastSync = safeLocalStorage.getItem('last_sync_timestamp');
+  const totalSynced = parseInt(safeLocalStorage.getItem('total_synced_count') || '0');
+  const failures = parseInt(safeLocalStorage.getItem('sync_failures_count') || '0');
   
   return {
     lastSync: lastSync ? parseInt(lastSync) : null,
@@ -64,7 +62,7 @@ export const queueOfflineAction = async (action: Omit<OfflineAction, 'timestamp'
     
     store.add(actionWithTimestamp);
     
-    if (!navigator.onLine) {
+    if (!safeNavigator.onLine) {
       toast.info("Você está offline. O registro foi salvo localmente e será sincronizado quando a internet voltar.");
     }
   } catch (error) {
@@ -73,7 +71,7 @@ export const queueOfflineAction = async (action: Omit<OfflineAction, 'timestamp'
 };
 
 export const syncOfflineActions = async () => {
-  if (!navigator.onLine) return;
+  if (!safeNavigator.onLine) return;
   
   try {
     const db = await openDB();
@@ -98,14 +96,14 @@ export const syncOfflineActions = async () => {
           const deleteTransaction = db.transaction(STORE_NAME, 'readwrite');
           deleteTransaction.objectStore(STORE_NAME).delete(action.id!);
           
-          localStorage.setItem('total_synced_count', (parseInt(localStorage.getItem('total_synced_count') || '0') + 1).toString());
+          safeLocalStorage.setItem('total_synced_count', (parseInt(safeLocalStorage.getItem('total_synced_count') || '0') + 1).toString());
         } catch (err) {
           console.error("Failed to sync specific action:", err);
-          localStorage.setItem('sync_failures_count', (parseInt(localStorage.getItem('sync_failures_count') || '0') + 1).toString());
+          safeLocalStorage.setItem('sync_failures_count', (parseInt(safeLocalStorage.getItem('sync_failures_count') || '0') + 1).toString());
         }
       }
       
-      localStorage.setItem('last_sync_timestamp', Date.now().toString());
+      safeLocalStorage.setItem('last_sync_timestamp', Date.now().toString());
       toast.success(`${actions.length} registros foram sincronizados com sucesso!`);
     };
   } catch (error) {
@@ -114,15 +112,16 @@ export const syncOfflineActions = async () => {
 };
 
 // Adiciona listener para sync em background se disponível
-if (typeof window !== 'undefined') {
-  if ('serviceWorker' in navigator && 'SyncManager' in window) {
-    navigator.serviceWorker.ready.then(registration => {
+if (isBrowser) {
+  const sw = safeNavigator.serviceWorker;
+  if (sw && 'SyncManager' in window) {
+    sw.ready.then(registration => {
       return (registration as any).sync.register('sync-offline-actions');
     }).catch(() => {
       // Fallback para quando o sync de background não é suportado
-      window.addEventListener('online', syncOfflineActions);
+      safeWindow.addEventListener('online', syncOfflineActions);
     });
   } else {
-    window.addEventListener('online', syncOfflineActions);
+    safeWindow.addEventListener('online', syncOfflineActions);
   }
 }
