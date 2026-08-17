@@ -415,26 +415,33 @@ function RootComponent() {
         {showSidebar && (
           <>
             {/* Desktop Sidebar */}
-            <aside className="hidden md:flex w-80 flex-col border-r border-white/5 bg-card/30 backdrop-blur-3xl sticky top-0 h-screen z-40">
-              <div className="p-10 border-b border-white/5 relative overflow-hidden group">
+            <aside className={cn(
+              "hidden md:flex flex-col border-r border-white/5 bg-card/30 backdrop-blur-3xl sticky top-0 h-screen z-40 transition-all duration-300",
+              "w-80 group/sidebar hover:w-80",
+              "w-20 hover:w-80" // Starts collapsed, expands on hover
+            )}>
+              <div className="p-6 border-b border-white/5 relative overflow-hidden group">
                 <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                <h1 className="relative z-10 text-2xl font-black font-display text-primary leading-none tracking-tighter uppercase italic">
-                  BODY MÉTTRICA <span className="text-foreground">FJ</span>
-                </h1>
-                <p className="relative z-10 text-[9px] font-black uppercase tracking-[0.4em] text-foreground/20 mt-2">Performance Suite</p>
+                <div className="flex items-center gap-4">
+                  <div className="min-w-[40px] h-10 bg-brand-gradient rounded-xl flex items-center justify-center text-primary-foreground font-bold shadow-xl border border-white/10 shrink-0">
+                    B
+                  </div>
+                  <div className="overflow-hidden transition-all duration-300 group-hover/sidebar:opacity-100 opacity-0 group-hover/sidebar:translate-x-0 -translate-x-4">
+                    <h1 className="text-xl font-black font-display text-primary leading-none tracking-tighter uppercase italic whitespace-nowrap">
+                      BODY MÉTTRICA <span className="text-foreground">FJ</span>
+                    </h1>
+                    <p className="text-[8px] font-black uppercase tracking-[0.4em] text-foreground/20 mt-1">Performance Suite</p>
+                  </div>
+                </div>
               </div>
-              <nav className="flex-1 p-8 space-y-3 overflow-y-auto">
-                <SidebarLink to="/dashboard" icon={<LayoutDashboard size={22} />} label="DASHBOARD" />
-                <SidebarLink to="/goals" icon={<Target size={22} />} label="METAS" />
-                <SidebarLink to="/body" icon={<User size={22} />} label="COMPOSIÇÃO" />
-                <SidebarLink to="/nutrition" icon={<Utensils size={22} />} label="NUTRIÇÃO" />
-                <SidebarLink 
-                  to="/hydration" 
-                  icon={<Droplets size={22} />} 
-                  label="HIDRATAÇÃO" 
-                />
-                <SidebarLink to="/supplements" icon={<Pill size={22} />} label="PROTOCOLOS" />
-                <SidebarLink to="/training" icon={<Dumbbell size={22} />} label="PERFORMANCE" />
+              <nav className="flex-1 p-4 space-y-2 overflow-y-auto scrollbar-none">
+                <SidebarLink to="/dashboard" icon={<LayoutDashboard size={20} />} label="DASHBOARD" />
+                <SidebarLink to="/goals" icon={<Target size={20} />} label="METAS" />
+                <SidebarLink to="/body" icon={<User size={20} />} label="COMPOSIÇÃO" />
+                <SidebarLink to="/nutrition" icon={<Utensils size={20} />} label="NUTRIÇÃO" />
+                <SidebarLink to="/hydration" icon={<Droplets size={20} />} label="HIDRATAÇÃO" />
+                <SidebarLink to="/supplements" icon={<Pill size={20} />} label="PROTOCOLOS" />
+                <SidebarLink to="/training" icon={<Dumbbell size={20} />} label="PERFORMANCE" />
               </nav>
               <div className="p-8 border-t border-white/5 space-y-6">
                 <div className="flex items-center justify-between px-5 py-3 bg-white/[0.03] rounded-2xl border border-white/5">
