@@ -12,6 +12,7 @@ import {
   LifeBuoy
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ResponsiveHero } from "@/components/responsive-hero";
 
 export const Route = createFileRoute("/about/")({
   component: AboutPage,
@@ -43,14 +44,13 @@ function AboutPage() {
       </header>
 
       <main className="relative z-10 pt-16 container mx-auto px-0 max-w-4xl space-y-12">
-        <section className="relative h-[40vh] min-h-[300px] flex items-center justify-center overflow-hidden mb-12">
-          <img 
-            src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&q=80&w=1600"
-            className="absolute inset-0 w-full h-full object-cover"
-            alt="Hero tools"
-          />
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px]" />
-          <div className="relative z-10 text-center space-y-4 px-4">
+        <ResponsiveHero 
+          imageUrl="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&q=80&w=1600"
+          overlayOpacity={0.7}
+          height="h-[40vh] min-h-[300px]"
+          className="mb-12"
+        >
+          <div className="text-center space-y-4 px-4">
             <h2 className="text-4xl md:text-5xl font-black font-display tracking-tighter text-white uppercase italic">
               A SUÍTE <span className="text-primary">COMPLETA</span>
             </h2>
@@ -58,7 +58,7 @@ function AboutPage() {
               O Body Métrica FJ foi projetado para transformar dados em resultados de alta performance.
             </p>
           </div>
-        </section>
+        </ResponsiveHero>
 
         <div className="px-4 grid gap-6 md:grid-cols-2">
           <ToolItem 

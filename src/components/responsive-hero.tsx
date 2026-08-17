@@ -7,6 +7,7 @@ interface ResponsiveHeroProps {
   overlayOpacity?: number;
   className?: string;
   children?: React.ReactNode;
+  height?: string;
 }
 
 export function ResponsiveHero({
@@ -15,9 +16,10 @@ export function ResponsiveHero({
   overlayOpacity = 0.4,
   className,
   children,
+  height = "h-[50vh] min-h-[400px]",
 }: ResponsiveHeroProps) {
   return (
-    <div className={cn("relative overflow-hidden w-full", className)}>
+    <div className={cn("relative overflow-hidden w-full flex items-center justify-center", height, className)}>
       {/* Hero Image with Responsive Logic and Placeholders */}
       <picture>
         {mobileImageUrl && (

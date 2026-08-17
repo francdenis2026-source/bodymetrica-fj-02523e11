@@ -15,6 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { ResponsiveHero } from "@/components/responsive-hero";
 
 export const Route = createFileRoute("/help/")({
   component: HelpCenterPage,
@@ -123,16 +124,14 @@ function HelpCenterPage() {
       </header>
 
       <main className="relative z-10 pt-16 container mx-auto px-0 max-w-3xl space-y-8">
-        <section className="relative h-[30vh] min-h-[250px] flex flex-col items-center justify-center overflow-hidden mb-8 px-4 text-center">
-          <img 
-            src="https://images.unsplash.com/photo-1434494878577-86c23bddad63?auto=format&fit=crop&q=80&w=1600"
-            className="absolute inset-0 w-full h-full object-cover"
-            alt="Help Center Hero"
-          />
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px]" />
-          
-          <div className="relative z-10 space-y-4 w-full max-w-md">
-            <h2 className="text-3xl font-black font-display tracking-tighter text-white uppercase italic">COMO PODEMOS <span className="text-primary">AJUDAR?</span></h2>
+        <ResponsiveHero 
+          imageUrl="https://images.unsplash.com/photo-1434494878577-86c23bddad63?auto=format&fit=crop&q=80&w=1600"
+          overlayOpacity={0.7}
+          height="h-[35vh] min-h-[280px]"
+          className="mb-8"
+        >
+          <div className="space-y-4 w-full max-w-md px-4">
+            <h2 className="text-3xl font-black font-display tracking-tighter text-white uppercase italic text-center">COMO PODEMOS <span className="text-primary">AJUDAR?</span></h2>
             <div className="relative">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-primary" size={20} />
               <Input 
@@ -143,7 +142,7 @@ function HelpCenterPage() {
               />
             </div>
           </div>
-        </section>
+        </ResponsiveHero>
 
         <section className="px-4 flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
           {CATEGORIES.map(cat => (
