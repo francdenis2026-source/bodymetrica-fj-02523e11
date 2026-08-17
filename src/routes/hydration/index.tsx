@@ -35,28 +35,29 @@ function HydrationPage() {
   };
 
   return (
-    <div className="flex-1 space-y-8 p-4 md:p-8 pt-6 relative overflow-hidden">
+    <div className="flex-1 space-y-12 p-4 md:p-12 pt-10 relative overflow-hidden bg-background">
       {/* Decorative Module Hero Image */}
-      <div className="absolute top-0 right-0 w-96 h-96 opacity-[0.03] pointer-events-none -z-10 translate-x-1/4 -translate-y-1/4">
+      <div className="absolute top-0 right-0 w-96 h-96 opacity-[0.08] pointer-events-none -z-10 translate-x-1/4 -translate-y-1/4">
         <Droplets size={384} className="text-info" />
       </div>
 
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 relative z-10 animate-in fade-in slide-in-from-left-4 duration-700">
         <ModuleHeader 
           title="Hidratação"
-          description="Mantenha seu corpo em pleno funcionamento com o controle diário de ingestão de líquidos."
+          description="Controle rigoroso de ingestão de fluídos para otimização metabólica e performance."
           icon={Droplets}
-          iconClassName="bg-info text-info-foreground"
+          iconClassName="bg-info text-info-foreground shadow-info/40 border-info/20"
         />
-        <div className="flex gap-2 relative z-10">
-          <Button variant="outline" size="icon" className="rounded-xl h-10 w-10 border-2" asChild title="Ajuda">
-            <Link to="/help"><LifeBuoy size={20} /></Link>
+        <div className="flex flex-wrap justify-center gap-4">
+          <Button variant="outline" className="gap-2 h-14 px-8 font-black uppercase tracking-widest border-2 bg-white/5 border-white/10 hover:bg-white/10 hover:scale-105 transition-all" asChild>
+            <Link to="/help">CENTRAL DE AJUDA</Link>
           </Button>
-          <Button variant="outline" size="icon" className="rounded-xl h-10 w-10 border-2" title="Configurações">
-            <Settings size={20} />
+          <Button variant="outline" size="icon" className="rounded-2xl h-14 w-14 border-2 bg-white/5 border-white/10 hover:bg-white/10 hover:scale-105 transition-all">
+            <Settings size={22} />
           </Button>
         </div>
       </div>
+
 
 
       <div className="grid gap-6 md:grid-cols-2">

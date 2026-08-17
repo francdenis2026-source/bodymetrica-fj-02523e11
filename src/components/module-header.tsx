@@ -18,21 +18,22 @@ export function ModuleHeader({
   className,
 }: ModuleHeaderProps) {
   return (
-    <div className={cn("flex flex-col gap-2 relative z-10 animate-in fade-in slide-in-from-left-4 duration-500", className)}>
-      <div className="flex items-center gap-3">
+    <div className={cn("flex flex-col gap-3 relative z-10 animate-in fade-in slide-in-from-left-4 duration-500", className)}>
+      <div className="flex items-center gap-4">
         <div className={cn(
-          "bg-brand-gradient p-2 rounded-xl shadow-lg border border-white/10 group",
+          "bg-brand-gradient p-3 rounded-2xl shadow-2xl border border-white/20 group",
           iconClassName
         )}>
-          <Icon className="text-primary-foreground group-hover:scale-110 transition-transform" size={24} />
+          <Icon className="text-primary-foreground group-hover:scale-110 transition-transform" size={28} />
         </div>
-        <h2 className="text-2xl md:text-3xl font-bold tracking-tight font-display text-primary uppercase">
+        <h2 className="text-3xl md:text-5xl font-black tracking-tighter font-display text-foreground uppercase italic leading-none">
           {title}
         </h2>
       </div>
-      <p className="text-muted-foreground text-sm md:text-base max-w-2xl font-medium leading-relaxed">
+      <p className="text-foreground/60 text-sm md:text-lg max-w-2xl font-semibold tracking-tight leading-snug">
         {description}
       </p>
     </div>
+
   );
 }

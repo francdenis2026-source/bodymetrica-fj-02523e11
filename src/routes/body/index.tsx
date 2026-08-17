@@ -41,24 +41,25 @@ function BodyPage() {
   const [activeTab, setActiveTab] = useState("overview");
 
   return (
-    <div className="flex-1 space-y-8 p-4 md:p-8 pt-6 relative overflow-hidden">
+    <div className="flex-1 space-y-12 p-4 md:p-12 pt-10 relative overflow-hidden bg-background">
       {/* Decorative Module Hero Image */}
-      <div className="absolute top-0 right-0 w-96 h-96 opacity-[0.03] pointer-events-none -z-10 translate-x-1/4 -translate-y-1/4">
+      <div className="absolute top-0 right-0 w-96 h-96 opacity-[0.08] pointer-events-none -z-10 translate-x-1/4 -translate-y-1/4">
         <Scale size={384} className="text-primary" />
       </div>
 
       <ModuleHeader 
-        title="Composição Corporal"
-        description="Acompanhe sua evolução física com métricas precisas, fotos e tendências. Use os dados para ajustar sua rotina e alcançar seus objetivos de forma profissional."
+        title="Performance Física"
+        description="Domine sua evolução com métricas de elite e acompanhamento profissional de resultados."
         icon={Scale}
       />
 
-      <Tabs defaultValue="overview" className="space-y-6" onValueChange={setActiveTab}>
-        <TabsList className="inline-flex h-12 items-center justify-center rounded-xl bg-muted/50 p-1 text-muted-foreground w-full md:w-auto">
-          <TabsTrigger value="overview" className="h-10 px-8 rounded-lg font-bold uppercase tracking-wider text-xs">Geral</TabsTrigger>
-          <TabsTrigger value="measurements" className="h-10 px-8 rounded-lg font-bold uppercase tracking-wider text-xs">Medidas</TabsTrigger>
-          <TabsTrigger value="photos" className="h-10 px-8 rounded-lg font-bold uppercase tracking-wider text-xs">Fotos</TabsTrigger>
+      <Tabs defaultValue="overview" className="space-y-8" onValueChange={setActiveTab}>
+        <TabsList className="inline-flex h-14 items-center justify-center rounded-2xl bg-white/5 p-1.5 text-foreground/60 w-full md:w-auto border border-white/5 backdrop-blur-3xl">
+          <TabsTrigger value="overview" className="h-11 px-10 rounded-xl font-black uppercase tracking-widest text-[10px] data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all">GERAL</TabsTrigger>
+          <TabsTrigger value="measurements" className="h-11 px-10 rounded-xl font-black uppercase tracking-widest text-[10px] data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all">MEDIDAS</TabsTrigger>
+          <TabsTrigger value="photos" className="h-11 px-10 rounded-xl font-black uppercase tracking-widest text-[10px] data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all">EVOLUÇÃO</TabsTrigger>
         </TabsList>
+
 
 
         <TabsContent value="overview" className="space-y-4">
@@ -129,42 +130,46 @@ function BodyPage() {
             </div>
           </Card>
 
-          <Card className="surface border-none">
-            <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle className="text-lg font-display">Últimos Registros</CardTitle>
-              <div className="flex items-center gap-2">
-                <Button size="sm" variant="outline" className="gap-2" asChild>
+          <Card className="surface border-white/5 bg-white/[0.03] backdrop-blur-3xl rounded-[2.5rem] overflow-hidden">
+            <CardHeader className="flex flex-col md:flex-row md:items-center justify-between p-8 gap-6">
+              <div className="space-y-1">
+                <CardTitle className="text-xl font-black uppercase tracking-widest italic">HISTÓRICO DE PERFORMANCE</CardTitle>
+                <p className="text-[10px] font-bold text-foreground/40 uppercase tracking-widest">REGISTROS CRONOLÓGICOS DE EVOLUÇÃO</p>
+              </div>
+              <div className="flex items-center gap-3">
+                <Button variant="outline" className="gap-2 h-12 px-6 font-black uppercase tracking-widest border-2 bg-white/5 border-white/10" asChild>
                   <Link to="/help">
-                    <LifeBuoy size={16} /> Entender Métricas
+                    ENTENDER MÉTRICAS
                   </Link>
                 </Button>
-                <Button size="sm" variant="outline" className="gap-2">
-                  <Plus size={16} /> Registrar
+                <Button className="gap-2 h-12 px-6 font-black uppercase tracking-widest bg-brand-gradient shadow-2xl shadow-primary/40 hover:scale-105 transition-all border-none">
+                  <Plus size={18} /> REGISTRAR
                 </Button>
               </div>
             </CardHeader>
             <CardContent className="px-0">
-              <div className="space-y-1">
+              <div className="space-y-0">
                 {[1, 2, 3].map((i) => (
-                  <div key={i} className="flex items-center justify-between px-6 py-4 hover:bg-muted/30 transition-colors border-b last:border-0">
-                    <div className="flex flex-col">
-                      <span className="text-sm font-semibold">13 Ago, 08:30</span>
-                      <span className="text-xs text-muted-foreground">Medição matinal</span>
+                  <div key={i} className="flex items-center justify-between px-8 py-6 hover:bg-white/5 transition-all border-b border-white/5 last:border-0 group">
+                    <div className="flex flex-col gap-1">
+                      <span className="text-xs font-black uppercase tracking-[0.2em] text-foreground/80 group-hover:text-primary transition-colors">13 AGO, 08:30</span>
+                      <span className="text-[10px] font-bold text-foreground/40 uppercase tracking-widest italic">MEDIÇÃO MATINAL EM JEJUM</span>
                     </div>
-                    <div className="text-right">
-                      <div className="text-sm font-bold">82.4 kg</div>
-                      <div className="text-[10px] text-success font-medium">-0.3 kg</div>
+                    <div className="text-right space-y-1">
+                      <div className="text-2xl font-black font-display tracking-tighter italic uppercase group-hover:scale-110 transition-transform">82.4 KG</div>
+                      <div className="text-[10px] font-black uppercase tracking-widest text-success bg-success/10 px-2 py-0.5 rounded-full inline-block">-0.3 KG</div>
                     </div>
                   </div>
                 ))}
               </div>
-              <div className="p-4 text-center">
-                <Button variant="ghost" size="sm" className="text-xs text-muted-foreground gap-2">
-                  <History size={14} /> Ver histórico completo
+              <div className="p-8 text-center bg-white/[0.01]">
+                <Button variant="ghost" className="text-[10px] font-black uppercase tracking-[0.3em] text-foreground/40 hover:text-foreground gap-3">
+                  <History size={16} /> VER HISTÓRICO COMPLETO
                 </Button>
               </div>
             </CardContent>
           </Card>
+
         </TabsContent>
 
         <TabsContent value="measurements">
@@ -231,22 +236,25 @@ function BodyPage() {
 
 function MetricCard({ label, value, change, trend, icon }: { label: string; value: string; change: string; trend: 'up' | 'down'; icon: React.ReactNode }) {
   return (
-    <Card className="surface border-none overflow-hidden group">
-      <CardContent className="p-5 flex flex-col gap-2 relative">
-        <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-110 transition-transform">
+    <Card className="surface border-white/5 bg-white/[0.03] backdrop-blur-3xl overflow-hidden group hover:scale-105 transition-all duration-500 rounded-[2rem]">
+      <CardContent className="p-8 flex flex-col gap-4 relative">
+        <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10 group-hover:rotate-6 transition-transform">
           {icon}
         </div>
-        <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">{label}</span>
-        <div className="flex items-baseline gap-2">
-          <span className="text-2xl font-bold font-display">{value}</span>
-          <span className={`text-[10px] font-bold ${trend === 'up' && label === 'Massa Muscular' ? 'text-success' : trend === 'down' ? 'text-success' : 'text-destructive'}`}>
-            {change}
-          </span>
+        <div className="space-y-1">
+          <span className="text-[10px] font-black text-foreground/40 uppercase tracking-[0.2em]">{label}</span>
+          <div className="flex items-baseline gap-3">
+            <span className="text-3xl font-black font-display tracking-tighter italic uppercase">{value}</span>
+            <span className={`text-xs font-black uppercase tracking-widest px-2 py-0.5 rounded-full ${trend === 'up' && label === 'Massa Muscular' ? 'bg-success/20 text-success' : trend === 'down' ? 'bg-success/20 text-success' : 'bg-destructive/20 text-destructive'}`}>
+              {change}
+            </span>
+          </div>
         </div>
       </CardContent>
     </Card>
   );
 }
+
 
 function MeasurementItem({ label, value }: { label: string; value: number }) {
   return (

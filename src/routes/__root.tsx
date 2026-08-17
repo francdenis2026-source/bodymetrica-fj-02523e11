@@ -175,28 +175,29 @@ function RootComponent() {
         {!isPublicRoute && (
           <>
             {/* Desktop Sidebar */}
-            <aside className="hidden md:flex w-64 flex-col border-r bg-card sticky top-0 h-screen">
-              <div className="p-6 border-b">
-                <h1 className="text-xl font-bold font-display text-primary leading-tight">
-                  Body Métrica FJ
+            <aside className="hidden md:flex w-72 flex-col border-r border-white/5 bg-card/50 backdrop-blur-2xl sticky top-0 h-screen">
+              <div className="p-8 border-b border-white/5">
+                <h1 className="text-2xl font-black font-display text-primary leading-tight tracking-tighter uppercase">
+                  BODY MÉTTRICA
                 </h1>
               </div>
-              <nav className="flex-1 p-4 space-y-1">
-                <SidebarLink to="/dashboard" icon={<LayoutDashboard size={20} />} label="Início" />
-                <SidebarLink to="/body" icon={<User size={20} />} label="Corpo" />
-                <SidebarLink to="/nutrition" icon={<Utensils size={20} />} label="Alimentação" />
-                <SidebarLink to="/hydration" icon={<Droplets size={20} />} label="Hidratação" />
-                <SidebarLink to="/supplements" icon={<Pill size={20} />} label="Suplementos" />
-                <SidebarLink to="/training" icon={<Dumbbell size={20} />} label="Treino" />
+              <nav className="flex-1 p-6 space-y-2">
+                <SidebarLink to="/dashboard" icon={<LayoutDashboard size={22} />} label="DASHBOARD" />
+                <SidebarLink to="/body" icon={<User size={22} />} label="COMPOSIÇÃO" />
+                <SidebarLink to="/nutrition" icon={<Utensils size={22} />} label="NUTRIÇÃO" />
+                <SidebarLink to="/hydration" icon={<Droplets size={22} />} label="HIDRATAÇÃO" />
+                <SidebarLink to="/supplements" icon={<Pill size={22} />} label="PROTOCOLOS" />
+                <SidebarLink to="/training" icon={<Dumbbell size={22} />} label="PERFORMANCE" />
               </nav>
-              <div className="p-4 border-t space-y-1">
-                <SidebarLink to="/settings" icon={<Settings size={20} />} label="Configurações" />
-                <button className="flex w-full items-center gap-3 px-3 py-2 text-sm font-medium text-destructive hover:bg-destructive/10 rounded-md transition-colors">
-                  <LogOut size={20} />
-                  Sair
+              <div className="p-6 border-t border-white/5 space-y-2">
+                <SidebarLink to="/settings" icon={<Settings size={22} />} label="AJUSTES" />
+                <button className="flex w-full items-center gap-4 px-4 py-3 text-xs font-black tracking-widest text-destructive hover:bg-destructive/10 rounded-xl transition-all uppercase">
+                  <LogOut size={22} />
+                  SAIR
                 </button>
               </div>
             </aside>
+
 
             {/* Mobile Bottom Nav */}
             <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-card border-t flex items-center justify-around p-2 pb-safe">
@@ -230,15 +231,16 @@ function SidebarLink({ to, icon, label }: { to: string; icon: React.ReactNode; l
   return (
     <Link
       to={to}
-      activeProps={{ className: "bg-primary/10 text-primary" }}
-      inactiveProps={{ className: "text-muted-foreground hover:bg-accent hover:text-foreground" }}
-      className="flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-colors"
+      activeProps={{ className: "bg-primary text-primary-foreground shadow-xl shadow-primary/20 scale-[1.02]" }}
+      inactiveProps={{ className: "text-foreground/60 hover:bg-white/5 hover:text-foreground" }}
+      className="flex items-center gap-4 px-4 py-3 text-xs font-black tracking-widest rounded-xl transition-all uppercase group"
     >
-      {icon}
+      <span className="group-hover:scale-110 transition-transform">{icon}</span>
       {label}
     </Link>
   );
 }
+
 
 function MobileNavLink({ to, icon, label }: { to: string; icon: React.ReactNode; label: string }) {
   return (

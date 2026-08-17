@@ -67,99 +67,102 @@ function AuthPage() {
       />
 
       <div className="relative z-10 w-full max-w-md px-4 py-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
-        <div className="text-center space-y-4 mb-8">
-          <Link to="/" className="inline-flex items-center text-sm font-semibold text-white/70 hover:text-white transition-colors mb-2 backdrop-blur-sm bg-black/20 px-4 py-2 rounded-full border border-white/10">
-            <ArrowLeft size={16} className="mr-2" />
-            Voltar para o Início
+        <div className="text-center space-y-6 mb-12">
+          <Link to="/" className="inline-flex items-center text-[10px] font-black uppercase tracking-[0.2em] text-white/50 hover:text-white transition-all mb-4 backdrop-blur-3xl bg-black/40 px-6 py-2 rounded-full border border-white/10 hover:border-primary/50">
+            <ArrowLeft size={14} className="mr-2" />
+            VOLTAR AO INÍCIO
           </Link>
-          <div className="mx-auto w-16 h-16 bg-brand-gradient rounded-2xl flex items-center justify-center text-primary-foreground font-bold text-2xl shadow-2xl border-2 border-white/20">
+          <div className="mx-auto w-24 h-24 bg-brand-gradient rounded-[2rem] flex items-center justify-center text-primary-foreground font-black text-4xl shadow-2xl border-2 border-white/20 transform rotate-3 hover:rotate-0 transition-transform duration-500">
             B
           </div>
           <div>
-            <h1 className="text-4xl font-bold font-display tracking-tight text-white uppercase drop-shadow-lg">Body Métrica FJ</h1>
-            <p className="text-white/80 font-bold uppercase tracking-widest text-xs mt-1">Sua evolução levada a sério.</p>
+            <h1 className="text-5xl md:text-6xl font-black font-display tracking-tighter text-white uppercase italic leading-none">
+              BODY <span className="text-gradient-brand">MÉTTRICA</span>
+            </h1>
+            <p className="text-white/60 font-black uppercase tracking-[0.3em] text-[10px] mt-4">PERFORMANCE & RESULTADOS</p>
           </div>
         </div>
 
-        <Card className="surface border-none shadow-2xl bg-card/80 backdrop-blur-xl">
-          <CardHeader>
-            <CardTitle className="text-2xl font-bold font-display text-primary uppercase flex items-center gap-2">
-              <Lock size={20} />
-              Entrar
-            </CardTitle>
-            <CardDescription className="font-medium text-muted-foreground">
-              Utilize seu CPF e PIN de 6 dígitos para acessar sua conta protegida.
+        <Card className="surface border-white/5 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.6)] bg-black/60 backdrop-blur-3xl rounded-[2.5rem] overflow-hidden">
+          <CardHeader className="space-y-2 pb-10 border-b border-white/5 pt-12">
+            <CardTitle className="text-3xl font-black text-white text-center uppercase tracking-[0.2em] italic">AUTENTICAÇÃO</CardTitle>
+            <CardDescription className="font-bold text-white/40 text-center uppercase text-[10px] tracking-widest px-4">
+              INSIRA SEUS DADOS DE ACESSO PROTEGIDO
             </CardDescription>
           </CardHeader>
+
           <CardContent>
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                 <FormField
                   control={form.control}
                   name="cpf"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="font-bold text-xs uppercase tracking-wider text-muted-foreground">CPF</FormLabel>
+                      <FormLabel className="font-black text-[10px] uppercase tracking-[0.2em] text-primary ml-1">IDENTIFICAÇÃO (CPF)</FormLabel>
                       <FormControl>
                         <Input 
                           placeholder="000.000.000-00" 
-                          className="h-12 text-lg font-medium border-2 focus-visible:ring-primary"
+                          className="h-16 text-xl font-black bg-white/5 border-white/10 rounded-2xl px-6 text-white focus:ring-primary focus:border-primary transition-all placeholder:text-white/20"
                           {...field} 
                           onChange={(e) => field.onChange(formatCpf(e.target.value))}
                           disabled={isLoading}
                         />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className="text-[10px] font-bold uppercase tracking-widest text-destructive/80" />
                     </FormItem>
                   )}
                 />
+
                 <FormField
                   control={form.control}
                   name="pin"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="font-bold text-xs uppercase tracking-wider text-muted-foreground">PIN de 6 dígitos</FormLabel>
+                      <FormLabel className="font-black text-[10px] uppercase tracking-[0.2em] text-primary ml-1">CÓDIGO DE ACESSO (PIN)</FormLabel>
                       <FormControl>
                         <Input 
                           type="password" 
                           inputMode="numeric"
                           maxLength={6}
                           placeholder="••••••" 
-                          className="h-12 text-center text-2xl tracking-[0.5em] font-bold border-2 focus-visible:ring-primary"
+                          className="h-16 text-center text-3xl tracking-[0.5em] font-black bg-white/5 border-white/10 rounded-2xl text-white focus:ring-primary focus:border-primary transition-all placeholder:text-white/20"
                           {...field} 
                           disabled={isLoading}
                         />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className="text-[10px] font-bold uppercase tracking-widest text-destructive/80" />
                     </FormItem>
                   )}
                 />
-                <Button type="submit" className="w-full h-12 text-base font-bold uppercase tracking-wide bg-brand-gradient hover:opacity-90 shadow-lg shadow-primary/20" disabled={isLoading}>
-                  {isLoading ? "Validando..." : "Acessar Sistema"}
+                <Button type="submit" className="w-full h-16 text-base font-black uppercase tracking-[0.2em] bg-brand-gradient hover:scale-[1.02] transition-all shadow-2xl shadow-primary/30 border-none mt-4 rounded-2xl" disabled={isLoading}>
+                  {isLoading ? "PROCESSANDO..." : "ACESSAR PLATAFORMA"}
                 </Button>
+
               </form>
             </Form>
           </CardContent>
-          <CardFooter className="flex flex-col gap-6 border-t pt-8 bg-muted/20">
-            <div className="flex items-start gap-3 text-xs text-muted-foreground leading-relaxed font-medium">
-              <ShieldCheck className="text-primary shrink-0" size={18} />
+          <CardFooter className="flex flex-col gap-8 border-t border-white/5 pt-10 pb-12 bg-white/[0.02]">
+            <div className="flex items-start gap-4 text-[10px] text-white/40 leading-relaxed font-bold uppercase tracking-widest">
+              <ShieldCheck className="text-primary shrink-0" size={20} />
               <p>
-                Protocolo de segurança ativo. Seus dados de saúde são criptografados e acessíveis apenas sob autenticação rigorosa.
+                Protocolo de segurança militar ativo. Criptografia de ponta a ponta.
               </p>
             </div>
             
-            <div className="w-full space-y-3">
-              <p className="text-center text-sm font-semibold text-muted-foreground">
-                Novo por aqui?{" "}
-                <Link to="/onboarding" className="text-primary hover:underline underline-offset-4 decoration-2">
-                  Criar minha conta agora
+            <div className="w-full space-y-4">
+              <p className="text-center text-[10px] font-black text-white/30 uppercase tracking-[0.2em]">
+                NÃO POSSUI UMA CONTA?{" "}
+                <Link to="/onboarding" className="text-primary hover:text-primary-foreground transition-all">
+                  CADASTRAR AGORA
                 </Link>
               </p>
-              <button className="w-full text-center text-xs font-bold uppercase tracking-wider text-primary/60 hover:text-primary transition-colors underline underline-offset-2">
-                Esqueci meu PIN de acesso
+              <button className="w-full text-center text-[10px] font-black uppercase tracking-[0.2em] text-white/20 hover:text-white transition-all underline decoration-white/10 underline-offset-4">
+                RECUPERAR PIN DE ACESSO
               </button>
             </div>
           </CardFooter>
+
         </Card>
         
         <div className="mt-8 text-center space-y-1">

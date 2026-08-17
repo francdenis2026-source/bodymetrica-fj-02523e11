@@ -35,29 +35,30 @@ function NutritionPage() {
   };
 
   return (
-    <div className="flex-1 space-y-8 p-4 md:p-8 pt-6 relative overflow-hidden">
+    <div className="flex-1 space-y-12 p-4 md:p-12 pt-10 relative overflow-hidden bg-background">
       {/* Decorative Module Hero Image */}
-      <div className="absolute top-0 right-0 w-96 h-96 opacity-[0.03] pointer-events-none -z-10 translate-x-1/4 -translate-y-1/4">
+      <div className="absolute top-0 right-0 w-96 h-96 opacity-[0.08] pointer-events-none -z-10 translate-x-1/4 -translate-y-1/4">
         <Utensils size={384} className="text-primary" />
       </div>
 
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 relative z-10 animate-in fade-in slide-in-from-left-4 duration-700">
         <ModuleHeader 
-          title="Alimentação"
-          description="Planejamento nutricional estratégico focado no seu objetivo de saúde e performance."
+          title="Nutrição"
+          description="Planejamento estratégico de ingestão calórica e macronutrientes para performance máxima."
           icon={Utensils}
         />
-        <div className="flex gap-2 relative z-10">
-          <Button size="sm" variant="outline" className="gap-2 h-10 px-4 font-semibold border-2" asChild>
+        <div className="flex flex-wrap justify-center gap-4">
+          <Button variant="outline" className="gap-2 h-14 px-8 font-black uppercase tracking-widest border-2 bg-white/5 border-white/10 hover:bg-white/10 hover:scale-105 transition-all" asChild>
             <Link to="/help">
-              <LifeBuoy size={18} /> Ajuda
+              CENTRAL DE AJUDA
             </Link>
           </Button>
-          <Button size="sm" className="gap-2 h-10 px-4 font-semibold bg-brand-gradient shadow-lg">
-            <Search size={18} /> Buscar Alimentos
+          <Button className="gap-3 h-14 px-8 font-black uppercase tracking-widest bg-brand-gradient shadow-2xl shadow-primary/40 hover:scale-105 transition-all border-none">
+            <Search size={20} /> BUSCAR ALIMENTOS
           </Button>
         </div>
       </div>
+
 
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
