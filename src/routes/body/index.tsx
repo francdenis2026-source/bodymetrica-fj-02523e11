@@ -2,7 +2,9 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { exportToCSV } from "@/lib/export";
-import { generateComparisonPDF } from "@/lib/comparison-reports";
+import { toast } from "sonner";
+import { generateComparisonPDF, exportReportAsImage } from "@/lib/comparison-reports";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -15,8 +17,11 @@ import {
   TrendingUp,
   Info,
   LifeBuoy,
-  FileDown
+  FileDown,
+  Share2,
+  Image as ImageIcon
  } from "lucide-react";
+
 import { 
   LineChart, 
   Line, 
