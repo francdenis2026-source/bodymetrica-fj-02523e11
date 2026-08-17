@@ -13,8 +13,11 @@ import {
   Download,
   Trash2,
   ChevronRight,
-  LifeBuoy
+  LifeBuoy,
+  Settings
 } from "lucide-react";
+import { ModuleHeader } from "@/components/module-header";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export const Route = createFileRoute("/settings/")({

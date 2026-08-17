@@ -11,9 +11,12 @@ import {
   Clock,
   ListChecks,
   Info,
-  LifeBuoy
+  LifeBuoy,
+  Search
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ModuleHeader } from "@/components/module-header";
+
 
 export const Route = createFileRoute("/supplements/")({
   component: SupplementsPage,
