@@ -24,7 +24,8 @@ import {
   LogOut,
   Moon,
   Sun,
-  Target
+  Target,
+  Zap
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { syncOfflineActions, getSyncHistory } from "@/lib/offline-sync";
