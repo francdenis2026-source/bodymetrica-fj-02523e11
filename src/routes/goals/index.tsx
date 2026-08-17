@@ -19,7 +19,7 @@ function GoalsPage() {
     if (session) setUserData(session);
   }, []);
 
-  const goals = [
+  const [goals, setGoals] = useState([
     {
       title: "Peso Corporal",
       current: 82.4,
@@ -47,7 +47,15 @@ function GoalsPage() {
       color: "bg-success",
       status: "Faltam 35g"
     }
-  ];
+  ]);
+
+  const updateGoal = (idx: number, newTarget: number) => {
+    const updated = [...goals];
+    if (updated[idx]) {
+      updated[idx].target = newTarget;
+      setGoals(updated);
+    }
+  };
 
   return (
     <div className="flex-1 space-y-12 p-4 md:p-12 pt-10 bg-background">
@@ -59,7 +67,7 @@ function GoalsPage() {
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {goals.map((goal, idx) => {
-          const progress = Math.min(Math.round((goal.current / goal.target) * 100), 100);
+          const progress = Math.min(Math.round(((goal.current || 0) / (goal.target || 1)) * 100), 100);
           return (
             <motion.div
               key={idx}
@@ -88,7 +96,12 @@ function GoalsPage() {
                       </p>
                     </div>
                     <div className="text-right">
-                      <div className="text-2xl font-black italic text-primary">{progress}%</div>
+                      <input 
+                        type="number" 
+                        value={goal.target}
+                        onChange={(e) => updateGoal(idx, parseFloat(e.target.value))}
+                        className="w-20 text-right bg-transparent text-2xl font-black italic text-primary focus:outline-none"
+                      />
                       <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{goal.status}</p>
                     </div>
                   </div>
