@@ -417,8 +417,7 @@ function RootComponent() {
             {/* Desktop Sidebar */}
             <aside className={cn(
               "hidden md:flex flex-col border-r border-white/5 bg-card/30 backdrop-blur-3xl sticky top-0 h-screen z-40 transition-all duration-300",
-              "w-80 group/sidebar hover:w-80",
-              "w-20 hover:w-80" // Starts collapsed, expands on hover
+              "w-20 hover:w-80 focus-within:w-80 group/sidebar" // Expands on hover OR focus
             )}>
               <div className="p-6 border-b border-white/5 relative overflow-hidden group">
                 <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
@@ -514,10 +513,10 @@ function SidebarLink({ to, icon, label }: { to: string; icon: React.ReactNode; l
       to={to}
       activeProps={{ className: "bg-primary text-primary-foreground shadow-xl shadow-primary/20 scale-[1.02] border-primary" }}
       inactiveProps={{ className: "text-foreground/60 hover:bg-white/5 hover:text-foreground border-transparent" }}
-      className="flex items-center gap-4 px-4 py-3 text-[11px] font-black tracking-widest rounded-xl transition-all uppercase group border-2 overflow-hidden whitespace-nowrap"
+      className="flex items-center gap-4 px-4 py-3 text-[11px] font-black tracking-widest rounded-xl transition-all uppercase group border-2 overflow-hidden whitespace-nowrap focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background outline-none"
     >
       <span className="group-hover:scale-110 transition-transform shrink-0">{icon}</span>
-      <span className="opacity-0 group-hover/sidebar:opacity-100 transition-opacity duration-300">{label}</span>
+      <span className="opacity-0 group-hover/sidebar:opacity-100 transition-opacity duration-300 pointer-events-none group-focus-within/sidebar:opacity-100">{label}</span>
     </Link>
   );
 }

@@ -274,6 +274,31 @@ function QuickOnboarding({ isLoggedIn }: { isLoggedIn: boolean }) {
   const [step, setStep] = useState(1);
   const [data, setData] = useState({ type: '', value: '' });
 
+  // Persistence logic for the mini onboarding
+  useEffect(() => {
+    const saved = localStorage.getItem('bodymetrica_quick_onboarding');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (parsed.step > 1 || parsed.data.type) {
+          setStep(parsed.step);
+          setData(parsed.data);
+          // Don't auto-open, but keep state ready
+        }
+      } catch (e) {
+        console.error("Failed to restore onboarding state", e);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (step > 1 || data.type || data.value) {
+      localStorage.setItem('bodymetrica_quick_onboarding', JSON.stringify({ step, data }));
+    } else {
+      localStorage.removeItem('bodymetrica_quick_onboarding');
+    }
+  }, [step, data]);
+
   const handleAction = () => {
     if (!isLoggedIn) {
       toast.error("Acesse sua conta para registrar.", {
@@ -288,6 +313,8 @@ function QuickOnboarding({ isLoggedIn }: { isLoggedIn: boolean }) {
     toast.success("Registro simulado com sucesso!");
     setOpen(false);
     setStep(1);
+    setData({ type: '', value: '' });
+    localStorage.removeItem('bodymetrica_quick_onboarding');
   };
 
   return (
