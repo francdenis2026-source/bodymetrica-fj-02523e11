@@ -166,7 +166,23 @@ function HydrationPage() {
                 <History size={18} className="text-primary" />
                 Registros de Hoje
               </CardTitle>
-              <Button variant="ghost" size="sm" className="h-8 text-xs">Ver tudo</Button>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="h-8 text-xs"
+                onClick={() => {
+                  if ("Notification" in window && Notification.permission === "granted") {
+                    new Notification("Body Métrica FJ", {
+                      body: "Não esqueça de beber água! Sua meta é 3L hoje.",
+                      icon: "/favicon.ico"
+                    });
+                  } else {
+                    alert("Ative as notificações nas configurações para receber lembretes.");
+                  }
+                }}
+              >
+                TESTAR LEMBRETE
+              </Button>
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
