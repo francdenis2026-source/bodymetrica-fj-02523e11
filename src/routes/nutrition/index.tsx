@@ -114,9 +114,51 @@ function NutritionPage() {
       <Tabs defaultValue="plan" className="space-y-4" onValueChange={setActiveTab}>
         <TabsList className="grid w-full grid-cols-2 md:w-auto md:inline-grid">
           <TabsTrigger value="plan">Plano Alimentar</TabsTrigger>
-          <TabsTrigger value="diary">Diário</TabsTrigger>
+          <TabsTrigger value="diary">Diário & Macros</TabsTrigger>
           <TabsTrigger value="calculator">Calculadora Macros</TabsTrigger>
         </TabsList>
+
+        <TabsContent value="diary" className="space-y-6">
+          <Card className="surface border-none p-6">
+            <CardHeader className="px-0 pt-0 flex flex-row items-center justify-between">
+              <div>
+                <CardTitle className="text-xl font-display uppercase italic">Registrar Refeição</CardTitle>
+                <CardDescription className="text-[10px] font-bold uppercase tracking-widest opacity-60">Histórico de consumo e validação de macros</CardDescription>
+              </div>
+              <Button size="sm" variant="outline" className="text-[10px] font-bold uppercase tracking-widest">
+                <History size={14} className="mr-2" /> Histórico
+              </Button>
+            </CardHeader>
+            <CardContent className="px-0 space-y-4">
+              <div className="space-y-2">
+                <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Alimento / Refeição</label>
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={16} />
+                  <Input placeholder="Ex: 200g Frango Grelhado" className="pl-10 bg-white/5 border-white/10" />
+                </div>
+              </div>
+              <div className="grid grid-cols-4 gap-4 text-center">
+                <div className="p-3 rounded-lg bg-white/5 border border-white/10">
+                  <div className="text-xs font-bold text-primary">Kcal</div>
+                  <div className="text-lg font-black italic tracking-tighter">--</div>
+                </div>
+                <div className="p-3 rounded-lg bg-white/5 border border-white/10">
+                  <div className="text-xs font-bold text-success">P</div>
+                  <div className="text-lg font-black italic tracking-tighter">--g</div>
+                </div>
+                <div className="p-3 rounded-lg bg-white/5 border border-white/10">
+                  <div className="text-xs font-bold text-info">C</div>
+                  <div className="text-lg font-black italic tracking-tighter">--g</div>
+                </div>
+                <div className="p-3 rounded-lg bg-white/5 border border-white/10">
+                  <div className="text-xs font-bold text-warning">G</div>
+                  <div className="text-lg font-black italic tracking-tighter">--g</div>
+                </div>
+              </div>
+              <Button className="w-full bg-brand-gradient border-none font-black uppercase tracking-widest h-12">Confirmar Registro e Atualizar Diário</Button>
+            </CardContent>
+          </Card>
+        </TabsContent>
 
         <TabsContent value="calculator" className="space-y-6">
           <Card className="surface border-none p-8">

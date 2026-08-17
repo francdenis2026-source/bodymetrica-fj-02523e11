@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { generatePDFReport } from "@/lib/reports";
+import { exportToCSV } from "@/lib/export";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getSession } from "@/lib/auth/auth.functions";
 
@@ -119,6 +120,16 @@ function DashboardPage() {
             })}
           >
             <FileDown size={20} /> RELATÓRIO PDF
+          </Button>
+          <Button 
+            variant="outline"
+            className="gap-3 h-14 px-8 font-black uppercase tracking-widest border-2 bg-white/5 border-white/10 hover:bg-white/10 hover:scale-105 transition-all"
+            onClick={() => exportToCSV([
+              { Data: "01/08", Peso: 84.5, Hidratacao: "1.2L", Proteina: "180g" },
+              { Data: "15/08", Peso: 82.4, Hidratacao: "2.1L", Proteina: "185g" }
+            ], 'Evolucao_BodyMetrica')}
+          >
+            <FileDown size={20} /> EXPORTAR CSV
           </Button>
         </div>
       </div>

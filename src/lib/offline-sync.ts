@@ -64,17 +64,20 @@ export const syncOfflineActions = async () => {
       
       console.log(`Syncing ${actions.length} offline actions...`);
       
-      // In a real app, we would send these to the server
-      // For now, we simulate a successful sync
+      // Enviar para o servidor em lote ou sequência
       for (const action of actions) {
-        console.log("Syncing action:", action);
-        // Simulate API call
-        // await api.post('/sync', action);
+        try {
+          console.log("Syncing action:", action);
+          // Em um app real, aqui chamaríamos a API do Supabase
+          // await supabase.from('logs').insert(action.data);
+          
+          // Simular sucesso
+          const deleteTransaction = db.transaction(STORE_NAME, 'readwrite');
+          deleteTransaction.objectStore(STORE_NAME).delete(action.id!);
+        } catch (err) {
+          console.error("Failed to sync specific action:", err);
+        }
       }
-      
-      // Clear the store after successful sync
-      const clearTransaction = db.transaction(STORE_NAME, 'readwrite');
-      clearTransaction.objectStore(STORE_NAME).clear();
       
       toast.success(`${actions.length} registros foram sincronizados com sucesso!`);
     };
@@ -82,3 +85,15 @@ export const syncOfflineActions = async () => {
     console.error("Failed to sync offline actions:", error);
   }
 };
+
+// Adiciona listener para sync em background se disponível
+if ('serviceWorker' in navigator && 'SyncManager' in window) {
+  navigator.serviceWorker.ready.then(registration => {
+    return (registration as any).sync.register('sync-offline-actions');
+  }).catch(() => {
+    // Fallback para quando o sync de background não é suportado
+    window.addEventListener('online', syncOfflineActions);
+  });
+} else {
+  window.addEventListener('online', syncOfflineActions);
+}
