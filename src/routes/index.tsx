@@ -26,7 +26,14 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-  return (
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userName, setUserName] = useState("");
+
+  useEffect(() => {
+    const session = getSession();
+    setIsLoggedIn(!!session);
+    setUserName(session?.user?.name || "");
+  }, []);
     <div className="flex flex-col min-h-screen bg-background relative overflow-x-hidden">
       {/* Professional Full Background Image with better contrast */}
       <div 
