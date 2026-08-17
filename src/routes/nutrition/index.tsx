@@ -23,6 +23,7 @@ import { queueOfflineAction } from "@/lib/offline-sync";
 import { ModuleHeader } from "@/components/module-header";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PageHeaderSkeleton, StatsSkeleton } from "@/components/ui/loading-states";
+import { EmptyState } from "@/components/ui/status-states";
 import { getSession } from "@/lib/auth/auth.functions";
 
 
@@ -70,6 +71,8 @@ function NutritionPage() {
     }
   }, [isLoading, macros.protein.current, macros.protein.goal]);
 
+  const hasMacros = false; // Mock data absence for demonstration
+
   if (isLoading) {
     return (
       <div className="flex-1 space-y-12 p-4 md:p-12 pt-10 bg-background animate-in fade-in duration-700">
@@ -83,6 +86,33 @@ function NutritionPage() {
             <Skeleton className="h-64 rounded-[2.5rem]" />
             <Skeleton className="h-48 rounded-[2.5rem]" />
           </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Placeholder logic for empty state
+  const isDiaryEmpty = true; 
+
+  if (isDiaryEmpty && activeTab === "diary" && !isLoading) {
+    return (
+      <div className="flex-1 p-4 md:p-12 pt-10 bg-background animate-in fade-in duration-700">
+         <ModuleHeader 
+          title="Nutrição"
+          description="Planejamento estratégico de ingestão calórica e macronutrientes para performance máxima."
+          icon={Utensils}
+        />
+        <div className="mt-20">
+          <EmptyState 
+            icon={Utensils}
+            title="DIÁRIO VAZIO"
+            description="Nenhuma refeição registrada hoje. Mantenha a disciplina e registre seu primeiro consumo."
+            action={
+              <Button className="h-14 px-10 rounded-xl bg-brand-gradient text-xs font-black uppercase tracking-widest shadow-2xl hover:scale-105 transition-all">
+                <Plus size={18} className="mr-2" /> REGISTRAR REFEIÇÃO
+              </Button>
+            }
+          />
         </div>
       </div>
     );
@@ -141,42 +171,49 @@ function NutritionPage() {
                 <HistoryIcon size={14} className="mr-2" /> Histórico
               </Button>
             </CardHeader>
-            <CardContent className="px-0 space-y-4">
-              <div className="space-y-2 relative">
-                <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Alimento / Refeição</label>
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={16} />
-                  <Input 
-                    placeholder="Ex: 200g Frango Grelhado" 
-                    className="pl-10 bg-white/5 border-white/10" 
-                    onChange={(e) => {
-                      // Simular autocomplete
-                      if (e.target.value.length > 2) {
-                        toast.info("Sugestão: Peito de Frango (165kcal/100g)", { duration: 1000 });
-                      }
-                    }}
-                  />
+            <CardContent className="px-0 space-y-6">
+              <form className="space-y-6" onSubmit={(e) => {
+                e.preventDefault();
+                toast.success("Refeição registrada com sucesso!", {
+                  description: "Os macronutrientes foram atualizados no seu diário."
+                });
+              }}>
+                <div className="space-y-2 relative">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Alimento / Refeição</label>
+                  <div className="relative">
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" size={16} />
+                    <Input 
+                      required
+                      placeholder="Ex: 200g Frango Grelhado" 
+                      className="pl-12 h-14 bg-white/5 border-2 border-white/5 focus:border-primary/50 transition-all rounded-2xl font-bold" 
+                      onChange={(e) => {
+                        if (e.target.value.length > 2) {
+                          toast.info("Sugestão: Peito de Frango (165kcal/100g)", { duration: 1000 });
+                        }
+                      }}
+                    />
+                  </div>
                 </div>
-              </div>
-              <div className="grid grid-cols-4 gap-4 text-center">
-                <div className="p-3 rounded-lg bg-white/5 border border-white/10">
-                  <div className="text-xs font-bold text-primary">Kcal</div>
-                  <div className="text-lg font-black italic tracking-tighter">--</div>
+                <div className="grid grid-cols-4 gap-4 text-center">
+                  <div className="p-4 rounded-2xl bg-white/5 border border-white/5">
+                    <div className="text-[10px] font-black uppercase text-primary mb-1">Kcal</div>
+                    <div className="text-xl font-black italic tracking-tighter uppercase">--</div>
+                  </div>
+                  <div className="p-4 rounded-2xl bg-white/5 border border-white/5">
+                    <div className="text-[10px] font-black uppercase text-success mb-1">P</div>
+                    <div className="text-xl font-black italic tracking-tighter uppercase">--g</div>
+                  </div>
+                  <div className="p-4 rounded-2xl bg-white/5 border border-white/5">
+                    <div className="text-[10px] font-black uppercase text-info mb-1">C</div>
+                    <div className="text-xl font-black italic tracking-tighter uppercase">--g</div>
+                  </div>
+                  <div className="p-4 rounded-2xl bg-white/5 border border-white/5">
+                    <div className="text-[10px] font-black uppercase text-warning mb-1">G</div>
+                    <div className="text-xl font-black italic tracking-tighter uppercase">--g</div>
+                  </div>
                 </div>
-                <div className="p-3 rounded-lg bg-white/5 border border-white/10">
-                  <div className="text-xs font-bold text-success">P</div>
-                  <div className="text-lg font-black italic tracking-tighter">--g</div>
-                </div>
-                <div className="p-3 rounded-lg bg-white/5 border border-white/10">
-                  <div className="text-xs font-bold text-info">C</div>
-                  <div className="text-lg font-black italic tracking-tighter">--g</div>
-                </div>
-                <div className="p-3 rounded-lg bg-white/5 border border-white/10">
-                  <div className="text-xs font-bold text-warning">G</div>
-                  <div className="text-lg font-black italic tracking-tighter">--g</div>
-                </div>
-              </div>
-              <Button className="w-full bg-brand-gradient border-none font-black uppercase tracking-widest h-12">Confirmar Registro e Atualizar Diário</Button>
+                <Button type="submit" className="w-full bg-brand-gradient border-none font-black uppercase tracking-[0.2em] h-16 rounded-2xl shadow-2xl hover:scale-[1.02] transition-all">Confirmar Registro</Button>
+              </form>
             </CardContent>
           </Card>
         </TabsContent>

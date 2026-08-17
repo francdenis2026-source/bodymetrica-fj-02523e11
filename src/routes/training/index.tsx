@@ -19,6 +19,7 @@ import {
 import { ModuleHeader } from "@/components/module-header";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PageHeaderSkeleton, StatsSkeleton } from "@/components/ui/loading-states";
+import { EmptyState } from "@/components/ui/status-states";
 import { Input } from "@/components/ui/input";
 import { getSession } from "@/lib/auth/auth.functions";
 
@@ -42,6 +43,8 @@ function TrainingPage() {
     return () => clearTimeout(timer);
   }, []);
 
+  const hasWorkouts = false; // Mock for demonstration
+
   if (isLoading) {
     return (
       <div className="flex-1 space-y-12 p-4 md:p-12 pt-10 bg-background animate-in fade-in duration-700">
@@ -51,6 +54,30 @@ function TrainingPage() {
           {[1, 2, 3].map(i => <Skeleton key={i} className="h-64 rounded-[2.5rem]" />)}
         </div>
         <Skeleton className="h-96 rounded-[2.5rem] w-full" />
+      </div>
+    );
+  }
+
+  if (!hasWorkouts && activeTab === "routine" && !isLoading) {
+    return (
+      <div className="flex-1 p-4 md:p-12 pt-10 bg-background animate-in fade-in duration-700">
+        <ModuleHeader 
+          title="Performance"
+          description="Evolução estratégica de carga, consistência e potência nos seus treinamentos de elite."
+          icon={Dumbbell}
+        />
+        <div className="mt-20">
+          <EmptyState 
+            icon={Dumbbell}
+            title="SEM TREINOS ATIVOS"
+            description="Nenhuma ficha de treinamento detectada. Crie sua primeira rotina de performance agora."
+            action={
+              <Button className="h-14 px-10 rounded-xl bg-brand-gradient text-xs font-black uppercase tracking-widest shadow-2xl hover:scale-105 transition-all">
+                <Plus size={18} className="mr-2" /> CRIAR FICHA
+              </Button>
+            }
+          />
+        </div>
       </div>
     );
   }
