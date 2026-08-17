@@ -100,9 +100,12 @@ function DashboardPage() {
 
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 relative z-10 animate-in fade-in slide-in-from-left-4 duration-700">
         <div className="flex flex-col md:flex-row items-center gap-6">
-          <div className="w-20 h-20 bg-brand-gradient rounded-3xl flex items-center justify-center text-white text-3xl font-black shadow-2xl border-2 border-white/20 transform hover:scale-105 transition-transform duration-500">
-            {userName[0]}
-          </div>
+          <Link to="/profile" className="group">
+            <div className="w-20 h-20 bg-brand-gradient rounded-3xl flex items-center justify-center text-white text-3xl font-black shadow-2xl border-2 border-white/20 transform group-hover:scale-105 transition-transform duration-500">
+              {userName[0]}
+            </div>
+          </Link>
+
           <div className="text-center md:text-left space-y-2">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/20 text-primary-foreground text-[10px] font-black uppercase tracking-[0.2em] mb-1 border border-primary/30">
               SISTEMA DE PERFORMANCE
