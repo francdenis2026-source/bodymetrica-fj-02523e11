@@ -118,7 +118,7 @@ function DashboardPage() {
               <User className="h-4 w-4 text-primary" />
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-black font-display italic tracking-tighter uppercase">82.4 kg</div>
+              <div className="text-3xl font-black font-display italic tracking-tighter uppercase">{userData?.profile?.weight || "82.4"} kg</div>
               <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
                 <TrendingUp size={12} className="text-success" />
                 {weightChange}kg desde a última semana
