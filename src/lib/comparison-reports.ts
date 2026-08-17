@@ -16,6 +16,7 @@ export interface ReportData {
   summary: string;
   password?: string | null | undefined;
   viewLimit?: number | null | undefined;
+  expirationDays?: number | null | undefined;
 }
 
 export const generateComparisonPDF = async (data: ReportData) => {
@@ -73,7 +74,7 @@ export const generateComparisonPDF = async (data: ReportData) => {
     type: 'PDF',
     fileName: `Comparativo_BodyMetrica_${data.userName.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`,
     publicLink: `https://bodymetrica.link/share/${crypto.randomUUID().slice(0, 8)}`,
-    expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+    expiresAt: new Date(Date.now() + (data.expirationDays || 7) * 24 * 60 * 60 * 1000).toISOString(),
     password: data.password || null,
     viewLimit: data.viewLimit || null,
     viewsCount: 0
@@ -89,7 +90,7 @@ export const generateComparisonPDF = async (data: ReportData) => {
   };
 };
 
-export const exportReportAsImage = async (elementId: string, fileName: string, options?: { password?: string | null | undefined, viewLimit?: number | null | undefined }) => {
+export const exportReportAsImage = async (elementId: string, fileName: string, options?: { password?: string | null | undefined, viewLimit?: number | null | undefined, expirationDays?: number | null | undefined }) => {
   const element = document.getElementById(elementId);
   if (!element) return;
   
@@ -111,7 +112,7 @@ export const exportReportAsImage = async (elementId: string, fileName: string, o
     type: 'PNG',
     fileName: fullFileName,
     publicLink: `https://bodymetrica.link/share/${crypto.randomUUID().slice(0, 8)}`,
-    expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+    expiresAt: new Date(Date.now() + (options?.expirationDays || 7) * 24 * 60 * 60 * 1000).toISOString(),
     password: options?.password || null,
     viewLimit: options?.viewLimit || null,
     viewsCount: 0

@@ -87,6 +87,7 @@ function BodyPage() {
   const [pendingExportType, setPendingExportType] = useState<'PDF' | 'PNG' | null>(null);
   const [exportPassword, setExportPassword] = useState("");
   const [exportViewLimit, setExportViewLimit] = useState("0");
+  const [exportExpiration, setExportExpiration] = useState("7");
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
 
@@ -161,7 +162,8 @@ function BodyPage() {
   const executeExport = async () => {
     const options = {
       password: exportPassword || undefined,
-      viewLimit: parseInt(exportViewLimit) > 0 ? parseInt(exportViewLimit) : undefined
+      viewLimit: parseInt(exportViewLimit) > 0 ? parseInt(exportViewLimit) : undefined,
+      expirationDays: parseInt(exportExpiration) > 0 ? parseInt(exportExpiration) : 7
     };
 
     if (pendingExportType === 'PDF') {
@@ -189,6 +191,7 @@ function BodyPage() {
     setIsExportSettingsOpen(false);
     setExportPassword("");
     setExportViewLimit("0");
+    setExportExpiration("7");
     toast.success(`${pendingExportType} gerado com sucesso!`);
   };
 
@@ -593,25 +596,23 @@ function BodyPage() {
                 value={exportPassword}
                 onChange={(e) => setExportPassword(e.target.value)}
               />
-            </div>
-            
             <div className="space-y-3">
               <label className="text-[10px] font-black uppercase tracking-widest text-foreground/60 flex items-center gap-2">
-                <Eye size={14} className="text-info" /> Limite de Visualizações (Opcional)
+                <Calendar size={14} className="text-warning" /> Expiração do Link
               </label>
-              <Select value={exportViewLimit} onValueChange={setExportViewLimit}>
-                <SelectTrigger className="h-14 bg-white/5 border-white/10 focus:border-info/50 text-[10px] font-black uppercase tracking-[0.2em] px-6">
-                  <SelectValue placeholder="SEM LIMITE" />
+              <Select value={exportExpiration} onValueChange={setExportExpiration}>
+                <SelectTrigger className="h-14 bg-white/5 border-white/10 focus:border-warning/50 text-[10px] font-black uppercase tracking-[0.2em] px-6">
+                  <SelectValue placeholder="7 DIAS (PADRÃO)" />
                 </SelectTrigger>
                 <SelectContent className="bg-background border-white/10 rounded-xl">
-                  <SelectItem value="0" className="text-[10px] font-black uppercase tracking-widest focus:bg-primary/20">SEM LIMITE</SelectItem>
-                  <SelectItem value="1" className="text-[10px] font-black uppercase tracking-widest focus:bg-primary/20">1 VISUALIZAÇÃO</SelectItem>
-                  <SelectItem value="5" className="text-[10px] font-black uppercase tracking-widest focus:bg-primary/20">5 VISUALIZAÇÕES</SelectItem>
-                  <SelectItem value="10" className="text-[10px] font-black uppercase tracking-widest focus:bg-primary/20">10 VISUALIZAÇÕES</SelectItem>
-                  <SelectItem value="50" className="text-[10px] font-black uppercase tracking-widest focus:bg-primary/20">50 VISUALIZAÇÕES</SelectItem>
+                  <SelectItem value="1" className="text-[10px] font-black uppercase tracking-widest focus:bg-primary/20">24 HORAS</SelectItem>
+                  <SelectItem value="7" className="text-[10px] font-black uppercase tracking-widest focus:bg-primary/20">7 DIAS</SelectItem>
+                  <SelectItem value="30" className="text-[10px] font-black uppercase tracking-widest focus:bg-primary/20">30 DIAS</SelectItem>
+                  <SelectItem value="0" className="text-[10px] font-black uppercase tracking-widest focus:bg-primary/20">NUNCA EXPIRA</SelectItem>
                 </SelectContent>
               </Select>
             </div>
+          </div>
           </div>
 
           <DialogFooter className="gap-3">
