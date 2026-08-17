@@ -226,35 +226,31 @@ function AuthPage() {
         <div className="absolute inset-0 bg-gradient-to-br from-black via-black/80 to-primary/20" />
       </div>
 
-      <ResponsiveHero 
-        imageUrl="https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?auto=format&fit=crop&q=80&w=1600"
-        overlayOpacity={0.85}
-        className="absolute inset-0 z-[1] h-full"
-      />
+        {/* Removed redundant hero overlay that was causing layout issues */}
 
-      <div className="relative z-10 w-full max-w-md px-4 py-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
-        <div className="text-center space-y-6 mb-12">
-          <Link to="/" className="inline-flex items-center text-[10px] font-black uppercase tracking-[0.2em] text-white/50 hover:text-white transition-all mb-4 backdrop-blur-3xl bg-black/40 px-6 py-2 rounded-full border border-white/10 hover:border-primary/50">
-            <ArrowLeft size={14} className="mr-2" />
+      <div className="relative z-10 w-full max-w-sm px-6 py-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+        <div className="text-center space-y-4 mb-6">
+          <Link to="/" className="inline-flex items-center text-[10px] font-black uppercase tracking-[0.2em] text-white/50 hover:text-white transition-all mb-2 backdrop-blur-3xl bg-black/40 px-4 py-1.5 rounded-full border border-white/10 hover:border-primary/50">
+            <ArrowLeft size={12} className="mr-2" />
             VOLTAR AO INÍCIO
           </Link>
-          <div className="mx-auto w-24 h-24 bg-brand-gradient rounded-[2rem] flex items-center justify-center text-primary-foreground font-black text-4xl shadow-2xl border-2 border-white/20 transform rotate-3 hover:rotate-0 transition-transform duration-500">
+          <div className="mx-auto w-16 h-16 bg-brand-gradient rounded-[1.25rem] flex items-center justify-center text-primary-foreground font-black text-2xl shadow-2xl border-2 border-white/20 transform rotate-3 hover:rotate-0 transition-transform duration-500">
             B
           </div>
           <div>
-            <h1 className="text-5xl md:text-6xl font-black font-display tracking-tighter text-white uppercase italic leading-none">
+            <h1 className="text-4xl font-black font-display tracking-tighter text-white uppercase italic leading-none">
               BODY <span className="text-gradient-brand">MÉTTRICA</span>
             </h1>
-            <p className="text-white/60 font-black uppercase tracking-[0.3em] text-[10px] mt-4">PERFORMANCE & RESULTADOS</p>
+            <p className="text-white/60 font-black uppercase tracking-[0.3em] text-[8px] mt-2">PERFORMANCE & RESULTADOS</p>
           </div>
         </div>
 
-        <Card className="surface border-white/5 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.6)] bg-black/60 backdrop-blur-3xl rounded-[2.5rem] overflow-hidden">
-          <CardHeader className="space-y-2 pb-10 border-b border-white/5 pt-12">
-            <CardTitle className="text-3xl font-black text-white text-center uppercase tracking-[0.2em] italic">
+        <Card className="surface border-white/5 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.6)] bg-black/60 backdrop-blur-3xl rounded-[2rem] overflow-hidden">
+          <CardHeader className="space-y-1 pb-6 border-b border-white/5 pt-8">
+            <CardTitle className="text-xl font-black text-white text-center uppercase tracking-[0.2em] italic">
               {isResetting ? "RECUPERAÇÃO" : isRegistering ? "CADASTRO" : "AUTENTICAÇÃO"}
             </CardTitle>
-            <CardDescription className="font-bold text-white/40 text-center uppercase text-[10px] tracking-widest px-4">
+            <CardDescription className="font-bold text-white/40 text-center uppercase text-[8px] tracking-widest px-4">
               {isBlocked ? `ACESSO BLOQUEADO POR ${remainingSeconds}s` :
                isResetting ? "SOLICITE O LINK DE REDEFINIÇÃO" : 
                isRegistering ? "CRIE SUA CONTA PROFISSIONAL" : 
@@ -262,33 +258,33 @@ function AuthPage() {
             </CardDescription>
           </CardHeader>
 
-          <CardContent className="pt-8">
+          <CardContent className="pt-6">
             {isResetting ? (
               <Form {...resetForm}>
-                <form onSubmit={resetForm.handleSubmit(onResetSubmit)} className="space-y-6">
+                <form onSubmit={resetForm.handleSubmit(onResetSubmit)} className="space-y-4">
                   <FormField
                     control={resetForm.control}
                     name="email"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="font-black text-[10px] uppercase tracking-[0.2em] text-primary ml-1">E-MAIL</FormLabel>
+                        <FormLabel className="font-black text-[8px] uppercase tracking-[0.2em] text-primary ml-1">E-MAIL</FormLabel>
                         <FormControl>
                           <Input 
                             placeholder="seu@email.com" 
-                            className="h-16 text-lg font-black bg-white/5 border-white/10 rounded-2xl px-6 text-white"
+                            className="h-12 text-base font-black bg-white/5 border-white/10 rounded-xl px-4 text-white"
                             {...field} 
                             disabled={isLoading}
                           />
                         </FormControl>
-                        <FormMessage className="text-[10px] font-bold text-destructive uppercase tracking-widest" />
+                        <FormMessage className="text-[8px] font-bold text-destructive uppercase tracking-widest" />
                       </FormItem>
                     )}
                   />
-                  <div className="flex gap-4">
-                    <Button type="button" variant="ghost" className="flex-1 h-16 font-black uppercase text-white/40" onClick={() => setIsResetting(false)}>
+                  <div className="flex gap-3">
+                    <Button type="button" variant="ghost" className="flex-1 h-12 font-black uppercase text-white/40 text-[10px]" onClick={() => setIsResetting(false)}>
                       VOLTAR
                     </Button>
-                    <Button type="submit" className="flex-[2] h-16 text-base font-black uppercase tracking-[0.2em] bg-brand-gradient rounded-2xl" disabled={isLoading}>
+                    <Button type="submit" className="flex-[2] h-12 text-sm font-black uppercase tracking-[0.2em] bg-brand-gradient rounded-xl" disabled={isLoading}>
                       {isLoading ? "ENVIANDO..." : "ENVIAR LINK"}
                     </Button>
                   </div>
@@ -296,22 +292,22 @@ function AuthPage() {
               </Form>
             ) : isRegistering ? (
               <Form {...registerForm}>
-                <form onSubmit={registerForm.handleSubmit(onRegisterSubmit)} className="space-y-6">
+                <form onSubmit={registerForm.handleSubmit(onRegisterSubmit)} className="space-y-4">
                   <FormField
                     control={registerForm.control}
                     name="name"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="font-black text-[10px] uppercase tracking-[0.2em] text-primary ml-1">NOME COMPLETO</FormLabel>
+                        <FormLabel className="font-black text-[8px] uppercase tracking-[0.2em] text-primary ml-1">NOME COMPLETO</FormLabel>
                         <FormControl>
                           <Input 
                             placeholder="Seu Nome" 
-                            className="h-16 text-lg font-black bg-white/5 border-white/10 rounded-2xl px-6 text-white"
+                            className="h-12 text-base font-black bg-white/5 border-white/10 rounded-xl px-4 text-white"
                             {...field} 
                             disabled={isLoading}
                           />
                         </FormControl>
-                        <FormMessage className="text-[10px] font-bold text-destructive uppercase tracking-widest" />
+                        <FormMessage className="text-[8px] font-bold text-destructive uppercase tracking-widest" />
                       </FormItem>
                     )}
                   />
@@ -320,16 +316,16 @@ function AuthPage() {
                     name="email"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="font-black text-[10px] uppercase tracking-[0.2em] text-primary ml-1">E-MAIL</FormLabel>
+                        <FormLabel className="font-black text-[8px] uppercase tracking-[0.2em] text-primary ml-1">E-MAIL</FormLabel>
                         <FormControl>
                           <Input 
                             placeholder="seu@email.com" 
-                            className="h-16 text-lg font-black bg-white/5 border-white/10 rounded-2xl px-6 text-white"
+                            className="h-12 text-base font-black bg-white/5 border-white/10 rounded-xl px-4 text-white"
                             {...field} 
                             disabled={isLoading}
                           />
                         </FormControl>
-                        <FormMessage className="text-[10px] font-bold text-destructive uppercase tracking-widest" />
+                        <FormMessage className="text-[8px] font-bold text-destructive uppercase tracking-widest" />
                       </FormItem>
                     )}
                   />
@@ -338,43 +334,43 @@ function AuthPage() {
                     name="password"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="font-black text-[10px] uppercase tracking-[0.2em] text-primary ml-1">SENHA (MÍN. 6)</FormLabel>
+                        <FormLabel className="font-black text-[8px] uppercase tracking-[0.2em] text-primary ml-1">SENHA (MÍN. 6)</FormLabel>
                         <FormControl>
                           <Input 
                             type="password" 
                             placeholder="••••••" 
-                            className="h-16 text-lg font-black bg-white/5 border-white/10 rounded-2xl px-6 text-white"
+                            className="h-12 text-base font-black bg-white/5 border-white/10 rounded-xl px-4 text-white"
                             {...field} 
                             disabled={isLoading}
                           />
                         </FormControl>
-                        <FormMessage className="text-[10px] font-bold text-destructive uppercase tracking-widest" />
+                        <FormMessage className="text-[8px] font-bold text-destructive uppercase tracking-widest" />
                       </FormItem>
                     )}
                   />
-                  <Button type="submit" className="w-full h-16 text-base font-black uppercase tracking-[0.2em] bg-brand-gradient hover:scale-[1.02] transition-all shadow-2xl shadow-primary/30 border-none mt-4 rounded-2xl" disabled={isLoading}>
+                  <Button type="submit" className="w-full h-12 text-sm font-black uppercase tracking-[0.2em] bg-brand-gradient hover:scale-[1.02] transition-all shadow-xl shadow-primary/20 border-none mt-2 rounded-xl" disabled={isLoading}>
                     {isLoading ? "CADASTRANDO..." : "CRIAR CONTA"}
                   </Button>
                 </form>
               </Form>
             ) : (
               <Form {...loginForm}>
-                <form onSubmit={loginForm.handleSubmit(onLoginSubmit)} className="space-y-6">
+                <form onSubmit={loginForm.handleSubmit(onLoginSubmit)} className="space-y-4">
                   <FormField
                     control={loginForm.control}
                     name="email"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="font-black text-[10px] uppercase tracking-[0.2em] text-primary ml-1">E-MAIL</FormLabel>
+                        <FormLabel className="font-black text-[8px] uppercase tracking-[0.2em] text-primary ml-1">E-MAIL</FormLabel>
                         <FormControl>
                           <Input 
                             placeholder="seu@email.com" 
-                            className="h-16 text-lg font-black bg-white/5 border-white/10 rounded-2xl px-6 text-white"
+                            className="h-12 text-base font-black bg-white/5 border-white/10 rounded-xl px-4 text-white"
                             {...field} 
                             disabled={isLoading || isBlocked}
                           />
                         </FormControl>
-                        <FormMessage className="text-[10px] font-bold text-destructive uppercase tracking-widest" />
+                        <FormMessage className="text-[8px] font-bold text-destructive uppercase tracking-widest" />
                       </FormItem>
                     )}
                   />
@@ -383,21 +379,21 @@ function AuthPage() {
                     name="password"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="font-black text-[10px] uppercase tracking-[0.2em] text-primary ml-1">SENHA</FormLabel>
+                        <FormLabel className="font-black text-[8px] uppercase tracking-[0.2em] text-primary ml-1">SENHA</FormLabel>
                         <FormControl>
                           <Input 
                             type="password" 
                             placeholder="••••••" 
-                            className="h-16 text-lg font-black bg-white/5 border-white/10 rounded-2xl px-6 text-white"
+                            className="h-12 text-base font-black bg-white/5 border-white/10 rounded-xl px-4 text-white"
                             {...field} 
                             disabled={isLoading || isBlocked}
                           />
                         </FormControl>
-                        <FormMessage className="text-[10px] font-bold text-destructive uppercase tracking-widest" />
+                        <FormMessage className="text-[8px] font-bold text-destructive uppercase tracking-widest" />
                       </FormItem>
                     )}
                   />
-                  <Button type="submit" className="w-full h-16 text-base font-black uppercase tracking-[0.2em] bg-brand-gradient hover:scale-[1.02] transition-all shadow-2xl shadow-primary/30 border-none mt-4 rounded-2xl" disabled={isLoading || isBlocked}>
+                  <Button type="submit" className="w-full h-12 text-sm font-black uppercase tracking-[0.2em] bg-brand-gradient hover:scale-[1.02] transition-all shadow-xl shadow-primary/20 border-none mt-2 rounded-xl" disabled={isLoading || isBlocked}>
                     {isLoading ? "PROCESSANDO..." : "ACESSAR PLATAFORMA"}
                   </Button>
                 </form>
@@ -405,18 +401,18 @@ function AuthPage() {
             )}
           </CardContent>
           
-          <CardFooter className="flex flex-col gap-8 border-t border-white/5 pt-10 pb-12 bg-white/[0.02]">
+          <CardFooter className="flex flex-col gap-4 border-t border-white/5 pt-6 pb-8 bg-white/[0.02]">
             {!isResetting && (
               <>
-                <div className="flex items-start gap-4 text-[10px] text-white/40 leading-relaxed font-bold uppercase tracking-widest">
-                  <ShieldCheck className="text-primary shrink-0" size={20} />
+                <div className="flex items-start gap-3 text-[8px] text-white/40 leading-relaxed font-bold uppercase tracking-widest px-2">
+                  <ShieldCheck className="text-primary shrink-0" size={16} />
                   <p>
                     Protocolo de segurança militar ativo. Criptografia de ponta a ponta.
                   </p>
                 </div>
                 
-                <div className="w-full space-y-4">
-                  <p className="text-center text-[10px] font-black text-white/30 uppercase tracking-[0.2em]">
+                <div className="w-full space-y-2">
+                  <p className="text-center text-[8px] font-black text-white/30 uppercase tracking-[0.2em]">
                     {isRegistering ? "JÁ POSSUI UMA CONTA?" : "NÃO POSSUI UMA CONTA?"}{" "}
                     <button 
                       onClick={() => setIsRegistering(!isRegistering)} 
@@ -428,7 +424,7 @@ function AuthPage() {
                   {!isRegistering && (
                     <button 
                       onClick={() => setIsResetting(true)}
-                      className="w-full text-center text-[10px] font-black uppercase tracking-[0.2em] text-white/20 hover:text-white transition-all underline decoration-white/10 underline-offset-4"
+                      className="w-full text-center text-[8px] font-black uppercase tracking-[0.2em] text-white/20 hover:text-white transition-all underline decoration-white/10 underline-offset-4"
                     >
                       RECUPERAR SENHA
                     </button>
@@ -447,11 +443,11 @@ function AuthPage() {
           </CardFooter>
         </Card>
         
-        <div className="mt-8 text-center space-y-1">
-          <p className="text-[10px] text-white/40 uppercase tracking-[0.2em] font-bold">
+        <div className="mt-6 text-center space-y-1">
+          <p className="text-[8px] text-white/40 uppercase tracking-[0.2em] font-bold">
             dev Franc D'nis Feijó, AC
           </p>
-          <p className="text-[10px] text-white/30 font-medium">
+          <p className="text-[8px] text-white/30 font-medium">
             © {new Date().getFullYear()} Body Métrica FJ. Todos os direitos reservados.
           </p>
         </div>
