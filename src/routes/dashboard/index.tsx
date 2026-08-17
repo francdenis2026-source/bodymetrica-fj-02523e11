@@ -1,4 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState, useEffect } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
+
 import { 
   ArrowRight, 
   Droplets, 
@@ -11,7 +14,6 @@ import {
   TrendingUp,
   Calendar,
   FileDown,
-  Filter,
   LifeBuoy,
   LayoutDashboard
 } from "lucide-react";
@@ -25,9 +27,39 @@ export const Route = createFileRoute("/dashboard/")({
 });
 
 function DashboardPage() {
+  const [isLoading, setIsLoading] = useState(true);
   const userName = "Visitante"; // Mock data
   const currentGoal = "Hipertrofia";
   const weightChange = -0.5;
+
+  useEffect(() => {
+    // Simulating initial load
+    const timer = setTimeout(() => setIsLoading(false), 1000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="flex-1 space-y-12 p-4 md:p-12 pt-10 bg-background">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
+          <div className="flex items-center gap-6">
+            <Skeleton className="w-20 h-20 rounded-3xl" />
+            <div className="space-y-2">
+              <Skeleton className="w-32 h-6" />
+              <Skeleton className="w-64 h-12" />
+            </div>
+          </div>
+        </div>
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          {[1, 2, 3, 4].map(i => <Skeleton key={i} className="h-32 rounded-[2rem]" />)}
+        </div>
+        <div className="grid gap-4 md:grid-cols-2">
+          <Skeleton className="h-64 rounded-[2rem]" />
+          <Skeleton className="h-64 rounded-[2rem]" />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex-1 space-y-12 p-4 md:p-12 pt-10 relative overflow-hidden bg-background">
@@ -48,9 +80,10 @@ function DashboardPage() {
             <h2 className="text-4xl md:text-7xl font-black tracking-tighter font-display text-foreground uppercase italic leading-none">
               OLÁ, <span className="text-gradient-brand">{userName}</span>
             </h2>
-            <p className="text-foreground/60 text-lg md:text-xl font-bold tracking-tight">
-              Sua evolução está em alta. O foco hoje é o segredo do sucesso.
+            <p className="text-foreground/60 text-lg md:text-2xl font-black tracking-tight leading-none uppercase italic">
+              SUA EVOLUÇÃO ESTÁ EM ALTA. O FOCO HOJE É O SEGREDO DO SUCESSO.
             </p>
+
           </div>
         </div>
         
@@ -64,9 +97,7 @@ function DashboardPage() {
         </div>
       </div>
 
-
-
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 relative z-10">
         <Link to="/body" className="block transition-transform active:scale-[0.98]">
           <Card className="surface border-none hover:bg-accent/5 transition-colors cursor-pointer h-full">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -74,7 +105,7 @@ function DashboardPage() {
               <User className="h-4 w-4 text-primary" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">82.4 kg</div>
+              <div className="text-3xl font-black font-display italic tracking-tighter uppercase">82.4 kg</div>
               <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
                 <TrendingUp size={12} className="text-success" />
                 {weightChange}kg desde a última semana
@@ -90,7 +121,7 @@ function DashboardPage() {
               <ArrowRight className="h-4 w-4 text-primary" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{currentGoal}</div>
+              <div className="text-3xl font-black font-display italic tracking-tighter uppercase">{currentGoal}</div>
               <div className="mt-2">
                 <div className="flex justify-between text-[10px] mb-1">
                   <span>Progresso</span>
@@ -109,7 +140,7 @@ function DashboardPage() {
               <Droplets className="h-4 w-4 text-info" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">1.2L / 3.0L</div>
+              <div className="text-3xl font-black font-display italic tracking-tighter uppercase">1.2L / 3.0L</div>
               <div className="mt-2">
                 <Progress value={40} className="h-1.5" />
               </div>
@@ -124,7 +155,7 @@ function DashboardPage() {
               <Dumbbell className="h-4 w-4 text-warning" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">Puxada (A)</div>
+              <div className="text-3xl font-black font-display italic tracking-tighter uppercase">Puxada (A)</div>
               <p className="text-xs text-muted-foreground mt-1">
                 Programado para hoje às 18:00
               </p>
@@ -133,7 +164,7 @@ function DashboardPage() {
         </Link>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-4 md:grid-cols-2 relative z-10">
         <Card className="surface border-none">
           <CardHeader>
             <CardTitle className="text-lg font-display flex items-center gap-2">
@@ -205,7 +236,7 @@ function DashboardPage() {
         </Card>
       </div>
 
-      <Card className="surface border-none">
+      <Card className="surface border-none relative z-10">
         <CardHeader>
           <CardTitle className="text-lg font-display flex items-center gap-2">
             <Calendar size={20} className="text-primary" />

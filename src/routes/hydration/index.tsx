@@ -98,18 +98,19 @@ function HydrationPage() {
           </div>
 
           <div className="grid grid-cols-3 gap-3 w-full max-w-xs">
-            <Button variant="outline" className="flex flex-col h-auto py-3 gap-1" onClick={() => addWater(200)}>
+            <Button variant="outline" className="flex flex-col h-auto py-5 gap-1 min-h-[64px]" onClick={() => addWater(200)}>
               <span className="text-xs font-bold">200ml</span>
-              <span className="text-[10px] text-muted-foreground">Copo</span>
+              <span className="text-[10px] text-muted-foreground uppercase">Copo</span>
             </Button>
-            <Button variant="outline" className="flex flex-col h-auto py-3 gap-1" onClick={() => addWater(500)}>
+            <Button variant="outline" className="flex flex-col h-auto py-5 gap-1 min-h-[64px]" onClick={() => addWater(500)}>
               <span className="text-xs font-bold">500ml</span>
-              <span className="text-[10px] text-muted-foreground">Garrafa</span>
+              <span className="text-[10px] text-muted-foreground uppercase">Garrafa</span>
             </Button>
-            <Button variant="outline" className="flex flex-col h-auto py-3 gap-1" onClick={() => addWater(1000)}>
+            <Button variant="outline" className="flex flex-col h-auto py-5 gap-1 min-h-[64px]" onClick={() => addWater(1000)}>
               <span className="text-xs font-bold">1L</span>
-              <span className="text-[10px] text-muted-foreground">Extra</span>
+              <span className="text-[10px] text-muted-foreground uppercase">Extra</span>
             </Button>
+
           </div>
         </Card>
 

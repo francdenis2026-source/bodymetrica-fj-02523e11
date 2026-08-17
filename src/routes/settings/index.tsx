@@ -50,7 +50,7 @@ function SettingsPage() {
         <Card className="surface border-none overflow-hidden">
           <CardHeader className="bg-muted/30 pb-6 pt-8">
             <div className="flex flex-col items-center gap-4 text-center">
-              <Avatar className="w-24 h-24 border-4 border-background shadow-lg">
+              <Avatar className="w-24 h-24 border-4 border-background shadow-lg transition-transform hover:scale-105">
                 <AvatarImage src="" />
                 <AvatarFallback className="bg-primary text-primary-foreground text-2xl font-bold">FJ</AvatarFallback>
               </Avatar>
@@ -58,7 +58,7 @@ function SettingsPage() {
                 <CardTitle className="text-xl font-display">Visitante Demonstrativo</CardTitle>
                 <CardDescription>Membro desde Agosto 2026</CardDescription>
               </div>
-              <Button size="sm" variant="outline" className="mt-2">Alterar Foto</Button>
+              <Button size="sm" variant="outline" className="mt-2 min-h-[36px] min-w-[120px]">Alterar Foto</Button>
             </div>
           </CardHeader>
           <CardContent className="p-0">

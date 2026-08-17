@@ -30,18 +30,18 @@ export function ResponsiveHero({
           src={imageUrl}
           alt="Hero background"
           loading="lazy"
-          className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+          className="absolute inset-0 w-full h-full object-cover transition-transform duration-700"
         />
       </picture>
       
       {/* Contrast Overlay for Readability */}
       <div 
-        className="absolute inset-0 z-10 bg-black/60 backdrop-blur-[2px]" 
+        className="absolute inset-0 z-10 bg-black/40 backdrop-blur-[1px]" 
         style={{ opacity: overlayOpacity }} 
       />
       
       {/* Decorative Brand Gradient Overlay */}
-      <div className="absolute inset-0 z-20 bg-gradient-to-t from-background via-background/20 to-transparent" />
+      <div className="absolute inset-0 z-20 bg-gradient-to-t from-background via-background/40 to-transparent" />
       
       {/* Content */}
       <div className="relative z-30 w-full h-full">

@@ -26,13 +26,15 @@ export function ModuleHeader({
         )}>
           <Icon className="text-primary-foreground group-hover:scale-110 transition-transform" size={28} />
         </div>
-        <h2 className="text-3xl md:text-5xl font-black tracking-tighter font-display text-foreground uppercase italic leading-none">
+        <h2 className="text-3xl md:text-6xl font-black tracking-tighter font-display text-foreground uppercase italic leading-none">
           {title}
         </h2>
+
       </div>
-      <p className="text-foreground/60 text-sm md:text-lg max-w-2xl font-semibold tracking-tight leading-snug">
+      <p className="text-foreground/60 text-sm md:text-xl max-w-2xl font-bold tracking-tight leading-snug">
         {description}
       </p>
+
     </div>
 
   );

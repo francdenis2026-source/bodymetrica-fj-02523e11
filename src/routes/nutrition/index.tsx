@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -19,6 +19,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { queueOfflineAction } from "@/lib/offline-sync";
 import { ModuleHeader } from "@/components/module-header";
+import { Skeleton } from "@/components/ui/skeleton";
+
 
 export const Route = createFileRoute("/nutrition/")({
   component: NutritionPage,
@@ -26,6 +28,12 @@ export const Route = createFileRoute("/nutrition/")({
 
 function NutritionPage() {
   const [activeTab, setActiveTab] = useState("plan");
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 800);
+    return () => clearTimeout(timer);
+  }, []);
 
   const macros = {
     calories: { current: 1850, goal: 2400 },
@@ -33,6 +41,35 @@ function NutritionPage() {
     carbs: { current: 160, goal: 250 },
     fat: { current: 65, goal: 80 },
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex-1 space-y-12 p-4 md:p-12 pt-10 bg-background">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
+          <div className="flex items-center gap-6">
+            <Skeleton className="w-20 h-20 rounded-3xl" />
+            <div className="space-y-2">
+              <Skeleton className="w-32 h-6" />
+              <Skeleton className="w-64 h-12" />
+            </div>
+          </div>
+        </div>
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          {[1, 2, 3, 4].map(i => <Skeleton key={i} className="h-32 rounded-2xl" />)}
+        </div>
+        <div className="grid gap-6 md:grid-cols-3">
+          <div className="md:col-span-2 space-y-4">
+            {[1, 2, 3].map(i => <Skeleton key={i} className="h-48 rounded-2xl" />)}
+          </div>
+          <div className="space-y-4">
+            <Skeleton className="h-48 rounded-2xl" />
+            <Skeleton className="h-32 rounded-2xl" />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
 
   return (
     <div className="flex-1 space-y-12 p-4 md:p-12 pt-10 relative overflow-hidden bg-background">

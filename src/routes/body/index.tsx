@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -23,6 +23,8 @@ import {
   ResponsiveContainer 
 } from "recharts";
 import { ModuleHeader } from "@/components/module-header";
+import { Skeleton } from "@/components/ui/skeleton";
+
 
 const mockWeightData = [
   { date: "01/08", weight: 84.5 },
@@ -39,6 +41,36 @@ export const Route = createFileRoute("/body/")({
 
 function BodyPage() {
   const [activeTab, setActiveTab] = useState("overview");
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 900);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="flex-1 space-y-12 p-4 md:p-12 pt-10 bg-background">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
+          <div className="flex items-center gap-6">
+            <Skeleton className="w-20 h-20 rounded-3xl" />
+            <div className="space-y-2">
+              <Skeleton className="w-32 h-6" />
+              <Skeleton className="w-64 h-12" />
+            </div>
+          </div>
+        </div>
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {[1, 2, 3].map(i => <Skeleton key={i} className="h-40 rounded-[2rem]" />)}
+        </div>
+        <div className="space-y-4">
+          <Skeleton className="h-80 rounded-[2.5rem]" />
+          <Skeleton className="h-64 rounded-[2.5rem]" />
+        </div>
+      </div>
+    );
+  }
+
 
   return (
     <div className="flex-1 space-y-12 p-4 md:p-12 pt-10 relative overflow-hidden bg-background">
@@ -94,16 +126,18 @@ function BodyPage() {
             <div className="h-[250px] w-full mt-4">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={mockWeightData}>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="oklch(0.9 0.012 235 / 0.5)" />
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border))" opacity={0.3} />
                   <XAxis 
                     dataKey="date" 
-                    stroke="oklch(0.51 0.025 240)" 
+                    stroke="hsl(var(--muted-foreground))" 
+
+
                     fontSize={12} 
                     tickLine={false} 
                     axisLine={false} 
                   />
                   <YAxis 
-                    stroke="oklch(0.51 0.025 240)" 
+                    stroke="hsl(var(--muted-foreground))" 
                     fontSize={12} 
                     tickLine={false} 
                     axisLine={false}
@@ -111,18 +145,21 @@ function BodyPage() {
                   />
                   <Tooltip 
                     contentStyle={{ 
-                      backgroundColor: 'oklch(1 0 0)', 
+                      backgroundColor: 'hsl(var(--card))', 
                       borderRadius: '12px',
-                      border: '1px solid oklch(0.9 0.012 235)',
-                      boxShadow: '0 8px 24px oklch(0.2 0.05 235 / 0.06)'
-                    }} 
+                      border: '1px solid hsl(var(--border))',
+                      boxShadow: 'var(--shadow-card)',
+                      color: 'hsl(var(--foreground))'
+                    }}
+                    itemStyle={{ color: 'hsl(var(--primary))' }}
                   />
+
                   <Line 
                     type="monotone" 
                     dataKey="weight" 
-                    stroke="oklch(0.45 0.09 226)" 
+                    stroke="hsl(var(--primary))" 
                     strokeWidth={3} 
-                    dot={{ r: 4, fill: 'oklch(0.45 0.09 226)' }}
+                    dot={{ r: 4, fill: 'hsl(var(--primary))' }}
                     activeDot={{ r: 6, strokeWidth: 0 }}
                   />
                 </LineChart>
