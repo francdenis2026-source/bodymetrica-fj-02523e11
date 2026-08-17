@@ -292,22 +292,22 @@ function AuthPage() {
               </Form>
             ) : isRegistering ? (
               <Form {...registerForm}>
-                <form onSubmit={registerForm.handleSubmit(onRegisterSubmit)} className="space-y-6">
+                <form onSubmit={registerForm.handleSubmit(onRegisterSubmit)} className="space-y-4">
                   <FormField
                     control={registerForm.control}
                     name="name"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="font-black text-[10px] uppercase tracking-[0.2em] text-primary ml-1">NOME COMPLETO</FormLabel>
+                        <FormLabel className="font-black text-[8px] uppercase tracking-[0.2em] text-primary ml-1">NOME COMPLETO</FormLabel>
                         <FormControl>
                           <Input 
                             placeholder="Seu Nome" 
-                            className="h-16 text-lg font-black bg-white/5 border-white/10 rounded-2xl px-6 text-white"
+                            className="h-12 text-base font-black bg-white/5 border-white/10 rounded-xl px-4 text-white"
                             {...field} 
                             disabled={isLoading}
                           />
                         </FormControl>
-                        <FormMessage className="text-[10px] font-bold text-destructive uppercase tracking-widest" />
+                        <FormMessage className="text-[8px] font-bold text-destructive uppercase tracking-widest" />
                       </FormItem>
                     )}
                   />
@@ -316,16 +316,16 @@ function AuthPage() {
                     name="email"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="font-black text-[10px] uppercase tracking-[0.2em] text-primary ml-1">E-MAIL</FormLabel>
+                        <FormLabel className="font-black text-[8px] uppercase tracking-[0.2em] text-primary ml-1">E-MAIL</FormLabel>
                         <FormControl>
                           <Input 
                             placeholder="seu@email.com" 
-                            className="h-16 text-lg font-black bg-white/5 border-white/10 rounded-2xl px-6 text-white"
+                            className="h-12 text-base font-black bg-white/5 border-white/10 rounded-xl px-4 text-white"
                             {...field} 
                             disabled={isLoading}
                           />
                         </FormControl>
-                        <FormMessage className="text-[10px] font-bold text-destructive uppercase tracking-widest" />
+                        <FormMessage className="text-[8px] font-bold text-destructive uppercase tracking-widest" />
                       </FormItem>
                     )}
                   />
@@ -334,21 +334,21 @@ function AuthPage() {
                     name="password"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="font-black text-[10px] uppercase tracking-[0.2em] text-primary ml-1">SENHA (MÍN. 6)</FormLabel>
+                        <FormLabel className="font-black text-[8px] uppercase tracking-[0.2em] text-primary ml-1">SENHA (MÍN. 6)</FormLabel>
                         <FormControl>
                           <Input 
                             type="password" 
                             placeholder="••••••" 
-                            className="h-16 text-lg font-black bg-white/5 border-white/10 rounded-2xl px-6 text-white"
+                            className="h-12 text-base font-black bg-white/5 border-white/10 rounded-xl px-4 text-white"
                             {...field} 
                             disabled={isLoading}
                           />
                         </FormControl>
-                        <FormMessage className="text-[10px] font-bold text-destructive uppercase tracking-widest" />
+                        <FormMessage className="text-[8px] font-bold text-destructive uppercase tracking-widest" />
                       </FormItem>
                     )}
                   />
-                  <Button type="submit" className="w-full h-16 text-base font-black uppercase tracking-[0.2em] bg-brand-gradient hover:scale-[1.02] transition-all shadow-2xl shadow-primary/30 border-none mt-4 rounded-2xl" disabled={isLoading}>
+                  <Button type="submit" className="w-full h-12 text-sm font-black uppercase tracking-[0.2em] bg-brand-gradient hover:scale-[1.02] transition-all shadow-xl shadow-primary/20 border-none mt-2 rounded-xl" disabled={isLoading}>
                     {isLoading ? "CADASTRANDO..." : "CRIAR CONTA"}
                   </Button>
                 </form>
