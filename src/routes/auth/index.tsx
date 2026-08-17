@@ -15,7 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { cpfSchema, formatCpf } from "@/lib/auth/utils";
-import { login } from "@/lib/auth/auth.functions";
+import { login, setSession } from "@/lib/auth/auth.functions";
 import { toast } from "sonner";
 import { ShieldCheck, ArrowLeft, Lock } from "lucide-react";
 import { ResponsiveHero } from "@/components/responsive-hero";
@@ -50,8 +50,9 @@ function AuthPage() {
     try {
       const result = await login({ data: values });
       if (result.success) {
+        setSession(result.user);
         toast.success("Bem-vindo ao Body Métrica FJ!");
-        navigate({ to: "/dashboard" });
+        window.location.href = "/dashboard"; // Force reload to pick up session state
       }
     } catch (error) {
       toast.error("Erro ao entrar. Verifique seus dados.");
