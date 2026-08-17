@@ -103,16 +103,20 @@ function AuthPage() {
                       <FormControl>
                         <Input 
                           placeholder="000.000.000-00" 
-                          className="h-16 text-xl font-black bg-white/5 border-white/10 rounded-2xl px-6 text-white focus:ring-primary focus:border-primary transition-all placeholder:text-white/20"
+                          className={cn(
+                            "h-16 text-xl font-black bg-white/5 border-white/10 rounded-2xl px-6 text-white focus:ring-primary focus:border-primary transition-all placeholder:text-white/20",
+                            form.formState.errors.cpf && "border-destructive ring-destructive"
+                          )}
                           {...field} 
                           onChange={(e) => field.onChange(formatCpf(e.target.value))}
                           disabled={isLoading}
                         />
                       </FormControl>
-                      <FormMessage className="text-[10px] font-bold uppercase tracking-widest text-destructive/80" />
+                      <FormMessage className="text-[10px] font-bold uppercase tracking-widest text-destructive animate-in fade-in slide-in-from-top-1" />
                     </FormItem>
                   )}
                 />
+
 
                 <FormField
                   control={form.control}
@@ -126,15 +130,19 @@ function AuthPage() {
                           inputMode="numeric"
                           maxLength={6}
                           placeholder="••••••" 
-                          className="h-16 text-center text-3xl tracking-[0.5em] font-black bg-white/5 border-white/10 rounded-2xl text-white focus:ring-primary focus:border-primary transition-all placeholder:text-white/20"
+                          className={cn(
+                            "h-16 text-center text-3xl tracking-[0.5em] font-black bg-white/5 border-white/10 rounded-2xl text-white focus:ring-primary focus:border-primary transition-all placeholder:text-white/20",
+                            form.formState.errors.pin && "border-destructive ring-destructive"
+                          )}
                           {...field} 
                           disabled={isLoading}
                         />
                       </FormControl>
-                      <FormMessage className="text-[10px] font-bold uppercase tracking-widest text-destructive/80" />
+                      <FormMessage className="text-[10px] font-bold uppercase tracking-widest text-destructive animate-in fade-in slide-in-from-top-1" />
                     </FormItem>
                   )}
                 />
+
                 <Button type="submit" className="w-full h-16 text-base font-black uppercase tracking-[0.2em] bg-brand-gradient hover:scale-[1.02] transition-all shadow-2xl shadow-primary/30 border-none mt-4 rounded-2xl" disabled={isLoading}>
                   {isLoading ? "PROCESSANDO..." : "ACESSAR PLATAFORMA"}
                 </Button>
