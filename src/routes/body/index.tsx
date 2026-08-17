@@ -126,9 +126,16 @@ function BodyPage() {
           <Card className="surface border-none">
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle className="text-lg font-display">Últimos Registros</CardTitle>
-              <Button size="sm" variant="outline" className="gap-2">
-                <Plus size={16} /> Registrar
-              </Button>
+              <div className="flex items-center gap-2">
+                <Button size="sm" variant="outline" className="gap-2" asChild>
+                  <Link to="/about">
+                    <Info size={16} /> Entender Métricas
+                  </Link>
+                </Button>
+                <Button size="sm" variant="outline" className="gap-2">
+                  <Plus size={16} /> Registrar
+                </Button>
+              </div>
             </CardHeader>
             <CardContent className="px-0">
               <div className="space-y-1">

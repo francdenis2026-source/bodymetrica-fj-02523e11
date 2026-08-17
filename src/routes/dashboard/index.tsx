@@ -36,8 +36,10 @@ function DashboardPage() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" className="gap-2 h-9 text-xs">
-            <Filter size={14} /> Período
+          <Button variant="outline" size="sm" className="gap-2 h-9 text-xs" asChild>
+            <Link to="/about">
+              <Filter size={14} /> Como Funciona
+            </Link>
           </Button>
           <Button variant="outline" size="sm" className="gap-2 h-9 text-xs">
             <FileDown size={14} /> Relatórios PDF
@@ -49,62 +51,70 @@ function DashboardPage() {
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card className="surface border-none">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Peso Atual</CardTitle>
-            <User className="h-4 w-4 text-primary" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">82.4 kg</div>
-            <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
-              <TrendingUp size={12} className="text-success" />
-              {weightChange}kg desde a última semana
-            </p>
-          </CardContent>
-        </Card>
+        <Link to="/body" className="block transition-transform active:scale-[0.98]">
+          <Card className="surface border-none hover:bg-accent/5 transition-colors cursor-pointer h-full">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Peso Atual</CardTitle>
+              <User className="h-4 w-4 text-primary" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">82.4 kg</div>
+              <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
+                <TrendingUp size={12} className="text-success" />
+                {weightChange}kg desde a última semana
+              </p>
+            </CardContent>
+          </Card>
+        </Link>
 
-        <Card className="surface border-none">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Objetivo</CardTitle>
-            <ArrowRight className="h-4 w-4 text-primary" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{currentGoal}</div>
-            <div className="mt-2">
-              <div className="flex justify-between text-[10px] mb-1">
-                <span>Progresso</span>
-                <span>65%</span>
+        <Link to="/body" className="block transition-transform active:scale-[0.98]">
+          <Card className="surface border-none hover:bg-accent/5 transition-colors cursor-pointer h-full">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Objetivo</CardTitle>
+              <ArrowRight className="h-4 w-4 text-primary" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{currentGoal}</div>
+              <div className="mt-2">
+                <div className="flex justify-between text-[10px] mb-1">
+                  <span>Progresso</span>
+                  <span>65%</span>
+                </div>
+                <Progress value={65} className="h-1.5" />
               </div>
-              <Progress value={65} className="h-1.5" />
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </Link>
 
-        <Card className="surface border-none">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Hidratação</CardTitle>
-            <Droplets className="h-4 w-4 text-info" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">1.2L / 3.0L</div>
-            <div className="mt-2">
-              <Progress value={40} className="h-1.5" />
-            </div>
-          </CardContent>
-        </Card>
+        <Link to="/hydration" className="block transition-transform active:scale-[0.98]">
+          <Card className="surface border-none hover:bg-accent/5 transition-colors cursor-pointer h-full">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Hidratação</CardTitle>
+              <Droplets className="h-4 w-4 text-info" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">1.2L / 3.0L</div>
+              <div className="mt-2">
+                <Progress value={40} className="h-1.5" />
+              </div>
+            </CardContent>
+          </Card>
+        </Link>
 
-        <Card className="surface border-none">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Treino</CardTitle>
-            <Dumbbell className="h-4 w-4 text-warning" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">Puxada (A)</div>
-            <p className="text-xs text-muted-foreground mt-1">
-              Programado para hoje às 18:00
-            </p>
-          </CardContent>
-        </Card>
+        <Link to="/training" className="block transition-transform active:scale-[0.98]">
+          <Card className="surface border-none hover:bg-accent/5 transition-colors cursor-pointer h-full">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Treino</CardTitle>
+              <Dumbbell className="h-4 w-4 text-warning" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">Puxada (A)</div>
+              <p className="text-xs text-muted-foreground mt-1">
+                Programado para hoje às 18:00
+              </p>
+            </CardContent>
+          </Card>
+        </Link>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2">
@@ -116,7 +126,7 @@ function DashboardPage() {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+            <Link to="/nutrition" className="flex items-center justify-between p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors cursor-pointer group">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-background flex items-center justify-center font-bold text-xs">
                   12h
@@ -126,8 +136,8 @@ function DashboardPage() {
                   <div className="text-xs text-muted-foreground">Arroz, Frango, Salada</div>
                 </div>
               </div>
-              <Button size="sm" variant="ghost">Registrar</Button>
-            </div>
+              <Button size="sm" variant="ghost" className="group-hover:bg-primary/10 group-hover:text-primary">Registrar</Button>
+            </Link>
             <div className="flex items-center justify-between p-3 rounded-lg bg-muted/20 opacity-60">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-background flex items-center justify-center font-bold text-xs">
@@ -163,7 +173,7 @@ function DashboardPage() {
               </div>
               <span className="text-[10px] text-success font-medium">08:00</span>
             </div>
-            <div className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+            <Link to="/supplements" className="flex items-center justify-between p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors cursor-pointer group">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-background flex items-center justify-center">
                   <Pill size={18} className="text-primary" />
@@ -173,8 +183,8 @@ function DashboardPage() {
                   <div className="text-xs text-muted-foreground">1 cap - Próximo</div>
                 </div>
               </div>
-              <Button size="sm" variant="ghost">Tomar</Button>
-            </div>
+              <Button size="sm" variant="ghost" className="group-hover:bg-primary/10 group-hover:text-primary">Tomar</Button>
+            </Link>
           </CardContent>
         </Card>
       </div>

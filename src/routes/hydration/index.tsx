@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -10,7 +10,8 @@ import {
   Settings, 
   History,
   Calendar,
-  AlertTriangle
+  AlertTriangle,
+  Info
 } from "lucide-react";
 import { queueOfflineAction } from "@/lib/offline-sync";
 
@@ -40,9 +41,14 @@ function HydrationPage() {
             Mantenha seu corpo em pleno funcionamento com controle diário.
           </p>
         </div>
-        <Button variant="outline" size="icon" className="rounded-full">
-          <Settings size={18} />
-        </Button>
+        <div className="flex gap-2">
+          <Button variant="outline" size="icon" className="rounded-full" asChild>
+            <Link to="/about"><Info size={18} /></Link>
+          </Button>
+          <Button variant="outline" size="icon" className="rounded-full">
+            <Settings size={18} />
+          </Button>
+        </div>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">

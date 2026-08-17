@@ -73,9 +73,9 @@ function OnboardingPage() {
                 <p className="text-muted-foreground text-sm">O que você deseja alcançar com o Body Métrica FJ?</p>
               </div>
               <div className="grid gap-4">
-                <GoalOption icon={<Scale />} title="Emagrecimento" description="Foco em perda de gordura e definição." />
-                <GoalOption icon={<Target />} title="Hipertrofia" description="Foco em ganho de massa muscular." isActive />
-                <GoalOption icon={<User />} title="Manutenção" description="Manter o peso e melhorar a saúde." />
+                <GoalOption id="loss" icon={<Scale />} title="Emagrecimento" description="Foco em perda de gordura e definição." />
+                <GoalOption id="gain" icon={<Target />} title="Hipertrofia" description="Foco em ganho de massa muscular." isActive />
+                <GoalOption id="maint" icon={<User />} title="Manutenção" description="Manter o peso e melhorar a saúde." />
               </div>
             </div>
           )}
@@ -155,9 +155,14 @@ function OnboardingPage() {
   );
 }
 
-function GoalOption({ icon, title, description, isActive = false }: { icon: React.ReactNode; title: string; description: string; isActive?: boolean }) {
+function GoalOption({ id, icon, title, description, isActive: initialActive = false }: { id: string; icon: React.ReactNode; title: string; description: string; isActive?: boolean }) {
+  const [isActive, setIsActive] = useState(initialActive);
+  
   return (
-    <button className={`w-full text-left p-4 rounded-xl border-2 transition-all flex items-center gap-4 ${isActive ? 'border-primary bg-primary/5 ring-1 ring-primary' : 'border-transparent surface hover:border-primary/20'}`}>
+    <button 
+      onClick={() => setIsActive(!isActive)}
+      className={`w-full text-left p-4 rounded-xl border-2 transition-all flex items-center gap-4 ${isActive ? 'border-primary bg-primary/5 ring-1 ring-primary' : 'border-transparent surface hover:border-primary/20'}`}
+    >
       <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${isActive ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'}`}>
         {icon}
       </div>

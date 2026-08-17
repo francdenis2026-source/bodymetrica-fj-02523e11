@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { 
   Users, 
   ShieldCheck, 
@@ -116,8 +116,10 @@ function AdminDashboard() {
                     {client.lastSync}
                   </TableCell>
                   <TableCell className="text-right">
-                    <Button variant="ghost" size="icon" className="h-8 w-8">
-                      <Eye size={16} className="text-muted-foreground" />
+                    <Button variant="ghost" size="icon" className="h-8 w-8" asChild>
+                      <Link to="/about">
+                        <Eye size={16} className="text-muted-foreground" />
+                      </Link>
                     </Button>
                     <Button variant="ghost" size="icon" className="h-8 w-8">
                       <MoreVertical size={16} className="text-muted-foreground" />
