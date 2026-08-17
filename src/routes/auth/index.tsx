@@ -148,7 +148,7 @@ function AuthPage() {
     }
   };
 
-  async function onLoginSubmit(values: z.infer<typeof loginSchema>) {
+  async function onLoginSubmit(values: any) {
     if (isBlocked) return;
     setIsLoading(true);
     try {
@@ -180,8 +180,6 @@ function AuthPage() {
           />
         ));
         if (result.needsVerification) {
-          // Store user email for resend functionality
-          const { data } = await supabase.auth.getUser();
           navigate({ to: "/auth/verify" as any });
         } else {
           trackAttempt();
