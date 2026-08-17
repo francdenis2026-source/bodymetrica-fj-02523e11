@@ -4,8 +4,8 @@
 
 @source "../src";
 
-
 @custom-variant dark (&:is(.dark *));
+
 
 
 /*
