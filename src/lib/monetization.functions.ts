@@ -89,12 +89,15 @@ export const generateLicenseKey = createServerFn({ method: "POST" })
     const randomPart = Math.random().toString(36).substring(2, 10).toUpperCase();
     const licenseKey = `BODY-${randomPart}-${Date.now().toString(36).toUpperCase()}`;
     
+    const expiresAt = new Date();
+    expiresAt.setDate(expiresAt.getDate() + data.expiresInDays);
+
     const { data: license, error } = await supabaseAdmin
       .from('licenses')
       .insert({
         license_key: licenseKey,
         status: 'unused',
-        expires_at: data.userId ? new Date(Date.now() + 86400000 * data.expiresInDays).toISOString() : null
+        expires_at: expiresAt.toISOString()
       })
       .select()
       .single();
