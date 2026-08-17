@@ -8,7 +8,8 @@ import {
   ShieldCheck, 
   BarChart3, 
   Zap,
-  Droplets
+  Droplets,
+  LifeBuoy
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -25,6 +26,11 @@ function AboutPage() {
             <Link to="/"><ArrowLeft size={20} /></Link>
           </Button>
           <h1 className="text-lg font-bold font-display">Conhecer Ferramentas</h1>
+          <Button variant="outline" size="sm" className="ml-auto gap-2" asChild>
+            <Link to="/help">
+              <LifeBuoy size={16} /> Central de Ajuda
+            </Link>
+          </Button>
         </div>
       </header>
 
