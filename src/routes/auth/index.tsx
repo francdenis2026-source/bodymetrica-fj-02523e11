@@ -79,8 +79,8 @@ function AuthPage() {
           <div className="mx-auto w-12 h-12 bg-brand-gradient rounded-xl flex items-center justify-center text-primary-foreground font-bold text-xl mb-4">
             B
           </div>
-          <h1 className="text-2xl font-bold font-display tracking-tight">Body Métrica FJ</h1>
-          <p className="text-muted-foreground">Acesse sua conta para ver sua evolução</p>
+          <h1 className="text-3xl font-bold font-display tracking-tight text-primary">Body Métrica FJ</h1>
+          <p className="text-muted-foreground font-medium">Sua evolução levada a sério.</p>
         </div>
 
         <Card className="surface border-none shadow-2xl">
