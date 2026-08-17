@@ -184,7 +184,7 @@ function ProfilePage() {
     <div className="flex-1 space-y-12 p-4 md:p-12 pt-10 relative overflow-hidden bg-background">
       <ModuleHeader 
         title="MEU PERFIL" 
-        subtitle="GERENCIE SEUS DADOS E SEGURANÇA"
+        description="GERENCIE SEUS DADOS E SEGURANÇA"
         icon={User}
       />
 
