@@ -14,7 +14,3 @@ BEGIN
         CHECK (license_status IN ('demonstrative', 'active', 'expired', 'suspended'));
     END IF;
 END $$;
-
--- Grant access
-GRANT UPDATE(license_status, license_key, license_expires_at) ON public.profiles TO authenticated;
-GRANT SELECT ON public.profiles TO authenticated;
