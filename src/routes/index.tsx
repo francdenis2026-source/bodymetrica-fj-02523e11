@@ -41,15 +41,15 @@ function Index() {
       <div 
         className="fixed inset-0 z-0 pointer-events-none opacity-40 transition-opacity duration-700"
         style={{
-          backgroundImage: 'url(https://images.unsplash.com/photo-1599058917232-d750c1859d7c?auto=format&fit=crop&q=80&w=2000)',
+          backgroundImage: 'url(https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=2000)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
-          filter: 'contrast(1.2) brightness(0.6)'
+          filter: 'contrast(1.1) brightness(0.5)'
         }}
       />
       
       {/* Professional Gradient Overlay */}
-      <div className="fixed inset-0 z-0 pointer-events-none bg-gradient-to-tr from-background via-background/80 to-primary/20" />
+      <div className="fixed inset-0 z-0 pointer-events-none bg-gradient-to-tr from-background via-background/60 to-primary/10" />
 
       
       <div className="relative z-10 flex flex-col flex-1">
@@ -113,15 +113,16 @@ function Index() {
             </div>
 
             <div className="relative hidden lg:block animate-in fade-in zoom-in-95 duration-1000">
-              <div className="relative z-10 rounded-2xl overflow-hidden shadow-2xl border-4 border-white/20 transform hover:scale-[1.02] transition-transform duration-500">
+              <div className="relative z-10 rounded-3xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)] border border-white/10 transform hover:scale-[1.02] transition-transform duration-500 bg-card/20 backdrop-blur-sm">
                 <img 
-                  src="https://images.unsplash.com/photo-1599058917232-d750c1859d7c?auto=format&fit=crop&q=80&w=1200" 
-                  alt="Performance Training" 
+                  src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?auto=format&fit=crop&q=80&w=1200" 
+                  alt="High Performance Athlete" 
                   className="w-full h-auto object-cover aspect-[4/3] scale-105 hover:scale-100 transition-transform duration-1000"
                   fetchPriority="high"
+                  loading="eager"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                <div className="absolute bottom-6 left-6 right-6">
+                <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-transparent" />
+                <div className="absolute bottom-8 left-8 right-8">
                   <p className="text-white text-lg font-bold font-display drop-shadow-md">
                     Alta precisão em dados corporais.
                   </p>
