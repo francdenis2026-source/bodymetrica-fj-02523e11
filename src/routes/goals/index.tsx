@@ -51,8 +51,10 @@ function GoalsPage() {
 
   const updateGoal = (idx: number, newTarget: number) => {
     const updated = [...goals];
-    updated[idx].target = newTarget;
-    setGoals(updated);
+    if (updated[idx]) {
+      updated[idx].target = newTarget;
+      setGoals(updated);
+    }
   };
 
   return (
