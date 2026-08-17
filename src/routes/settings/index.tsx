@@ -57,11 +57,15 @@ function SettingsPage() {
             <div className="flex flex-col items-center gap-4 text-center">
               <Avatar className="w-24 h-24 border-4 border-background shadow-lg transition-transform hover:scale-105">
                 <AvatarImage src="" />
-                <AvatarFallback className="bg-primary text-primary-foreground text-2xl font-bold">FJ</AvatarFallback>
+                <AvatarFallback className="bg-primary text-primary-foreground text-2xl font-bold">
+                  {user?.name?.substring(0, 2).toUpperCase() || "FJ"}
+                </AvatarFallback>
               </Avatar>
               <div className="space-y-1">
-                <CardTitle className="text-xl font-display">Visitante Demonstrativo</CardTitle>
-                <CardDescription>Membro desde Agosto 2026</CardDescription>
+                <CardTitle className="text-xl font-display">{user?.name || "Visitante"}</CardTitle>
+                <CardDescription>
+                  {user?.email || "Demonstrativo"}
+                </CardDescription>
               </div>
               <Button size="sm" variant="outline" className="mt-2 min-h-[36px] min-w-[120px]">Alterar Foto</Button>
             </div>
