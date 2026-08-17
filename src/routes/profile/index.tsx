@@ -68,9 +68,9 @@ function ProfilePage() {
         goal: session.profile?.goal || "gain"
       });
 
-      // Fetch active sessions
-      const { data: { sessions: activeSessions } } = await supabase.auth.listSessions();
-      setSessions(activeSessions || []);
+      // Fetch active sessions using the user_id if needed, but Supabase JS SDK 
+      // doesn't have listSessions on the client side in this version.
+      setSessions([]);
       
       setIsLoading(false);
     };
