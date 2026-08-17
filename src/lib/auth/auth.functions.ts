@@ -56,7 +56,7 @@ export const login = createServerFn({ method: "POST" })
       user: {
         id: authData.user.id,
         email: authData.user.email,
-        name: profile?.name || authData.user.user_metadata?.name || "Usuário",
+        name: profile?.name || authData.user.user_metadata?.['name'] || "Usuário",
         role: "user",
         profile: profile
       }
@@ -85,12 +85,12 @@ export const register = createServerFn({ method: "POST" })
       await supabase
         .from('profiles')
         .update({
-          cpf: data.cpf,
+          cpf: data.cpf ?? null,
           birth_date: data.birthDate ? new Date(data.birthDate).toISOString() : null,
-          goal: data.goal,
+          goal: data.goal ?? null,
           weight: data.weight ? parseFloat(data.weight) : null,
           height: data.height ? parseFloat(data.height) : null,
-          activity_level: data.activityLevel,
+          activity_level: data.activityLevel ?? null,
         })
         .eq('id', authData.user.id);
     }
