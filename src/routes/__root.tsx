@@ -471,7 +471,8 @@ function RootComponent() {
               <nav className="flex-1 p-4 space-y-2 overflow-y-auto scrollbar-none">
                 <SidebarLink to="/dashboard" icon={<LayoutDashboard size={20} />} label="DASHBOARD" />
                 <SidebarLink to="/goals" icon={<Target size={20} />} label="METAS" />
-                <SidebarLink to="/body" icon={<User size={20} />} label="COMPOSIÇÃO" />
+                <SidebarLink to="/profile" icon={<User size={20} />} label="PERFIL" />
+                <SidebarLink to="/body" icon={<Zap size={20} />} label="COMPOSIÇÃO" />
                 <SidebarLink to="/nutrition" icon={<Utensils size={20} />} label="NUTRIÇÃO" />
                 <SidebarLink to="/hydration" icon={<Droplets size={20} />} label="HIDRATAÇÃO" />
                 <SidebarLink to="/supplements" icon={<Pill size={20} />} label="PROTOCOLOS" />
