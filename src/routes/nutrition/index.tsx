@@ -12,6 +12,7 @@ import {
   ChevronRight, 
   Search, 
   Info,
+  LifeBuoy,
   Calendar,
   Heart
 } from "lucide-react";
