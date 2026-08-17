@@ -178,7 +178,9 @@ function RootComponent() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [needsVerification, setNeedsVerification] = useState(false);
   const [needsLicense, setNeedsLicense] = useState(false);
-  const [isOnline, setIsOnline] = useState(typeof navigator !== 'undefined' ? navigator.onLine : true);
+  const [isOnline, setIsOnline] = useState(true); // Default to true to match server for hydration
+  const [actualIsOnline, setActualIsOnline] = useState(true);
+
   const [syncStatus, setSyncStatus] = useState<'idle' | 'syncing' | 'synced'>('idle');
   const [syncHistory, setSyncHistory] = useState<{lastSync: number | null, totalSynced: number, failures: number}>({lastSync: null, totalSynced: 0, failures: 0});
   const checkLicenseStatusFn = useServerFn(checkLicenseStatus);
