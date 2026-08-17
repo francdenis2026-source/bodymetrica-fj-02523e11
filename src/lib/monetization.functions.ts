@@ -179,6 +179,15 @@ export const revokeLicense = createServerFn({ method: "POST" })
         .from('profiles')
         .update({ license_status: 'revoked' })
         .eq('id', license.user_id);
+      
+      // Notify user via email
+      const { data: userData } = await supabaseAdmin.from('profiles').select('email').eq('id', license.user_id).single();
+      if (userData?.email) {
+        // We import dynamically to avoid circular dependencies if any
+        const { sendLicenseEmail } = await import("./email.functions");
+        // Using a background promise for email so it doesn't block response
+        sendLicenseEmail({ data: { email: userData.email, type: 'revoked', details: { reason: data.reason } } }).catch(console.error);
+      }
     }
 
     // Audit log
@@ -192,6 +201,54 @@ export const revokeLicense = createServerFn({ method: "POST" })
     );
 
     return { success: true, message: "Licença revogada com sucesso." };
+  });
+
+/**
+ * Generates a checkout URL for Mercado Pago
+ */
+export const createCheckoutSession = createServerFn({ method: "POST" })
+  .inputValidator((data) => z.object({ userId: z.string().uuid() }).parse(data))
+  .handler(async ({ data }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: setting } = await supabaseAdmin
+      .from('admin_settings')
+      .select('value')
+      .eq('key', 'mercadopago_access_token')
+      .single();
+
+    if (!setting?.value) return { success: false, message: "Pagamento não configurado." };
+
+    try {
+      const response = await fetch("https://api.mercadopago.com/checkout/preferences", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${setting.value}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          items: [
+            {
+              title: "Assinatura Anual Body Métrica FJ",
+              unit_price: 299.90,
+              quantity: 1,
+              currency_id: "BRL"
+            }
+          ],
+          external_reference: data.userId,
+          back_urls: {
+            success: `${process.env.VITE_APP_URL || 'http://localhost:8080'}/settings`,
+            failure: `${process.env.VITE_APP_URL || 'http://localhost:8080'}/settings`,
+            pending: `${process.env.VITE_APP_URL || 'http://localhost:8080'}/settings`
+          },
+          auto_return: "approved"
+        })
+      });
+
+      const preference = await response.json();
+      return { success: true, init_point: preference.init_point };
+    } catch (error) {
+      return { success: false, message: "Erro ao criar sessão de pagamento." };
+    }
   });
 
 /**
