@@ -80,8 +80,8 @@ function VerifyPage() {
           </CardHeader>
 
           <CardContent className="pt-8 space-y-6">
-            <p className="text-sm text-white/70 text-center leading-relaxed">
-              Para garantir a segurança da plataforma e dos seus dados de saúde, precisamos que você valide seu endereço de e-mail antes de acessar as ferramentas.
+            <p className="text-sm text-white/70 text-center leading-relaxed italic">
+              A licença de uso só poderá ser ativada após a confirmação do seu e-mail. Por favor, verifique sua caixa de entrada e clique no link de ativação.
             </p>
 
             <div className="space-y-4">
