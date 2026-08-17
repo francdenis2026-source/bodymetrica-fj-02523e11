@@ -61,7 +61,20 @@ function HydrationPage() {
           <Button variant="outline" className="gap-2 h-14 px-8 font-black uppercase tracking-widest border-2 bg-white/5 border-white/10 hover:bg-white/10 hover:scale-105 transition-all" asChild>
             <Link to="/help">CENTRAL DE AJUDA</Link>
           </Button>
-          <Button variant="outline" size="icon" className="rounded-2xl h-14 w-14 border-2 bg-white/5 border-white/10 hover:bg-white/10 hover:scale-105 transition-all">
+          <Button 
+            variant="outline" 
+            size="icon" 
+            className="rounded-2xl h-14 w-14 border-2 bg-white/5 border-white/10 hover:bg-white/10 hover:scale-105 transition-all"
+            onClick={() => {
+              if ("Notification" in window) {
+                Notification.requestPermission().then(permission => {
+                  if (permission === "granted") {
+                    alert("Lembretes de hidratação ativados!");
+                  }
+                });
+              }
+            }}
+          >
             <Settings size={22} />
           </Button>
         </div>
