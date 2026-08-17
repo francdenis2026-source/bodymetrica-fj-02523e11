@@ -104,11 +104,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="pt-BR">
+    <html lang="pt-BR" suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>
-      <body className="antialiased selection:bg-primary selection:text-primary-foreground">
+      <body className="antialiased selection:bg-primary selection:text-primary-foreground" suppressHydrationWarning>
         {children}
         <Scripts />
         <script
