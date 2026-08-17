@@ -23,7 +23,21 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   return (
-    <div className="flex flex-col min-h-screen bg-background">
+    <div className="flex flex-col min-h-screen bg-background relative overflow-x-hidden">
+      {/* Background Image Layer */}
+      <div 
+        className="absolute inset-0 z-0 pointer-events-none opacity-40 grayscale-[0.2]"
+        style={{
+          backgroundImage: 'url(/assets/homepage-bg.jpg)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundAttachment: 'fixed'
+        }}
+      />
+      {/* Gradient Overlay for Readability */}
+      <div className="absolute inset-0 z-0 pointer-events-none bg-gradient-to-b from-background/95 via-background/80 to-background/95" />
+      
+      <div className="relative z-10 flex flex-col flex-1">
       {/* Header */}
       <header className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-md border-b">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
@@ -141,6 +155,7 @@ function Index() {
           </div>
         </div>
       </footer>
+      </div>
     </div>
   );
 }
