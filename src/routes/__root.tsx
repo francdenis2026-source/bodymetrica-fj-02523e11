@@ -181,8 +181,9 @@ function RootComponent() {
   const handleLogout = () => {
     clearSession();
     setIsLoggedIn(false);
+    queryClient.clear();
     toast.success("Sessão encerrada com sucesso");
-    navigate({ to: "/" });
+    window.location.href = "/auth";
   };
 
   const isPublicRoute = ["/", "/auth", "/admin/login", "/onboarding"].includes(location.pathname);
