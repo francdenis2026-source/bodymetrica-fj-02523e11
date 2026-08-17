@@ -10,8 +10,8 @@ import {
   Ruler, 
   Camera,
   TrendingUp,
-   Info,
-   LifeBuoy
+  Info,
+  LifeBuoy
  } from "lucide-react";
 import { 
   LineChart, 
@@ -22,6 +22,7 @@ import {
   Tooltip, 
   ResponsiveContainer 
 } from "recharts";
+import { ModuleHeader } from "@/components/module-header";
 
 const mockWeightData = [
   { date: "01/08", weight: 84.5 },
@@ -40,29 +41,25 @@ function BodyPage() {
   const [activeTab, setActiveTab] = useState("overview");
 
   return (
-    <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 relative">
+    <div className="flex-1 space-y-8 p-4 md:p-8 pt-6 relative overflow-hidden">
       {/* Decorative Module Hero Image */}
-      <div className="absolute top-0 right-0 w-64 h-64 opacity-5 pointer-events-none -z-10 translate-x-1/4 -translate-y-1/4">
-        <Scale size={256} className="text-primary" />
+      <div className="absolute top-0 right-0 w-96 h-96 opacity-[0.03] pointer-events-none -z-10 translate-x-1/4 -translate-y-1/4">
+        <Scale size={384} className="text-primary" />
       </div>
 
-      <div className="flex flex-col gap-2 relative">
-        <h2 className="text-3xl font-bold tracking-tight font-display text-primary flex items-center gap-3">
-          <Scale className="text-primary-foreground bg-brand-gradient p-1.5 rounded-lg" size={32} />
-          Composição Corporal
-        </h2>
-        <p className="text-muted-foreground text-sm max-w-2xl font-medium">
-          Acompanhe sua evolução física com métricas precisas, fotos e tendências. 
-          Use os dados para ajustar sua rotina e alcançar seus objetivos.
-        </p>
-      </div>
+      <ModuleHeader 
+        title="Composição Corporal"
+        description="Acompanhe sua evolução física com métricas precisas, fotos e tendências. Use os dados para ajustar sua rotina e alcançar seus objetivos de forma profissional."
+        icon={Scale}
+      />
 
-      <Tabs defaultValue="overview" className="space-y-4" onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-3 md:w-auto md:inline-grid">
-          <TabsTrigger value="overview">Geral</TabsTrigger>
-          <TabsTrigger value="measurements">Medidas</TabsTrigger>
-          <TabsTrigger value="photos">Fotos</TabsTrigger>
+      <Tabs defaultValue="overview" className="space-y-6" onValueChange={setActiveTab}>
+        <TabsList className="inline-flex h-12 items-center justify-center rounded-xl bg-muted/50 p-1 text-muted-foreground w-full md:w-auto">
+          <TabsTrigger value="overview" className="h-10 px-8 rounded-lg font-bold uppercase tracking-wider text-xs">Geral</TabsTrigger>
+          <TabsTrigger value="measurements" className="h-10 px-8 rounded-lg font-bold uppercase tracking-wider text-xs">Medidas</TabsTrigger>
+          <TabsTrigger value="photos" className="h-10 px-8 rounded-lg font-bold uppercase tracking-wider text-xs">Fotos</TabsTrigger>
         </TabsList>
+
 
         <TabsContent value="overview" className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
