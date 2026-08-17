@@ -19,12 +19,17 @@ import {
 import { ModuleHeader } from "@/components/module-header";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { getSession, clearSession } from "@/lib/auth/auth.functions";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/settings/")({
   component: SettingsPage,
 });
 
 function SettingsPage() {
+  const session = getSession();
+  const user = session?.user;
+
   return (
     <div className="flex-1 space-y-12 p-4 md:p-12 pt-10 relative overflow-hidden bg-background">
       {/* Decorative Module Hero Image */}
