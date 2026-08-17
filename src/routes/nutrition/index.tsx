@@ -161,61 +161,94 @@ function NutritionPage() {
         </TabsList>
 
         <TabsContent value="diary" className="space-y-6">
-          <Card className="surface border-none p-6">
-            <CardHeader className="px-0 pt-0 flex flex-row items-center justify-between">
-              <div>
-                <CardTitle className="text-xl font-display uppercase italic">Registrar Refeição</CardTitle>
-                <CardDescription className="text-[10px] font-bold uppercase tracking-widest opacity-60">Histórico de consumo e validação de macros</CardDescription>
+          <div className="grid gap-6 md:grid-cols-3">
+            <Card className="surface border-none p-6 md:col-span-2">
+              <CardHeader className="px-0 pt-0 flex flex-row items-center justify-between">
+                <div>
+                  <CardTitle className="text-xl font-black font-display uppercase italic tracking-tighter">REGISTRAR REFEIÇÃO</CardTitle>
+                  <CardDescription className="text-[10px] font-bold uppercase tracking-widest opacity-60 italic">INTELIGÊNCIA ALIMENTAR E CONTROLE DE MACROS</CardDescription>
+                </div>
+                <div className="flex gap-2">
+                  <Button size="sm" variant="outline" className="text-[10px] font-bold uppercase tracking-widest border-white/10 bg-white/5">
+                    <HistoryIcon size={14} className="mr-2" /> HISTÓRICO
+                  </Button>
+                  <Button size="sm" variant="outline" className="text-[10px] font-bold uppercase tracking-widest border-white/10 bg-white/5">
+                    <Calendar size={14} className="mr-2" /> AGENDA
+                  </Button>
+                </div>
+              </CardHeader>
+              <CardContent className="px-0 space-y-6">
+                <form className="space-y-8" onSubmit={(e) => {
+                  e.preventDefault();
+                  toast.success("Refeição registrada com sucesso!", {
+                    description: "Os macronutrientes foram sincronizados com sua meta diária."
+                  });
+                }}>
+                  <div className="space-y-3 relative">
+                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">BUSCA RÁPIDA DE ALIMENTOS</label>
+                    <div className="relative">
+                      <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-primary" size={18} />
+                      <Input 
+                        required
+                        placeholder="Ex: 200g Peito de Frango, 150g Arroz..." 
+                        className="pl-14 h-16 bg-white/5 border-2 border-white/10 focus:border-primary/50 transition-all rounded-[1.5rem] font-bold text-lg italic tracking-tight" 
+                        onChange={(e) => {
+                          if (e.target.value.length > 2) {
+                            toast.info("Sugestão: Peito de Frango (31g P | 0g C | 3g G)", { 
+                              duration: 2000,
+                              icon: <Utensils className="text-primary" size={14} />
+                            });
+                          }
+                        }}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <MacroInputItem label="CALORIAS" color="text-primary" value="--" unit="kcal" />
+                    <MacroInputItem label="PROTEÍNAS" color="text-success" value="--g" unit="" />
+                    <MacroInputItem label="CARBOS" color="text-info" value="--g" unit="" />
+                    <MacroInputItem label="GORDURAS" color="text-warning" value="--g" unit="" />
+                  </div>
+
+                  <Button type="submit" className="w-full bg-brand-gradient border-none font-black uppercase tracking-[0.3em] h-20 rounded-[1.5rem] shadow-2xl shadow-primary/20 hover:scale-[1.02] transition-all group relative overflow-hidden">
+                    <span className="relative z-10 flex items-center gap-3">
+                      REGISTRAR PERFORMANCE ALIMENTAR
+                      <ChevronRight size={20} className="group-hover:translate-x-2 transition-transform" />
+                    </span>
+                  </Button>
+                </form>
+              </CardContent>
+            </Card>
+
+            <Card className="surface border-none bg-primary/5 p-6 flex flex-col justify-between">
+              <div className="space-y-4">
+                <div className="text-[10px] font-black uppercase tracking-[0.2em] text-primary">STATUS DO DIA</div>
+                <div className="space-y-6">
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest">
+                      <span>CALORIAS</span>
+                      <span>{macros.calories.current} / {macros.calories.goal} kcal</span>
+                    </div>
+                    <Progress value={(macros.calories.current/macros.calories.goal)*100} className="h-1.5" />
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest">
+                      <span>PROTEÍNAS</span>
+                      <span>{macros.protein.current} / {macros.protein.goal}g</span>
+                    </div>
+                    <Progress value={(macros.protein.current/macros.protein.goal)*100} className="h-1.5" indicatorClassName="bg-success" />
+                  </div>
+                </div>
               </div>
-              <Button size="sm" variant="outline" className="text-[10px] font-bold uppercase tracking-widest">
-                <HistoryIcon size={14} className="mr-2" /> Histórico
-              </Button>
-            </CardHeader>
-            <CardContent className="px-0 space-y-6">
-              <form className="space-y-6" onSubmit={(e) => {
-                e.preventDefault();
-                toast.success("Refeição registrada com sucesso!", {
-                  description: "Os macronutrientes foram atualizados no seu diário."
-                });
-              }}>
-                <div className="space-y-2 relative">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Alimento / Refeição</label>
-                  <div className="relative">
-                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" size={16} />
-                    <Input 
-                      required
-                      placeholder="Ex: 200g Frango Grelhado" 
-                      className="pl-12 h-14 bg-white/5 border-2 border-white/5 focus:border-primary/50 transition-all rounded-2xl font-bold" 
-                      onChange={(e) => {
-                        if (e.target.value.length > 2) {
-                          toast.info("Sugestão: Peito de Frango (165kcal/100g)", { duration: 1000 });
-                        }
-                      }}
-                    />
-                  </div>
-                </div>
-                <div className="grid grid-cols-4 gap-4 text-center">
-                  <div className="p-4 rounded-2xl bg-white/5 border border-white/5">
-                    <div className="text-[10px] font-black uppercase text-primary mb-1">Kcal</div>
-                    <div className="text-xl font-black italic tracking-tighter uppercase">--</div>
-                  </div>
-                  <div className="p-4 rounded-2xl bg-white/5 border border-white/5">
-                    <div className="text-[10px] font-black uppercase text-success mb-1">P</div>
-                    <div className="text-xl font-black italic tracking-tighter uppercase">--g</div>
-                  </div>
-                  <div className="p-4 rounded-2xl bg-white/5 border border-white/5">
-                    <div className="text-[10px] font-black uppercase text-info mb-1">C</div>
-                    <div className="text-xl font-black italic tracking-tighter uppercase">--g</div>
-                  </div>
-                  <div className="p-4 rounded-2xl bg-white/5 border border-white/5">
-                    <div className="text-[10px] font-black uppercase text-warning mb-1">G</div>
-                    <div className="text-xl font-black italic tracking-tighter uppercase">--g</div>
-                  </div>
-                </div>
-                <Button type="submit" className="w-full bg-brand-gradient border-none font-black uppercase tracking-[0.2em] h-16 rounded-2xl shadow-2xl hover:scale-[1.02] transition-all">Confirmar Registro</Button>
-              </form>
-            </CardContent>
-          </Card>
+              <div className="p-4 rounded-2xl bg-white/5 border border-white/10 mt-8">
+                <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground mb-2">INSIGHT NUTRICIONAL</p>
+                <p className="text-[11px] font-bold leading-relaxed italic opacity-80">
+                  "Você já atingiu 80% da sua meta de proteínas. Mantenha os carboidratos baixos no jantar para otimizar a oxidação de gordura."
+                </p>
+              </div>
+            </Card>
+          </div>
         </TabsContent>
 
         <TabsContent value="calculator" className="space-y-6">
@@ -332,6 +365,15 @@ function MacroCard({ label, current, goal, unit, icon }: { label: string; curren
         <Progress value={percentage} className="h-1.5" />
       </div>
     </Card>
+  );
+}
+
+function MacroInputItem({ label, color, value, unit }: { label: string; color: string; value: string; unit: string }) {
+  return (
+    <div className="p-5 rounded-[1.5rem] bg-white/5 border border-white/10 hover:border-primary/30 transition-all group">
+      <div className={`text-[9px] font-black uppercase tracking-widest ${color} mb-2`}>{label}</div>
+      <div className="text-2xl font-black italic tracking-tighter uppercase group-hover:scale-105 transition-transform">{value} {unit}</div>
+    </div>
   );
 }
 

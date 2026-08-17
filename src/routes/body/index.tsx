@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { exportToCSV } from "@/lib/export";
+import { generateComparisonPDF } from "@/lib/comparison-reports";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -338,7 +339,22 @@ function BodyPage() {
               <p className="text-sm text-muted-foreground">
                 Compare sua evolução visual com segurança e privacidade.
               </p>
-              <Button variant="outline" className="gap-2">
+              <Button 
+                variant="outline" 
+                className="gap-2"
+                onClick={() => generateComparisonPDF({
+                  userName: userData?.name || "Usuário",
+                  period: "Mensal",
+                  bodyWeightChange: "-2.6 kg",
+                  muscleMassChange: "+0.5 kg",
+                  fatPercentChange: "-1.2%",
+                  weightData: [],
+                  macros: { calories: 2400, protein: 180, carbs: 250, fat: 80 },
+                  hydrationGoal: 3000,
+                  hydrationCurrent: 2100,
+                  summary: "Sua aderência semanal atingiu 92%, com foco excelente na ingestão proteica. Recomendamos manter o volume de treino atual, pois a resposta muscular está acima da média para o período."
+                })}
+              >
                 Ver Comparativo Antes e Depois
               </Button>
             </div>
