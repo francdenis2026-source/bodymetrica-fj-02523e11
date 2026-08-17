@@ -74,11 +74,23 @@ export const scheduleNotifications = async () => {
   
   // Example of immediate check for "near not being reached"
   // In a real app, this would be a background task or push notification
-  const checkGoals = () => {
-    // Logic to check current hydration/macros vs goals
-    // and fire a notification if near threshold
-    console.log("Verificando proximidade de metas para notificações...");
+  const checkGoals = (stats?: { hydrationPercent: number, adherencePercent: number }) => {
+    // Threshold for warnings: 80% (close to missing)
+    if (stats) {
+      if (stats.hydrationPercent < 80 && new Date().getHours() > 18) {
+        sendImmediateNotification("Performance em Risco", {
+          body: `Você atingiu apenas ${stats.hydrationPercent}% da meta de hidratação hoje. Hidrate-se agora!`,
+        });
+      }
+      
+      if (stats.adherencePercent < 60) {
+        sendImmediateNotification("Atenção à Consistência", {
+          body: `Sua adesão semanal está em ${stats.adherencePercent}%. Ajuste seu foco para bater as metas amanhã.`,
+        });
+      }
+    }
   };
+
 
   // Run initial check
   checkGoals();

@@ -1,5 +1,7 @@
 import { jsPDF } from "jspdf";
 import "jspdf-autotable";
+import html2canvas from "html2canvas";
+
 
 export interface ReportData {
   userName: string;
@@ -14,7 +16,7 @@ export interface ReportData {
   summary: string;
 }
 
-export const generateComparisonPDF = (data: ReportData) => {
+export const generateComparisonPDF = async (data: ReportData) => {
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.getWidth();
 
@@ -61,4 +63,25 @@ export const generateComparisonPDF = (data: ReportData) => {
   doc.text("Body Métrica FJ - Performance Suite", pageWidth / 2, doc.internal.pageSize.getHeight() - 10, { align: "center" });
 
   doc.save(`Comparativo_BodyMetrica_${data.userName.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`);
+
+  return {
+    summaryText: `Relatório Body Métrica FJ - ${data.userName}\nEvolução: ${data.bodyWeightChange} de peso, ${data.muscleMassChange} de massa.\nResumo: ${data.summary}`,
+    fileName: `Comparativo_BodyMetrica_${data.userName.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}`
+  };
 };
+
+export const exportReportAsImage = async (elementId: string, fileName: string) => {
+  const element = document.getElementById(elementId);
+  if (!element) return;
+  
+  const canvas = await html2canvas(element, {
+    backgroundColor: '#14141E',
+    scale: 2
+  });
+  
+  const link = document.createElement('a');
+  link.download = `${fileName}.png`;
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+};
+
