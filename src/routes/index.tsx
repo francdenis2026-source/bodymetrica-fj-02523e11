@@ -212,26 +212,3 @@ function FeatureCard({ icon, title, description, className }: { icon: React.Reac
   );
 }
 
-function FeatureCard({ icon, title, description, className }: { icon: React.ReactNode; title: string; description: string; className?: string }) {
-  return (
-    <div className={cn("surface p-8 space-y-4 border border-transparent backdrop-blur-sm bg-card/80", className)}>
-      <div className="w-14 h-14 rounded-2xl bg-brand-gradient flex items-center justify-center shadow-lg border border-white/20 transform group-hover:rotate-6 transition-transform text-white">
-        {icon}
-      </div>
-      <h3 className="text-2xl font-bold font-display tracking-tight">{title}</h3>
-      <p className="text-muted-foreground leading-relaxed font-medium">
-        {description}
-      </p>
-      <ul className="space-y-3 pt-2">
-        <li className="flex items-center gap-3 text-sm text-muted-foreground font-medium">
-          <CheckCircle2 size={16} className="text-success" />
-          <span>Fácil de usar</span>
-        </li>
-        <li className="flex items-center gap-3 text-sm text-muted-foreground font-medium">
-          <CheckCircle2 size={16} className="text-success" />
-          <span>Mobile-first</span>
-        </li>
-      </ul>
-    </div>
-  );
-}
