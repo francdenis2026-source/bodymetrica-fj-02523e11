@@ -100,34 +100,53 @@ function Index() {
 
 
         {/* Hero Section - Optimized for Single Page View */}
-        <section className="relative flex-1 flex items-center pt-20 pb-12 px-4 overflow-hidden min-h-[calc(100vh-64px)]">
-          <div className="container mx-auto max-w-7xl grid lg:grid-cols-2 gap-8 items-center h-full">
-            <div className="text-left space-y-6 relative z-10 flex flex-col justify-center">
-              <div className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full bg-primary/10 text-primary text-[10px] font-black uppercase tracking-[0.2em] w-fit animate-in fade-in slide-in-from-left-4 duration-1000 border border-primary/20 backdrop-blur-md">
-                <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-                <span>Alta Performance & Precisão</span>
-              </div>
+        <section className="relative flex-1 flex items-center pt-12 pb-6 px-4 overflow-hidden min-h-[calc(100vh-64px)] sm:min-h-0 sm:h-auto lg:min-h-[calc(100vh-64px)]">
+          <div className="container mx-auto max-w-7xl grid lg:grid-cols-2 gap-6 items-center h-full">
+            <div className="text-left space-y-4 relative z-10 flex flex-col justify-center">
+              {isLoading ? (
+                <Skeleton className="h-8 w-48 rounded-full bg-white/5" />
+              ) : (
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-[10px] font-black uppercase tracking-[0.2em] w-fit animate-in fade-in slide-in-from-left-4 duration-700 border border-primary/20 backdrop-blur-md">
+                  <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+                  <span>Alta Performance & Precisão</span>
+                </div>
+              )}
               
-              <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black font-display text-foreground leading-[0.9] tracking-tighter animate-in fade-in slide-in-from-left-4 duration-1000 delay-100 uppercase">
-                DOMINE SUA <br />
-                <span className="text-gradient-brand">EVOLUÇÃO.</span>
-              </h1>
+              {isLoading ? (
+                <div className="space-y-2">
+                  <Skeleton className="h-14 w-full max-w-md bg-white/5" />
+                  <Skeleton className="h-14 w-3/4 bg-white/5" />
+                </div>
+              ) : (
+                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black font-display text-foreground leading-[0.95] tracking-tighter animate-in fade-in slide-in-from-left-4 duration-700 delay-100 uppercase">
+                  DOMINE SUA <br />
+                  <span className="text-gradient-brand">EVOLUÇÃO.</span>
+                </h1>
+              )}
               
-              <p className="text-lg md:text-xl text-foreground/70 max-w-lg leading-tight font-medium animate-in fade-in slide-in-from-left-4 duration-1000 delay-200">
-                A engenharia definitiva para quem busca a perfeição física. 
-                Sincronize sua biometria com inteligência preditiva e suporte offline total.
-              </p>
+              {isLoading ? (
+                <Skeleton className="h-10 w-full max-w-sm bg-white/5" />
+              ) : (
+                <p className="text-sm md:text-base text-foreground/70 max-w-sm leading-tight font-medium animate-in fade-in slide-in-from-left-4 duration-700 delay-200">
+                  A engenharia definitiva para quem busca a perfeição física. 
+                  Sincronize sua biometria com inteligência preditiva.
+                </p>
+              )}
 
-              <div className="flex flex-col sm:flex-row items-center gap-4 pt-4 animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-300">
-                <Button size="lg" className="h-14 px-10 text-[10px] font-black uppercase tracking-[0.2em] group w-full sm:w-auto bg-brand-gradient hover:scale-105 transition-all border-none shadow-[0_20px_50px_rgba(oklch(0.65_0.22_260),0.3)]" asChild>
-                  <Link to={isLoggedIn ? "/dashboard" : "/onboarding"}>
-                    {isLoggedIn ? "MEU DASHBOARD" : "ACESSAR SUÍTE"}
-                    <ArrowRight className="ml-3 group-hover:translate-x-1 transition-transform" size={18} />
-                  </Link>
-                </Button>
-                <Button size="lg" variant="outline" className="h-14 px-10 text-[10px] font-black uppercase tracking-[0.2em] w-full sm:w-auto backdrop-blur-xl bg-white/[0.02] border-white/10 hover:bg-white/[0.08] hover:border-white/20 transition-all" asChild>
-                  <Link to="/about">ENGENHARIA</Link>
-                </Button>
+              <div className="flex flex-col sm:flex-row items-center gap-2 pt-1 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300">
+                {isLoading ? (
+                  <>
+                    <Skeleton className="h-10 w-full sm:w-40 bg-white/5" />
+                    <Skeleton className="h-10 w-full sm:w-40 bg-white/5" />
+                  </>
+                ) : (
+                  <>
+                    <QuickOnboarding isLoggedIn={isLoggedIn} />
+                    <Button variant="outline" className="h-10 px-6 text-[9px] font-black uppercase tracking-[0.2em] w-full sm:w-auto backdrop-blur-xl bg-white/[0.02] border-white/10 hover:bg-white/[0.08] hover:border-white/20 transition-all focus-visible:ring-2 focus-visible:ring-primary outline-none" asChild>
+                      <Link to="/about">ENGENHARIA</Link>
+                    </Button>
+                  </>
+                )}
               </div>
 
               {/* Quick stats / Features inline to save space */}
@@ -277,10 +296,10 @@ function QuickOnboarding({ isLoggedIn }: { isLoggedIn: boolean }) {
         <Button 
           size="lg" 
           onClick={handleAction}
-          className="h-12 px-8 text-[10px] font-black uppercase tracking-[0.2em] group w-full sm:w-auto bg-brand-gradient hover:scale-105 transition-all border-none shadow-[0_15px_35px_rgba(oklch(0.65_0.22_260),0.3)] focus-visible:ring-2 focus-visible:ring-primary outline-none"
+          className="h-10 px-6 text-[9px] font-black uppercase tracking-[0.2em] group w-full sm:w-auto bg-brand-gradient hover:scale-105 transition-all border-none shadow-[0_15px_35px_rgba(oklch(0.65_0.22_260),0.3)] focus-visible:ring-2 focus-visible:ring-primary outline-none"
         >
           {isLoggedIn ? "NOVO REGISTRO" : "ACESSAR SUÍTE"}
-          <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={16} />
+          <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={14} />
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[400px] bg-background/95 backdrop-blur-2xl border-white/10 p-0 overflow-hidden rounded-[2.5rem]">
