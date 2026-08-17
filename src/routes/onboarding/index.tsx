@@ -23,15 +23,15 @@ export const Route = createFileRoute("/onboarding/")({
   component: OnboardingPage,
   validateSearch: (search: Record<string, unknown>) => {
     return {
-      registerMode: (search['registerMode'] as boolean) || false,
-      reset: (search['reset'] as boolean) || false,
-      name: (search['name'] as string) || "",
-      birthDate: (search['birthDate'] as string) || "",
-      goal: (search['goal'] as string) || "",
-      weight: (search['weight'] as string) || "",
-      height: (search['height'] as string) || "",
-      activityLevel: (search['activityLevel'] as string) || "",
-    };
+      registerMode: (search['registerMode'] as boolean) || undefined,
+      reset: (search['reset'] as boolean) || undefined,
+      name: (search['name'] as string) || undefined,
+      birthDate: (search['birthDate'] as string) || undefined,
+      goal: (search['goal'] as string) || undefined,
+      weight: (search['weight'] as string) || undefined,
+      height: (search['height'] as string) || undefined,
+      activityLevel: (search['activityLevel'] as string) || undefined,
+    } as any;
   },
 });
 
