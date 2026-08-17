@@ -1,4 +1,7 @@
 import { isBrowser, safeLocalStorage } from "./browser-utils";
+import { toast } from "sonner";
+import { SVGToast } from "@/components/ui/svg-toast";
+import React from "react";
 
 export interface NotificationSettings {
   hydration: {
@@ -90,12 +93,30 @@ export const scheduleNotifications = async () => {
     // Threshold for warnings: 80% (close to missing)
     if (stats) {
       if (stats.hydrationPercent < 80 && new Date().getHours() > 18) {
+        toast.custom((t) => (
+          <SVGToast 
+            type="warning"
+            title="PERFORMANCE EM RISCO"
+            message={`Você atingiu apenas ${stats.hydrationPercent}% da meta de hidratação hoje. Hidrate-se agora!`}
+            onClose={() => toast.dismiss(t)}
+          />
+        ), { duration: 6000 });
+        
         sendImmediateNotification("Performance em Risco", {
           body: `Você atingiu apenas ${stats.hydrationPercent}% da meta de hidratação hoje. Hidrate-se agora!`,
         });
       }
       
       if (stats.adherencePercent < 60) {
+        toast.custom((t) => (
+          <SVGToast 
+            type="info"
+            title="ATENÇÃO À CONSISTÊNCIA"
+            message={`Sua adesão semanal está em ${stats.adherencePercent}%. Ajuste seu foco para bater as metas amanhã.`}
+            onClose={() => toast.dismiss(t)}
+          />
+        ), { duration: 6000 });
+        
         sendImmediateNotification("Atenção à Consistência", {
           body: `Sua adesão semanal está em ${stats.adherencePercent}%. Ajuste seu foco para bater as metas amanhã.`,
         });
