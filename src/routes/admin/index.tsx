@@ -163,7 +163,7 @@ function AdminDashboard() {
         <TabsList className="bg-muted/50 p-1">
           <TabsTrigger value="licenses" className="text-xs uppercase font-black">Licenças</TabsTrigger>
           <TabsTrigger value="audit" className="text-xs uppercase font-black">Auditoria</TabsTrigger>
-          <TabsTrigger value="settings" className="text-xs uppercase font-black">API Pagamento</TabsTrigger>
+          <TabsTrigger value="settings" className="text-xs uppercase font-black">API Pagamento / Webhook</TabsTrigger>
         </TabsList>
 
         <TabsContent value="licenses">
