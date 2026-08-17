@@ -1,0 +1,17 @@
+{
+  "name": "Body Métrica FJ",
+  "short_name": "Body Métrica",
+  "description": "Acompanhamento completo de composição corporal e saúde.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0891b2",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
