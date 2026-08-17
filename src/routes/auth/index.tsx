@@ -226,11 +226,7 @@ function AuthPage() {
         <div className="absolute inset-0 bg-gradient-to-br from-black via-black/80 to-primary/20" />
       </div>
 
-      <ResponsiveHero 
-        imageUrl="https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?auto=format&fit=crop&q=80&w=1600"
-        overlayOpacity={0.85}
-        className="absolute inset-0 z-[1] h-full"
-      />
+        {/* Removed redundant hero overlay that was causing layout issues */}
 
       <div className="relative z-10 w-full max-w-md px-4 py-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
         <div className="text-center space-y-6 mb-12">
