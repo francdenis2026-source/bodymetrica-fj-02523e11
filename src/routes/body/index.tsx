@@ -105,7 +105,7 @@ function BodyPage() {
             <MetricCard 
               label="Peso" 
               value={`${userData?.profile?.weight || "82.4"} kg`} 
-              change="-0.3 kg" 
+              change={userData?.profile?.weight ? "Sincronizado" : "Padrão"} 
               trend="down" 
               icon={<Scale className="h-4 w-4 text-primary" />} 
             />
