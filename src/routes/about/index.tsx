@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowLeft, Code2, MapPin, Zap, Globe, Github } from "lucide-react";
+import { ArrowLeft, Code2, MapPin, Zap, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ResponsiveHero } from "@/components/responsive-hero";
 
