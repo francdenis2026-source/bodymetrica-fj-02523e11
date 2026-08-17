@@ -19,6 +19,7 @@ import { toast } from "sonner";
 import { ShieldCheck, ArrowLeft, Mail, UserPlus, KeyRound, Lock } from "lucide-react";
 import { ResponsiveHero } from "@/components/responsive-hero";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/auth/")({
   component: AuthPage,
