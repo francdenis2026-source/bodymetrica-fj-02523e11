@@ -29,6 +29,7 @@ function VerifyPage() {
       }, 3000);
       return () => clearTimeout(timer);
     }
+    return undefined;
   }, [verified, navigate]);
 
   const handleResendLink = async () => {
