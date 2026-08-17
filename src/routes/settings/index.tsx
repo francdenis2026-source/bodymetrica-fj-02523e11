@@ -309,7 +309,7 @@ function SettingsPage() {
           </CardHeader>
           <CardContent className="p-0">
             <div className="divide-y">
-              <Link to="/profile" className="flex w-full items-center justify-between px-6 py-4 hover:bg-muted/30 transition-colors group">
+              <Link to="/profile" search={{} as any} className="flex w-full items-center justify-between px-6 py-4 hover:bg-muted/30 transition-colors group">
                 <div className="flex items-center gap-4">
                   <div className="text-muted-foreground group-hover:text-primary transition-colors">
                     <User size={18} />
@@ -318,7 +318,7 @@ function SettingsPage() {
                 </div>
                 <ChevronRight size={16} className="text-muted-foreground group-hover:translate-x-1 transition-transform" />
               </Link>
-              <Link to="/profile" className="flex w-full items-center justify-between px-6 py-4 hover:bg-muted/30 transition-colors group">
+              <Link to="/profile" search={{} as any} className="flex w-full items-center justify-between px-6 py-4 hover:bg-muted/30 transition-colors group">
                 <div className="flex items-center gap-4">
                   <div className="text-muted-foreground group-hover:text-primary transition-colors">
                     <Smartphone size={18} />
