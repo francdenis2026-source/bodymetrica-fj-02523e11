@@ -100,7 +100,7 @@ function DashboardPage() {
 
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 relative z-10 animate-in fade-in slide-in-from-left-4 duration-700">
         <div className="flex flex-col md:flex-row items-center gap-6">
-          <Link to="/profile" className="group">
+          <Link to="/profile" search={{} as any} className="group">
             <div className="w-20 h-20 bg-brand-gradient rounded-3xl flex items-center justify-center text-white text-3xl font-black shadow-2xl border-2 border-white/20 transform group-hover:scale-105 transition-transform duration-500">
               {userName[0]}
             </div>
