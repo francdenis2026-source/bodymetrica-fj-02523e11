@@ -117,11 +117,24 @@ function TrainingPage() {
 
           <TabsContent value="history" className="space-y-6">
             <Card className="surface border-none p-6">
-              <CardTitle className="text-xl font-display uppercase italic mb-6">Evolução de Performance</CardTitle>
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                <CardTitle className="text-xl font-display uppercase italic">Evolução de Performance</CardTitle>
+                <div className="flex gap-2">
+                  <select className="h-8 bg-white/5 border border-white/10 rounded px-2 text-[10px] font-bold uppercase focus:outline-none">
+                    <option>Peitoral</option>
+                    <option>Costas</option>
+                    <option>Pernas</option>
+                  </select>
+                  <Button variant="outline" size="sm" className="h-8 text-[9px] font-black uppercase">Comparar Semanas</Button>
+                </div>
+              </div>
               <div className="h-64 flex items-end justify-between gap-2">
                  {[40, 60, 50, 75, 80, 70, 95].map((val, i) => (
-                    <div key={i} className="flex-1 flex flex-col items-center gap-2">
+                    <div key={i} className="flex-1 flex flex-col items-center gap-2 group relative">
                         <div className="w-full bg-primary/20 rounded-t-lg transition-all hover:bg-primary/40" style={{ height: `${val}%` }} />
+                        <div className="absolute bottom-full mb-2 bg-background border border-white/10 p-2 rounded text-[8px] invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all whitespace-nowrap">
+                          Volume: {val * 10}kg
+                        </div>
                         <span className="text-[10px] font-black text-muted-foreground uppercase">Sem {i+1}</span>
                     </div>
                  ))}
