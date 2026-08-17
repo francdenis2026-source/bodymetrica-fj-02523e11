@@ -1,19 +1,10 @@
-@import "tailwindcss" source(none);
+@import "tailwindcss";
 @import "tw-animate-css";
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=Outfit:wght@400;700;900&display=swap');
 
 @source "../src";
 
 @custom-variant dark (&:is(.dark *));
-
-
-
-
-/*
- * Body Métrica FJ — design system
- * Petrol/deep blue primary, vibrant green for progress, controlled orange for
- * reminders, red reserved for destructive/risk. All colors in oklch.
- */
 
 @theme inline {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
@@ -108,18 +99,14 @@
   --sidebar-ring: oklch(0.65 0.22 260);
 }
 
-
 .dark {
-  /* Dark mode stays consistent as the primary theme is now dark */
   --background: oklch(0.1 0.02 245);
   --card: oklch(0.14 0.02 245);
   --border: oklch(0.2 0.02 245);
   --input: oklch(0.2 0.02 245);
 }
 
-
 @layer base {
-  /* Hide Lovable badge */
   #lovable-badge {
     display: none !important;
   }
@@ -146,7 +133,6 @@
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
   }
-
 
   h1,
   h2,
