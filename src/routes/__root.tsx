@@ -310,10 +310,20 @@ function RootComponent() {
               <Outlet />
             </AccessGate>
           </div>
-          <footer className="py-8 px-6 text-center border-t border-white/5 mt-auto bg-card/30 backdrop-blur-md">
-            <p className="text-[10px] text-muted-foreground/40 uppercase tracking-[0.3em] font-black italic">
-              dev Franc D'nis Feijó, AC
-            </p>
+          <footer className="relative py-12 px-6 text-center border-t border-white/5 mt-auto overflow-hidden">
+            <div className="absolute inset-0 z-0 opacity-10 grayscale pointer-events-none">
+              <img 
+                src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&q=80&w=800" 
+                alt="Footer background" 
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div className="relative z-10 space-y-4">
+              <h4 className="text-[10px] font-black tracking-[0.4em] text-white/20 uppercase">BODY MÉTTRICA FJ • PERFORMANCE SUITE</h4>
+              <p className="text-[10px] text-muted-foreground/40 uppercase tracking-[0.3em] font-black italic">
+                dev Franc D'nis Feijó, AC
+              </p>
+            </div>
           </footer>
         </main>
       </div>

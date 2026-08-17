@@ -189,10 +189,19 @@ function AuthPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center relative p-0 overflow-hidden bg-background">
+      <div className="absolute inset-0 z-0">
+        <img 
+          src="https://images.unsplash.com/photo-1593079831268-3381b0db4a77?auto=format&fit=crop&q=80&w=1600"
+          alt="Auth background"
+          className="w-full h-full object-cover opacity-30"
+        />
+        <div className="absolute inset-0 bg-gradient-to-br from-black via-black/80 to-primary/20" />
+      </div>
+
       <ResponsiveHero 
-        imageUrl="https://images.unsplash.com/photo-1593079831268-3381b0db4a77?auto=format&fit=crop&q=80&w=1600"
-        overlayOpacity={0.7}
-        className="absolute inset-0 z-0 h-full"
+        imageUrl="https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?auto=format&fit=crop&q=80&w=1600"
+        overlayOpacity={0.85}
+        className="absolute inset-0 z-[1] h-full"
       />
 
       <div className="relative z-10 w-full max-w-md px-4 py-12 animate-in fade-in slide-in-from-bottom-4 duration-700">

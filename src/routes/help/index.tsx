@@ -101,7 +101,15 @@ function HelpCenterPage() {
   }, [searchQuery, selectedCategory]);
 
   return (
-    <div className="min-h-screen bg-background pb-20">
+    <div className="min-h-screen bg-background pb-20 relative overflow-hidden">
+      <div className="fixed inset-0 z-0 opacity-10 pointer-events-none">
+        <img 
+          src="https://images.unsplash.com/photo-1552674605-db6ffd4facb5?auto=format&fit=crop&q=80&w=1600" 
+          alt="Background" 
+          className="w-full h-full object-cover"
+        />
+      </div>
+
       <header className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-md border-b">
         <div className="container mx-auto px-4 h-16 flex items-center gap-4">
           <Button variant="ghost" size="icon" asChild>
@@ -114,22 +122,30 @@ function HelpCenterPage() {
         </div>
       </header>
 
-      <main className="pt-24 container mx-auto px-4 max-w-3xl space-y-8">
-        <section className="text-center space-y-4">
-          <h2 className="text-2xl font-bold font-display tracking-tight text-primary">Como podemos ajudar?</h2>
-          <div className="relative max-w-md mx-auto">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-primary" size={20} />
-            <Input 
-              placeholder="Busque por termos (ex: macros, treino...)" 
-              className="pl-12 h-14 text-lg bg-white/5 border-white/10 rounded-2xl focus:ring-primary focus:border-primary transition-all placeholder:text-white/20"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
+      <main className="relative z-10 pt-16 container mx-auto px-0 max-w-3xl space-y-8">
+        <section className="relative h-[30vh] min-h-[250px] flex flex-col items-center justify-center overflow-hidden mb-8 px-4 text-center">
+          <img 
+            src="https://images.unsplash.com/photo-1434494878577-86c23bddad63?auto=format&fit=crop&q=80&w=1600"
+            className="absolute inset-0 w-full h-full object-cover"
+            alt="Help Center Hero"
+          />
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px]" />
+          
+          <div className="relative z-10 space-y-4 w-full max-w-md">
+            <h2 className="text-3xl font-black font-display tracking-tighter text-white uppercase italic">COMO PODEMOS <span className="text-primary">AJUDAR?</span></h2>
+            <div className="relative">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-primary" size={20} />
+              <Input 
+                placeholder="Busque por termos (ex: macros, treino...)" 
+                className="pl-12 h-14 text-lg bg-black/40 border-white/10 rounded-2xl focus:ring-primary focus:border-primary transition-all placeholder:text-white/20 text-white"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
           </div>
-
         </section>
 
-        <section className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+        <section className="px-4 flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
           {CATEGORIES.map(cat => (
             <Button
               key={cat.id}
