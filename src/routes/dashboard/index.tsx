@@ -1,8 +1,10 @@
+import * as React from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { generatePDFReport } from "@/lib/reports";
 import { exportToCSV } from "@/lib/export";
 import { Skeleton } from "@/components/ui/skeleton";
+import { PageHeaderSkeleton, StatsSkeleton } from "@/components/ui/loading-states";
 import { getSession } from "@/lib/auth/auth.functions";
 
 import { 
