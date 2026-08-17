@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -44,6 +45,14 @@ function BodyPage() {
   const [activeTab, setActiveTab] = useState("overview");
   const [isLoading, setIsLoading] = useState(true);
   const [userData, setUserData] = useState<any>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (!scrollContainerRef.current) return;
+    const { current } = scrollContainerRef;
+    if (e.key === 'ArrowDown') current.scrollTop += 50;
+    if (e.key === 'ArrowUp') current.scrollTop -= 50;
+  };
 
   useEffect(() => {
     const session = getSession();
@@ -79,7 +88,12 @@ function BodyPage() {
 
 
   return (
-    <div className="flex-1 space-y-12 p-4 md:p-12 pt-10 relative overflow-hidden bg-background">
+    <div 
+      ref={scrollContainerRef}
+      onKeyDown={handleKeyDown}
+      tabIndex={0}
+      className="flex-1 space-y-12 p-4 md:p-12 pt-10 relative overflow-y-auto outline-none scroll-smooth bg-background"
+    >
       {/* Decorative Module Hero Image */}
       <div className="absolute top-0 right-0 w-96 h-96 opacity-[0.08] pointer-events-none -z-10 translate-x-1/4 -translate-y-1/4">
         <Scale size={384} className="text-primary" />
@@ -100,8 +114,14 @@ function BodyPage() {
 
 
 
+        <AnimatePresence mode="wait">
         <TabsContent value="overview" className="space-y-4">
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="grid gap-4 md:grid-cols-2 lg:grid-cols-3"
+          >
             <MetricCard 
               label="Peso" 
               value={`${userData?.profile?.weight || "82.4"} kg`} 
@@ -123,7 +143,7 @@ function BodyPage() {
               trend="up" 
               icon={<TrendingUp className="h-4 w-4 text-success" />} 
             />
-          </div>
+          </motion.div>
 
           <Card className="surface border-none p-6">
             <CardHeader className="px-0 pt-0">
@@ -272,6 +292,7 @@ function BodyPage() {
             </Button>
           </div>
         </TabsContent>
+        </AnimatePresence>
       </Tabs>
     </div>
   );

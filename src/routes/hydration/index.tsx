@@ -61,7 +61,20 @@ function HydrationPage() {
           <Button variant="outline" className="gap-2 h-14 px-8 font-black uppercase tracking-widest border-2 bg-white/5 border-white/10 hover:bg-white/10 hover:scale-105 transition-all" asChild>
             <Link to="/help">CENTRAL DE AJUDA</Link>
           </Button>
-          <Button variant="outline" size="icon" className="rounded-2xl h-14 w-14 border-2 bg-white/5 border-white/10 hover:bg-white/10 hover:scale-105 transition-all">
+          <Button 
+            variant="outline" 
+            size="icon" 
+            className="rounded-2xl h-14 w-14 border-2 bg-white/5 border-white/10 hover:bg-white/10 hover:scale-105 transition-all"
+            onClick={() => {
+              if ("Notification" in window) {
+                Notification.requestPermission().then(permission => {
+                  if (permission === "granted") {
+                    alert("Lembretes de hidratação ativados!");
+                  }
+                });
+              }
+            }}
+          >
             <Settings size={22} />
           </Button>
         </div>
@@ -153,7 +166,23 @@ function HydrationPage() {
                 <History size={18} className="text-primary" />
                 Registros de Hoje
               </CardTitle>
-              <Button variant="ghost" size="sm" className="h-8 text-xs">Ver tudo</Button>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="h-8 text-xs"
+                onClick={() => {
+                  if ("Notification" in window && Notification.permission === "granted") {
+                    new Notification("Body Métrica FJ", {
+                      body: "Não esqueça de beber água! Sua meta é 3L hoje.",
+                      icon: "/favicon.ico"
+                    });
+                  } else {
+                    alert("Ative as notificações nas configurações para receber lembretes.");
+                  }
+                }}
+              >
+                TESTAR LEMBRETE
+              </Button>
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
