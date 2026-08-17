@@ -113,7 +113,7 @@ function AboutPage() {
               Seja bem-vindo à nova era do acompanhamento físico.
             </p>
             <Button size="lg" variant="secondary" className="px-10 h-14 rounded-2xl font-black uppercase tracking-widest hover:scale-105 transition-all shadow-xl" asChild>
-              <Link to="/auth">FAZER PARTE DA ELITE</Link>
+              <Link to="/auth" search={{ registerMode: true, name: "", birthDate: "", goal: "", weight: "", height: "", activityLevel: "" }}>FAZER PARTE DA ELITE</Link>
             </Button>
           </div>
         </section>
