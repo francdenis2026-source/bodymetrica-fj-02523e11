@@ -103,7 +103,7 @@ function VerifyPage() {
                 asChild
                 className="w-full h-14 font-black uppercase tracking-widest text-white/40 hover:text-white"
               >
-                <Link to="/auth">
+                <Link to="/auth" search={{ registerMode: false, name: "", birthDate: "", goal: "", weight: "", height: "", activityLevel: "" } as any}>
                   <ArrowLeft className="mr-2" size={16} />
                   VOLTAR AO LOGIN
                 </Link>
