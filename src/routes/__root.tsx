@@ -213,9 +213,12 @@ function RootComponent() {
           !isPublicRoute && "mb-16 md:mb-0"
         )}>
           <Outlet />
-          <footer className="py-4 px-6 text-center text-[10px] text-muted-foreground/50 border-t mt-auto">
-            dev <span className="font-semibold text-primary/60">Franc D'nis</span> Feijó, AC
+          <footer className="py-6 px-6 text-center border-t mt-auto bg-background/50 backdrop-blur-md">
+            <p className="text-[10px] text-muted-foreground/60 uppercase tracking-[0.2em] font-bold">
+              dev Franc D'nis Feijó, AC
+            </p>
           </footer>
+
         </main>
       </div>
       <Toaster position="top-center" />
