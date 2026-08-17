@@ -50,6 +50,25 @@ function NutritionPage() {
     fat: { current: 65, goal: 80 },
   };
 
+  useEffect(() => {
+    // Alert if macros are near limit but not reached
+    const checkMacroStatus = () => {
+      const proteinPercent = (macros.protein.current / macros.protein.goal);
+      if (proteinPercent >= 0.8 && proteinPercent < 1.0) {
+        if ("Notification" in window && Notification.permission === "granted") {
+          new Notification("Body Métrica FJ", {
+            body: "Você está próximo da sua meta de proteínas. Falta pouco!",
+            icon: "/favicon.svg"
+          });
+        }
+      }
+    };
+    
+    if (!isLoading) {
+      checkMacroStatus();
+    }
+  }, [isLoading, macros.protein.current, macros.protein.goal]);
+
   if (isLoading) {
     return (
       <div className="flex-1 space-y-12 p-4 md:p-12 pt-10 bg-background">
