@@ -126,7 +126,7 @@ function DashboardPage() {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+            <Link to="/nutrition" className="flex items-center justify-between p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors cursor-pointer group">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-background flex items-center justify-center font-bold text-xs">
                   12h
@@ -136,8 +136,8 @@ function DashboardPage() {
                   <div className="text-xs text-muted-foreground">Arroz, Frango, Salada</div>
                 </div>
               </div>
-              <Button size="sm" variant="ghost">Registrar</Button>
-            </div>
+              <Button size="sm" variant="ghost" className="group-hover:bg-primary/10 group-hover:text-primary">Registrar</Button>
+            </Link>
             <div className="flex items-center justify-between p-3 rounded-lg bg-muted/20 opacity-60">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-background flex items-center justify-center font-bold text-xs">
