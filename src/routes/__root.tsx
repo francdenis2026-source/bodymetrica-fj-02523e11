@@ -188,8 +188,27 @@ function RootComponent() {
           .register("/sw.js")
           .then((registration) => {
             console.log("SW registered:", registration);
-            // Optional: immediately trigger a check for updates
+            
+            // Check for updates periodically
             registration.update();
+
+            // Listen for update prompt
+            registration.addEventListener('updatefound', () => {
+              const newWorker = registration.installing;
+              if (newWorker) {
+                newWorker.addEventListener('statechange', () => {
+                  if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                    toast.info("Nova versão disponível!", {
+                      action: {
+                        label: "Atualizar",
+                        onClick: () => window.location.reload()
+                      },
+                      duration: 10000
+                    });
+                  }
+                });
+              }
+            });
           })
           .catch((error) => {
             console.error("SW registration failed:", error);
