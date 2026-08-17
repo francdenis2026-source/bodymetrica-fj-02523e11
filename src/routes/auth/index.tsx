@@ -343,37 +343,6 @@ function AuthPage() {
                   </Button>
                 </form>
               </Form>
-            ) : isResetting ? (
-              <Form {...resetForm}>
-                <form onSubmit={resetForm.handleSubmit(onResetSubmit)} className="space-y-4">
-                  <FormField
-                    control={resetForm.control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="font-black text-[8px] uppercase tracking-[0.2em] text-primary ml-1">E-MAIL</FormLabel>
-                        <FormControl>
-                          <Input 
-                            placeholder="seu@email.com" 
-                            className="h-12 text-base font-black bg-white/5 border-white/10 rounded-xl px-4 text-white"
-                            {...field} 
-                            disabled={isLoading}
-                          />
-                        </FormControl>
-                        <FormMessage className="text-[8px] font-bold text-destructive uppercase tracking-widest" />
-                      </FormItem>
-                    )}
-                  />
-                  <div className="flex gap-3">
-                    <Button type="button" variant="ghost" className="flex-1 h-12 font-black uppercase text-white/40 text-[10px]" onClick={() => setIsResetting(false)}>
-                      VOLTAR
-                    </Button>
-                    <Button type="submit" className="flex-[2] h-12 text-sm font-black uppercase tracking-[0.2em] bg-brand-gradient rounded-xl" disabled={isLoading}>
-                      {isLoading ? "ENVIANDO..." : "ENVIAR LINK"}
-                    </Button>
-                  </div>
-                </form>
-              </Form>
             ) : isRegistering ? (
               <Form {...registerForm}>
                 <form onSubmit={registerForm.handleSubmit(onRegisterSubmit)} className="space-y-4">
@@ -504,7 +473,7 @@ function AuthPage() {
           </CardContent>
           
           <CardFooter className="flex flex-col gap-4 border-t border-white/5 pt-6 pb-8 bg-white/[0.02]">
-            {!isResetting && (
+            {true && (
               <>
                 <div className="flex items-start gap-3 text-[8px] text-white/40 leading-relaxed font-bold uppercase tracking-widest px-2">
                   <ShieldCheck className="text-primary shrink-0" size={16} />
