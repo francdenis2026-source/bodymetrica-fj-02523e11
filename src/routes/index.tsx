@@ -87,25 +87,25 @@ function Index() {
                 <span>Alta Performance & Precisão</span>
               </div>
               
-              <h1 className="text-5xl md:text-8xl font-black font-display text-foreground leading-[0.95] tracking-tighter animate-in fade-in slide-in-from-left-4 duration-700 delay-75 uppercase">
+              <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black font-display text-foreground leading-[0.95] tracking-tighter animate-in fade-in slide-in-from-left-4 duration-700 delay-75 uppercase">
                 DOMINE SUA <br />
                 <span className="text-gradient-brand">EVOLUÇÃO.</span>
               </h1>
               
-              <p className="text-xl text-foreground/70 max-w-xl leading-relaxed font-semibold animate-in fade-in slide-in-from-left-4 duration-700 delay-150">
+              <p className="text-lg md:text-xl text-foreground/70 max-w-xl leading-relaxed font-semibold animate-in fade-in slide-in-from-left-4 duration-700 delay-150">
                 A plataforma definitiva para atletas que buscam a perfeição.
                 Acompanhamento de elite para composição corporal e performance.
               </p>
 
               
               <div className="flex flex-col sm:flex-row items-center gap-4 pt-4 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300">
-                <Button size="lg" className="h-14 px-10 text-base font-black uppercase tracking-widest group w-full sm:w-auto bg-brand-gradient hover:scale-105 transition-all border-none shadow-2xl shadow-primary/40" asChild>
+                <Button size="lg" className="h-12 md:h-14 px-8 md:px-10 text-sm md:text-base font-black uppercase tracking-widest group w-full sm:w-auto bg-brand-gradient hover:scale-105 transition-all border-none shadow-2xl shadow-primary/40" asChild>
                   <Link to={isLoggedIn ? "/dashboard" : "/onboarding"}>
                     {isLoggedIn ? "MEU DASHBOARD" : "COMEÇAR AGORA"}
                     <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={20} />
                   </Link>
                 </Button>
-                <Button size="lg" variant="outline" className="h-14 px-10 text-base font-black uppercase tracking-widest w-full sm:w-auto backdrop-blur-md bg-white/5 border-white/10 hover:bg-white/10" asChild>
+                <Button size="lg" variant="outline" className="h-12 md:h-14 px-8 md:px-10 text-sm md:text-base font-black uppercase tracking-widest w-full sm:w-auto backdrop-blur-md bg-white/5 border-white/10 hover:bg-white/10" asChild>
                   <Link to="/about">DETALHES</Link>
                 </Button>
 
