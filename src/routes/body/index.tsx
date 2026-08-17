@@ -112,7 +112,7 @@ function BodyPage() {
             <MetricCard 
               label="Gordura" 
               value="15.2 %" 
-              change="-0.8 %" 
+              change="Referência" 
               trend="down" 
               icon={<TrendingUp className="h-4 w-4 text-primary" />} 
             />
