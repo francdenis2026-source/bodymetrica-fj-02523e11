@@ -17,12 +17,21 @@ export function AccessGate({
   children, 
   isAllowed 
 }: AccessGateProps) {
-  const navigate = useNavigate();
-
   useEffect(() => {
     if (!isAllowed) {
       const timer = setTimeout(() => {
-        navigate({ to: "/auth", search: { registerMode: false, name: "", birthDate: "" } });
+        navigate({ 
+          to: "/auth", 
+          search: { 
+            registerMode: false, 
+            name: "", 
+            birthDate: "",
+            goal: "",
+            weight: "",
+            height: "",
+            activityLevel: ""
+          } 
+        });
       }, 3500);
       return () => clearTimeout(timer);
     }
@@ -52,7 +61,18 @@ export function AccessGate({
 
           <div className="flex flex-col gap-4 pt-4">
             <Button className="h-14 font-black uppercase tracking-widest bg-brand-gradient shadow-2xl shadow-primary/30 hover:scale-105 transition-all border-none rounded-2xl" asChild>
-              <Link to="/auth" search={{ registerMode: false, name: "", birthDate: "" }}>
+              <Link 
+                to="/auth" 
+                search={{ 
+                  registerMode: false, 
+                  name: "", 
+                  birthDate: "",
+                  goal: "",
+                  weight: "",
+                  height: "",
+                  activityLevel: ""
+                }}
+              >
                 ENTRAR AGORA
               </Link>
             </Button>
