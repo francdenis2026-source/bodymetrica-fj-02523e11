@@ -42,9 +42,15 @@ export const login = createServerFn({ method: "POST" })
       success: true,
       user: {
         id: "user-" + Math.random().toString(36).substr(2, 9),
-        name: "Usuário Body Métrica",
+        name: "Franc D'nis Feijó",
         cpf: data.cpf,
-        role: "user"
+        role: "user",
+        profile: {
+          goal: 'gain',
+          weight: '82.4',
+          height: '185',
+          activityLevel: 'Muito ativo (6-7 dias/semana)'
+        }
       }
     };
   });
