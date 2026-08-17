@@ -324,6 +324,7 @@ function RootComponent() {
 
     const handleOnline = () => {
       setIsOnline(true);
+      setActualIsOnline(true);
       setSyncStatus('syncing');
       syncOfflineActions().then(() => setSyncStatus('synced'));
       setTimeout(() => setSyncStatus('idle'), 3000);
@@ -332,12 +333,16 @@ function RootComponent() {
 
     const handleOffline = () => {
       setIsOnline(false);
+      setActualIsOnline(false);
     };
 
     if (typeof window !== 'undefined') {
+      setIsOnline(navigator.onLine);
+      setActualIsOnline(navigator.onLine);
       window.addEventListener("online", handleOnline);
       window.addEventListener("offline", handleOffline);
     }
+
 
     return () => {
       if (typeof window !== 'undefined') {
