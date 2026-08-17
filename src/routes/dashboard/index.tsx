@@ -51,62 +51,70 @@ function DashboardPage() {
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card className="surface border-none">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Peso Atual</CardTitle>
-            <User className="h-4 w-4 text-primary" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">82.4 kg</div>
-            <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
-              <TrendingUp size={12} className="text-success" />
-              {weightChange}kg desde a última semana
-            </p>
-          </CardContent>
-        </Card>
+        <Link to="/body" className="block transition-transform active:scale-[0.98]">
+          <Card className="surface border-none hover:bg-accent/5 transition-colors cursor-pointer h-full">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Peso Atual</CardTitle>
+              <User className="h-4 w-4 text-primary" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">82.4 kg</div>
+              <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
+                <TrendingUp size={12} className="text-success" />
+                {weightChange}kg desde a última semana
+              </p>
+            </CardContent>
+          </Card>
+        </Link>
 
-        <Card className="surface border-none">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Objetivo</CardTitle>
-            <ArrowRight className="h-4 w-4 text-primary" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{currentGoal}</div>
-            <div className="mt-2">
-              <div className="flex justify-between text-[10px] mb-1">
-                <span>Progresso</span>
-                <span>65%</span>
+        <Link to="/body" className="block transition-transform active:scale-[0.98]">
+          <Card className="surface border-none hover:bg-accent/5 transition-colors cursor-pointer h-full">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Objetivo</CardTitle>
+              <ArrowRight className="h-4 w-4 text-primary" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{currentGoal}</div>
+              <div className="mt-2">
+                <div className="flex justify-between text-[10px] mb-1">
+                  <span>Progresso</span>
+                  <span>65%</span>
+                </div>
+                <Progress value={65} className="h-1.5" />
               </div>
-              <Progress value={65} className="h-1.5" />
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </Link>
 
-        <Card className="surface border-none">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Hidratação</CardTitle>
-            <Droplets className="h-4 w-4 text-info" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">1.2L / 3.0L</div>
-            <div className="mt-2">
-              <Progress value={40} className="h-1.5" />
-            </div>
-          </CardContent>
-        </Card>
+        <Link to="/hydration" className="block transition-transform active:scale-[0.98]">
+          <Card className="surface border-none hover:bg-accent/5 transition-colors cursor-pointer h-full">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Hidratação</CardTitle>
+              <Droplets className="h-4 w-4 text-info" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">1.2L / 3.0L</div>
+              <div className="mt-2">
+                <Progress value={40} className="h-1.5" />
+              </div>
+            </CardContent>
+          </Card>
+        </Link>
 
-        <Card className="surface border-none">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Treino</CardTitle>
-            <Dumbbell className="h-4 w-4 text-warning" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">Puxada (A)</div>
-            <p className="text-xs text-muted-foreground mt-1">
-              Programado para hoje às 18:00
-            </p>
-          </CardContent>
-        </Card>
+        <Link to="/training" className="block transition-transform active:scale-[0.98]">
+          <Card className="surface border-none hover:bg-accent/5 transition-colors cursor-pointer h-full">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Treino</CardTitle>
+              <Dumbbell className="h-4 w-4 text-warning" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">Puxada (A)</div>
+              <p className="text-xs text-muted-foreground mt-1">
+                Programado para hoje às 18:00
+              </p>
+            </CardContent>
+          </Card>
+        </Link>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2">
