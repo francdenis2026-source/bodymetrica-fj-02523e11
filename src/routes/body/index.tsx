@@ -19,8 +19,12 @@ import {
   LifeBuoy,
   FileDown,
   Share2,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Link as LinkIcon,
+  Trash2,
+  Download
  } from "lucide-react";
+
 
 import { 
   LineChart, 
@@ -55,7 +59,9 @@ function BodyPage() {
   const [activeTab, setActiveTab] = useState("overview");
   const [isLoading, setIsLoading] = useState(true);
   const [userData, setUserData] = useState<any>(null);
+  const [exportHistory, setExportHistory] = useState<any[]>([]);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (!scrollContainerRef.current) return;
@@ -69,7 +75,12 @@ function BodyPage() {
     if (session) {
       setUserData(session);
     }
-    const timer = setTimeout(() => setIsLoading(false), 900);
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+      const history = JSON.parse(localStorage.getItem('bodymetrica_export_history') || '[]');
+      setExportHistory(history);
+    }, 900);
+
     return () => clearTimeout(timer);
   }, []);
 
@@ -132,7 +143,9 @@ function BodyPage() {
           <TabsTrigger value="overview" className="h-11 px-10 rounded-xl font-black uppercase tracking-widest text-[10px] data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all">GERAL</TabsTrigger>
           <TabsTrigger value="measurements" className="h-11 px-10 rounded-xl font-black uppercase tracking-widest text-[10px] data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all">MEDIDAS</TabsTrigger>
           <TabsTrigger value="photos" className="h-11 px-10 rounded-xl font-black uppercase tracking-widest text-[10px] data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all">EVOLUÇÃO</TabsTrigger>
+          <TabsTrigger value="exports" className="h-11 px-10 rounded-xl font-black uppercase tracking-widest text-[10px] data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all">EXPORTAÇÕES</TabsTrigger>
         </TabsList>
+
 
 
 
@@ -390,6 +403,76 @@ function BodyPage() {
             </div>
           </div>
         </TabsContent>
+
+        <TabsContent value="exports" className="space-y-6">
+          <Card className="surface border-none p-6">
+            <CardHeader className="px-0 pt-0">
+              <CardTitle className="text-xl font-black font-display uppercase italic tracking-tighter">HISTÓRICO DE EXPORTAÇÕES</CardTitle>
+              <p className="text-[10px] font-bold text-foreground/40 uppercase tracking-widest">LINKS PÚBLICOS E DOWNLOADS REALIZADOS</p>
+            </CardHeader>
+            <CardContent className="px-0 pt-6">
+              {exportHistory.length === 0 ? (
+                <EmptyState 
+                  icon={FileDown}
+                  title="NENHUMA EXPORTAÇÃO"
+                  description="Seus relatórios gerados aparecerão aqui para acesso rápido e compartilhamento."
+                />
+              ) : (
+                <div className="space-y-4">
+                  {exportHistory.map((item) => (
+                    <div key={item.id} className="flex items-center justify-between p-6 rounded-[1.5rem] bg-white/[0.03] border border-white/5 group hover:bg-white/5 transition-all">
+                      <div className="flex gap-4 items-center">
+                        <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${item.type === 'PDF' ? 'bg-primary/10 text-primary' : 'bg-success/10 text-success'}`}>
+                          {item.type === 'PDF' ? <FileDown size={20} /> : <ImageIcon size={20} />}
+                        </div>
+                        <div>
+                          <div className="text-xs font-black uppercase tracking-widest">{item.fileName}</div>
+                          <div className="text-[9px] font-bold text-muted-foreground uppercase mt-1">
+                            {new Date(item.date).toLocaleDateString()} • Expira em: {new Date(item.expiresAt).toLocaleDateString()}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex gap-2">
+                        <Button 
+                          variant="ghost" 
+                          size="icon" 
+                          className="h-10 w-10 rounded-xl hover:bg-primary/10 hover:text-primary transition-all"
+                          onClick={() => {
+                            navigator.clipboard.writeText(item.publicLink);
+                            toast.success("Link público copiado!");
+                          }}
+                        >
+                          <LinkIcon size={16} />
+                        </Button>
+                        <Button 
+                          variant="ghost" 
+                          size="icon" 
+                          className="h-10 w-10 rounded-xl hover:bg-destructive/10 hover:text-destructive transition-all"
+                          onClick={() => {
+                            const newHistory = exportHistory.filter(i => i.id !== item.id);
+                            localStorage.setItem('bodymetrica_export_history', JSON.stringify(newHistory));
+                            setExportHistory(newHistory);
+                            toast.success("Acesso revogado com sucesso!");
+                          }}
+                        >
+                          <Trash2 size={16} />
+                        </Button>
+                        <Button 
+                          variant="ghost" 
+                          size="icon" 
+                          className="h-10 w-10 rounded-xl hover:bg-success/10 hover:text-success transition-all"
+                        >
+                          <Download size={16} />
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
         </AnimatePresence>
       </Tabs>
     </div>
