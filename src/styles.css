@@ -145,6 +145,11 @@
 }
 
 @layer base {
+  /* Hide Lovable badge */
+  #lovable-badge {
+    display: none !important;
+  }
+
   * {
     border-color: var(--color-border);
   }
