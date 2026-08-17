@@ -165,10 +165,9 @@ function SettingsPage() {
             variant="ghost" 
             className="w-full justify-start text-destructive hover:bg-destructive/10 h-12 px-4 gap-3"
             onClick={() => {
-              if (typeof window !== 'undefined') {
-                localStorage.removeItem('bodymetrica_auth_session');
-                window.location.href = '/auth';
-              }
+              clearSession();
+              toast.success("Sessão encerrada com sucesso");
+              window.location.href = '/auth';
             }}
           >
             <LogOut size={18} />
