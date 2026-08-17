@@ -1,11 +1,14 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
+import { cn } from "@/lib/utils";
 import { 
   ArrowLeft, 
   BookOpen, 
   Target, 
   ShieldCheck, 
   BarChart3, 
-  Zap 
+  Zap,
+  Droplets
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "@tanstack/react-router";
@@ -88,16 +91,40 @@ function AboutPage() {
   );
 }
 
-function ToolItem({ icon, title, description }: { icon: React.ReactNode; title: string; description: string }) {
+function ToolItem({ icon, title, description, details }: { icon: React.ReactNode; title: string; description: string; details: string }) {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
-    <div className="surface p-6 space-y-3">
-      <div className="w-10 h-10 rounded-full bg-background border flex items-center justify-center shadow-sm">
-        {icon}
+    <div 
+      className={cn(
+        "surface p-6 space-y-3 cursor-pointer transition-all duration-300 hover:shadow-md border border-transparent",
+        isOpen && "border-primary/20 bg-primary/5 shadow-sm"
+      )}
+      onClick={() => setIsOpen(!isOpen)}
+    >
+      <div className="flex items-start justify-between">
+        <div className="w-10 h-10 rounded-full bg-background border flex items-center justify-center shadow-sm">
+          {icon}
+        </div>
+        <div className={cn(
+          "text-[10px] font-bold uppercase px-2 py-0.5 rounded-full border transition-colors",
+          isOpen ? "bg-primary text-white border-primary" : "bg-muted text-muted-foreground border-transparent"
+        )}>
+          {isOpen ? 'Ocultar' : 'Saiba mais'}
+        </div>
       </div>
       <h3 className="font-bold font-display">{title}</h3>
       <p className="text-sm text-muted-foreground leading-relaxed">
         {description}
       </p>
+      
+      {isOpen && (
+        <div className="pt-4 mt-4 border-t border-primary/10 animate-in fade-in slide-in-from-top-2 duration-300">
+          <p className="text-sm text-foreground/80 leading-relaxed italic">
+            {details}
+          </p>
+        </div>
+      )}
     </div>
   );
 }
