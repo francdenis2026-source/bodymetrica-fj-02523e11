@@ -306,13 +306,42 @@ function BodyPage() {
             </div>
           </div>
           
-          <div className="mt-8 text-center space-y-4">
-            <p className="text-sm text-muted-foreground">
-              Compare sua evolução visual com segurança e privacidade.
-            </p>
-            <Button variant="outline" className="gap-2">
-              Ver Comparativo Antes e Depois
-            </Button>
+          <div className="mt-8 space-y-8">
+            <Card className="surface border-none p-6">
+              <CardTitle className="text-xl font-display uppercase italic mb-6">Relatório Comparativo (Mensal)</CardTitle>
+              <div className="grid md:grid-cols-2 gap-8">
+                <div className="space-y-4">
+                  <h4 className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Evolução de Peso</h4>
+                  <div className="flex items-end justify-between h-32 gap-2">
+                    {[85, 84, 83.5, 82.4].map((v, i) => (
+                      <div key={i} className="flex-1 flex flex-col items-center gap-2 group relative">
+                        <div className="w-full bg-primary/20 rounded-t-sm" style={{ height: `${(v/90)*100}%` }} />
+                        <span className="text-[8px] font-bold text-muted-foreground uppercase">Mês {i+1}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div className="flex flex-col justify-center gap-4">
+                  <div className="p-4 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-between">
+                    <span className="text-[10px] font-black uppercase text-muted-foreground">Peso Médio</span>
+                    <span className="text-xl font-black italic text-primary">83.2 KG</span>
+                  </div>
+                  <div className="p-4 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-between">
+                    <span className="text-[10px] font-black uppercase text-muted-foreground">Variação Total</span>
+                    <span className="text-xl font-black italic text-success">-2.6 KG</span>
+                  </div>
+                </div>
+              </div>
+            </Card>
+
+            <div className="text-center space-y-4">
+              <p className="text-sm text-muted-foreground">
+                Compare sua evolução visual com segurança e privacidade.
+              </p>
+              <Button variant="outline" className="gap-2">
+                Ver Comparativo Antes e Depois
+              </Button>
+            </div>
           </div>
         </TabsContent>
         </AnimatePresence>

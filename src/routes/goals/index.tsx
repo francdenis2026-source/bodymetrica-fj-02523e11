@@ -65,7 +65,7 @@ function GoalsPage() {
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {goals.map((goal, idx) => {
-          const progress = Math.min(Math.round((goal.current / goal.target) * 100), 100);
+          const progress = Math.min(Math.round(((goal.current || 0) / (goal.target || 1)) * 100), 100);
           return (
             <motion.div
               key={idx}
