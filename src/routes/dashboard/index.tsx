@@ -28,33 +28,40 @@ function DashboardPage() {
   const weightChange = -0.5;
 
   return (
-    <div className="flex-1 space-y-8 p-4 md:p-8 pt-6 relative overflow-hidden">
-      <div className="flex flex-col gap-6 relative z-10 animate-in fade-in slide-in-from-left-4 duration-700">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div className="flex items-center gap-4">
-            <div className="w-16 h-16 bg-brand-gradient rounded-2xl flex items-center justify-center text-white text-2xl font-bold shadow-xl border-2 border-white/10">
-              {userName[0]}
-            </div>
-            <div>
-              <h2 className="text-4xl font-bold tracking-tight font-display text-primary uppercase">Olá, {userName}!</h2>
-              <p className="text-muted-foreground font-medium mt-1">
-                Sua evolução está em alta. O foco hoje é o segredo do sucesso.
-              </p>
-            </div>
+    <div className="flex-1 space-y-12 p-4 md:p-12 pt-10 relative overflow-hidden bg-background">
+      {/* Decorative Module Hero Image */}
+      <div className="absolute top-0 right-0 w-96 h-96 opacity-[0.08] pointer-events-none -z-10 translate-x-1/4 -translate-y-1/4">
+        <LayoutDashboard size={384} className="text-primary" />
+      </div>
+
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 relative z-10 animate-in fade-in slide-in-from-left-4 duration-700">
+        <div className="flex flex-col md:flex-row items-center gap-6">
+          <div className="w-20 h-20 bg-brand-gradient rounded-3xl flex items-center justify-center text-white text-3xl font-black shadow-2xl border-2 border-white/20 transform hover:scale-105 transition-transform duration-500">
+            {userName[0]}
           </div>
-          
-          <div className="flex items-center gap-3">
-            <Button variant="outline" size="sm" className="gap-2 h-10 px-4 font-semibold border-2" asChild>
-              <Link to="/help">
-                <LifeBuoy size={18} /> Central de Ajuda
-              </Link>
-            </Button>
-            <Button size="sm" className="gap-2 h-10 px-4 font-semibold bg-brand-gradient shadow-lg">
-              <FileDown size={18} /> Exportar Relatório PDF
-            </Button>
+          <div className="text-center md:text-left space-y-2">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/20 text-primary-foreground text-[10px] font-black uppercase tracking-[0.2em] mb-1 border border-primary/30">
+              SISTEMA DE PERFORMANCE
+            </div>
+            <h2 className="text-4xl md:text-7xl font-black tracking-tighter font-display text-foreground uppercase italic leading-none">
+              OLÁ, <span className="text-gradient-brand">{userName}</span>
+            </h2>
+            <p className="text-foreground/60 text-lg md:text-xl font-bold tracking-tight">
+              Sua evolução está em alta. O foco hoje é o segredo do sucesso.
+            </p>
           </div>
         </div>
+        
+        <div className="flex flex-wrap justify-center gap-4">
+          <Button variant="outline" className="gap-2 h-14 px-8 font-black uppercase tracking-widest border-2 bg-white/5 border-white/10 hover:bg-white/10 hover:scale-105 transition-all" asChild>
+            <Link to="/help">CENTRAL DE AJUDA</Link>
+          </Button>
+          <Button className="gap-3 h-14 px-8 font-black uppercase tracking-widest bg-brand-gradient shadow-2xl shadow-primary/40 hover:scale-105 transition-all border-none">
+            <FileDown size={20} /> RELATÓRIO PDF
+          </Button>
+        </div>
       </div>
+
 
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
