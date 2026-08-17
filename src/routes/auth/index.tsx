@@ -245,12 +245,12 @@ function AuthPage() {
           </div>
         </div>
 
-        <Card className="surface border-white/5 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.6)] bg-black/60 backdrop-blur-3xl rounded-[2.5rem] overflow-hidden">
-          <CardHeader className="space-y-2 pb-10 border-b border-white/5 pt-12">
-            <CardTitle className="text-3xl font-black text-white text-center uppercase tracking-[0.2em] italic">
+        <Card className="surface border-white/5 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.6)] bg-black/60 backdrop-blur-3xl rounded-[2rem] overflow-hidden">
+          <CardHeader className="space-y-1 pb-6 border-b border-white/5 pt-8">
+            <CardTitle className="text-xl font-black text-white text-center uppercase tracking-[0.2em] italic">
               {isResetting ? "RECUPERAÇÃO" : isRegistering ? "CADASTRO" : "AUTENTICAÇÃO"}
             </CardTitle>
-            <CardDescription className="font-bold text-white/40 text-center uppercase text-[10px] tracking-widest px-4">
+            <CardDescription className="font-bold text-white/40 text-center uppercase text-[8px] tracking-widest px-4">
               {isBlocked ? `ACESSO BLOQUEADO POR ${remainingSeconds}s` :
                isResetting ? "SOLICITE O LINK DE REDEFINIÇÃO" : 
                isRegistering ? "CRIE SUA CONTA PROFISSIONAL" : 
@@ -258,7 +258,7 @@ function AuthPage() {
             </CardDescription>
           </CardHeader>
 
-          <CardContent className="pt-8">
+          <CardContent className="pt-6">
             {isResetting ? (
               <Form {...resetForm}>
                 <form onSubmit={resetForm.handleSubmit(onResetSubmit)} className="space-y-6">
