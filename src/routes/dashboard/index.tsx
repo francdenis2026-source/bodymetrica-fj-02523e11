@@ -303,33 +303,56 @@ function DashboardPage() {
         <CardHeader>
           <CardTitle className="text-lg font-display flex items-center gap-2">
             <Calendar size={20} className="text-primary" />
-            Consistência Semanal
+            Adesão e Recomendação
           </CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="flex justify-between items-end h-32 gap-2">
-            {[60, 80, 45, 90, 100, 75, 85].map((val, i) => (
-              <div key={i} className="flex-1 flex flex-col items-center gap-2 group relative">
-                <div 
-                  className="w-full bg-primary/20 rounded-t-sm transition-all hover:bg-primary/40 cursor-help" 
-                  style={{ height: `${val}%` }}
-                />
-                <div className="absolute bottom-full mb-2 bg-card border border-white/10 p-2 rounded-lg text-[9px] font-black uppercase tracking-widest invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all whitespace-nowrap z-50 shadow-2xl">
-                  Aderência: {val}% | {val > 80 ? 'EXCELENTE' : 'EM EVOLUÇÃO'}
+        <CardContent className="space-y-8">
+          <div className="flex flex-col md:flex-row gap-8">
+            <div className="flex-1 flex justify-between items-end h-40 gap-3">
+              {[60, 85, 45, 92, 100, 75, 88].map((val, i) => (
+                <div key={i} className="flex-1 flex flex-col items-center gap-2 group relative">
+                  <div 
+                    className="w-full bg-primary/20 rounded-t-xl transition-all hover:bg-primary/40 cursor-help border-t-2 border-primary/40" 
+                    style={{ height: `${val}%` }}
+                  >
+                    {val > 90 && (
+                      <div className="absolute -top-6 left-1/2 -translate-x-1/2 text-primary">
+                        <TrendingUp size={12} />
+                      </div>
+                    )}
+                  </div>
+                  <div className="absolute bottom-full mb-3 bg-card border border-white/10 p-3 rounded-xl text-[9px] font-black uppercase tracking-widest invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all whitespace-nowrap z-50 shadow-2xl backdrop-blur-xl">
+                    <div className="flex items-center gap-2 mb-1">
+                      <div className={`w-2 h-2 rounded-full ${val > 80 ? 'bg-success' : 'bg-warning'}`} />
+                      ADERÊNCIA: {val}%
+                    </div>
+                    {val > 80 ? 'EXCELENTE PERFORMANCE' : 'FOCO NA CONSISTÊNCIA'}
+                  </div>
+                  <span className="text-[10px] text-muted-foreground font-black uppercase tracking-tighter">
+                    {['SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB', 'DOM'][i]}
+                  </span>
                 </div>
-                <span className="text-[10px] text-muted-foreground font-medium">
-                  {['S', 'T', 'Q', 'Q', 'S', 'S', 'D'][i]}
-                </span>
-              </div>
-            ))}
-          </div>
-          <div className="mt-6 p-4 rounded-2xl bg-white/[0.02] border border-white/5 flex items-center gap-4">
-            <div className="w-10 h-10 rounded-xl bg-success/20 flex items-center justify-center">
-              <TrendingUp className="text-success" size={20} />
+              ))}
             </div>
-            <div>
-              <p className="text-[10px] font-black uppercase tracking-widest text-success">INSIGHT DE PERFORMANCE</p>
-              <p className="text-xs text-foreground/70 font-bold">Sua aderência média subiu 12% esta semana. Mantenha a consistência nos treinos matinais.</p>
+
+            <div className="md:w-72 space-y-4">
+              <div className="p-4 rounded-[2rem] bg-white/[0.03] border border-white/5 space-y-2">
+                <div className="flex justify-between items-center">
+                  <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Consistência</span>
+                  <span className="text-sm font-black text-primary">82%</span>
+                </div>
+                <Progress value={82} className="h-2" />
+              </div>
+              
+              <div className="p-4 rounded-[2rem] bg-success/5 border border-success/10 space-y-2">
+                <div className="flex items-center gap-2 mb-1">
+                  <TrendingUp className="text-success" size={14} />
+                  <span className="text-[10px] font-black uppercase tracking-widest text-success">Recomendação</span>
+                </div>
+                <p className="text-[11px] font-bold text-foreground/80 leading-relaxed italic">
+                  "Sua performance matinal está 15% acima da média. Considere concentrar seus treinos de força neste período para maximizar ganhos."
+                </p>
+              </div>
             </div>
           </div>
         </CardContent>
