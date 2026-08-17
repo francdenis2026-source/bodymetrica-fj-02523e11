@@ -197,11 +197,11 @@ export const updateProfile = createServerFn({ method: "POST" })
     const { error } = await supabase
       .from('profiles')
       .update({
-        name: data.name,
-        goal: data.goal,
-        weight: data.weight,
-        height: data.height,
-        activity_level: data.activityLevel,
+        name: data.name ?? null,
+        goal: data.goal ?? null,
+        weight: data.weight ?? null,
+        height: data.height ?? null,
+        activity_level: data.activityLevel ?? null,
       })
       .eq('id', user.id);
 
