@@ -110,22 +110,32 @@ function Index() {
               </div>
             </div>
 
-            <div className="relative hidden lg:block animate-in fade-in zoom-in-95 duration-1000">
-              <div className="relative z-10 rounded-3xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)] border border-white/10 transform hover:scale-[1.02] transition-transform duration-500 bg-card/20 backdrop-blur-sm">
+            <div className="relative hidden lg:block animate-in fade-in zoom-in-95 duration-1000 delay-300">
+              <div className="relative z-10 rounded-[2.5rem] overflow-hidden shadow-[0_40px_100px_rgba(0,0,0,0.6)] border border-white/5 transform hover:scale-[1.01] transition-transform duration-700 bg-card/10 backdrop-blur-md">
+                <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-transparent z-20 pointer-events-none mix-blend-overlay" />
                 <img 
                   src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?auto=format&fit=crop&q=80&w=1200" 
                   alt="High Performance Athlete" 
-                  className="w-full h-auto object-cover aspect-[4/3] scale-105 hover:scale-100 transition-transform duration-1000"
+                  className="w-full h-auto object-cover aspect-[4/5] scale-105 hover:scale-100 transition-transform duration-[2000ms]"
                   fetchPriority="high"
                   loading="eager"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-transparent" />
-                <div className="absolute bottom-8 left-8 right-8">
-                  <p className="text-white text-lg font-bold font-display drop-shadow-md">
-                    Alta precisão em dados corporais.
-                  </p>
+                <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-transparent z-10" />
+                <div className="absolute bottom-12 left-12 right-12 z-20">
+                  <div className="space-y-2">
+                    <p className="text-white text-2xl font-black font-display tracking-tight uppercase">
+                      ENGENHARIA BIOMÉTRICA
+                    </p>
+                    <p className="text-white/60 text-sm font-medium leading-relaxed max-w-[280px]">
+                      Monitoramento de nível olímpico para aprimoramento constante.
+                    </p>
+                  </div>
                 </div>
               </div>
+              
+              {/* Decorative elements */}
+              <div className="absolute -top-12 -right-12 w-64 h-64 bg-primary/10 rounded-full blur-[100px] -z-10" />
+              <div className="absolute -bottom-12 -left-12 w-64 h-64 bg-success/10 rounded-full blur-[100px] -z-10" />
             </div>
           </div>
         </section>
