@@ -17,6 +17,7 @@ import { Route as AdminLoginRouteImport } from './routes/admin/login'
 import { Route as AuthIndexRouteImport } from './routes/auth/index'
 import { Route as BodyIndexRouteImport } from './routes/body/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
+import { Route as HelpIndexRouteImport } from './routes/help/index'
 import { Route as HydrationIndexRouteImport } from './routes/hydration/index'
 import { Route as NutritionIndexRouteImport } from './routes/nutrition/index'
 import { Route as OnboardingIndexRouteImport } from './routes/onboarding/index'
@@ -64,6 +65,11 @@ const BodyIndexRoute = BodyIndexRouteImport.update({
 const DashboardIndexRoute = DashboardIndexRouteImport.update({
   id: '/dashboard/',
   path: '/dashboard/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HelpIndexRoute = HelpIndexRouteImport.update({
+  id: '/help/',
+  path: '/help/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HydrationIndexRoute = HydrationIndexRouteImport.update({
@@ -116,6 +122,7 @@ export interface FileRoutesByFullPath {
   '/auth/': typeof AuthIndexRoute
   '/body/': typeof BodyIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/help/': typeof HelpIndexRoute
   '/hydration/': typeof HydrationIndexRoute
   '/nutrition/': typeof NutritionIndexRoute
   '/onboarding/': typeof OnboardingIndexRoute
@@ -133,6 +140,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthIndexRoute
   '/body': typeof BodyIndexRoute
   '/dashboard': typeof DashboardIndexRoute
+  '/help': typeof HelpIndexRoute
   '/hydration': typeof HydrationIndexRoute
   '/nutrition': typeof NutritionIndexRoute
   '/onboarding': typeof OnboardingIndexRoute
@@ -152,6 +160,7 @@ export interface FileRoutesById {
   '/auth/': typeof AuthIndexRoute
   '/body/': typeof BodyIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/help/': typeof HelpIndexRoute
   '/hydration/': typeof HydrationIndexRoute
   '/nutrition/': typeof NutritionIndexRoute
   '/onboarding/': typeof OnboardingIndexRoute
@@ -172,6 +181,7 @@ export interface FileRouteTypes {
     | '/auth/'
     | '/body/'
     | '/dashboard/'
+    | '/help/'
     | '/hydration/'
     | '/nutrition/'
     | '/onboarding/'
@@ -189,6 +199,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/body'
     | '/dashboard'
+    | '/help'
     | '/hydration'
     | '/nutrition'
     | '/onboarding'
@@ -207,6 +218,7 @@ export interface FileRouteTypes {
     | '/auth/'
     | '/body/'
     | '/dashboard/'
+    | '/help/'
     | '/hydration/'
     | '/nutrition/'
     | '/onboarding/'
@@ -224,6 +236,7 @@ export interface RootRouteChildren {
   AuthIndexRoute: typeof AuthIndexRoute
   BodyIndexRoute: typeof BodyIndexRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
+  HelpIndexRoute: typeof HelpIndexRoute
   HydrationIndexRoute: typeof HydrationIndexRoute
   NutritionIndexRoute: typeof NutritionIndexRoute
   OnboardingIndexRoute: typeof OnboardingIndexRoute
@@ -290,6 +303,13 @@ declare module '@tanstack/react-router' {
       path: '/dashboard'
       fullPath: '/dashboard/'
       preLoaderRoute: typeof DashboardIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/help/': {
+      id: '/help/'
+      path: '/help'
+      fullPath: '/help/'
+      preLoaderRoute: typeof HelpIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/hydration/': {
@@ -372,6 +392,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthIndexRoute: AuthIndexRoute,
   BodyIndexRoute: BodyIndexRoute,
   DashboardIndexRoute: DashboardIndexRoute,
+  HelpIndexRoute: HelpIndexRoute,
   HydrationIndexRoute: HydrationIndexRoute,
   NutritionIndexRoute: NutritionIndexRoute,
   OnboardingIndexRoute: OnboardingIndexRoute,
