@@ -11,7 +11,8 @@ import {
   TrendingUp,
   Calendar,
   FileDown,
-  Filter
+  Filter,
+  LifeBuoy
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -37,8 +38,8 @@ function DashboardPage() {
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm" className="gap-2 h-9 text-xs" asChild>
-            <Link to="/about">
-              <Filter size={14} /> Como Funciona
+            <Link to="/help">
+              <LifeBuoy size={14} /> Central de Ajuda
             </Link>
           </Button>
           <Button variant="outline" size="sm" className="gap-2 h-9 text-xs">
