@@ -19,8 +19,12 @@ import {
   LifeBuoy,
   FileDown,
   Share2,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Link as LinkIcon,
+  Trash2,
+  Download
  } from "lucide-react";
+
 
 import { 
   LineChart, 
@@ -55,7 +59,9 @@ function BodyPage() {
   const [activeTab, setActiveTab] = useState("overview");
   const [isLoading, setIsLoading] = useState(true);
   const [userData, setUserData] = useState<any>(null);
+  const [exportHistory, setExportHistory] = useState<any[]>([]);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (!scrollContainerRef.current) return;
@@ -69,7 +75,12 @@ function BodyPage() {
     if (session) {
       setUserData(session);
     }
-    const timer = setTimeout(() => setIsLoading(false), 900);
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+      const history = JSON.parse(localStorage.getItem('bodymetrica_export_history') || '[]');
+      setExportHistory(history);
+    }, 900);
+
     return () => clearTimeout(timer);
   }, []);
 
@@ -132,7 +143,9 @@ function BodyPage() {
           <TabsTrigger value="overview" className="h-11 px-10 rounded-xl font-black uppercase tracking-widest text-[10px] data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all">GERAL</TabsTrigger>
           <TabsTrigger value="measurements" className="h-11 px-10 rounded-xl font-black uppercase tracking-widest text-[10px] data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all">MEDIDAS</TabsTrigger>
           <TabsTrigger value="photos" className="h-11 px-10 rounded-xl font-black uppercase tracking-widest text-[10px] data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all">EVOLUÇÃO</TabsTrigger>
+          <TabsTrigger value="exports" className="h-11 px-10 rounded-xl font-black uppercase tracking-widest text-[10px] data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all">EXPORTAÇÕES</TabsTrigger>
         </TabsList>
+
 
 
 
