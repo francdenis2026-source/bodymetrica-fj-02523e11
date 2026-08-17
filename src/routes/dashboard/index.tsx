@@ -16,7 +16,8 @@ import {
   Calendar,
   FileDown,
   LifeBuoy,
-  LayoutDashboard
+  LayoutDashboard,
+  CheckCircle2
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
