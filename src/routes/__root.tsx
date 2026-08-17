@@ -443,12 +443,12 @@ function RootComponent() {
                 <SidebarLink to="/supplements" icon={<Pill size={20} />} label="PROTOCOLOS" />
                 <SidebarLink to="/training" icon={<Dumbbell size={20} />} label="PERFORMANCE" />
               </nav>
-              <div className="p-8 border-t border-white/5 space-y-6">
-                <div className="flex items-center justify-between px-5 py-3 bg-white/[0.03] rounded-2xl border border-white/5">
-                  <span className="text-[10px] font-black tracking-[0.2em] text-foreground/40 uppercase">TEMA</span>
+              <div className="p-4 border-t border-white/5 space-y-4">
+                <div className="flex items-center justify-between px-3 py-2 bg-white/[0.03] rounded-xl border border-white/5 overflow-hidden transition-all duration-300 group-hover/sidebar:opacity-100">
+                  <span className="text-[8px] font-black tracking-[0.2em] text-foreground/40 uppercase whitespace-nowrap opacity-0 group-hover/sidebar:opacity-100 transition-opacity">TEMA</span>
                   <ThemeToggle />
                 </div>
-                <SidebarLink to="/settings" icon={<Settings size={22} />} label="AJUSTES" />
+                <SidebarLink to="/settings" icon={<Settings size={20} />} label="AJUSTES" />
                 <button 
                   onClick={handleLogout}
                   className="flex w-full items-center gap-5 px-5 py-4 text-[11px] font-black tracking-[0.2em] text-destructive hover:bg-destructive/10 rounded-2xl transition-all uppercase cursor-pointer group"
@@ -514,10 +514,10 @@ function SidebarLink({ to, icon, label }: { to: string; icon: React.ReactNode; l
       to={to}
       activeProps={{ className: "bg-primary text-primary-foreground shadow-xl shadow-primary/20 scale-[1.02] border-primary" }}
       inactiveProps={{ className: "text-foreground/60 hover:bg-white/5 hover:text-foreground border-transparent" }}
-      className="flex items-center gap-4 px-4 py-3 text-[11px] font-black tracking-widest rounded-xl transition-all uppercase group border-2"
+      className="flex items-center gap-4 px-4 py-3 text-[11px] font-black tracking-widest rounded-xl transition-all uppercase group border-2 overflow-hidden whitespace-nowrap"
     >
-      <span className="group-hover:scale-110 transition-transform">{icon}</span>
-      {label}
+      <span className="group-hover:scale-110 transition-transform shrink-0">{icon}</span>
+      <span className="opacity-0 group-hover/sidebar:opacity-100 transition-opacity duration-300">{label}</span>
     </Link>
   );
 }
