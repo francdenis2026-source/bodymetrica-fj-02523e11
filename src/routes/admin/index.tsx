@@ -38,7 +38,8 @@ import {
   revokeLicense, 
   updateAdminSetting, 
   getAdminSetting, 
-  listAuditLogs 
+  listAuditLogs,
+  listWebhookEvents 
 } from "@/lib/monetization.functions";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -60,9 +61,11 @@ function AdminDashboard() {
   const updateSettingFn = useServerFn(updateAdminSetting);
   const getSettingFn = useServerFn(getAdminSetting);
   const listAuditLogsFn = useServerFn(listAuditLogs);
+  const listWebhookEventsFn = useServerFn(listWebhookEvents);
   
   const [isGenerating, setIsGenerating] = useState(false);
   const [mpAccessToken, setMpAccessToken] = useState("");
+  const [mpWebhookSecret, setMpWebhookSecret] = useState("");
 
   const { data: licensesData, isLoading: isLoadingLicenses } = useQuery({
     queryKey: ['admin-licenses'],
@@ -78,6 +81,10 @@ function AdminDashboard() {
     getSettingFn({ data: "mercadopago_access_token" }).then(res => {
       if (res.success) setMpAccessToken(res.value);
     });
+    getSettingFn({ data: "mercadopago_webhook_secret" }).then(res => {
+      if (res.success) setMpWebhookSecret(res.value);
+    });
+
   }, []);
 
   const generateMutation = useMutation({
@@ -307,7 +314,7 @@ function AdminDashboard() {
               </CardTitle>
               <CardDescription className="text-xs">Configure as credenciais para processamento de pagamentos e renovação automática.</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-6">
+            <CardContent className="space-y-8">
               <div className="space-y-2">
                 <Label className="text-[10px] font-black uppercase tracking-widest text-primary ml-1">Access Token (Produção)</Label>
                 <div className="flex gap-2">
@@ -322,14 +329,42 @@ function AdminDashboard() {
                     className="h-12 bg-primary font-black uppercase tracking-widest px-8 rounded-xl"
                     onClick={() => updateSettingMutation.mutate(mpAccessToken)}
                   >
-                    SALVAR
+                    SALVAR TOKEN
+                  </Button>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-[10px] font-black uppercase tracking-widest text-primary ml-1">Webhook Secret (Verification)</Label>
+                <div className="flex gap-2">
+                  <Input 
+                    type="password"
+                    placeholder="Assinatura secreta do Webhook..." 
+                    className="h-12 bg-white/5 border-white/10 rounded-xl px-4 font-mono text-xs"
+                    value={mpWebhookSecret}
+                    onChange={(e) => setMpWebhookSecret(e.target.value)}
+                  />
+                  <Button 
+                    variant="outline"
+                    className="h-12 font-black uppercase tracking-widest px-8 rounded-xl"
+                    onClick={() => updateSettingFn({ data: { key: "mercadopago_webhook_secret", value: mpWebhookSecret } }).then(res => {
+                      if (res.success) toast.success("Webhook Secret salvo!");
+                    })}
+                  >
+                    SALVAR SECRET
                   </Button>
                 </div>
                 <p className="text-[9px] text-muted-foreground italic px-1">
-                  Este token é usado para gerar links de pagamento e validar Webhooks de ativação.
+                  Usado para validar a integridade das requisições vindas do Mercado Pago.
                 </p>
               </div>
+
+              <div className="pt-6 border-t border-white/5">
+                <h3 className="text-sm font-black uppercase tracking-widest mb-4">Eventos de Webhook Recentes</h3>
+                <WebhookEventsList listFn={listWebhookEventsFn} />
+              </div>
             </CardContent>
+
           </Card>
         </TabsContent>
       </Tabs>
