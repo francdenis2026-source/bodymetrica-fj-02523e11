@@ -24,11 +24,13 @@ export function AccessGate({
   const navigate = useNavigate();
 
   useEffect(() => {
+    const redirectTarget = needsVerification ? "/auth/verify" : needsLicense ? "/settings" : "/auth";
+
     let timer: any;
     if (!isAllowed) {
       timer = setTimeout(() => {
         navigate({ 
-          to: "/auth", 
+          to: redirectTarget, 
           search: { 
             registerMode: false, 
             name: "", 
