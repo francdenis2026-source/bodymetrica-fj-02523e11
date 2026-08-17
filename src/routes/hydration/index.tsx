@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
+import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -36,10 +37,18 @@ function HydrationPage() {
   }, []);
 
   const addWater = (amount: number) => {
-    setCurrentAmount(prev => Math.min(prev + amount, 5000));
+    const newTotal = currentAmount + amount;
+    setCurrentAmount(prev => Math.min(newTotal, 5000));
+    
+    if (newTotal >= goalAmount * 0.9 && currentAmount < goalAmount * 0.9) {
+      toast.success("Parabéns! Você atingiu 90% da sua meta de hidratação!", {
+        description: "Mais um pouco e você conclui o dia.",
+      });
+    }
+
     queueOfflineAction({
       type: 'WATER_LOG',
-      data: { amount, currentTotal: currentAmount + amount }
+      data: { amount, currentTotal: newTotal }
     });
   };
 

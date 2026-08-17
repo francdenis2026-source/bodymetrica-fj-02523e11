@@ -162,24 +162,6 @@ function RootComponent() {
   const [syncStatus, setSyncStatus] = useState<'idle' | 'syncing' | 'synced'>('idle');
 
   useEffect(() => {
-    const updateOnlineStatus = () => {
-      const online = navigator.onLine;
-      setIsOnline(online);
-      if (online) {
-        setSyncStatus('syncing');
-        syncOfflineActions().then(() => setSyncStatus('synced'));
-        setTimeout(() => setSyncStatus('idle'), 3000);
-      }
-    };
-    
-    window.addEventListener('online', updateOnlineStatus);
-    window.addEventListener('offline', updateOnlineStatus);
-    
-    return () => {
-      window.removeEventListener('online', updateOnlineStatus);
-      window.removeEventListener('offline', updateOnlineStatus);
-    };
-  }, []);
     // Setup cross-tab logout listener
     const cleanupLogoutListener = setupLogoutListener(() => {
       setIsLoggedIn(false);
@@ -239,11 +221,15 @@ function RootComponent() {
     }
 
     const handleOnline = () => {
+      setIsOnline(true);
+      setSyncStatus('syncing');
+      syncOfflineActions().then(() => setSyncStatus('synced'));
+      setTimeout(() => setSyncStatus('idle'), 3000);
       toast.success("Conexão restabelecida. Sincronizando dados...");
-      syncOfflineActions();
     };
 
     const handleOffline = () => {
+      setIsOnline(false);
       toast.error("Você está offline. O modo offline está ativo.");
     };
 

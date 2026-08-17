@@ -131,11 +131,20 @@ function NutritionPage() {
               </Button>
             </CardHeader>
             <CardContent className="px-0 space-y-4">
-              <div className="space-y-2">
+              <div className="space-y-2 relative">
                 <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Alimento / Refeição</label>
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={16} />
-                  <Input placeholder="Ex: 200g Frango Grelhado" className="pl-10 bg-white/5 border-white/10" />
+                  <Input 
+                    placeholder="Ex: 200g Frango Grelhado" 
+                    className="pl-10 bg-white/5 border-white/10" 
+                    onChange={(e) => {
+                      // Simular autocomplete
+                      if (e.target.value.length > 2) {
+                        toast.info("Sugestão: Peito de Frango (165kcal/100g)", { duration: 1000 });
+                      }
+                    }}
+                  />
                 </div>
               </div>
               <div className="grid grid-cols-4 gap-4 text-center">
