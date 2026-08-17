@@ -261,30 +261,30 @@ function AuthPage() {
           <CardContent className="pt-6">
             {isResetting ? (
               <Form {...resetForm}>
-                <form onSubmit={resetForm.handleSubmit(onResetSubmit)} className="space-y-6">
+                <form onSubmit={resetForm.handleSubmit(onResetSubmit)} className="space-y-4">
                   <FormField
                     control={resetForm.control}
                     name="email"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="font-black text-[10px] uppercase tracking-[0.2em] text-primary ml-1">E-MAIL</FormLabel>
+                        <FormLabel className="font-black text-[8px] uppercase tracking-[0.2em] text-primary ml-1">E-MAIL</FormLabel>
                         <FormControl>
                           <Input 
                             placeholder="seu@email.com" 
-                            className="h-16 text-lg font-black bg-white/5 border-white/10 rounded-2xl px-6 text-white"
+                            className="h-12 text-base font-black bg-white/5 border-white/10 rounded-xl px-4 text-white"
                             {...field} 
                             disabled={isLoading}
                           />
                         </FormControl>
-                        <FormMessage className="text-[10px] font-bold text-destructive uppercase tracking-widest" />
+                        <FormMessage className="text-[8px] font-bold text-destructive uppercase tracking-widest" />
                       </FormItem>
                     )}
                   />
-                  <div className="flex gap-4">
-                    <Button type="button" variant="ghost" className="flex-1 h-16 font-black uppercase text-white/40" onClick={() => setIsResetting(false)}>
+                  <div className="flex gap-3">
+                    <Button type="button" variant="ghost" className="flex-1 h-12 font-black uppercase text-white/40 text-[10px]" onClick={() => setIsResetting(false)}>
                       VOLTAR
                     </Button>
-                    <Button type="submit" className="flex-[2] h-16 text-base font-black uppercase tracking-[0.2em] bg-brand-gradient rounded-2xl" disabled={isLoading}>
+                    <Button type="submit" className="flex-[2] h-12 text-sm font-black uppercase tracking-[0.2em] bg-brand-gradient rounded-xl" disabled={isLoading}>
                       {isLoading ? "ENVIANDO..." : "ENVIAR LINK"}
                     </Button>
                   </div>
