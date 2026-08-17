@@ -11,7 +11,8 @@ import {
   History,
   Calendar,
   AlertTriangle,
-  Info
+  Info,
+  LifeBuoy
 } from "lucide-react";
 import { queueOfflineAction } from "@/lib/offline-sync";
 
@@ -43,7 +44,7 @@ function HydrationPage() {
         </div>
         <div className="flex gap-2">
           <Button variant="outline" size="icon" className="rounded-full" asChild>
-            <Link to="/about"><Info size={18} /></Link>
+            <Link to="/help"><LifeBuoy size={18} /></Link>
           </Button>
           <Button variant="outline" size="icon" className="rounded-full">
             <Settings size={18} />
