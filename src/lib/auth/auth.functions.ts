@@ -106,7 +106,7 @@ export const requestPasswordReset = createServerFn({ method: "POST" })
   .inputValidator((data) => resetRequestSchema.parse(data))
   .handler(async ({ data }) => {
     const { error } = await supabase.auth.resetPasswordForEmail(data.email, {
-      redirectTo: `${window.location.origin}/auth/reset-password`,
+      redirectTo: `https://${process.env['LOVABLE_APP_DOMAIN'] || 'bodymetrica-fj.lovable.app'}/auth`,
     });
 
     if (error) {
