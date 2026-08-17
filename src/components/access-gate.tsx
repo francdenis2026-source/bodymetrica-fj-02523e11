@@ -25,7 +25,6 @@ export function AccessGate({
     let timer: any;
     if (!isAllowed) {
       timer = setTimeout(() => {
-        console.log("AccessGate: Redirecting unauthenticated user to /auth");
         navigate({ 
           to: "/auth", 
           search: { 
