@@ -346,14 +346,13 @@ function RootComponent() {
         <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-background/80 backdrop-blur border border-white/10 shadow-lg animate-in fade-in slide-in-from-top-2 group relative">
           {syncStatus === 'syncing' ? (
             <Loader2 className="w-3 h-3 animate-spin text-primary" />
-          ) : isOnline ? (
-            <Wifi className="w-3 h-3 text-success" />
           ) : (
-            <WifiOff className="w-3 h-3 text-destructive" />
+            <StatusIcon isOnline={isOnline} />
           )}
           <span className="text-[10px] font-black uppercase tracking-widest text-foreground/60">
             {syncStatus === 'syncing' ? 'Sincronizando...' : isOnline ? 'Online' : 'Offline'}
           </span>
+
           
           {isOnline && (
             <button 
