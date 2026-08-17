@@ -171,7 +171,15 @@ function AuthPage() {
           />
         ));
         if (result.needsVerification) {
-          navigate({ to: "/auth/verify" as any });
+          toast.custom((t) => (
+            <SVGToast 
+              type="info"
+              title="VERIFIQUE SEU E-MAIL"
+              message="Sua conta precisa ser confirmada via e-mail antes do primeiro acesso."
+              onClose={() => toast.dismiss(t)}
+            />
+          ));
+          navigate({ to: "/auth/verify" as any, search: {} as any });
         } else {
           trackAttempt();
         }
@@ -198,7 +206,7 @@ function AuthPage() {
       });
       if (result.success) {
         toast.success(result.message || "Cadastro realizado! Verifique seu e-mail.");
-        navigate({ to: "/auth/verify" as any });
+        navigate({ to: "/auth/verify" as any, search: {} as any });
       } else {
         toast.error(result.message || "Erro ao cadastrar.");
       }
