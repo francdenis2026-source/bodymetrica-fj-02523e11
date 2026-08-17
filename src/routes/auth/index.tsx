@@ -35,7 +35,7 @@ export const Route = createFileRoute("/auth/")({
       weight: (search['weight'] as string) || "",
       height: (search['height'] as string) || "",
       activityLevel: (search['activityLevel'] as string) || "",
-    } as const;
+    };
   },
 });
 
