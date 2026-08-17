@@ -19,6 +19,7 @@ import { toast } from "sonner";
 import { ShieldCheck, ArrowLeft, Mail, UserPlus, KeyRound, Lock } from "lucide-react";
 import { ResponsiveHero } from "@/components/responsive-hero";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/auth/")({
   component: AuthPage,
@@ -55,6 +56,7 @@ const MAX_ATTEMPTS = 5;
 const BLOCK_TIME = 60 * 1000; // 1 minute
 
 function AuthPage() {
+  const navigate = useNavigate();
   const searchParams = Route.useSearch();
   const [isRegistering, setIsRegistering] = useState(searchParams.registerMode);
   const [isResetting, setIsResetting] = useState(false);
@@ -132,10 +134,21 @@ function AuthPage() {
         setSession(result.user);
         localStorage.setItem(RATE_LIMIT_KEY, '{"count": 0, "lastAttempt": 0}');
         toast.success("Bem-vindo ao Body Métrica FJ!");
+        
+        if (!result.user.isLicensed) {
+          toast.info("Ative sua licença para desbloquear todas as ferramentas.");
+        }
+        
         window.location.href = "/dashboard";
       } else {
         toast.error(result.message);
-        if (!result.needsVerification) trackAttempt();
+        if (result.needsVerification) {
+          // Store user email for resend functionality
+          const { data } = await supabase.auth.getUser();
+          navigate({ to: "/auth/verify" as any });
+        } else {
+          trackAttempt();
+        }
       }
     } catch (error) {
       toast.error("Erro ao entrar. Verifique sua conexão.");
@@ -159,7 +172,7 @@ function AuthPage() {
       });
       if (result.success) {
         toast.success(result.message || "Cadastro realizado! Verifique seu e-mail.");
-        setIsRegistering(false);
+        navigate({ to: "/auth/verify" as any });
       } else {
         toast.error(result.message || "Erro ao cadastrar.");
       }

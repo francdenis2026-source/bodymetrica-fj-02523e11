@@ -23,6 +23,9 @@ export type Database = {
           goal: string | null
           height: number | null
           id: string
+          license_expires_at: string | null
+          license_key: string | null
+          license_status: string | null
           name: string | null
           theme_preference: string | null
           updated_at: string | null
@@ -36,6 +39,9 @@ export type Database = {
           goal?: string | null
           height?: number | null
           id: string
+          license_expires_at?: string | null
+          license_key?: string | null
+          license_status?: string | null
           name?: string | null
           theme_preference?: string | null
           updated_at?: string | null
@@ -49,6 +55,9 @@ export type Database = {
           goal?: string | null
           height?: number | null
           id?: string
+          license_expires_at?: string | null
+          license_key?: string | null
+          license_status?: string | null
           name?: string | null
           theme_preference?: string | null
           updated_at?: string | null

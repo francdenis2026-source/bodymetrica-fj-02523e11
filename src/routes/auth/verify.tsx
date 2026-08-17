@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,11 +9,28 @@ import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/auth/verify")({
   component: VerifyPage,
+  validateSearch: (search: Record<string, unknown>) => {
+    return {
+      verified: (search['verified'] as string) === 'true',
+    };
+  },
 });
 
 function VerifyPage() {
+  const { verified } = Route.useSearch();
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (verified) {
+      toast.success("E-mail confirmado com sucesso! Faça login para continuar.");
+      const timer = setTimeout(() => {
+        navigate({ to: "/auth", search: { registerMode: false } as any });
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+    return undefined;
+  }, [verified, navigate]);
 
   const handleResendLink = async () => {
     setIsLoading(true);
@@ -29,7 +46,7 @@ function VerifyPage() {
         type: 'signup',
         email: user.email,
         options: {
-          emailRedirectTo: `${window.location.origin}/auth`
+          emailRedirectTo: `${window.location.origin}/auth/verify?verified=true`
         }
       });
 
@@ -72,16 +89,18 @@ function VerifyPage() {
               <Mail className="text-primary" size={32} />
             </div>
             <CardTitle className="text-2xl font-black text-white text-center uppercase tracking-[0.1em] italic">
-              CONFIRME SEU E-MAIL
+              {verified ? "E-MAIL CONFIRMADO!" : "CONFIRME SEU E-MAIL"}
             </CardTitle>
             <CardDescription className="font-bold text-white/40 text-center uppercase text-[10px] tracking-widest px-4">
-              ENVIAMOS UM LINK DE ATIVAÇÃO PARA VOCÊ.
+              {verified 
+                ? "SUA CONTA FOI ATIVADA COM SUCESSO." 
+                : "ENVIAMOS UM LINK DE ATIVAÇÃO PARA VOCÊ."}
             </CardDescription>
           </CardHeader>
 
           <CardContent className="pt-8 space-y-6">
-            <p className="text-sm text-white/70 text-center leading-relaxed">
-              Para garantir a segurança da plataforma e dos seus dados de saúde, precisamos que você valide seu endereço de e-mail antes de acessar as ferramentas.
+            <p className="text-sm text-white/70 text-center leading-relaxed italic">
+              A licença de uso só poderá ser ativada após a confirmação do seu e-mail. Por favor, verifique sua caixa de entrada e clique no link de ativação.
             </p>
 
             <div className="space-y-4">

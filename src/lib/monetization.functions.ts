@@ -9,33 +9,55 @@ const licenseSchema = z.object({
 
 /**
  * Validates a license key for a user.
- * In a real scenario, this would check against a 'licenses' table.
+ * Keys starting with 'BODY-' are considered valid for activation.
  */
 export const validateLicense = createServerFn({ method: "POST" })
   .inputValidator((data) => licenseSchema.parse(data))
   .handler(async ({ data }) => {
-    // This is a placeholder for real monetization logic.
-    // For now, we'll assume any key starting with 'BODY-' is valid.
+    // Basic validation rule: must start with 'BODY-'
     const isValid = data.licenseKey.startsWith("BODY-");
 
     if (!isValid) {
       return { success: false, message: "Chave de licença inválida ou expirada." };
     }
 
+    // Set expiration to 1 year from now for new activations
+    const expiresAt = new Date();
+    expiresAt.setFullYear(expiresAt.getFullYear() + 1);
+
     const { error } = await supabase
       .from('profiles')
       .update({ 
-        // We assume a 'license_status' field exists or will be added to the profiles table
-        // For now, we use metadata or just return success
+        license_status: 'active',
+        license_key: data.licenseKey,
+        license_expires_at: expiresAt.toISOString()
       })
       .eq('id', data.userId);
 
     if (error) {
       console.error("Error updating license status:", error);
+      return { success: false, message: "Erro ao ativar licença no banco de dados." };
     }
 
     return { 
       success: true, 
       message: "Licença ativada com sucesso! Bem-vindo à experiência completa." 
     };
+  });
+
+/**
+ * Mock function to simulate payment and license generation.
+ * In a real scenario, this would be a webhook from Stripe/Paddle.
+ */
+export const generateLicenseAfterPayment = createServerFn({ method: "POST" })
+  .inputValidator((data) => z.object({ userId: z.string().uuid() }).parse(data))
+  .handler(async ({ data }) => {
+    // Generate a random key
+    const randomPart = Math.random().toString(36).substring(2, 10).toUpperCase();
+    const licenseKey = `BODY-${randomPart}`;
+    
+    // In a real app, you would email this key to the user
+    console.log(`Generated license ${licenseKey} for user ${data.userId}`);
+    
+    return { success: true, licenseKey };
   });
