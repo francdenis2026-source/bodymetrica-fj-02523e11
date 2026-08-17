@@ -10,8 +10,9 @@ import {
   Ruler, 
   Camera,
   TrendingUp,
-  Info
-} from "lucide-react";
+   Info,
+   LifeBuoy
+ } from "lucide-react";
 import { 
   LineChart, 
   Line, 
@@ -128,8 +129,8 @@ function BodyPage() {
               <CardTitle className="text-lg font-display">Últimos Registros</CardTitle>
               <div className="flex items-center gap-2">
                 <Button size="sm" variant="outline" className="gap-2" asChild>
-                  <Link to="/about">
-                    <Info size={16} /> Entender Métricas
+                  <Link to="/help">
+                    <LifeBuoy size={16} /> Entender Métricas
                   </Link>
                 </Button>
                 <Button size="sm" variant="outline" className="gap-2">
