@@ -214,7 +214,16 @@ function OnboardingPage() {
             </Button>
           )}
           {step < 4 ? (
-            <Button className="h-12 flex-1 gap-2 text-base font-semibold" onClick={nextStep}>
+            <Button 
+              className="h-12 flex-1 gap-2 text-base font-semibold" 
+              onClick={() => {
+                if (validateStep(step)) {
+                  nextStep();
+                } else {
+                  toast.error("Por favor, preencha todos os campos obrigatórios.");
+                }
+              }}
+            >
               Próximo <ChevronRight size={18} />
             </Button>
           ) : (
