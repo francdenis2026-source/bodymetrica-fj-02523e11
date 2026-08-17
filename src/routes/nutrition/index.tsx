@@ -35,6 +35,9 @@ function NutritionPage() {
   const [activeTab, setActiveTab] = useState("plan");
   const [isLoading, setIsLoading] = useState(true);
   const [userData, setUserData] = useState<any>(null);
+  const [portionGrams, setPortionGrams] = useState<number>(100);
+  const [baseMacros, setBaseMacros] = useState({ kcal: 165, p: 31, c: 0, g: 3.6 }); // Base macros per 100g (Chicken)
+
 
   useEffect(() => {
     const session = getSession();
@@ -205,11 +208,22 @@ function NutritionPage() {
                   </div>
 
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <MacroInputItem label="CALORIAS" color="text-primary" value="--" unit="kcal" />
-                    <MacroInputItem label="PROTEÍNAS" color="text-success" value="--g" unit="" />
-                    <MacroInputItem label="CARBOS" color="text-info" value="--g" unit="" />
-                    <MacroInputItem label="GORDURAS" color="text-warning" value="--g" unit="" />
+                    <MacroInputItem label="CALORIAS" color="text-primary" value={Math.round((baseMacros.kcal * portionGrams) / 100).toString()} unit="kcal" />
+                    <MacroInputItem label="PROTEÍNAS" color="text-success" value={Math.round((baseMacros.p * portionGrams) / 100).toString()} unit="g" />
+                    <MacroInputItem label="CARBOS" color="text-info" value={Math.round((baseMacros.c * portionGrams) / 100).toString()} unit="g" />
+                    <MacroInputItem label="GORDURAS" color="text-warning" value={Math.round((baseMacros.g * portionGrams) / 100).toString()} unit="g" />
                   </div>
+
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">QUANTIDADE (GRAMAS)</label>
+                    <Input 
+                      type="number" 
+                      value={portionGrams}
+                      onChange={(e) => setPortionGrams(Number(e.target.value))}
+                      className="h-14 bg-white/5 border-2 border-white/10 focus:border-primary/50 transition-all rounded-[1.5rem] font-bold text-lg italic tracking-tight"
+                    />
+                  </div>
+
 
                   <Button type="submit" className="w-full bg-brand-gradient border-none font-black uppercase tracking-[0.3em] h-20 rounded-[1.5rem] shadow-2xl shadow-primary/20 hover:scale-[1.02] transition-all group relative overflow-hidden">
                     <span className="relative z-10 flex items-center gap-3">

@@ -308,8 +308,33 @@ function BodyPage() {
           </div>
           
           <div className="mt-8 space-y-8">
-            <Card className="surface border-none p-6">
-              <CardTitle className="text-xl font-display uppercase italic mb-6">Relatório Comparativo (Mensal)</CardTitle>
+            <Card className="surface border-none p-6" id="comparison-report-content">
+              <div className="flex items-center justify-between mb-6">
+                <CardTitle className="text-xl font-display uppercase italic">Relatório Comparativo (Mensal)</CardTitle>
+                <div className="flex gap-2 no-print">
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    title="Copiar Resumo"
+                    onClick={() => {
+                      const text = `Relatório Body Métrica FJ - ${userData?.name}\nEvolução: -2.6 kg de peso, +0.5 kg de massa.\nResumo: Sua aderência semanal atingiu 92%, com foco excelente na ingestão proteica.`;
+                      navigator.clipboard.writeText(text);
+                      toast.success("Resumo copiado para a área de transferência!");
+                    }}
+                  >
+                    <Share2 size={16} />
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    title="Exportar como Imagem"
+                    onClick={() => exportReportAsImage('comparison-report-content', 'Evolucao_BodyMetrica')}
+                  >
+                    <ImageIcon size={16} />
+                  </Button>
+                </div>
+              </div>
+
               <div className="grid md:grid-cols-2 gap-8">
                 <div className="space-y-4">
                   <h4 className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Evolução de Peso</h4>
