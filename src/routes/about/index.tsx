@@ -11,7 +11,6 @@ import {
   Droplets
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Link } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/about/")({
   component: AboutPage,
