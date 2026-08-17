@@ -34,6 +34,8 @@ function Index() {
     setIsLoggedIn(!!session);
     setUserName(session?.user?.name || "");
   }, []);
+
+  return (
     <div className="flex flex-col min-h-screen bg-background relative overflow-x-hidden">
       {/* Professional Full Background Image with better contrast */}
       <div 
