@@ -143,8 +143,18 @@ function AuthPage() {
     if (isBlocked) return;
     setIsLoading(true);
     try {
+      // MFA Check first
+      const { data: { factors }, error: mfaError } = await supabase.auth.mfa.listFactors();
+      
       const result = await login({ data: values });
       if (result.success) {
+        // Log activity if it's a direct login result (not waiting for MFA)
+        await supabase.rpc('log_security_activity', {
+          _user_id: result.user.id,
+          _action: 'LOGIN_SUCCESS',
+          _details: { remember: values.rememberMe }
+        });
+
         setSession(result.user);
         localStorage.setItem(RATE_LIMIT_KEY, '{"count": 0, "lastAttempt": 0}');
         toast.custom((t) => (
