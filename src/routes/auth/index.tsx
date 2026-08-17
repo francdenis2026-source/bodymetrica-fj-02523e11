@@ -35,6 +35,15 @@ export const Route = createFileRoute("/auth/")({
       weight: (search['weight'] as string) || "",
       height: (search['height'] as string) || "",
       activityLevel: (search['activityLevel'] as string) || "",
+    } as {
+      registerMode: boolean;
+      reset: boolean;
+      name: string;
+      birthDate: string;
+      goal: string;
+      weight: string;
+      height: string;
+      activityLevel: string;
     };
   },
 });
