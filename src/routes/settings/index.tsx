@@ -19,6 +19,7 @@ import {
   Clock
 } from "lucide-react";
 import { ModuleHeader } from "@/components/module-header";
+import { cn } from "@/lib/utils";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getSession, clearSession } from "@/lib/auth/auth.functions";
