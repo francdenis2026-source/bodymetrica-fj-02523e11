@@ -42,8 +42,15 @@ export const Route = createFileRoute("/body/")({
 function BodyPage() {
   const [activeTab, setActiveTab] = useState("overview");
   const [isLoading, setIsLoading] = useState(true);
+  const [userData, setUserData] = useState<any>(null);
 
   useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const session = localStorage.getItem('bodymetrica_auth_session');
+      if (session) {
+        setUserData(JSON.parse(session));
+      }
+    }
     const timer = setTimeout(() => setIsLoading(false), 900);
     return () => clearTimeout(timer);
   }, []);
