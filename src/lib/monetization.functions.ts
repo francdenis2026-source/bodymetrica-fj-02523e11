@@ -339,6 +339,23 @@ export const checkLicenseStatus = createServerFn({ method: "GET" })
   });
 
 /**
+ * Audit logs list
+ */
+export const listAuditLogs = createServerFn({ method: "GET" })
+  .middleware([requireAdminAuth])
+  .handler(async () => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data, error } = await supabaseAdmin
+      .from('license_audit_logs')
+      .select('*, admin:admin_id(email), user:user_id(email)')
+      .order('created_at', { ascending: false })
+      .limit(100);
+
+    if (error) return { success: false, message: "Erro ao buscar logs." };
+    return { success: true, logs: data };
+  });
+
+/**
  * Webhook events list
  */
 export const listWebhookEvents = createServerFn({ method: "GET" })
@@ -354,5 +371,6 @@ export const listWebhookEvents = createServerFn({ method: "GET" })
     if (error) return { success: false, message: "Erro ao buscar eventos de webhook." };
     return { success: true, events: data };
   });
+
 
 
