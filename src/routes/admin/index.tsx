@@ -83,9 +83,9 @@ function AdminDashboard() {
             <TableHeader>
               <TableRow className="hover:bg-transparent border-muted/20">
                 <TableHead className="text-xs font-bold uppercase tracking-wider">Cliente</TableHead>
-                <TableHead className="text-xs font-bold uppercase tracking-wider">Plano</TableHead>
+                <TableHead className="text-xs font-bold uppercase tracking-wider">Licença / Plano</TableHead>
                 <TableHead className="text-xs font-bold uppercase tracking-wider">Status</TableHead>
-                <TableHead className="text-xs font-bold uppercase tracking-wider">Último Acesso</TableHead>
+                <TableHead className="text-xs font-bold uppercase tracking-wider">Validação</TableHead>
                 <TableHead className="text-right"></TableHead>
               </TableRow>
             </TableHeader>
@@ -112,8 +112,8 @@ function AdminDashboard() {
                       <span className="text-xs">{client.status}</span>
                     </div>
                   </TableCell>
-                  <TableCell className="text-xs text-muted-foreground">
-                    {client.lastSync}
+                  <TableCell className="text-xs">
+                    <Badge variant="outline" className="text-[10px] border-success/20 bg-success/5 text-success">Verificado</Badge>
                   </TableCell>
                   <TableCell className="text-right">
                     <Button variant="ghost" size="icon" className="h-8 w-8" asChild>

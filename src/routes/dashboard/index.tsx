@@ -97,7 +97,17 @@ function DashboardPage() {
             <p className="text-foreground/60 text-lg md:text-2xl font-black tracking-tight leading-none uppercase italic">
               SUA EVOLUÇÃO ESTÁ EM ALTA. O FOCO HOJE É O SEGREDO DO SUCESSO.
             </p>
-
+            {userData?.profile?.license_status !== 'active' && (
+              <div className="mt-4 p-4 bg-primary/10 border border-primary/20 rounded-2xl inline-block text-left">
+                <p className="text-[10px] font-black uppercase tracking-widest text-primary mb-2">LICENÇA PENDENTE</p>
+                <p className="text-xs text-foreground/70 font-bold mb-3 max-w-xs">
+                  Adquira sua licença para desbloquear todas as ferramentas de elite e suporte direto.
+                </p>
+                <Button size="sm" className="h-8 text-[10px] font-black uppercase tracking-widest bg-brand-gradient" asChild>
+                  <Link to="/settings">ATIVAR AGORA</Link>
+                </Button>
+              </div>
+            )}
           </div>
         </div>
         
