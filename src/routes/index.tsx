@@ -10,6 +10,7 @@ import {
   ShieldCheck, 
   Target 
 } from "lucide-react";
+import { ResponsiveHero } from "@/components/responsive-hero";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -26,148 +27,162 @@ export const Route = createFileRoute("/")({
 function Index() {
   return (
     <div className="flex flex-col min-h-screen bg-background relative overflow-x-hidden">
-      {/* Professional Full Background Image */}
+      {/* Professional Full Background Image with better contrast */}
       <div 
-        className="fixed inset-0 z-0 pointer-events-none opacity-20 dark:opacity-10 transition-opacity duration-700"
+        className="fixed inset-0 z-0 pointer-events-none opacity-25 dark:opacity-15 transition-opacity duration-700"
         style={{
-          backgroundImage: 'url(https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80)',
+          backgroundImage: 'url(https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=1600)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
-          filter: 'grayscale(100%) contrast(1.1)'
+          filter: 'grayscale(100%) contrast(1.1) brightness(0.8)'
         }}
       />
       
       {/* Professional Gradient Overlay */}
-      <div className="fixed inset-0 z-0 pointer-events-none bg-gradient-to-tr from-background via-background/90 to-primary/5" />
-      
+      <div className="fixed inset-0 z-0 pointer-events-none bg-gradient-to-tr from-background via-background/95 to-primary/10" />
       
       <div className="relative z-10 flex flex-col flex-1">
-      {/* Header */}
-      <header className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-md border-b">
-        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-brand-gradient rounded-lg flex items-center justify-center text-primary-foreground font-bold">
-              B
+        {/* Header */}
+        <header className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-md border-b">
+          <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 bg-brand-gradient rounded-lg flex items-center justify-center text-primary-foreground font-bold shadow-md">
+                B
+              </div>
+              <span className="text-xl font-bold font-display text-primary tracking-tight">
+                Body Métrica FJ
+              </span>
             </div>
-            <span className="text-xl font-bold font-display text-primary tracking-tight">
-              Body Métrica FJ
-            </span>
+            
+            <Button variant="ghost" size="sm" asChild className="text-muted-foreground font-medium hover:text-primary">
+              <Link to="/auth">Entrar</Link>
+            </Button>
           </div>
-          
-          <Button variant="ghost" size="sm" asChild className="text-muted-foreground font-medium">
-            <Link to="/auth">Entrar</Link>
-          </Button>
-        </div>
-      </header>
+        </header>
 
-      {/* Hero Section */}
-      <section className="relative pt-32 pb-20 px-4 overflow-hidden">
-        {/* Abstract 3D-like background shapes */}
-        <div className="absolute top-20 right-[-10%] w-[500px] h-[500px] bg-primary/5 rounded-full blur-3xl -z-10 animate-pulse" />
-        <div className="absolute bottom-0 left-[-5%] w-[400px] h-[400px] bg-success/5 rounded-full blur-3xl -z-10" />
-
-        <div className="container mx-auto max-w-6xl grid lg:grid-cols-2 gap-12 items-center">
-          <div className="text-left">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6">
-              <Activity size={16} />
-              <span>Sua evolução, documentada com precisão</span>
+        {/* Hero Section */}
+        <section className="relative pt-32 pb-20 px-4 overflow-hidden">
+          <div className="container mx-auto max-w-6xl grid lg:grid-cols-2 gap-12 items-center">
+            <div className="text-left space-y-6">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-semibold mb-2 animate-in fade-in slide-in-from-left-4 duration-700">
+                <Activity size={16} />
+                <span>Sua evolução, documentada com precisão</span>
+              </div>
+              
+              <h1 className="text-4xl md:text-7xl font-bold font-display text-foreground leading-[1.05] tracking-tight animate-in fade-in slide-in-from-left-4 duration-700 delay-75">
+                Métricas que <br />
+                <span className="text-gradient-brand">definem o seu futuro.</span>
+              </h1>
+              
+              <p className="text-xl text-muted-foreground max-w-xl leading-relaxed font-medium animate-in fade-in slide-in-from-left-4 duration-700 delay-150">
+                A suíte definitiva para acompanhar composição corporal, alimentação, 
+                suplementação e treinos. Design premium para resultados reais.
+              </p>
+              
+              <div className="flex flex-col sm:flex-row items-center gap-4 pt-4 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300">
+                <Button size="lg" className="h-12 px-8 text-base font-semibold group w-full sm:w-auto bg-brand-gradient hover:opacity-90 border-none shadow-lg shadow-primary/20" asChild>
+                  <Link to="/auth">
+                    Começar Agora
+                    <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={18} />
+                  </Link>
+                </Button>
+                <Button size="lg" variant="outline" className="h-12 px-8 text-base font-semibold w-full sm:w-auto backdrop-blur-sm" asChild>
+                  <Link to="/about">Conhecer Ferramentas</Link>
+                </Button>
+              </div>
             </div>
-            
-            <h1 className="text-4xl md:text-7xl font-bold font-display text-foreground leading-[1.05] mb-6 tracking-tight">
-              Métricas que <br />
-              <span className="text-gradient-brand">definem o seu futuro.</span>
-            </h1>
-            
-            <p className="text-xl text-muted-foreground max-w-xl mb-10 leading-relaxed font-medium">
-              A suíte definitiva para acompanhar composição corporal, alimentação, 
-              suplementação e treinos. Design premium para resultados reais.
-            </p>
-            
-            <div className="flex flex-col sm:flex-row items-center gap-4">
-              <Button size="lg" className="h-12 px-8 text-base font-semibold group w-full sm:w-auto bg-brand-gradient hover:opacity-90 border-none" asChild>
-                <Link to="/auth">
-                  Começar Agora
-                  <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={18} />
-                </Link>
-              </Button>
-              <Button size="lg" variant="outline" className="h-12 px-8 text-base font-semibold w-full sm:w-auto" asChild>
-                <Link to="/about">Conhecer Ferramentas</Link>
-              </Button>
+
+            <div className="relative hidden lg:block animate-in fade-in zoom-in-95 duration-1000">
+              <div className="relative z-10 rounded-2xl overflow-hidden shadow-2xl border-4 border-white/20 transform hover:scale-[1.02] transition-transform duration-500">
+                <img 
+                  src="https://images.unsplash.com/photo-1540206276907-c6928a7c9731?auto=format&fit=crop&q=80&w=1200" 
+                  alt="Fitness Training" 
+                  className="w-full h-auto object-cover aspect-[4/3] scale-105 hover:scale-100 transition-transform duration-1000"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                <div className="absolute bottom-6 left-6 right-6">
+                  <p className="text-white text-lg font-bold font-display drop-shadow-md">
+                    Profissionalismo em cada detalhe.
+                  </p>
+                </div>
+              </div>
+              
+              {/* Decorative 3D elements */}
+              <div className="absolute -top-6 -right-6 w-24 h-24 bg-brand-gradient rounded-2xl rotate-12 shadow-2xl flex items-center justify-center animate-bounce duration-[3000ms] border border-white/20 z-20">
+                <Target size={40} className="text-white drop-shadow-md" />
+              </div>
+              <div className="absolute -bottom-6 -left-6 w-20 h-20 bg-success rounded-full -rotate-12 shadow-2xl flex items-center justify-center animate-pulse border border-white/20 z-20">
+                <Zap size={32} className="text-white drop-shadow-md" />
+              </div>
             </div>
           </div>
+        </section>
 
-          <div className="relative hidden lg:block">
-            <div className="relative z-10 rounded-2xl overflow-hidden shadow-2xl border-4 border-white/10 transform hover:scale-[1.02] transition-transform duration-500">
-              <img 
-                src="https://images.unsplash.com/photo-1540206276907-c6928a7c9731?auto=format&fit=crop&q=80" 
-                alt="Fitness Training" 
-                className="w-full h-auto object-cover aspect-[4/3] scale-105 hover:scale-100 transition-transform duration-700"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-            </div>
-            {/* Decorative 3D elements (CSS simulated) */}
-            <div className="absolute -top-6 -right-6 w-24 h-24 bg-brand-gradient rounded-2xl rotate-12 shadow-2xl flex items-center justify-center animate-bounce duration-[3000ms] border border-white/20">
-              <Target size={40} className="text-white drop-shadow-md" />
-            </div>
-            <div className="absolute -bottom-6 -left-6 w-20 h-20 bg-success rounded-full -rotate-12 shadow-2xl flex items-center justify-center animate-pulse border border-white/20">
-              <Zap size={32} className="text-white drop-shadow-md" />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Features Grid */}
-      <section className="py-20 bg-muted/50">
-        <div className="container mx-auto px-4 max-w-6xl">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <Link to="/about" className="group block">
-              <FeatureCard 
-                icon={<Target size={28} />}
-                title="Objetivos Claros"
-                description="Emagrecimento, hipertrofia ou manutenção. Planos adaptados para sua meta real."
-                className="group-hover:border-primary/20 group-hover:bg-primary/5 transition-all"
-              />
-            </Link>
-            <Link to="/about" className="group block">
-              <FeatureCard 
-                icon={<Zap size={28} />}
-                title="Acompanhamento Ágil"
-                description="Registre peso, medidas e fotos de evolução em segundos. Gráficos de tendência precisos."
-                className="group-hover:border-success/20 group-hover:bg-success/5 transition-all"
-              />
-            </Link>
-            <Link to="/about" className="group block">
-              <FeatureCard 
-                icon={<ShieldCheck size={28} />}
-                title="Dados Protegidos"
-                description="Privacidade total para suas fotos e informações de saúde com criptografia de ponta."
-                className="group-hover:border-info/20 group-hover:bg-info/5 transition-all"
-              />
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="mt-auto py-12 border-t bg-background">
-        <div className="container mx-auto px-4 max-w-6xl">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-8">
-            <div className="flex items-center gap-2 opacity-80 grayscale">
-              <span className="text-sm font-semibold font-display">Body Métrica FJ</span>
-            </div>
-            
-            <nav className="flex gap-6 text-sm text-muted-foreground">
-              <Link to="/terms" className="hover:text-foreground">Termos</Link>
-              <Link to="/privacy" className="hover:text-foreground">Privacidade</Link>
-              <Link to="/admin/login" className="hover:text-foreground">Área administrativa</Link>
-            </nav>
-            
-            <p className="text-xs text-muted-foreground/60">
-              © {new Date().getFullYear()} Body Métrica FJ. dev Franc D'nis Feijó, AC.
+        {/* Features Grid */}
+        <section className="py-24 bg-muted/30 backdrop-blur-sm">
+          <div className="container mx-auto px-4 max-w-6xl text-center mb-12">
+            <h2 className="text-3xl md:text-5xl font-bold font-display mb-4 text-primary uppercase">Evolução Inteligente</h2>
+            <p className="text-muted-foreground font-medium max-w-2xl mx-auto">
+              Tudo o que você precisa para dominar sua saúde física em um único lugar.
             </p>
           </div>
-        </div>
-      </footer>
+          <div className="container mx-auto px-4 max-w-6xl">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <Link to="/about" className="group block">
+                <FeatureCard 
+                  icon={<Target size={28} />}
+                  title="Objetivos Claros"
+                  description="Emagrecimento, hipertrofia ou manutenção. Planos adaptados para sua meta real."
+                  className="group-hover:border-primary/40 group-hover:bg-primary/5 group-hover:shadow-xl transition-all duration-300"
+                />
+              </Link>
+              <Link to="/about" className="group block">
+                <FeatureCard 
+                  icon={<Zap size={28} />}
+                  title="Acompanhamento Ágil"
+                  description="Registre peso, medidas e fotos de evolução em segundos. Gráficos de tendência precisos."
+                  className="group-hover:border-success/40 group-hover:bg-success/5 group-hover:shadow-xl transition-all duration-300"
+                />
+              </Link>
+              <Link to="/about" className="group block">
+                <FeatureCard 
+                  icon={<ShieldCheck size={28} />}
+                  title="Dados Protegidos"
+                  description="Privacidade total para suas fotos e informações de saúde com criptografia de ponta."
+                  className="group-hover:border-info/40 group-hover:bg-info/5 group-hover:shadow-xl transition-all duration-300"
+                />
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* Footer */}
+        <footer className="mt-auto py-12 border-t bg-background/50 backdrop-blur-md">
+          <div className="container mx-auto px-4 max-w-6xl">
+            <div className="flex flex-col md:flex-row justify-between items-center gap-8 text-center md:text-left">
+              <div className="flex items-center gap-2 opacity-80 grayscale hover:grayscale-0 transition-all">
+                <div className="w-6 h-6 bg-brand-gradient rounded flex items-center justify-center text-[10px] text-white font-bold">B</div>
+                <span className="text-sm font-semibold font-display tracking-tight">Body Métrica FJ</span>
+              </div>
+              
+              <nav className="flex gap-8 text-sm text-muted-foreground font-medium">
+                <Link to="/terms" className="hover:text-primary transition-colors">Termos</Link>
+                <Link to="/privacy" className="hover:text-primary transition-colors">Privacidade</Link>
+                <Link to="/admin/login" className="hover:text-primary transition-colors">Administrativo</Link>
+              </nav>
+              
+              <div className="flex flex-col items-center md:items-end gap-1">
+                <p className="text-xs text-muted-foreground/80 font-medium">
+                  © {new Date().getFullYear()} Body Métrica FJ.
+                </p>
+                <p className="text-[10px] text-muted-foreground/60 uppercase tracking-widest font-bold">
+                  dev Franc D'nis Feijó, AC
+                </p>
+              </div>
+            </div>
+          </div>
+        </footer>
       </div>
     </div>
   );
@@ -175,20 +190,20 @@ function Index() {
 
 function FeatureCard({ icon, title, description, className }: { icon: React.ReactNode; title: string; description: string; className?: string }) {
   return (
-    <div className={cn("surface p-8 space-y-4 border border-transparent backdrop-blur-sm bg-card/80", className)}>
-      <div className="w-14 h-14 rounded-2xl bg-brand-gradient flex items-center justify-center shadow-lg border border-white/20 transform group-hover:rotate-6 transition-transform text-white">
+    <div className={cn("surface p-8 space-y-4 border-2 border-transparent backdrop-blur-md bg-card/60 relative overflow-hidden h-full group", className)}>
+      <div className="w-14 h-14 rounded-2xl bg-brand-gradient flex items-center justify-center shadow-lg border border-white/20 transform group-hover:rotate-6 transition-transform text-white mb-6">
         {icon}
       </div>
-      <h3 className="text-2xl font-bold font-display tracking-tight">{title}</h3>
+      <h3 className="text-2xl font-bold font-display tracking-tight text-primary uppercase">{title}</h3>
       <p className="text-muted-foreground leading-relaxed font-medium">
         {description}
       </p>
-      <ul className="space-y-3 pt-2">
-        <li className="flex items-center gap-3 text-sm text-muted-foreground font-medium">
+      <ul className="space-y-3 pt-4">
+        <li className="flex items-center gap-3 text-sm text-muted-foreground font-semibold">
           <CheckCircle2 size={16} className="text-success" />
           <span>Fácil de usar</span>
         </li>
-        <li className="flex items-center gap-3 text-sm text-muted-foreground font-medium">
+        <li className="flex items-center gap-3 text-sm text-muted-foreground font-semibold">
           <CheckCircle2 size={16} className="text-success" />
           <span>Mobile-first</span>
         </li>
@@ -196,3 +211,4 @@ function FeatureCard({ icon, title, description, className }: { icon: React.Reac
     </div>
   );
 }
+

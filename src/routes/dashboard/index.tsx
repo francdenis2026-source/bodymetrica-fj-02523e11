@@ -28,33 +28,34 @@ function DashboardPage() {
   const weightChange = -0.5;
 
   return (
-    <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 relative overflow-hidden">
-      {/* Decorative Module Hero Image */}
-      <div className="absolute top-0 right-0 w-64 h-64 opacity-5 pointer-events-none -z-10 translate-x-1/4 -translate-y-1/4">
-        <TrendingUp size={256} className="text-primary" />
+    <div className="flex-1 space-y-8 p-4 md:p-8 pt-6 relative overflow-hidden">
+      <div className="flex flex-col gap-6 relative z-10 animate-in fade-in slide-in-from-left-4 duration-700">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div className="flex items-center gap-4">
+            <div className="w-16 h-16 bg-brand-gradient rounded-2xl flex items-center justify-center text-white text-2xl font-bold shadow-xl border-2 border-white/10">
+              {userName[0]}
+            </div>
+            <div>
+              <h2 className="text-4xl font-bold tracking-tight font-display text-primary uppercase">Olá, {userName}!</h2>
+              <p className="text-muted-foreground font-medium mt-1">
+                Sua evolução está em alta. O foco hoje é o segredo do sucesso.
+              </p>
+            </div>
+          </div>
+          
+          <div className="flex items-center gap-3">
+            <Button variant="outline" size="sm" className="gap-2 h-10 px-4 font-semibold border-2" asChild>
+              <Link to="/help">
+                <LifeBuoy size={18} /> Central de Ajuda
+              </Link>
+            </Button>
+            <Button size="sm" className="gap-2 h-10 px-4 font-semibold bg-brand-gradient shadow-lg">
+              <FileDown size={18} /> Exportar Relatório PDF
+            </Button>
+          </div>
+        </div>
       </div>
 
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 relative z-10">
-        <div className="space-y-1">
-          <h2 className="text-3xl font-bold tracking-tight font-display text-primary">Olá, {userName}! 👋</h2>
-          <p className="text-muted-foreground text-sm font-medium">
-            Seu progresso está incrível hoje. Mantenha o foco!
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" className="gap-2 h-9 text-xs" asChild>
-            <Link to="/help">
-              <LifeBuoy size={14} /> Central de Ajuda
-            </Link>
-          </Button>
-          <Button variant="outline" size="sm" className="gap-2 h-9 text-xs">
-            <FileDown size={14} /> Relatórios PDF
-          </Button>
-        </div>
-        <Button size="icon" className="rounded-full w-12 h-12 shadow-lg bg-brand-gradient md:hidden fixed bottom-20 right-4 z-40">
-          <Plus size={24} />
-        </Button>
-      </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Link to="/body" className="block transition-transform active:scale-[0.98]">

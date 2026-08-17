@@ -17,7 +17,8 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { cpfSchema, formatCpf } from "@/lib/auth/utils";
 import { login } from "@/lib/auth/auth.functions";
 import { toast } from "sonner";
-import { ShieldCheck, ArrowLeft } from "lucide-react";
+import { ShieldCheck, ArrowLeft, Lock } from "lucide-react";
+import { ResponsiveHero } from "@/components/responsive-hero";
 
 export const Route = createFileRoute("/auth/")({
   component: AuthPage,
@@ -58,50 +59,51 @@ function AuthPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center relative px-4 py-12 overflow-hidden">
-      {/* Hero Background for Login */}
-      <div 
-        className="absolute inset-0 z-0 pointer-events-none opacity-10 dark:opacity-5 transition-opacity"
-        style={{
-          backgroundImage: 'url(https://images.unsplash.com/photo-1593079831268-3381b0db4a77?auto=format&fit=crop&q=80)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-        }}
+    <div className="min-h-screen flex items-center justify-center relative p-0 overflow-hidden bg-background">
+      <ResponsiveHero 
+        imageUrl="https://images.unsplash.com/photo-1593079831268-3381b0db4a77?auto=format&fit=crop&q=80&w=1600"
+        overlayOpacity={0.7}
+        className="absolute inset-0 z-0 h-full"
       />
-      <div className="absolute inset-0 z-0 bg-gradient-to-b from-background/80 via-background to-background" />
 
-      <div className="relative z-10 w-full max-w-md space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-        <div className="text-center space-y-2">
-          <Link to="/" className="inline-flex items-center text-sm text-muted-foreground hover:text-primary transition-colors mb-4">
-            <ArrowLeft size={16} className="mr-1" />
-            Voltar
+      <div className="relative z-10 w-full max-w-md px-4 py-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
+        <div className="text-center space-y-4 mb-8">
+          <Link to="/" className="inline-flex items-center text-sm font-semibold text-white/70 hover:text-white transition-colors mb-2 backdrop-blur-sm bg-black/20 px-4 py-2 rounded-full border border-white/10">
+            <ArrowLeft size={16} className="mr-2" />
+            Voltar para o Início
           </Link>
-          <div className="mx-auto w-12 h-12 bg-brand-gradient rounded-xl flex items-center justify-center text-primary-foreground font-bold text-xl mb-4">
+          <div className="mx-auto w-16 h-16 bg-brand-gradient rounded-2xl flex items-center justify-center text-primary-foreground font-bold text-2xl shadow-2xl border-2 border-white/20">
             B
           </div>
-          <h1 className="text-3xl font-bold font-display tracking-tight text-primary">Body Métrica FJ</h1>
-          <p className="text-muted-foreground font-medium">Sua evolução levada a sério.</p>
+          <div>
+            <h1 className="text-4xl font-bold font-display tracking-tight text-white uppercase drop-shadow-lg">Body Métrica FJ</h1>
+            <p className="text-white/80 font-bold uppercase tracking-widest text-xs mt-1">Sua evolução levada a sério.</p>
+          </div>
         </div>
 
-        <Card className="surface border-none shadow-2xl">
+        <Card className="surface border-none shadow-2xl bg-card/80 backdrop-blur-xl">
           <CardHeader>
-            <CardTitle>Entrar</CardTitle>
-            <CardDescription>
-              Utilize seu CPF e PIN de 6 dígitos.
+            <CardTitle className="text-2xl font-bold font-display text-primary uppercase flex items-center gap-2">
+              <Lock size={20} />
+              Entrar
+            </CardTitle>
+            <CardDescription className="font-medium text-muted-foreground">
+              Utilize seu CPF e PIN de 6 dígitos para acessar sua conta protegida.
             </CardDescription>
           </CardHeader>
           <CardContent>
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                 <FormField
                   control={form.control}
                   name="cpf"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>CPF</FormLabel>
+                      <FormLabel className="font-bold text-xs uppercase tracking-wider text-muted-foreground">CPF</FormLabel>
                       <FormControl>
                         <Input 
                           placeholder="000.000.000-00" 
+                          className="h-12 text-lg font-medium border-2 focus-visible:ring-primary"
                           {...field} 
                           onChange={(e) => field.onChange(formatCpf(e.target.value))}
                           disabled={isLoading}
@@ -116,13 +118,14 @@ function AuthPage() {
                   name="pin"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>PIN de 6 dígitos</FormLabel>
+                      <FormLabel className="font-bold text-xs uppercase tracking-wider text-muted-foreground">PIN de 6 dígitos</FormLabel>
                       <FormControl>
                         <Input 
                           type="password" 
                           inputMode="numeric"
                           maxLength={6}
-                          placeholder="******" 
+                          placeholder="••••••" 
+                          className="h-12 text-center text-2xl tracking-[0.5em] font-bold border-2 focus-visible:ring-primary"
                           {...field} 
                           disabled={isLoading}
                         />
@@ -131,35 +134,42 @@ function AuthPage() {
                     </FormItem>
                   )}
                 />
-                <Button type="submit" className="w-full h-11 font-semibold" disabled={isLoading}>
-                  {isLoading ? "Entrando..." : "Entrar"}
+                <Button type="submit" className="w-full h-12 text-base font-bold uppercase tracking-wide bg-brand-gradient hover:opacity-90 shadow-lg shadow-primary/20" disabled={isLoading}>
+                  {isLoading ? "Validando..." : "Acessar Sistema"}
                 </Button>
               </form>
             </Form>
           </CardContent>
-          <CardFooter className="flex flex-col gap-4 border-t pt-6 bg-muted/30">
-            <div className="flex items-start gap-3 text-xs text-muted-foreground leading-relaxed">
-              <ShieldCheck className="text-primary shrink-0" size={16} />
+          <CardFooter className="flex flex-col gap-6 border-t pt-8 bg-muted/20">
+            <div className="flex items-start gap-3 text-xs text-muted-foreground leading-relaxed font-medium">
+              <ShieldCheck className="text-primary shrink-0" size={18} />
               <p>
-                Seus dados de saúde são protegidos e acessíveis apenas por você.
-                Nunca compartilhe seu PIN.
+                Protocolo de segurança ativo. Seus dados de saúde são criptografados e acessíveis apenas sob autenticação rigorosa.
               </p>
             </div>
-            <p className="text-center text-sm text-muted-foreground">
-              Não tem uma conta?{" "}
-              <Link to="/onboarding" className="text-primary font-semibold hover:underline">
-                Registrar agora
-              </Link>
-            </p>
-            <button className="text-center text-xs text-primary hover:underline">
-              Esqueci minha senha
-            </button>
+            
+            <div className="w-full space-y-3">
+              <p className="text-center text-sm font-semibold text-muted-foreground">
+                Novo por aqui?{" "}
+                <Link to="/onboarding" className="text-primary hover:underline underline-offset-4 decoration-2">
+                  Criar minha conta agora
+                </Link>
+              </p>
+              <button className="w-full text-center text-xs font-bold uppercase tracking-wider text-primary/60 hover:text-primary transition-colors underline underline-offset-2">
+                Esqueci meu PIN de acesso
+              </button>
+            </div>
           </CardFooter>
         </Card>
         
-        <p className="text-center text-xs text-muted-foreground/60">
-          Ao entrar, você concorda com nossos Termos de Uso e Política de Privacidade.
-        </p>
+        <div className="mt-8 text-center space-y-1">
+          <p className="text-[10px] text-white/40 uppercase tracking-[0.2em] font-bold">
+            dev Franc D'nis Feijó, AC
+          </p>
+          <p className="text-[10px] text-white/30 font-medium">
+            © {new Date().getFullYear()} Body Métrica FJ. Todos os direitos reservados.
+          </p>
+        </div>
       </div>
     </div>
   );

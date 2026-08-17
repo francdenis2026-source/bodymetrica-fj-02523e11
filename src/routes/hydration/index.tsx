@@ -15,6 +15,7 @@ import {
   LifeBuoy
 } from "lucide-react";
 import { queueOfflineAction } from "@/lib/offline-sync";
+import { ModuleHeader } from "@/components/module-header";
 
 export const Route = createFileRoute("/hydration/")({
   component: HydrationPage,
@@ -34,31 +35,29 @@ function HydrationPage() {
   };
 
   return (
-    <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 relative">
+    <div className="flex-1 space-y-8 p-4 md:p-8 pt-6 relative overflow-hidden">
       {/* Decorative Module Hero Image */}
-      <div className="absolute top-0 right-0 w-64 h-64 opacity-5 pointer-events-none -z-10 translate-x-1/4 -translate-y-1/4">
-        <Droplets size={256} className="text-info" />
+      <div className="absolute top-0 right-0 w-96 h-96 opacity-[0.03] pointer-events-none -z-10 translate-x-1/4 -translate-y-1/4">
+        <Droplets size={384} className="text-info" />
       </div>
 
-      <div className="flex items-center justify-between relative">
-        <div className="space-y-1">
-          <h2 className="text-3xl font-bold tracking-tight font-display text-info flex items-center gap-3">
-            <Droplets className="text-info-foreground bg-info p-1.5 rounded-lg" size={32} />
-            Hidratação
-          </h2>
-          <p className="text-muted-foreground text-sm font-medium">
-            Mantenha seu corpo em pleno funcionamento com controle diário.
-          </p>
-        </div>
-        <div className="flex gap-2">
-          <Button variant="outline" size="icon" className="rounded-full" asChild>
-            <Link to="/help"><LifeBuoy size={18} /></Link>
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <ModuleHeader 
+          title="Hidratação"
+          description="Mantenha seu corpo em pleno funcionamento com o controle diário de ingestão de líquidos."
+          icon={Droplets}
+          iconClassName="bg-info text-info-foreground"
+        />
+        <div className="flex gap-2 relative z-10">
+          <Button variant="outline" size="icon" className="rounded-xl h-10 w-10 border-2" asChild title="Ajuda">
+            <Link to="/help"><LifeBuoy size={20} /></Link>
           </Button>
-          <Button variant="outline" size="icon" className="rounded-full">
-            <Settings size={18} />
+          <Button variant="outline" size="icon" className="rounded-xl h-10 w-10 border-2" title="Configurações">
+            <Settings size={20} />
           </Button>
         </div>
       </div>
+
 
       <div className="grid gap-6 md:grid-cols-2">
         <Card className="surface border-none flex flex-col items-center justify-center p-8 text-center space-y-6">

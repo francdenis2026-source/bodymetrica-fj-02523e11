@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { queueOfflineAction } from "@/lib/offline-sync";
+import { ModuleHeader } from "@/components/module-header";
 
 export const Route = createFileRoute("/nutrition/")({
   component: NutritionPage,
@@ -34,33 +35,30 @@ function NutritionPage() {
   };
 
   return (
-    <div className="flex-1 space-y-6 p-4 md:p-8 pt-6 relative">
+    <div className="flex-1 space-y-8 p-4 md:p-8 pt-6 relative overflow-hidden">
       {/* Decorative Module Hero Image */}
-      <div className="absolute top-0 right-0 w-64 h-64 opacity-5 pointer-events-none -z-10 translate-x-1/4 -translate-y-1/4">
-        <Utensils size={256} className="text-primary" />
+      <div className="absolute top-0 right-0 w-96 h-96 opacity-[0.03] pointer-events-none -z-10 translate-x-1/4 -translate-y-1/4">
+        <Utensils size={384} className="text-primary" />
       </div>
 
-      <div className="flex items-center justify-between relative">
-        <div className="space-y-1">
-          <h2 className="text-3xl font-bold tracking-tight font-display text-primary flex items-center gap-3">
-            <Utensils className="text-primary-foreground bg-brand-gradient p-1.5 rounded-lg" size={32} />
-            Alimentação
-          </h2>
-          <p className="text-muted-foreground text-sm font-medium">
-            Planejamento nutricional focado no seu objetivo.
-          </p>
-        </div>
-        <div className="flex gap-2">
-          <Button size="sm" variant="outline" className="gap-2" asChild>
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <ModuleHeader 
+          title="Alimentação"
+          description="Planejamento nutricional estratégico focado no seu objetivo de saúde e performance."
+          icon={Utensils}
+        />
+        <div className="flex gap-2 relative z-10">
+          <Button size="sm" variant="outline" className="gap-2 h-10 px-4 font-semibold border-2" asChild>
             <Link to="/help">
-              <LifeBuoy size={16} /> Ajuda
+              <LifeBuoy size={18} /> Ajuda
             </Link>
           </Button>
-          <Button size="sm" className="gap-2">
-            <Search size={16} /> Alimentos
+          <Button size="sm" className="gap-2 h-10 px-4 font-semibold bg-brand-gradient shadow-lg">
+            <Search size={18} /> Buscar Alimentos
           </Button>
         </div>
       </div>
+
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <MacroCard label="Calorias" current={macros.calories.current} goal={macros.calories.goal} unit="kcal" icon={<Flame size={14} className="text-orange-500" />} />
