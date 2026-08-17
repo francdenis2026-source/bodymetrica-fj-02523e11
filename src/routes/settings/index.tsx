@@ -25,6 +25,10 @@ import { getSession, clearSession } from "@/lib/auth/auth.functions";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { toast } from "sonner";
 import { requestNotificationPermission, scheduleNotifications } from "@/lib/notifications";
+import { validateLicense, generateLicenseAfterPayment } from "@/lib/monetization.functions";
+import { useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
+import { useNavigate } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/settings/")({
   component: SettingsPage,
@@ -33,6 +37,55 @@ export const Route = createFileRoute("/settings/")({
 function SettingsPage() {
   const session = getSession();
   const user = session?.user;
+  const navigate = useNavigate();
+  const [licenseKey, setLicenseKey] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  
+  const validateLicenseFn = useServerFn(validateLicense);
+  const generateLicenseFn = useServerFn(generateLicenseAfterPayment);
+
+  const handleActivateLicense = async () => {
+    if (!licenseKey) {
+      toast.error("Por favor, insira uma chave de licença.");
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const result = await validateLicenseFn({ data: { licenseKey, userId: user.id } });
+      if (result.success) {
+        toast.success(result.message);
+        // Update local session
+        const updatedUser = { ...session.user, licenseStatus: 'active', isLicensed: true };
+        localStorage.setItem('bodymetrica_auth_session', JSON.stringify({ ...session, user: updatedUser }));
+        window.location.reload();
+      } else {
+        toast.error(result.message);
+      }
+    } catch (error) {
+      toast.error("Erro ao validar licença.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handlePurchaseSim = async () => {
+    setIsLoading(true);
+    try {
+      const result = await generateLicenseFn({ data: { userId: user.id } });
+      if (result.success) {
+        setLicenseKey(result.licenseKey);
+        toast.success("Simulação de compra realizada! A chave foi preenchida.");
+      }
+    } catch (error) {
+      toast.error("Erro na simulação de compra.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const licenseStatus = user?.licenseStatus || 'demonstrative';
+  const isLicensed = licenseStatus === 'active';
 
   return (
     <div className="flex-1 space-y-12 p-4 md:p-12 pt-10 relative overflow-hidden bg-background">
@@ -68,27 +121,65 @@ function SettingsPage() {
             <div className="flex items-center justify-between p-4 bg-background/50 rounded-2xl border border-white/5">
               <div className="space-y-1">
                 <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">STATUS ATUAL</p>
-                <p className="text-sm font-black uppercase text-warning">Demonstrativo / Expirado</p>
+                <p className={cn(
+                  "text-sm font-black uppercase",
+                  isLicensed ? "text-success" : "text-warning"
+                )}>
+                  {isLicensed ? 'Licença Ativa' : 'Demonstrativo / Pendente'}
+                </p>
               </div>
               <div className="text-right">
                 <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">VALIDADE</p>
-                <p className="text-sm font-bold uppercase">N/A</p>
+                <p className="text-sm font-bold uppercase">
+                  {isLicensed ? 'Vitalícia / 1 Ano' : 'Expirada'}
+                </p>
               </div>
             </div>
 
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase tracking-widest text-primary ml-1">ATIVAR CHAVE DE LICENÇA</Label>
+                <Label className="text-[10px] font-black uppercase tracking-widest text-primary ml-1">
+                  {isLicensed ? "LICENÇA ATIVADA" : "ATIVAR CHAVE DE LICENÇA"}
+                </Label>
                 <div className="flex gap-2">
                   <Input 
                     placeholder="BODY-XXXX-XXXX-XXXX" 
                     className="h-12 bg-white/5 border-white/10 rounded-xl px-4 font-mono text-xs uppercase"
+                    value={licenseKey}
+                    onChange={(e) => setLicenseKey(e.target.value.toUpperCase())}
+                    disabled={isLicensed || isLoading}
                   />
-                  <Button className="h-12 bg-brand-gradient border-none font-black uppercase tracking-widest px-6 rounded-xl">
-                    ATIVAR
-                  </Button>
+                  {!isLicensed && (
+                    <Button 
+                      onClick={handleActivateLicense}
+                      disabled={isLoading}
+                      className="h-12 bg-brand-gradient border-none font-black uppercase tracking-widest px-6 rounded-xl"
+                    >
+                      ATIVAR
+                    </Button>
+                  )}
                 </div>
               </div>
+              
+              {!isLicensed && (
+                <div className="p-4 bg-primary/10 rounded-2xl border border-primary/20 space-y-3">
+                  <p className="text-xs font-bold text-primary flex items-center gap-2">
+                    <Smartphone size={14} /> SIMULAR AQUISIÇÃO
+                  </p>
+                  <p className="text-[10px] text-muted-foreground leading-relaxed italic">
+                    Clique abaixo para simular o fluxo de pagamento e receber sua chave automaticamente.
+                  </p>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="w-full text-[10px] font-black border-primary/30 hover:bg-primary/20"
+                    onClick={handlePurchaseSim}
+                    disabled={isLoading}
+                  >
+                    COMPRAR LICENÇA (SIMULAÇÃO)
+                  </Button>
+                </div>
+              )}
               <p className="text-[10px] text-muted-foreground leading-relaxed italic">
                 A licença de uso é enviada automaticamente após a confirmação do pagamento. 
                 Ela desbloqueia o sistema de relatórios avançados, sincronização na nuvem ilimitada e novos protocolos.
