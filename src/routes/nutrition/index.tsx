@@ -42,9 +42,16 @@ function NutritionPage() {
             Planejamento nutricional focado no seu objetivo.
           </p>
         </div>
-        <Button size="sm" className="gap-2">
-          <Search size={16} /> Alimentos
-        </Button>
+        <div className="flex gap-2">
+          <Button size="sm" variant="outline" className="gap-2" asChild>
+            <Link to="/help">
+              <LifeBuoy size={16} /> Ajuda
+            </Link>
+          </Button>
+          <Button size="sm" className="gap-2">
+            <Search size={16} /> Alimentos
+          </Button>
+        </div>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
