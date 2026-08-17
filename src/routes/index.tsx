@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { 
   ArrowRight, 
@@ -169,9 +170,9 @@ function Index() {
   );
 }
 
-function FeatureCard({ icon, title, description }: { icon: React.ReactNode; title: string; description: string }) {
+function FeatureCard({ icon, title, description, className }: { icon: React.ReactNode; title: string; description: string; className?: string }) {
   return (
-    <div className="surface p-8 space-y-4">
+    <div className={cn("surface p-8 space-y-4 border border-transparent", className)}>
       <div className="w-12 h-12 rounded-xl bg-background border flex items-center justify-center shadow-sm">
         {icon}
       </div>
