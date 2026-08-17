@@ -166,7 +166,7 @@ function AboutPage() {
             <p className="text-white/80 text-sm md:text-base font-bold uppercase tracking-[0.2em] max-w-2xl mx-auto">
               Seja bem-vindo à nova era do acompanhamento físico.
             </p>
-            <Button size="lg" variant="secondary" className="px-10 h-14 rounded-2xl font-black uppercase tracking-widest hover:scale-105 transition-all shadow-xl" asChild>
+            <Button size="lg" variant="secondary" className="px-8 h-12 md:px-10 md:h-14 rounded-xl md:rounded-2xl font-black uppercase tracking-widest hover:scale-105 transition-all shadow-xl text-xs md:text-sm" asChild>
               <Link to="/auth" search={{ registerMode: true, name: "", birthDate: "", goal: "", weight: "", height: "", activityLevel: "" }}>FAZER PARTE DA ELITE</Link>
             </Button>
           </div>
