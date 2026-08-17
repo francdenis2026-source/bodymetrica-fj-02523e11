@@ -29,6 +29,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { syncOfflineActions, getSyncHistory } from "@/lib/offline-sync";
+import { scheduleNotifications } from "@/lib/notifications";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { AppErrorBoundary } from "@/components/ui/error-boundary";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -214,6 +215,9 @@ function RootComponent() {
             
             // Check for updates periodically
             registration.update();
+
+            // Reschedule notifications on reload
+            scheduleNotifications();
 
             // Listen for update prompt
             registration.addEventListener('updatefound', () => {

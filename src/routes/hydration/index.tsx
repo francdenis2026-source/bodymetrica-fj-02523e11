@@ -50,6 +50,16 @@ function HydrationPage() {
       type: 'WATER_LOG',
       data: { amount, currentTotal: newTotal }
     });
+
+    // Check for goal proximity for notifications
+    if (newTotal < goalAmount && newTotal >= goalAmount * 0.8) {
+      if ("Notification" in window && Notification.permission === "granted") {
+        new Notification("Body Métrica FJ", {
+          body: `Você atingiu ${percentage}% da sua meta de água. Quase lá!`,
+          icon: "/favicon.svg"
+        });
+      }
+    }
   };
 
   return (
