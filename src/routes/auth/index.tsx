@@ -406,9 +406,9 @@ function AuthPage() {
               </Form>
             ) : (
               <Form {...loginForm}>
-                <form onSubmit={loginForm.handleSubmit(onLoginSubmit)} className="space-y-4">
+                <form onSubmit={loginForm.handleSubmit(onLoginSubmit as any)} className="space-y-4">
                   <FormField
-                    control={loginForm.control}
+                    control={loginForm.control as any}
                     name="email"
                     render={({ field }) => (
                       <FormItem>
@@ -426,7 +426,7 @@ function AuthPage() {
                     )}
                   />
                   <FormField
-                    control={loginForm.control}
+                    control={loginForm.control as any}
                     name="password"
                     render={({ field }) => (
                       <FormItem>
@@ -445,7 +445,7 @@ function AuthPage() {
                     )}
                   />
                   <FormField
-                    control={loginForm.control}
+                    control={loginForm.control as any}
                     name="rememberMe"
                     render={({ field }) => (
                       <FormItem className="flex flex-row items-center space-x-2 space-y-0 px-1">
