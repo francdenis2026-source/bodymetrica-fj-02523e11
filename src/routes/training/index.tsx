@@ -108,12 +108,26 @@ function TrainingPage() {
         </Card>
       </div>
 
-      <Tabs defaultValue="routine" className="space-y-4">
-        <TabsList>
-          <TabsTrigger value="routine">Fichas</TabsTrigger>
-          <TabsTrigger value="history">Histórico</TabsTrigger>
-          <TabsTrigger value="manage">Gerenciar Exercícios</TabsTrigger>
-        </TabsList>
+        <Tabs defaultValue="routine" className="space-y-4">
+          <TabsList>
+            <TabsTrigger value="routine">Fichas</TabsTrigger>
+            <TabsTrigger value="history">Progresso & Gráficos</TabsTrigger>
+            <TabsTrigger value="manage">Gerenciar Exercícios</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="history" className="space-y-6">
+            <Card className="surface border-none p-6">
+              <CardTitle className="text-xl font-display uppercase italic mb-6">Evolução de Performance</CardTitle>
+              <div className="h-64 flex items-end justify-between gap-2">
+                 {[40, 60, 50, 75, 80, 70, 95].map((val, i) => (
+                    <div key={i} className="flex-1 flex flex-col items-center gap-2">
+                        <div className="w-full bg-primary/20 rounded-t-lg transition-all hover:bg-primary/40" style={{ height: `${val}%` }} />
+                        <span className="text-[10px] font-black text-muted-foreground uppercase">Sem {i+1}</span>
+                    </div>
+                 ))}
+              </div>
+            </Card>
+          </TabsContent>
 
         <TabsContent value="manage" className="space-y-6">
           <Card className="surface border-none p-6">
