@@ -29,8 +29,13 @@ export const Route = createFileRoute("/training/")({
 function TrainingPage() {
   const [activeTab, setActiveTab] = useState("routine");
   const [isLoading, setIsLoading] = useState(true);
+  const [userData, setUserData] = useState<any>(null);
 
   useEffect(() => {
+    const session = getSession();
+    if (session) {
+      setUserData(session);
+    }
     const timer = setTimeout(() => setIsLoading(false), 900);
     return () => clearTimeout(timer);
   }, []);

@@ -29,8 +29,13 @@ export const Route = createFileRoute("/supplements/")({
 
 function SupplementsPage() {
   const [isLoading, setIsLoading] = useState(true);
+  const [userData, setUserData] = useState<any>(null);
 
   useEffect(() => {
+    const session = getSession();
+    if (session) {
+      setUserData(session);
+    }
     const timer = setTimeout(() => setIsLoading(false), 800);
     return () => clearTimeout(timer);
   }, []);

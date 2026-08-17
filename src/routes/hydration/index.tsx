@@ -24,8 +24,16 @@ export const Route = createFileRoute("/hydration/")({
 
 function HydrationPage() {
   const [currentAmount, setCurrentAmount] = useState(1200);
+  const [userData, setUserData] = useState<any>(null);
   const goalAmount = 3000;
   const percentage = Math.round((currentAmount / goalAmount) * 100);
+
+  useEffect(() => {
+    const session = getSession();
+    if (session) {
+      setUserData(session);
+    }
+  }, []);
 
   const addWater = (amount: number) => {
     setCurrentAmount(prev => Math.min(prev + amount, 5000));

@@ -30,8 +30,13 @@ export const Route = createFileRoute("/nutrition/")({
 function NutritionPage() {
   const [activeTab, setActiveTab] = useState("plan");
   const [isLoading, setIsLoading] = useState(true);
+  const [userData, setUserData] = useState<any>(null);
 
   useEffect(() => {
+    const session = getSession();
+    if (session) {
+      setUserData(session);
+    }
     const timer = setTimeout(() => setIsLoading(false), 800);
     return () => clearTimeout(timer);
   }, []);
