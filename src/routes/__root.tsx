@@ -141,10 +141,13 @@ function RootComponent() {
   const navigate = useNavigate();
   const [authChecked, setAuthChecked] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [needsVerification, setNeedsVerification] = useState(false);
 
   useEffect(() => {
     // Check initial auth state
-    setIsLoggedIn(isAuthenticated());
+    const session = getSession();
+    setIsLoggedIn(!!session);
+    setNeedsVerification(session?.needsVerification || false);
     setAuthChecked(true);
 
     if (typeof window !== "undefined" && "serviceWorker" in navigator) {
