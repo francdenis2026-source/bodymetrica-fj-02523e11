@@ -36,8 +36,10 @@ function DashboardPage() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" className="gap-2 h-9 text-xs">
-            <Filter size={14} /> Período
+          <Button variant="outline" size="sm" className="gap-2 h-9 text-xs" asChild>
+            <Link to="/about">
+              <Filter size={14} /> Como Funciona
+            </Link>
           </Button>
           <Button variant="outline" size="sm" className="gap-2 h-9 text-xs">
             <FileDown size={14} /> Relatórios PDF
