@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -15,15 +15,21 @@ import {
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { cpfSchema, formatCpf } from "@/lib/auth/utils";
-import { login, setSession } from "@/lib/auth/auth.functions";
+import { login, register, setSession } from "@/lib/auth/auth.functions";
 import { toast } from "sonner";
-import { ShieldCheck, ArrowLeft, Lock } from "lucide-react";
+import { ShieldCheck, ArrowLeft, Lock, UserPlus } from "lucide-react";
 import { ResponsiveHero } from "@/components/responsive-hero";
 import { cn } from "@/lib/utils";
 
-
 export const Route = createFileRoute("/auth/")({
   component: AuthPage,
+  validateSearch: (search: Record<string, unknown>) => {
+    return {
+      registerMode: (search.registerMode as boolean) || false,
+      name: (search.name as string) || "",
+      birthDate: (search.birthDate as string) || "",
+    };
+  },
 });
 
 const authSchema = z.object({
@@ -31,31 +37,57 @@ const authSchema = z.object({
   pin: z.string().length(6, "O PIN deve ter exatamente 6 dígitos"),
 });
 
+const registerSchema = z.object({
+  cpf: cpfSchema,
+  pin: z.string().length(6, "O PIN deve ter exatamente 6 dígitos"),
+  name: z.string().min(3, "Nome muito curto"),
+});
+
 type AuthFormValues = z.infer<typeof authSchema>;
+type RegisterFormValues = z.infer<typeof registerSchema>;
 
 function AuthPage() {
+  const { registerMode, name: initialName } = Route.useSearch();
+  const [isRegistering, setIsRegistering] = useState(registerMode);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const form = useForm<AuthFormValues>({
-    resolver: zodResolver(authSchema),
+  const form = useForm<RegisterFormValues>({
+    resolver: zodResolver(isRegistering ? registerSchema : authSchema),
     defaultValues: {
       cpf: "",
       pin: "",
+      name: initialName || "",
     },
   });
 
-  async function onSubmit(values: AuthFormValues) {
+  useEffect(() => {
+    setIsRegistering(registerMode);
+    if (initialName) {
+      form.setValue("name", initialName);
+    }
+  }, [registerMode, initialName, form]);
+
+  async function onSubmit(values: RegisterFormValues) {
     setIsLoading(true);
     try {
-      const result = await login({ data: values });
-      if (result.success) {
-        setSession(result.user);
-        toast.success("Bem-vindo ao Body Métrica FJ!");
-        window.location.href = "/dashboard"; // Force reload to pick up session state
+      if (isRegistering) {
+        const result = await register({ data: { ...values } });
+        if (result.success) {
+          setSession(result.user);
+          toast.success("Cadastro realizado com sucesso!");
+          window.location.href = "/dashboard";
+        }
+      } else {
+        const result = await login({ data: { cpf: values.cpf, pin: values.pin } });
+        if (result.success) {
+          setSession(result.user);
+          toast.success("Bem-vindo ao Body Métrica FJ!");
+          window.location.href = "/dashboard";
+        }
       }
     } catch (error) {
-      toast.error("Erro ao entrar. Verifique seus dados.");
+      toast.error(isRegistering ? "Erro ao cadastrar. Tente novamente." : "Erro ao entrar. Verifique seus dados.");
     } finally {
       setIsLoading(false);
     }
@@ -88,15 +120,41 @@ function AuthPage() {
 
         <Card className="surface border-white/5 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.6)] bg-black/60 backdrop-blur-3xl rounded-[2.5rem] overflow-hidden">
           <CardHeader className="space-y-2 pb-10 border-b border-white/5 pt-12">
-            <CardTitle className="text-3xl font-black text-white text-center uppercase tracking-[0.2em] italic">AUTENTICAÇÃO</CardTitle>
+            <CardTitle className="text-3xl font-black text-white text-center uppercase tracking-[0.2em] italic">
+              {isRegistering ? "CADASTRO" : "AUTENTICAÇÃO"}
+            </CardTitle>
             <CardDescription className="font-bold text-white/40 text-center uppercase text-[10px] tracking-widest px-4">
-              INSIRA SEUS DADOS DE ACESSO PROTEGIDO
+              {isRegistering ? "CRIE SUA CONTA PROFISSIONAL" : "INSIRA SEUS DADOS DE ACESSO PROTEGIDO"}
             </CardDescription>
           </CardHeader>
 
           <CardContent>
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                {isRegistering && (
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="font-black text-[10px] uppercase tracking-[0.2em] text-primary ml-1">NOME COMPLETO</FormLabel>
+                        <FormControl>
+                          <Input 
+                            placeholder="Seu Nome" 
+                            className={cn(
+                              "h-16 text-xl font-black bg-white/5 border-white/10 rounded-2xl px-6 text-white focus:ring-primary focus:border-primary transition-all placeholder:text-white/20",
+                              form.formState.errors.name && "border-destructive ring-destructive"
+                            )}
+                            {...field} 
+                            disabled={isLoading}
+                          />
+                        </FormControl>
+                        <FormMessage className="text-[10px] font-bold uppercase tracking-widest text-destructive animate-in fade-in slide-in-from-top-1" />
+                      </FormItem>
+                    )}
+                  />
+                )}
+
                 <FormField
                   control={form.control}
                   name="cpf"
@@ -119,7 +177,6 @@ function AuthPage() {
                     </FormItem>
                   )}
                 />
-
 
                 <FormField
                   control={form.control}
@@ -147,12 +204,12 @@ function AuthPage() {
                 />
 
                 <Button type="submit" className="w-full h-16 text-base font-black uppercase tracking-[0.2em] bg-brand-gradient hover:scale-[1.02] transition-all shadow-2xl shadow-primary/30 border-none mt-4 rounded-2xl" disabled={isLoading}>
-                  {isLoading ? "PROCESSANDO..." : "ACESSAR PLATAFORMA"}
+                  {isLoading ? "PROCESSANDO..." : isRegistering ? "FINALIZAR CADASTRO" : "ACESSAR PLATAFORMA"}
                 </Button>
-
               </form>
             </Form>
           </CardContent>
+          
           <CardFooter className="flex flex-col gap-8 border-t border-white/5 pt-10 pb-12 bg-white/[0.02]">
             <div className="flex items-start gap-4 text-[10px] text-white/40 leading-relaxed font-bold uppercase tracking-widest">
               <ShieldCheck className="text-primary shrink-0" size={20} />
@@ -163,17 +220,21 @@ function AuthPage() {
             
             <div className="w-full space-y-4">
               <p className="text-center text-[10px] font-black text-white/30 uppercase tracking-[0.2em]">
-                NÃO POSSUI UMA CONTA?{" "}
-                <Link to="/onboarding" className="text-primary hover:text-primary-foreground transition-all">
-                  CADASTRAR AGORA
-                </Link>
+                {isRegistering ? "JÁ POSSUI UMA CONTA?" : "NÃO POSSUI UMA CONTA?"}{" "}
+                <button 
+                  onClick={() => setIsRegistering(!isRegistering)} 
+                  className="text-primary hover:text-primary-foreground transition-all"
+                >
+                  {isRegistering ? "ENTRAR AGORA" : "CADASTRAR AGORA"}
+                </button>
               </p>
-              <button className="w-full text-center text-[10px] font-black uppercase tracking-[0.2em] text-white/20 hover:text-white transition-all underline decoration-white/10 underline-offset-4">
-                RECUPERAR PIN DE ACESSO
-              </button>
+              {!isRegistering && (
+                <button className="w-full text-center text-[10px] font-black uppercase tracking-[0.2em] text-white/20 hover:text-white transition-all underline decoration-white/10 underline-offset-4">
+                  RECUPERAR PIN DE ACESSO
+                </button>
+              )}
             </div>
           </CardFooter>
-
         </Card>
         
         <div className="mt-8 text-center space-y-1">
