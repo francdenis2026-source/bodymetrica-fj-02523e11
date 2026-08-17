@@ -116,21 +116,30 @@ function Index() {
       <section className="py-20 bg-muted/50">
         <div className="container mx-auto px-4 max-w-6xl">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <FeatureCard 
-              icon={<Target className="text-primary" />}
-              title="Objetivos Claros"
-              description="Emagrecimento, hipertrofia ou manutenção. Planos adaptados para sua meta real."
-            />
-            <FeatureCard 
-              icon={<Zap className="text-success" />}
-              title="Acompanhamento Ágil"
-              description="Registre peso, medidas e fotos de evolução em segundos. Gráficos de tendência precisos."
-            />
-            <FeatureCard 
-              icon={<ShieldCheck className="text-info" />}
-              title="Dados Protegidos"
-              description="Privacidade total para suas fotos e informações de saúde com criptografia de ponta."
-            />
+            <Link to="/about" className="group block">
+              <FeatureCard 
+                icon={<Target className="text-primary" />}
+                title="Objetivos Claros"
+                description="Emagrecimento, hipertrofia ou manutenção. Planos adaptados para sua meta real."
+                className="group-hover:border-primary/20 group-hover:bg-primary/5 transition-all"
+              />
+            </Link>
+            <Link to="/about" className="group block">
+              <FeatureCard 
+                icon={<Zap className="text-success" />}
+                title="Acompanhamento Ágil"
+                description="Registre peso, medidas e fotos de evolução em segundos. Gráficos de tendência precisos."
+                className="group-hover:border-success/20 group-hover:bg-success/5 transition-all"
+              />
+            </Link>
+            <Link to="/about" className="group block">
+              <FeatureCard 
+                icon={<ShieldCheck className="text-info" />}
+                title="Dados Protegidos"
+                description="Privacidade total para suas fotos e informações de saúde com criptografia de ponta."
+                className="group-hover:border-info/20 group-hover:bg-info/5 transition-all"
+              />
+            </Link>
           </div>
         </div>
       </section>
