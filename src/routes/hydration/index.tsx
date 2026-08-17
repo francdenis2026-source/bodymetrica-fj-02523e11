@@ -24,7 +24,8 @@ export const Route = createFileRoute("/hydration/")({
 });
 
 function HydrationPage() {
-  const [currentAmount, setCurrentAmount] = useState(1200);
+  const [currentAmount, setCurrentAmount] = useState(0); // Iniciar zerado para simular empty state
+  const [isSyncing, setIsSyncing] = useState(false);
   const [userData, setUserData] = useState<any>(null);
   const goalAmount = 3000;
   const percentage = Math.round((currentAmount / goalAmount) * 100);
@@ -36,7 +37,8 @@ function HydrationPage() {
     }
   }, []);
 
-  const addWater = (amount: number) => {
+  const addWater = async (amount: number) => {
+    setIsSyncing(true);
     const newTotal = currentAmount + amount;
     setCurrentAmount(prev => Math.min(newTotal, 5000));
     
@@ -50,6 +52,9 @@ function HydrationPage() {
       type: 'WATER_LOG',
       data: { amount, currentTotal: newTotal }
     });
+
+    // Simular delay de sincronização
+    setTimeout(() => setIsSyncing(false), 800);
 
     // Check for goal proximity for notifications
     if (newTotal < goalAmount && newTotal >= goalAmount * 0.8) {
@@ -127,9 +132,9 @@ function HydrationPage() {
               />
             </svg>
             <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <Droplets className="text-info mb-1" size={24} />
-              <span className="text-3xl font-bold font-display">{percentage}%</span>
-              <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-tighter">da meta diária</span>
+              <Droplets className={isSyncing ? "text-primary animate-pulse" : "text-info"} size={24} />
+              <span className="text-3xl font-black font-display italic tracking-tighter uppercase">{percentage}%</span>
+              <span className="text-[10px] text-muted-foreground uppercase font-black tracking-widest">{isSyncing ? "SINCRONIZANDO..." : "DIÁRIO"}</span>
             </div>
           </div>
           
@@ -185,30 +190,42 @@ function HydrationPage() {
                 <History size={18} className="text-primary" />
                 Registros de Hoje
               </CardTitle>
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                className="h-8 text-xs"
-                onClick={() => {
-                  if ("Notification" in window && Notification.permission === "granted") {
-                    new Notification("Body Métrica FJ", {
-                      body: "Não esqueça de beber água! Sua meta é 3L hoje.",
-                      icon: "/favicon.ico"
-                    });
-                  } else {
-                    alert("Ative as notificações nas configurações para receber lembretes.");
-                  }
-                }}
-              >
-                TESTAR LEMBRETE
-              </Button>
+              {currentAmount > 0 && (
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="h-8 text-[10px] font-black uppercase tracking-widest"
+                  onClick={() => {
+                    if ("Notification" in window && Notification.permission === "granted") {
+                      new Notification("Body Métrica FJ", {
+                        body: "Não esqueça de beber água! Sua meta é 3L hoje.",
+                        icon: "/favicon.ico"
+                      });
+                    } else {
+                      alert("Ative as notificações nas configurações para receber lembretes.");
+                    }
+                  }}
+                >
+                  TESTAR LEMBRETE
+                </Button>
+              )}
             </CardHeader>
             <CardContent>
-              <div className="space-y-3">
-                <WaterLogEntry time="08:15" amount="300ml" />
-                <WaterLogEntry time="09:45" amount="500ml" />
-                <WaterLogEntry time="11:30" amount="400ml" />
-              </div>
+              {currentAmount === 0 ? (
+                <div className="py-12 text-center space-y-4">
+                  <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center mx-auto">
+                    <Droplets className="text-muted-foreground/30" size={20} />
+                  </div>
+                  <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">NENHUM REGISTRO HOJE</p>
+                  <Button variant="ghost" className="text-[9px] font-black uppercase tracking-widest hover:text-primary" onClick={() => addWater(200)}>
+                    REGISTRAR AGORA
+                  </Button>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  <WaterLogEntry time="Agora" amount={`${currentAmount}ml (Total)`} />
+                </div>
+              )}
             </CardContent>
           </Card>
 
