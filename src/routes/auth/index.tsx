@@ -257,7 +257,7 @@ function AuthPage() {
 
       <div className="relative z-10 w-full max-w-sm px-6 py-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
         <div className="text-center space-y-4 mb-6">
-          <Link to="/" className="inline-flex items-center text-[10px] font-black uppercase tracking-[0.2em] text-white/50 hover:text-white transition-all mb-2 backdrop-blur-3xl bg-black/40 px-4 py-1.5 rounded-full border border-white/10 hover:border-primary/50">
+          <Link to="/" search={{} as any} className="inline-flex items-center text-[10px] font-black uppercase tracking-[0.2em] text-white/50 hover:text-white transition-all mb-2 backdrop-blur-3xl bg-black/40 px-4 py-1.5 rounded-full border border-white/10 hover:border-primary/50">
             <ArrowLeft size={12} className="mr-2" />
             VOLTAR AO INÍCIO
           </Link>
