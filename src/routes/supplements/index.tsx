@@ -16,6 +16,8 @@ import {
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ModuleHeader } from "@/components/module-header";
+import { Skeleton } from "@/components/ui/skeleton";
+
 
 
 export const Route = createFileRoute("/supplements/")({

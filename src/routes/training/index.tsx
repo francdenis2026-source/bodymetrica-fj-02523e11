@@ -15,6 +15,8 @@ import {
   LifeBuoy
 } from "lucide-react";
 import { ModuleHeader } from "@/components/module-header";
+import { Skeleton } from "@/components/ui/skeleton";
+
 
 export const Route = createFileRoute("/training/")({
   component: TrainingPage,
