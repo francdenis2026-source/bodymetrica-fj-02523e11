@@ -188,9 +188,11 @@ function RootComponent() {
           .register("/sw.js")
           .then((registration) => {
             console.log("SW registered:", registration);
+            // Optional: immediately trigger a check for updates
+            registration.update();
           })
           .catch((error) => {
-            console.log("SW registration failed:", error);
+            console.error("SW registration failed:", error);
           });
       });
     }

@@ -20,6 +20,7 @@ import { ModuleHeader } from "@/components/module-header";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getSession, clearSession } from "@/lib/auth/auth.functions";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/settings/")({
@@ -137,6 +138,13 @@ function SettingsPage() {
                 <p className="text-xs text-muted-foreground">Resumo da sua evolução toda segunda-feira.</p>
               </div>
               <Switch />
+            </div>
+            <div className="flex items-center justify-between">
+              <div className="space-y-0.5">
+                <Label className="text-sm font-medium">Tema do Sistema</Label>
+                <p className="text-xs text-muted-foreground">Escolha entre modo claro ou escuro.</p>
+              </div>
+              <ThemeToggle />
             </div>
           </CardContent>
         </Card>
