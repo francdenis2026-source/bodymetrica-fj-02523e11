@@ -20,6 +20,7 @@ import { ModuleHeader } from "@/components/module-header";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getSession, clearSession } from "@/lib/auth/auth.functions";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/settings/")({
