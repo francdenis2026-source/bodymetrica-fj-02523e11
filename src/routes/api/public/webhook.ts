@@ -93,6 +93,12 @@ export const Route = createFileRoute('/api/public/webhook')({
                   expires_at: expiresAt.toISOString()
                 }
               });
+              // 8. Notify user via email (simulated)
+              const { data: userData } = await supabaseAdmin.from('profiles').select('email').eq('id', userId).single();
+              if (userData?.email) {
+                const { sendLicenseEmail } = await import("@/lib/email.functions");
+                sendLicenseEmail({ data: { email: userData.email, type: 'renewed', details: { payment_id: resourceId } } }).catch(console.error);
+              }
 
               console.log(`[Webhook] License activated/renewed for user ${userId}`);
             }
