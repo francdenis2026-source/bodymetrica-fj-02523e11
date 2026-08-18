@@ -489,12 +489,13 @@ function AuthPage() {
                         <FormItem className="space-y-1.5">
                           <FormLabel className="text-[9px] font-black uppercase text-white/40 tracking-widest ml-1">NOME IDENTIFICADOR</FormLabel>
                           <FormControl>
-                            <Input 
-                              placeholder="SEU NOME" 
-                              className="h-14 bg-white/5 border-white/10 rounded-2xl px-5 text-white focus:border-primary/50 font-black transition-all"
-                              {...field} 
-                              disabled={isLoading}
-                            />
+                              <Input 
+                                placeholder="SEU NOME" 
+                                className="h-14 bg-white/5 border-white/10 rounded-2xl px-5 text-white focus:border-primary/50 focus:ring-2 focus:ring-primary/20 transition-all font-black outline-none"
+                                {...field} 
+                                disabled={isLoading}
+                                aria-required="true"
+                              />
                           </FormControl>
                           <FormMessage className="text-[8px] font-bold text-red-500 uppercase tracking-widest" />
                         </FormItem>
