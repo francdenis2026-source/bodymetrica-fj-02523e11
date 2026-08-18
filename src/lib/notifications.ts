@@ -70,7 +70,8 @@ export const getNotificationSettings = (): NotificationSettings => {
   const saved = safeLocalStorage.getItem(SETTINGS_KEY);
   if (!saved) return DEFAULT_SETTINGS;
   try {
-    return JSON.parse(saved);
+    const parsed = JSON.parse(saved);
+    return { ...DEFAULT_SETTINGS, ...parsed, weeklySummary: { ...DEFAULT_SETTINGS.weeklySummary, ...(parsed.weeklySummary ?? {}) } };
   } catch (e) {
     return DEFAULT_SETTINGS;
   }
