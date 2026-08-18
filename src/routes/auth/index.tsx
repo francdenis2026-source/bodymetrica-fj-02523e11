@@ -398,7 +398,7 @@ function AuthPage() {
         </div>
 
         {/* Main "Window" Container */}
-        <div className="w-full bg-[#0A0A0A]/80 backdrop-blur-3xl border border-white/10 rounded-[2.5rem] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.8)] overflow-hidden animate-in fade-in zoom-in-95 duration-500">
+        <div className="w-full max-h-[85vh] bg-[#0A0A0A]/80 backdrop-blur-3xl border border-white/10 rounded-[2.5rem] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.8)] overflow-hidden flex flex-col animate-in fade-in zoom-in-95 duration-500">
           {/* Decorative Window Top Bar */}
           <div className="h-10 bg-white/[0.03] border-b border-white/5 flex items-center justify-between px-6">
             <div className="flex gap-1.5">
