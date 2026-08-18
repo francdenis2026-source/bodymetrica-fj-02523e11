@@ -54,6 +54,11 @@ const DEFAULT_SETTINGS: NotificationSettings = {
     enabled: true,
     time: '21:30'
   },
+  weeklySummary: {
+    enabled: true,
+    weekday: 0,
+    time: '19:00'
+  },
   adherence: {
     enabled: true,
     frequency: 'daily'
