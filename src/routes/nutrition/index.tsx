@@ -19,8 +19,10 @@ import {
   Calendar,
   Heart,
   FileDown,
-  Download
+  Download,
+  TrendingUp
 } from "lucide-react";
+
 import { Input } from "@/components/ui/input";
 import { queueOfflineAction } from "@/lib/offline-sync";
 import { ModuleHeader } from "@/components/module-header";
