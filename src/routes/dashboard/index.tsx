@@ -343,14 +343,28 @@ function DashboardPage() {
                       style={{ height: `${record.water * 0.5}%` }}
                       title={`Água: ${record.water}%`}
                       onClick={() => {
-                        toast.custom((t) => (
-                          <SVGToast 
-                            type="info"
-                            title={`DETALHES DO DIA ${record.date.split('-')[2]}`}
-                            message={`Performance: ${record.macros}% Macros, ${record.water}% Água. ${record.training ? 'Treino realizado.' : 'Sem treino.'}`}
-                            onClose={() => toast.dismiss(t)}
-                          />
-                        ));
+                        toast.custom((t) => {
+                          const status = record.macros < 80 || record.water < 80 ? 'abaixo' : record.macros > 100 ? 'acima' : 'na meta';
+                          const color = status === 'abaixo' ? 'text-warning' : status === 'acima' ? 'text-destructive' : 'text-success';
+                          
+                          return (
+                            <SVGToast 
+                              type="info"
+                              title={`ANÁLISE DO DIA ${record.date.split('-')[2]}`}
+                              message={
+                                <div className="space-y-2">
+                                  <p>Performance: <span className={color}>{record.macros}% Macros</span> e <span className={record.water < 80 ? 'text-warning' : 'text-info'}>{record.water}% Água</span>.</p>
+                                  <p className="text-[10px] opacity-70 italic">
+                                    {status === 'abaixo' 
+                                      ? "Dica: Tente aumentar a ingestão de proteínas na próxima refeição." 
+                                      : "Parabéns! Você manteve a disciplina de elite hoje."}
+                                  </p>
+                                </div>
+                              }
+                              onClose={() => toast.dismiss(t)}
+                            />
+                          );
+                        });
                       }}
                     />
                     <div 
@@ -358,14 +372,28 @@ function DashboardPage() {
                       style={{ height: `${record.macros * 0.5}%` }}
                       title={`Macros: ${record.macros}%`}
                       onClick={() => {
-                        toast.custom((t) => (
-                          <SVGToast 
-                            type="info"
-                            title={`DETALHES DO DIA ${record.date.split('-')[2]}`}
-                            message={`Performance: ${record.macros}% Macros, ${record.water}% Água. ${record.training ? 'Treino realizado.' : 'Sem treino.'}`}
-                            onClose={() => toast.dismiss(t)}
-                          />
-                        ));
+                        toast.custom((t) => {
+                          const status = record.macros < 80 || record.water < 80 ? 'abaixo' : record.macros > 100 ? 'acima' : 'na meta';
+                          const color = status === 'abaixo' ? 'text-warning' : status === 'acima' ? 'text-destructive' : 'text-success';
+                          
+                          return (
+                            <SVGToast 
+                              type="info"
+                              title={`ANÁLISE DO DIA ${record.date.split('-')[2]}`}
+                              message={
+                                <div className="space-y-2">
+                                  <p>Performance: <span className={color}>{record.macros}% Macros</span> e <span className={record.water < 80 ? 'text-warning' : 'text-info'}>{record.water}% Água</span>.</p>
+                                  <p className="text-[10px] opacity-70 italic">
+                                    {status === 'abaixo' 
+                                      ? "Dica: Tente aumentar a ingestão de proteínas na próxima refeição." 
+                                      : "Parabéns! Você manteve a disciplina de elite hoje."}
+                                  </p>
+                                </div>
+                              }
+                              onClose={() => toast.dismiss(t)}
+                            />
+                          );
+                        });
                       }}
                     />
                   </div>
