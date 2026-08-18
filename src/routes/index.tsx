@@ -85,7 +85,7 @@ function Index() {
       {/* Professional Gradient Overlay */}
       <div className="fixed inset-0 z-0 pointer-events-none bg-gradient-to-tr from-background via-background/60 to-primary/10" />
 
-      <div className="flex flex-col h-full bg-transparent relative overflow-y-auto custom-scrollbar">
+      <div className="flex flex-col h-full bg-transparent relative overflow-x-hidden overflow-y-auto custom-scrollbar">
 
       
       <div className="relative z-10 flex flex-col flex-1">
