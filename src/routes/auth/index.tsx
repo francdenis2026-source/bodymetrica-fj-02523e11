@@ -684,7 +684,8 @@ function AuthPage() {
                   </p>
                   <button 
                     onClick={() => setIsRegistering(!isRegistering)} 
-                    className="text-[10px] font-black uppercase tracking-widest text-white hover:text-primary transition-all text-left"
+                    className="text-[10px] font-black uppercase tracking-widest text-white hover:text-primary focus:text-primary outline-none transition-all text-left"
+                    aria-label={isRegistering ? "Ir para tela de login" : "Ir para tela de cadastro"}
                   >
                     {isRegistering ? "FAZER LOGIN" : "CRIAR CONTA"}
                   </button>
