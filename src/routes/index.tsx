@@ -135,7 +135,7 @@ function Index() {
                     <Skeleton className="h-14 w-3/4 bg-white/5" />
                   </div>
                 ) : (
-                  <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-black font-display text-foreground leading-[0.9] tracking-tighter animate-in fade-in slide-in-from-left-4 duration-700 delay-100 uppercase">
+                  <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black font-display text-foreground leading-[0.85] tracking-tighter animate-in fade-in slide-in-from-left-4 duration-700 delay-100 uppercase">
                     DOMINE SUA <br />
                     <span className="text-gradient-brand">EVOLUÇÃO.</span>
                   </h1>
