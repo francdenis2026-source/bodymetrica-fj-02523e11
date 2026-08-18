@@ -353,7 +353,7 @@ function QuickOnboarding({ isLoggedIn }: { isLoggedIn: boolean }) {
         <Button 
           size="lg" 
           onClick={handleAction}
-          className="h-10 px-6 text-[9px] font-black uppercase tracking-[0.2em] group w-full sm:w-auto bg-brand-gradient hover:scale-105 transition-all border-none shadow-[0_15px_35px_rgba(oklch(0.65_0.22_260),0.3)] focus-visible:ring-2 focus-visible:ring-primary outline-none"
+          className="h-12 px-8 text-[10px] font-black uppercase tracking-[0.2em] group w-full sm:w-auto bg-brand-gradient hover:scale-105 transition-all border-none shadow-[0_20px_40px_rgba(oklch(0.65_0.22_260),0.4)] focus-visible:ring-2 focus-visible:ring-primary outline-none"
         >
           {isLoggedIn ? "NOVO REGISTRO" : "ACESSAR SUÍTE"}
           <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={14} />
