@@ -291,6 +291,30 @@ function ProfilePage() {
     }, 1500);
   };
 
+  const handleGenerateRecoveryCodes = async () => {
+    setIsSaving(true);
+    try {
+      const res = await generateRecoveryCodes();
+      if (res.success) {
+        setRecoveryCodes(res.codes);
+        setShowRecoveryCodes(true);
+        toast.custom((t) => (
+          <SVGToast 
+            type="success"
+            title="CÓDIGOS GERADOS"
+            message="Guarde seus códigos de recuperação em local seguro."
+            onClose={() => toast.dismiss(t)}
+          />
+        ));
+      }
+    } catch (error) {
+      toast.error("Erro ao gerar códigos de recuperação.");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+
   if (isLoading) {
     return (
       <div className="flex-1 space-y-12 p-4 md:p-12 pt-10 bg-background animate-in fade-in duration-700">
