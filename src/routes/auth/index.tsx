@@ -440,13 +440,13 @@ function AuthPage() {
             </div>
 
             {/* Forms Area */}
-            <div className="space-y-6">
-              {isUpdatingPassword ? (
-                <Form {...newPasswordForm}>
-                  <form onSubmit={newPasswordForm.handleSubmit(onNewPasswordSubmit)} className="space-y-5">
-                    <FormField
-                      control={newPasswordForm.control}
-                      name="password"
+              <div className={cn("space-y-6 transition-all duration-300", isLoading && "opacity-20 blur-sm pointer-events-none")}>
+                {isUpdatingPassword ? (
+                  <Form {...newPasswordForm}>
+                    <form onSubmit={newPasswordForm.handleSubmit(onNewPasswordSubmit)} className="space-y-5">
+                      <FormField
+                        control={newPasswordForm.control}
+                        name="password"
                       render={({ field }) => (
                         <FormItem className="space-y-1.5">
                           <FormLabel className="text-[9px] font-black uppercase text-white/40 tracking-widest ml-1">NOVA SENHA</FormLabel>
