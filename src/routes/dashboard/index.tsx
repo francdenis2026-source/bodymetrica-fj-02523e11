@@ -24,12 +24,14 @@ import {
   Calendar,
   FileDown,
   LifeBuoy,
-  LayoutDashboard
+  LayoutDashboard,
+  History as HistoryIcon
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/dashboard/")({
   component: DashboardPage,
