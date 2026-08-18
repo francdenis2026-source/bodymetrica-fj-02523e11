@@ -59,6 +59,8 @@ function ProfilePage() {
   const [securityLogs, setSecurityLogs] = useState<any[]>([]);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showMfaSetup, setShowMfaSetup] = useState(false);
+  const [showRecoveryCodes, setShowRecoveryCodes] = useState(false);
+  const [recoveryCodes, setRecoveryCodes] = useState<string[]>([]);
   const navigate = useNavigate();
 
   // Profile Form State
