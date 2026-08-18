@@ -26,6 +26,7 @@ import {
 
 
 import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
 import { queueOfflineAction } from "@/lib/offline-sync";
 import { ModuleHeader } from "@/components/module-header";
 import { Skeleton } from "@/components/ui/skeleton";
