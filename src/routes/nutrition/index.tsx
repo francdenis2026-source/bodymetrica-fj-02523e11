@@ -36,6 +36,7 @@ import { getSession } from "@/lib/auth/auth.functions";
 
 
 import { getAdherenceData, saveAdherenceRecord, DailyAdherence, addAuditLog } from "@/lib/adherence";
+import { alertOnDeviation } from "@/lib/deviation-alerts";
 
 export const Route = createFileRoute("/nutrition/")({
   component: NutritionPage,
