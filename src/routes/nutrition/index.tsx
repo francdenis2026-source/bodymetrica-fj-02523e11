@@ -168,6 +168,7 @@ function NutritionPage() {
           <TabsTrigger value="plan">Plano Alimentar</TabsTrigger>
           <TabsTrigger value="diary">Diário & Macros</TabsTrigger>
           <TabsTrigger value="calculator">Calculadora Macros</TabsTrigger>
+          <TabsTrigger value="daily-plan">Planejamento Diário</TabsTrigger>
         </TabsList>
 
         <TabsContent value="diary" className="space-y-6">
@@ -440,6 +441,34 @@ function NutritionPage() {
               </Card>
             </div>
           </div>
+        </TabsContent>
+        <TabsContent value="daily-plan" className="space-y-6">
+          <Card className="surface border-none p-8">
+            <CardHeader className="px-0 pt-0">
+              <CardTitle className="text-xl font-black font-display tracking-tighter italic uppercase">Planejamento do Dia</CardTitle>
+              <CardDescription className="text-[10px] font-bold uppercase tracking-widest opacity-60 italic">Distribuição de macros e checklist de consumo</CardDescription>
+            </CardHeader>
+            <CardContent className="px-0 space-y-6">
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+                <div className="flex items-center gap-3 p-4 rounded-2xl bg-white/5 border border-white/5 group hover:bg-success/5 transition-all cursor-pointer">
+                  <div className="w-4 h-4 rounded-full border-2 border-primary group-hover:bg-success group-hover:border-success transition-all" />
+                  <span className="text-xs font-black uppercase tracking-widest italic">Café da Manhã</span>
+                </div>
+                <div className="flex items-center gap-3 p-4 rounded-2xl bg-white/5 border border-white/5 group hover:bg-success/5 transition-all cursor-pointer">
+                  <div className="w-4 h-4 rounded-full border-2 border-primary group-hover:bg-success group-hover:border-success transition-all" />
+                  <span className="text-xs font-black uppercase tracking-widest italic">Almoço</span>
+                </div>
+                <div className="flex items-center gap-3 p-4 rounded-2xl bg-white/5 border border-white/5 group hover:bg-success/5 transition-all cursor-pointer">
+                  <div className="w-4 h-4 rounded-full border-2 border-primary group-hover:bg-success group-hover:border-success transition-all" />
+                  <span className="text-xs font-black uppercase tracking-widest italic">Jantar</span>
+                </div>
+                <div className="flex items-center gap-3 p-4 rounded-2xl bg-white/5 border border-white/5 group hover:bg-success/5 transition-all cursor-pointer">
+                  <div className="w-4 h-4 rounded-full border-2 border-primary group-hover:bg-success group-hover:border-success transition-all" />
+                  <span className="text-xs font-black uppercase tracking-widest italic">Lanches</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </TabsContent>
       </Tabs>
     </div>

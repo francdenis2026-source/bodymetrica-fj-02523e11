@@ -94,6 +94,8 @@ function BodyPage() {
   const [exportPassword, setExportPassword] = useState("");
   const [exportViewLimit, setExportViewLimit] = useState("0");
   const [exportExpiration, setExportExpiration] = useState("7");
+  const [compareMode, setCompareMode] = useState(false);
+  const [selectedForComparison, setSelectedForComparison] = useState<string[]>([]);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
 
@@ -322,7 +324,16 @@ function BodyPage() {
             <CardHeader className="flex flex-col md:flex-row md:items-center justify-between p-8 gap-6">
               <div className="space-y-1">
                 <CardTitle className="text-xl font-black uppercase tracking-widest italic">HISTÓRICO DE PERFORMANCE</CardTitle>
-                <p className="text-[10px] font-bold text-foreground/40 uppercase tracking-widest">ANÁLISE DETALHADA E DRILL-DOWN DE REGISTROS</p>
+                <div className="flex items-center gap-2">
+                  <p className="text-[10px] font-bold text-foreground/40 uppercase tracking-widest">ANÁLISE DETALHADA E DRILL-DOWN</p>
+                  <Button 
+                    variant="link" 
+                    className="text-[9px] font-black p-0 h-auto text-primary"
+                    onClick={() => setCompareMode(!compareMode)}
+                  >
+                    {compareMode ? "SAIR DO COMPARATIVO" : "ATIVAR COMPARATIVO"}
+                  </Button>
+                </div>
               </div>
 
               <div className="flex items-center gap-3">
@@ -381,19 +392,40 @@ function BodyPage() {
             <CardContent className="px-0">
               <div className="space-y-0">
                 {[
-                  { date: "13 AGO, 08:30", type: "Medição", desc: "MEDIÇÃO MATINAL EM JEJUM", value: "82.4 KG", change: "-0.3 KG" },
-                  { date: "12 AGO, 12:45", type: "Alimentação", desc: "ALMOÇO DE ALTA PROTEÍNA", value: "850 KCAL", change: "+15% P" },
-                  { date: "11 AGO, 19:30", type: "Treino", desc: "TREINO DE FORÇA (A)", value: "VOLUME ALTO", change: "RECORD" }
+                  { id: "1", date: "13 AGO, 08:30", type: "Medição", desc: "MEDIÇÃO MATINAL EM JEJUM", value: "82.4 KG", change: "-0.3 KG", metrics: { kcal: 2300, water: 3000 } },
+                  { id: "2", date: "12 AGO, 12:45", type: "Alimentação", desc: "ALMOÇO DE ALTA PROTEÍNA", value: "850 KCAL", change: "+15% P", metrics: { kcal: 2450, water: 2800 } },
+                  { id: "3", date: "11 AGO, 19:30", type: "Treino", desc: "TREINO DE FORÇA (A)", value: "VOLUME ALTO", change: "RECORD", metrics: { kcal: 2200, water: 3200 } }
                 ].map((item, i) => (
-                  <div key={i} className="flex items-center justify-between px-8 py-6 hover:bg-white/5 transition-all border-b border-white/5 last:border-0 group cursor-pointer" onClick={() => {
-                    toast.custom((t) => (
-                      <SVGToast 
-                        type="info"
-                        title={`DETALHES: ${item.type}`}
-                        message={`Visualizando drill-down para ${item.date}. ${item.desc}`}
-                        onClose={() => toast.dismiss(t)}
-                      />
-                    ));
+                  <div key={i} className={cn(
+                    "flex items-center justify-between px-8 py-6 hover:bg-white/5 transition-all border-b border-white/5 last:border-0 group cursor-pointer relative",
+                    selectedForComparison.includes(item.id) && "bg-primary/10"
+                  )} onClick={() => {
+                    if (compareMode) {
+                      const newSelected = selectedForComparison.includes(item.id)
+                        ? selectedForComparison.filter(id => id !== item.id)
+                        : [...selectedForComparison, item.id].slice(-2);
+                      setSelectedForComparison(newSelected);
+                      
+                      if (newSelected.length === 2) {
+                        toast.custom((t) => (
+                          <SVGToast 
+                            type="info"
+                            title="COMPARANDO REGISTROS"
+                            message={`Diferença calórica detectada entre os períodos selecionados.`}
+                            onClose={() => toast.dismiss(t)}
+                          />
+                        ));
+                      }
+                    } else {
+                      toast.custom((t) => (
+                        <SVGToast 
+                          type="info"
+                          title={`DETALHES: ${item.type}`}
+                          message={`Visualizando drill-down para ${item.date}. ${item.desc}`}
+                          onClose={() => toast.dismiss(t)}
+                        />
+                      ));
+                    }
                   }}>
                     <div className="flex flex-col gap-1">
                       <span className="text-xs font-black uppercase tracking-[0.2em] text-foreground/80 group-hover:text-primary transition-colors">{item.date}</span>

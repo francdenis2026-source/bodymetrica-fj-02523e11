@@ -96,7 +96,12 @@ export const generateMonthlyPDF = (data: MonthlyReportData) => {
     fileName: `Performance_Mensal_${data.month}.pdf`,
     publicLink: `https://bodymetrica.link/share/${crypto.randomUUID().slice(0, 8)}`,
     expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
-    viewsCount: 0
+    viewsCount: 0,
+    comparisonData: {
+      weightVar: "-3.1%",
+      calVar: "+5.2%",
+      waterVar: "+18.5%"
+    }
   };
   localStorage.setItem('bodymetrica_export_history', JSON.stringify([exportEntry, ...history].slice(0, 50)));
 };
