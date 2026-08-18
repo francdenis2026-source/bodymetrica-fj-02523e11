@@ -5,6 +5,8 @@ import { exportToCSV } from "@/lib/export";
 import { toast } from "sonner";
 import { SVGToast } from "@/components/ui/svg-toast";
 import { generateComparisonPDF, exportReportAsImage } from "@/lib/comparison-reports";
+import { generateMonthlyPDF } from "@/lib/monthly-reports";
+
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -318,6 +320,40 @@ function BodyPage() {
                 <p className="text-[10px] font-bold text-foreground/40 uppercase tracking-widest">REGISTROS CRONOLÓGICOS DE EVOLUÇÃO</p>
               </div>
               <div className="flex items-center gap-3">
+                <Button 
+                  variant="outline" 
+                  className="gap-2 h-12 px-6 font-black uppercase tracking-widest border-2 bg-primary/10 border-primary/20 hover:bg-primary/20 text-primary"
+                  onClick={() => {
+                    generateMonthlyPDF({
+                      userName: userData?.name || "Usuário",
+                      month: "Agosto 2026",
+                      nutrition: {
+                        calories: [{ date: "01/08", value: 2450 }, { date: "10/08", value: 2380 }, { date: "15/08", value: 2420 }],
+                        protein: [{ date: "01/08", value: 185 }, { date: "10/08", value: 175 }, { date: "15/08", value: 180 }],
+                        carbs: [{ date: "01/08", value: 250 }, { date: "10/08", value: 240 }, { date: "15/08", value: 245 }],
+                        fat: [{ date: "01/08", value: 75 }, { date: "10/08", value: 80 }, { date: "15/08", value: 78 }],
+                        goals: { calories: 2400, protein: 180, carbs: 250, fat: 80 }
+                      },
+                      hydration: {
+                        data: [{ date: "01/08", value: 2800 }, { date: "10/08", value: 3200 }, { date: "15/08", value: 3000 }],
+                        goal: 3000
+                      },
+                      evolution: {
+                        weight: mockWeightData.map(d => ({ date: d.date, value: d.weight }))
+                      }
+                    });
+                    toast.custom((t) => (
+                      <SVGToast 
+                        type="success"
+                        title="RELATÓRIO MENSAL"
+                        message="O relatório de performance mensal foi gerado com sucesso."
+                        onClose={() => toast.dismiss(t)}
+                      />
+                    ));
+                  }}
+                >
+                  <FileDown size={18} /> RELATÓRIO MENSAL PDF
+                </Button>
                 <Button variant="outline" className="gap-2 h-12 px-6 font-black uppercase tracking-widest border-2 bg-white/5 border-white/10" asChild>
                   <Link to="/help">
                     ENTENDER MÉTRICAS
@@ -334,6 +370,7 @@ function BodyPage() {
                   <FileDown size={18} /> CSV
                 </Button>
               </div>
+
             </CardHeader>
             <CardContent className="px-0">
               <div className="space-y-0">
