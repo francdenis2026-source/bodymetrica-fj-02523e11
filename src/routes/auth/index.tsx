@@ -347,11 +347,12 @@ function AuthPage() {
                 onChange={(e) => setMfaCode(e.target.value)}
                 placeholder={isRecoveryMode ? "XXXXXXXX" : "000000"}
                 className={cn(
-                  "h-16 bg-white/5 border-white/10 rounded-2xl text-center text-3xl font-black text-white focus:border-primary/50 transition-all",
+                  "h-16 bg-white/5 border-white/10 rounded-2xl text-center text-3xl font-black text-white focus:border-primary/50 focus:ring-2 focus:ring-primary/20 transition-all outline-none",
                   !isRecoveryMode && "tracking-[0.4em]"
                 )}
                 maxLength={isRecoveryMode ? 8 : 6}
                 autoFocus
+                aria-label={isRecoveryMode ? "Código de recuperação" : "Código de autenticação"}
               />
             </div>
             <div className="space-y-3">
