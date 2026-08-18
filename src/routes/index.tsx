@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -72,6 +73,8 @@ const HOME_FEATURES = [
   },
 ];
 
+const easeOut = [0.23, 1, 0.32, 1] as const;
+
 function Index() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -92,7 +95,7 @@ function Index() {
             to="/"
             className="group flex items-center gap-3 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           >
-            <div className="flex size-9 items-center justify-center rounded-xl bg-primary text-sm font-semibold text-primary-foreground shadow-sm transition-transform group-hover:-translate-y-0.5">
+            <div className="flex size-9 items-center justify-center rounded-xl bg-primary text-sm font-semibold text-primary-foreground shadow-sm transition-transform duration-150 ease-out group-hover:-translate-y-0.5 group-active:scale-[0.97] motion-reduce:transition-none">
               B
             </div>
             <div className="leading-tight">
@@ -106,11 +109,11 @@ function Index() {
           </Link>
 
           {isLoggedIn ? (
-            <Button asChild size="sm" variant="outline" className="rounded-xl bg-background/70">
+            <Button asChild size="sm" variant="outline" className="rounded-xl bg-background/70 transition-transform duration-150 ease-out active:scale-[0.97] motion-reduce:transition-none">
               <Link to="/dashboard">Abrir painel</Link>
             </Button>
           ) : (
-            <Button asChild size="sm" variant="ghost" className="rounded-xl">
+            <Button asChild size="sm" variant="ghost" className="rounded-xl transition-transform duration-150 ease-out active:scale-[0.97] motion-reduce:transition-none">
               <Link
                 to="/auth"
                 search={{
@@ -153,7 +156,11 @@ function Index() {
                   <Skeleton className="h-16 w-full max-w-xl" />
                 </div>
               ) : (
-                <>
+                <motion.div
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.42, ease: easeOut }}
+                >
                   <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-border/80 bg-background/80 px-3 py-1.5 text-sm text-muted-foreground shadow-sm backdrop-blur-md">
                     <span className="size-2 rounded-full bg-primary" aria-hidden="true" />
                     Sua evolução em uma única visão
@@ -166,7 +173,7 @@ function Index() {
                   <p className="mt-5 max-w-xl text-base leading-7 text-muted-foreground md:text-lg md:leading-8">
                     Composição corporal, alimentação, hidratação e treino reunidos em uma experiência direta, visual e fácil de acompanhar todos os dias.
                   </p>
-                </>
+                </motion.div>
               )}
 
               <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -176,28 +183,38 @@ function Index() {
                     <Skeleton className="h-12 w-full rounded-xl sm:w-40" />
                   </>
                 ) : (
-                  <>
+                  <motion.div
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.36, delay: 0.08, ease: easeOut }}
+                    className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row"
+                  >
                     <QuickOnboarding isLoggedIn={isLoggedIn} />
                     <Button
                       asChild
                       variant="outline"
                       size="lg"
-                      className="h-12 rounded-xl border-border/80 bg-background/65 px-6 backdrop-blur-md"
+                      className="h-12 rounded-xl border-border/80 bg-background/65 px-6 backdrop-blur-md transition-[transform,border-color,background-color] duration-150 ease-out active:scale-[0.97] motion-reduce:transition-none"
                     >
-                      <Link to="/about" className="gap-2">
+                      <Link to="/about" className="group gap-2">
                         Conhecer o projeto
-                        <ArrowRight size={16} />
+                        <ArrowRight size={16} className="transition-transform duration-150 ease-out group-hover:translate-x-0.5 motion-reduce:transition-none" />
                       </Link>
                     </Button>
-                  </>
+                  </motion.div>
                 )}
               </div>
 
-              <div className="mt-7 grid max-w-2xl gap-3 sm:grid-cols-3">
+              <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.38, delay: 0.12, ease: easeOut }}
+                className="mt-7 grid max-w-2xl gap-3 sm:grid-cols-3"
+              >
                 {HOME_FEATURES.map(({ icon: Icon, title, description }) => (
                   <div
                     key={title}
-                    className="rounded-2xl border border-border/70 bg-background/70 p-4 shadow-sm backdrop-blur-md"
+                    className="rounded-2xl border border-border/70 bg-background/70 p-4 shadow-sm backdrop-blur-md transition-[transform,border-color,background-color] duration-200 ease-out hover:-translate-y-0.5 hover:border-primary/25 hover:bg-background/80 motion-reduce:transition-none"
                   >
                     <div className="mb-3 flex size-9 items-center justify-center rounded-xl bg-primary/10 text-primary">
                       <Icon size={18} />
@@ -210,16 +227,21 @@ function Index() {
                     </p>
                   </div>
                 ))}
-              </div>
+              </motion.div>
             </div>
 
-            <div className="relative mx-auto w-full max-w-[430px] lg:max-w-[480px] xl:max-w-[510px]">
-              <div className="overflow-hidden rounded-[1.75rem] border border-white/15 bg-card shadow-2xl shadow-black/20">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.985, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ duration: 0.48, delay: 0.06, ease: easeOut }}
+              className="relative mx-auto w-full max-w-[430px] lg:max-w-[480px] xl:max-w-[510px]"
+            >
+              <div className="group overflow-hidden rounded-[1.75rem] border border-white/15 bg-card shadow-2xl shadow-black/20">
                 <div className="relative aspect-[4/4.7] overflow-hidden bg-muted sm:aspect-[4/4.6] lg:aspect-[4/4.45]">
                   <img
                     src="https://images.unsplash.com/photo-1599058917212-d750089bc07e?auto=format&fit=crop&q=88&w=1400"
                     alt="Pessoa treinando em ambiente profissional"
-                    className="h-full w-full object-cover object-center"
+                    className="h-full w-full object-cover object-center transition-transform duration-500 [transition-timing-function:cubic-bezier(0.23,1,0.32,1)] group-hover:scale-[1.015] motion-reduce:transition-none"
                     fetchPriority="high"
                     loading="eager"
                   />
@@ -239,16 +261,16 @@ function Index() {
                 <p className="text-xs font-medium text-muted-foreground">Visão integrada</p>
                 <p className="mt-1 text-sm font-semibold">Corpo, nutrição, água e treino no mesmo fluxo.</p>
               </div>
-            </div>
+            </motion.div>
           </div>
 
           <footer className="flex flex-col gap-3 border-t border-border/60 py-4 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
             <p>Body Métrica FJ · Feijó, Acre · desenvolvido por Franc D'nis</p>
             <nav className="flex flex-wrap gap-x-4 gap-y-1" aria-label="Rodapé">
-              <Link to="/about" className="transition-colors hover:text-foreground">Sobre</Link>
-              <Link to="/tools" className="transition-colors hover:text-foreground">Ferramentas</Link>
-              <Link to="/help" className="transition-colors hover:text-foreground">Ajuda</Link>
-              <Link to="/terms" className="transition-colors hover:text-foreground">Termos</Link>
+              <Link to="/about" className="transition-colors duration-150 ease-out hover:text-foreground">Sobre</Link>
+              <Link to="/tools" className="transition-colors duration-150 ease-out hover:text-foreground">Ferramentas</Link>
+              <Link to="/help" className="transition-colors duration-150 ease-out hover:text-foreground">Ajuda</Link>
+              <Link to="/terms" className="transition-colors duration-150 ease-out hover:text-foreground">Termos</Link>
             </nav>
           </footer>
         </section>
@@ -332,7 +354,7 @@ function QuickOnboarding({ isLoggedIn }: { isLoggedIn: boolean }) {
         <Button
           size="lg"
           onClick={handleAction}
-          className="h-12 w-full rounded-xl px-6 shadow-sm sm:w-auto"
+          className="h-12 w-full rounded-xl px-6 shadow-sm transition-transform duration-150 ease-out active:scale-[0.97] sm:w-auto motion-reduce:transition-none"
         >
           {isLoggedIn ? "Novo registro" : "Começar agora"}
           <ArrowRight className="ml-2" size={16} />
@@ -352,49 +374,65 @@ function QuickOnboarding({ isLoggedIn }: { isLoggedIn: boolean }) {
             </DialogDescription>
           </DialogHeader>
 
-          {step === 1 ? (
-            <div className="mt-6 grid grid-cols-2 gap-3">
-              {quickActions.map(({ icon: Icon, label, type }) => (
-                <button
-                  key={label}
-                  type="button"
-                  onClick={() => {
-                    setData({ ...data, type });
-                    setStep(2);
-                  }}
-                  className="flex min-h-28 flex-col items-start justify-between rounded-2xl border border-border bg-card p-4 text-left transition-colors hover:border-primary/30 hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-                >
-                  <div className="flex size-9 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                    <Icon size={18} />
-                  </div>
-                  <span className="text-sm font-medium">{label}</span>
-                </button>
-              ))}
-            </div>
-          ) : (
-            <div className="mt-6 space-y-5">
-              <label className="block rounded-2xl border border-border bg-card p-4">
-                <span className="text-sm font-medium">Valor aproximado</span>
-                <input
-                  autoFocus
-                  type="text"
-                  placeholder="Ex.: 500 ml, 200 g, 1 h"
-                  className="mt-3 w-full border-0 border-b border-border bg-transparent px-0 py-2 text-xl font-semibold outline-none transition-colors placeholder:text-muted-foreground/50 focus:border-primary"
-                  value={data.value}
-                  onChange={(event) => setData({ ...data, value: event.target.value })}
-                />
-              </label>
+          <AnimatePresence mode="wait" initial={false}>
+            {step === 1 ? (
+              <motion.div
+                key="actions"
+                initial={{ opacity: 0, x: -8 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -6 }}
+                transition={{ duration: 0.18, ease: easeOut }}
+                className="mt-6 grid grid-cols-2 gap-3"
+              >
+                {quickActions.map(({ icon: Icon, label, type }) => (
+                  <button
+                    key={label}
+                    type="button"
+                    onClick={() => {
+                      setData({ ...data, type });
+                      setStep(2);
+                    }}
+                    className="flex min-h-28 flex-col items-start justify-between rounded-2xl border border-border bg-card p-4 text-left transition-[transform,border-color,background-color] duration-150 ease-out hover:border-primary/30 hover:bg-muted/40 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary motion-reduce:transition-none"
+                  >
+                    <div className="flex size-9 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                      <Icon size={18} />
+                    </div>
+                    <span className="text-sm font-medium">{label}</span>
+                  </button>
+                ))}
+              </motion.div>
+            ) : (
+              <motion.div
+                key="value"
+                initial={{ opacity: 0, x: 8 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 6 }}
+                transition={{ duration: 0.18, ease: easeOut }}
+                className="mt-6 space-y-5"
+              >
+                <label className="block rounded-2xl border border-border bg-card p-4">
+                  <span className="text-sm font-medium">Valor aproximado</span>
+                  <input
+                    autoFocus
+                    type="text"
+                    placeholder="Ex.: 500 ml, 200 g, 1 h"
+                    className="mt-3 w-full border-0 border-b border-border bg-transparent px-0 py-2 text-xl font-semibold outline-none transition-colors duration-150 ease-out placeholder:text-muted-foreground/50 focus:border-primary"
+                    value={data.value}
+                    onChange={(event) => setData({ ...data, value: event.target.value })}
+                  />
+                </label>
 
-              <div className="flex gap-3">
-                <Button variant="ghost" onClick={() => setStep(1)} className="flex-1 rounded-xl">
-                  Voltar
-                </Button>
-                <Button onClick={finish} disabled={!data.value} className="flex-[2] rounded-xl">
-                  Confirmar
-                </Button>
-              </div>
-            </div>
-          )}
+                <div className="flex gap-3">
+                  <Button variant="ghost" onClick={() => setStep(1)} className="flex-1 rounded-xl transition-transform duration-150 ease-out active:scale-[0.97] motion-reduce:transition-none">
+                    Voltar
+                  </Button>
+                  <Button onClick={finish} disabled={!data.value} className="flex-[2] rounded-xl transition-transform duration-150 ease-out active:scale-[0.97] motion-reduce:transition-none">
+                    Confirmar
+                  </Button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </DialogContent>
     </Dialog>
