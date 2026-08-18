@@ -453,85 +453,8 @@ function SettingsPage() {
                   </div>
                 </div>
               </div>
+              </div>
             </div>
-
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div className="space-y-0.5">
-                    <Label className="text-sm font-medium">Resumo Diário</Label>
-                    <p className="text-xs text-muted-foreground">Insights e pendências do dia</p>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <Input type="time" defaultValue="21:30" className="h-8 w-24 text-[10px]" />
-                    <Switch defaultChecked />
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div className="space-y-0.5">
-                    <Label className="text-sm font-medium">Janela de Atraso (Macros)</Label>
-                    <p className="text-xs text-muted-foreground">Tempo antes do alerta de atraso</p>
-                  </div>
-                  <Select defaultValue="15">
-                    <SelectTrigger className="h-8 w-24 text-[10px] uppercase font-black">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="5">5 min</SelectItem>
-                      <SelectItem value="15">15 min</SelectItem>
-                      <SelectItem value="30">30 min</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div className="space-y-0.5">
-                    <Label className="text-sm font-medium">Lembretes de Refeições</Label>
-                    <p className="text-xs text-muted-foreground">Notificar nos horários estratégicos de alimentação</p>
-                  </div>
-                  <Switch defaultChecked />
-                </div>
-                <div className="pl-4 space-y-4 border-l-2 border-primary/20 ml-2">
-                   <div className="flex flex-col gap-3">
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
-                        <Clock size={12} /> Horários Customizados
-                      </span>
-                      <div className="flex flex-wrap gap-2">
-                         <Button variant="outline" size="sm" className="h-7 text-[9px] border-primary/30">07:30</Button>
-                         <Button variant="outline" size="sm" className="h-7 text-[9px] border-primary/30">12:30</Button>
-                         <Button variant="outline" size="sm" className="h-7 text-[9px] border-primary/30">16:00</Button>
-                         <Button variant="outline" size="sm" className="h-7 text-[9px] border-primary/30">20:00</Button>
-                         <Button variant="ghost" size="sm" className="h-7 w-7 p-0 rounded-full border border-dashed border-muted-foreground/30">+</Button>
-                      </div>
-                   </div>
-                </div>
-              </div>
-
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div className="space-y-0.5">
-                    <Label className="text-sm font-medium">Macronutrientes</Label>
-                    <p className="text-xs text-muted-foreground">Avisar sobre batimento de proteínas e calorias</p>
-                  </div>
-                  <Switch defaultChecked />
-                </div>
-                <div className="pl-4 space-y-4 border-l-2 border-primary/20 ml-2">
-                   <div className="flex flex-col gap-3">
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
-                        <Clock size={12} /> Horários de Lembrete
-                      </span>
-                      <div className="flex flex-wrap gap-2">
-                         <Button variant="outline" size="sm" className="h-7 text-[9px] border-primary/30">12:00</Button>
-                         <Button variant="outline" size="sm" className="h-7 text-[9px] border-primary/30">19:00</Button>
-                         <Button variant="ghost" size="sm" className="h-7 w-7 p-0 rounded-full border border-dashed border-muted-foreground/30">+</Button>
-                      </div>
-                   </div>
-                </div>
-              </div>
               
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
