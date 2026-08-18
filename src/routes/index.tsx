@@ -242,7 +242,7 @@ function Index() {
         </main>
 
         {/* Footer - Scaled down */}
-        <footer className="mt-auto py-4 md:py-6 border-t border-white/5 bg-background/50 backdrop-blur-md">
+        <footer className="mt-auto py-2 md:py-6 border-t border-white/5 bg-background/50 backdrop-blur-md">
           <div className="container mx-auto px-4 max-w-6xl">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4 md:gap-8 text-center md:text-left">
               <div className="flex items-center gap-2 opacity-80 grayscale hover:grayscale-0 transition-all">
