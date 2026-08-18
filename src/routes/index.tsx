@@ -115,7 +115,7 @@ function Index() {
 
 
         {/* Main Content Area */}
-        <main className="flex-1 flex flex-col pt-14 md:pt-16">
+        <main className="flex-1 flex flex-col pt-14 md:pt-16 max-h-[calc(100vh-60px)] md:max-h-none">
           {/* Hero Section - Optimized for Single Page View */}
           <section className="relative flex-1 flex flex-col justify-center py-2 md:py-6 px-4 md:px-6 overflow-hidden">
             <div className="container mx-auto max-w-7xl grid lg:grid-cols-2 gap-2 lg:gap-8 items-center">
@@ -258,10 +258,10 @@ function Index() {
               </nav>
               
               <div className="flex flex-col items-center md:items-end gap-1">
-                <p className="text-xs text-muted-foreground/80 font-medium">
+                <p className="text-[10px] md:text-xs text-muted-foreground/80 font-medium">
                   © {new Date().getFullYear()} Body Métrica FJ.
                 </p>
-                <p className="text-[10px] text-muted-foreground/60 uppercase tracking-widest font-bold">
+                <p className="text-[9px] md:text-[10px] text-muted-foreground/60 uppercase tracking-widest font-bold">
                   dev Franc D'nis Feijó, AC
                 </p>
               </div>
