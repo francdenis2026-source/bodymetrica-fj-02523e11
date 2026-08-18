@@ -26,6 +26,7 @@ import {
 
 
 import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
 import { queueOfflineAction } from "@/lib/offline-sync";
 import { ModuleHeader } from "@/components/module-header";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -449,22 +450,70 @@ function NutritionPage() {
               <CardDescription className="text-[10px] font-bold uppercase tracking-widest opacity-60 italic">Distribuição de macros e checklist de consumo</CardDescription>
             </CardHeader>
             <CardContent className="px-0 space-y-6">
-              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-                <div className="flex items-center gap-3 p-4 rounded-2xl bg-white/5 border border-white/5 group hover:bg-success/5 transition-all cursor-pointer">
-                  <div className="w-4 h-4 rounded-full border-2 border-primary group-hover:bg-success group-hover:border-success transition-all" />
-                  <span className="text-xs font-black uppercase tracking-widest italic">Café da Manhã</span>
+              <div className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-primary">VISUALIZAÇÃO DE CALENDÁRIO</h4>
+                  <div className="flex gap-2">
+                    <Button variant="outline" size="sm" className="h-8 text-[9px] uppercase font-black tracking-widest bg-white/5">AGOSTO 2026</Button>
+                  </div>
                 </div>
-                <div className="flex items-center gap-3 p-4 rounded-2xl bg-white/5 border border-white/5 group hover:bg-success/5 transition-all cursor-pointer">
-                  <div className="w-4 h-4 rounded-full border-2 border-primary group-hover:bg-success group-hover:border-success transition-all" />
-                  <span className="text-xs font-black uppercase tracking-widest italic">Almoço</span>
+
+                <div className="grid grid-cols-7 gap-1 md:gap-3">
+                  {['D', 'S', 'T', 'Q', 'Q', 'S', 'S'].map(day => (
+                    <div key={day} className="text-center text-[9px] font-black text-muted-foreground py-2">{day}</div>
+                  ))}
+                  {Array.from({ length: 31 }).map((_, i) => {
+                    const day = i + 1;
+                    const status = day < 18 ? (day % 3 === 0 ? 'warning' : 'success') : day === 18 ? 'current' : 'pending';
+                    return (
+                      <div 
+                        key={i} 
+                        className={cn(
+                          "aspect-square rounded-xl md:rounded-2xl border flex flex-col items-center justify-center gap-1 transition-all cursor-pointer hover:scale-105",
+                          status === 'success' ? "bg-success/10 border-success/20 text-success" :
+                          status === 'warning' ? "bg-warning/10 border-warning/20 text-warning" :
+                          status === 'current' ? "bg-primary border-primary text-primary-foreground shadow-lg shadow-primary/30" :
+                          "bg-white/5 border-white/10 text-muted-foreground/50"
+                        )}
+                        onClick={() => {
+                          if (status !== 'pending') {
+                            toast.custom((t) => (
+                              <SVGToast 
+                                type="info"
+                                title={`STATUS DO DIA ${day}/08`}
+                                message="Consumo: Café (OK), Almoço (OK), Jantar (Pendente). Treino: Concluído."
+                                onClose={() => toast.dismiss(t)}
+                              />
+                            ));
+                          }
+                        }}
+                      >
+                        <span className="text-[10px] font-black">{day}</span>
+                        {status !== 'pending' && status !== 'current' && (
+                          <div className="flex gap-0.5">
+                            <div className="w-1 h-1 rounded-full bg-current opacity-40" />
+                            <div className="w-1 h-1 rounded-full bg-current opacity-40" />
+                            <div className="w-1 h-1 rounded-full bg-current opacity-40" />
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
-                <div className="flex items-center gap-3 p-4 rounded-2xl bg-white/5 border border-white/5 group hover:bg-success/5 transition-all cursor-pointer">
-                  <div className="w-4 h-4 rounded-full border-2 border-primary group-hover:bg-success group-hover:border-success transition-all" />
-                  <span className="text-xs font-black uppercase tracking-widest italic">Jantar</span>
-                </div>
-                <div className="flex items-center gap-3 p-4 rounded-2xl bg-white/5 border border-white/5 group hover:bg-success/5 transition-all cursor-pointer">
-                  <div className="w-4 h-4 rounded-full border-2 border-primary group-hover:bg-success group-hover:border-success transition-all" />
-                  <span className="text-xs font-black uppercase tracking-widest italic">Lanches</span>
+                
+                <div className="flex flex-wrap gap-4 pt-4 border-t border-white/5">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-success" />
+                    <span className="text-[9px] font-bold uppercase text-muted-foreground tracking-widest">Metas Batidas</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-warning" />
+                    <span className="text-[9px] font-bold uppercase text-muted-foreground tracking-widest">Abaixo do Plano</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-primary" />
+                    <span className="text-[9px] font-bold uppercase text-muted-foreground tracking-widest">Hoje</span>
+                  </div>
                 </div>
               </div>
             </CardContent>
