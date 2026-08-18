@@ -8,7 +8,7 @@ import { generateComparisonPDF, exportReportAsImage } from "@/lib/comparison-rep
 import { generateMonthlyPDF } from "@/lib/monthly-reports";
 
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 

@@ -516,3 +516,34 @@ function MealCard({ name, time, items, confirmed: initialConfirmed }: { name: st
     </Card>
   );
 }
+
+function MealGoalCard({ name, kcal, p, c, g }: { name: string; kcal: number; p: number; c: number; g: number }) {
+  return (
+    <div className="flex-1 p-6 rounded-[2.5rem] bg-white/5 border border-white/10 relative overflow-hidden group hover:bg-primary/5 transition-all">
+      <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+        <Target size={48} className="text-primary" />
+      </div>
+      <div className="text-[10px] font-black text-primary uppercase tracking-[0.2em] mb-2">META POR REFEIÇÃO</div>
+      <h3 className="text-lg font-black italic uppercase tracking-tighter mb-4">{name}</h3>
+      <div className="grid grid-cols-2 gap-y-3 gap-x-6">
+        <div className="space-y-0.5">
+          <div className="text-[8px] font-black text-muted-foreground uppercase">KCAL</div>
+          <div className="text-sm font-black italic">{kcal}</div>
+        </div>
+        <div className="space-y-0.5">
+          <div className="text-[8px] font-black text-muted-foreground uppercase">PROT</div>
+          <div className="text-sm font-black italic text-success">{p}g</div>
+        </div>
+        <div className="space-y-0.5">
+          <div className="text-[8px] font-black text-muted-foreground uppercase">CARB</div>
+          <div className="text-sm font-black italic text-info">{c}g</div>
+        </div>
+        <div className="space-y-0.5">
+          <div className="text-[8px] font-black text-muted-foreground uppercase">GORD</div>
+          <div className="text-sm font-black italic text-warning">{g}g</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
