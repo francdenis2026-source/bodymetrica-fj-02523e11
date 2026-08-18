@@ -147,14 +147,14 @@ function Index() {
 
       <main className="relative isolate min-h-[calc(100dvh-4rem)] overflow-hidden">
         <img
-          src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=82&w=2200"
+          src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=86&w=2200"
           alt=""
           aria-hidden="true"
           className="absolute inset-0 -z-30 h-full w-full object-cover object-center"
         />
-        <div className="absolute inset-0 -z-20 bg-background/84 dark:bg-background/90" />
-        <div className="absolute inset-0 -z-10 bg-gradient-to-r from-background via-background/94 to-background/68" />
-        <div className="absolute inset-x-0 bottom-0 -z-10 h-56 bg-gradient-to-t from-background via-background/74 to-transparent" />
+        <div className="absolute inset-0 -z-20 bg-background/42 dark:bg-background/50" />
+        <div className="absolute inset-0 -z-10 bg-gradient-to-r from-background/92 via-background/58 to-background/12 dark:from-background/94 dark:via-background/62 dark:to-background/18" />
+        <div className="absolute inset-x-0 bottom-0 -z-10 h-48 bg-gradient-to-t from-background/64 via-background/24 to-transparent" />
 
         <section className="container mx-auto flex min-h-[calc(100dvh-4rem)] max-w-7xl flex-col px-4 md:px-6">
           <div className="grid flex-1 items-center gap-8 py-7 md:py-9 lg:grid-cols-[1.06fr_0.94fr] lg:gap-12 lg:py-8">
@@ -269,11 +269,6 @@ function Index() {
                     </p>
                   </div>
                 </div>
-              </div>
-
-              <div className="absolute -bottom-4 -left-4 hidden max-w-[220px] rounded-2xl border border-border/85 bg-background/96 p-3.5 shadow-xl backdrop-blur md:block">
-                <p className="text-xs font-medium text-muted-foreground">Visão integrada</p>
-                <p className="mt-1 text-sm font-semibold leading-5">Corpo, nutrição, água e treino no mesmo fluxo.</p>
               </div>
             </motion.div>
           </div>
