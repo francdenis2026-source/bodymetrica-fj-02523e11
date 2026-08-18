@@ -398,32 +398,62 @@ function SettingsPage() {
                         <Clock size={12} /> Horários de Lembrete
                       </span>
                       <div className="flex flex-wrap gap-2">
-                         <Button 
-                            variant="outline" 
-                            size="sm" 
-                            className="h-7 text-[9px] border-primary/30"
-                            onClick={() => {
-                              if ("Notification" in window) {
-                                Notification.requestPermission().then(permission => {
-                                  if (permission === "granted") {
-                                    new Notification("Body Métrica FJ", {
-                                      body: "Lembrete de hidratação configurado para as 08:00",
-                                      icon: "/favicon.svg"
-                                    });
-                                  }
-                                });
-                              }
-                            }}
-                         >
-                           08:00
-                         </Button>
+                         <Button variant="outline" size="sm" className="h-7 text-[9px] border-primary/30">08:00</Button>
                          <Button variant="outline" size="sm" className="h-7 text-[9px] border-primary/30">14:00</Button>
                          <Button variant="outline" size="sm" className="h-7 text-[9px] border-primary/30">20:00</Button>
-                         <Button variant="ghost" size="sm" className="h-7 w-7 p-0 rounded-full border border-dashed border-muted-foreground/30">+</Button>
                       </div>
                    </div>
                 </div>
               </div>
+
+              <div className="pt-4 border-t border-white/5 space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label className="text-sm font-medium">Resumo Diário</Label>
+                    <p className="text-xs text-muted-foreground">Relatório consolidado ao final do dia</p>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <Button 
+                      size="sm" 
+                      variant="outline" 
+                      className="h-8 text-[9px] font-black uppercase tracking-widest border-primary/20 hover:bg-primary/10"
+                      onClick={handleTestNotification}
+                      disabled={isLoading}
+                    >
+                      Teste de Notificação
+                    </Button>
+                    <Switch defaultChecked />
+                  </div>
+                </div>
+
+                <div className="mt-6 space-y-3">
+                  <h4 className="text-[10px] font-black uppercase tracking-widest text-primary flex items-center gap-2">
+                    <HistoryIcon size={12} /> Histórico de Notificações
+                  </h4>
+                  <div className="space-y-2 max-h-48 overflow-y-auto custom-scrollbar pr-2">
+                    {notifHistory.length > 0 ? (
+                      notifHistory.map((log) => (
+                        <div key={log.id} className="p-3 rounded-xl bg-white/5 border border-white/5 flex items-center justify-between">
+                          <div className="space-y-0.5">
+                            <p className="text-[11px] font-bold">{log.title}</p>
+                            <p className="text-[9px] text-muted-foreground uppercase">{format(new Date(log.timestamp), "HH:mm - dd/MM", { locale: ptBR })}</p>
+                          </div>
+                          <Badge variant="outline" className={cn(
+                            "text-[8px] font-black uppercase px-2 py-0",
+                            log.status === 'read' ? "border-success text-success" : 
+                            log.status === 'sent' ? "border-primary text-primary" : "border-warning text-warning"
+                          )}>
+                            {log.status === 'read' ? 'Lida' : log.status === 'sent' ? 'Enviada' : 'Pendente'}
+                          </Badge>
+                        </div>
+                      ))
+                    ) : (
+                      <p className="text-[10px] text-muted-foreground italic text-center py-4">Nenhuma notificação registrada.</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
 
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
