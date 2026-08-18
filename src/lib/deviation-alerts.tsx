@@ -2,6 +2,7 @@ import { toast } from "sonner";
 import { SVGToast } from "@/components/ui/svg-toast";
 import { addAuditLog, getAdherenceData, type DailyAdherence } from "./adherence";
 import { buildWeeklySummary } from "./weekly-adherence";
+import { addNotificationLog } from "./notification-history";
 
 const THRESHOLD = 15; // desvio significativo em pontos percentuais
 
@@ -67,6 +68,12 @@ export const alertOnDeviation = (
     action: "Alerta de Desvio",
     details: `${origin} | ${result.lines.join(" ")}`,
     type: "adherence",
+  });
+
+  addNotificationLog({
+    title: `${result.title} — ${origin}`,
+    type: "adherence",
+    status: "sent",
   });
 
   toast.custom((t) => (
