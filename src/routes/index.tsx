@@ -117,9 +117,9 @@ function Index() {
         {/* Main Content Area */}
         <main className="flex-1 flex flex-col pt-16">
           {/* Hero Section - Optimized for Single Page View */}
-          <section className="relative flex-1 flex items-center py-6 px-4 md:px-6 overflow-hidden min-h-[calc(100vh-160px)] md:min-h-0">
-            <div className="container mx-auto max-w-7xl grid lg:grid-cols-2 gap-8 items-center">
-              <div className="text-left space-y-4 relative z-10 flex flex-col justify-center">
+          <section className="relative flex-1 flex items-center py-6 px-4 md:px-6 overflow-hidden min-h-[450px] md:min-h-0">
+            <div className="container mx-auto max-w-7xl grid lg:grid-cols-2 gap-4 lg:gap-8 items-center">
+              <div className="text-left space-y-3 md:space-y-4 relative z-10 flex flex-col justify-center">
                 {isLoading ? (
                   <Skeleton className="h-8 w-48 rounded-full bg-white/5" />
                 ) : (
