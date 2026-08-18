@@ -267,7 +267,14 @@ function AuthPage() {
         } 
       });
       if (result.success) {
-        toast.success(result.message || "Cadastro realizado! Verifique seu e-mail.");
+        toast.custom((t) => (
+          <SVGToast 
+            type="success"
+            title="CADASTRO REALIZADO"
+            message={result.message || "Verifique seu e-mail para confirmar a conta."}
+            onClose={() => toast.dismiss(t)}
+          />
+        ), { duration: 6000 });
         navigate({ to: "/auth/verify" as any, search: {} as any });
       } else {
         toast.error(result.message || "Erro ao cadastrar.");
