@@ -70,7 +70,8 @@ function Index() {
   }, []);
 
   return (
-    <div className="flex flex-col min-h-screen bg-background relative overflow-x-hidden">
+    <div className="flex flex-col h-screen bg-background relative overflow-hidden">
+      <div className="flex flex-col h-full bg-background relative overflow-y-auto custom-scrollbar">
       {/* Professional Full Background Image with better contrast */}
       <div 
         className="fixed inset-0 z-0 pointer-events-none opacity-40 transition-opacity duration-700"
@@ -112,129 +113,132 @@ function Index() {
         </header>
 
 
-        {/* Hero Section - Optimized for Single Page View */}
-        <section className="relative flex-1 flex items-center pt-12 pb-6 px-4 overflow-hidden min-h-[calc(100vh-64px)] sm:min-h-0 sm:h-auto lg:min-h-[calc(100vh-64px)]">
-          <div className="container mx-auto max-w-7xl grid lg:grid-cols-2 gap-6 items-center h-full">
-            <div className="text-left space-y-4 relative z-10 flex flex-col justify-center">
-              {isLoading ? (
-                <Skeleton className="h-8 w-48 rounded-full bg-white/5" />
-              ) : (
-                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-[10px] font-black uppercase tracking-[0.2em] w-fit animate-in fade-in slide-in-from-left-4 duration-700 border border-primary/20 backdrop-blur-md">
-                  <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-                  <span>Alta Performance & Precisão</span>
-                </div>
-              )}
-              
-              {isLoading ? (
-                <div className="space-y-2">
-                  <Skeleton className="h-14 w-full max-w-md bg-white/5" />
-                  <Skeleton className="h-14 w-3/4 bg-white/5" />
-                </div>
-              ) : (
-                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black font-display text-foreground leading-[0.95] tracking-tighter animate-in fade-in slide-in-from-left-4 duration-700 delay-100 uppercase">
-                  DOMINE SUA <br />
-                  <span className="text-gradient-brand">EVOLUÇÃO.</span>
-                </h1>
-              )}
-              
-              {isLoading ? (
-                <Skeleton className="h-10 w-full max-w-sm bg-white/5" />
-              ) : (
-                <p className="text-sm md:text-base text-foreground/70 max-w-sm leading-tight font-medium animate-in fade-in slide-in-from-left-4 duration-700 delay-200">
-                  A engenharia definitiva para quem busca a perfeição física. 
-                  Sincronize sua biometria com inteligência preditiva.
-                </p>
-              )}
-
-              <div className="flex flex-col sm:flex-row items-center gap-2 pt-1 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300">
+        {/* Main Content Area */}
+        <main className="flex-1 flex flex-col">
+          {/* Hero Section - Optimized for Single Page View */}
+          <section className="relative flex-1 flex items-center py-4 px-4 overflow-hidden min-h-[calc(100vh-180px)]">
+            <div className="container mx-auto max-w-7xl grid lg:grid-cols-2 gap-8 items-center">
+              <div className="text-left space-y-4 relative z-10 flex flex-col justify-center">
                 {isLoading ? (
-                  <>
-                    <Skeleton className="h-10 w-full sm:w-40 bg-white/5" />
-                    <Skeleton className="h-10 w-full sm:w-40 bg-white/5" />
-                  </>
+                  <Skeleton className="h-8 w-48 rounded-full bg-white/5" />
                 ) : (
-                  <>
-                    <QuickOnboarding isLoggedIn={isLoggedIn} />
-                    <Button variant="outline" className="h-10 px-6 text-[9px] font-black uppercase tracking-[0.2em] w-full sm:w-auto backdrop-blur-xl bg-white/[0.02] border-white/10 hover:bg-white/[0.08] hover:border-white/20 transition-all focus-visible:ring-2 focus-visible:ring-primary outline-none" asChild>
-                      <Link to="/about">ENGENHARIA</Link>
-                    </Button>
-                  </>
+                  <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-[10px] font-black uppercase tracking-[0.2em] w-fit animate-in fade-in slide-in-from-left-4 duration-700 border border-primary/20 backdrop-blur-md">
+                    <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+                    <span>Alta Performance & Precisão</span>
+                  </div>
                 )}
-              </div>
-
-              {/* Quick stats / Features inline to save space */}
-              <div className="grid grid-cols-3 gap-4 pt-8 border-t border-white/5 animate-in fade-in duration-1000 delay-400">
-                <div className="space-y-1">
-                  <div className="text-primary font-black text-xl italic uppercase tracking-tighter">PWA</div>
-                  <div className="text-[8px] font-black text-foreground/40 uppercase tracking-widest leading-none">Offline Ready</div>
-                </div>
-                <div className="space-y-1 border-x border-white/5 px-4">
-                  <div className="text-primary font-black text-xl italic uppercase tracking-tighter">100%</div>
-                  <div className="text-[8px] font-black text-foreground/40 uppercase tracking-widest leading-none">Privacidade</div>
-                </div>
-                <div className="space-y-1">
-                  <div className="text-primary font-black text-xl italic uppercase tracking-tighter">AI</div>
-                  <div className="text-[8px] font-black text-foreground/40 uppercase tracking-widest leading-none">Biometria</div>
-                </div>
-              </div>
-            </div>
-
-            <div className="relative hidden lg:flex h-full items-center justify-center animate-in fade-in zoom-in-95 duration-1000 delay-300">
-              <div className="relative w-full max-w-[480px] z-10 rounded-[3rem] overflow-hidden shadow-[0_40px_100px_rgba(0,0,0,0.6)] border border-white/10 transform hover:scale-[1.02] transition-transform duration-700 bg-card/10 backdrop-blur-3xl aspect-[4/5]">
-                <div className="absolute inset-0 bg-gradient-to-tr from-primary/30 to-transparent z-20 pointer-events-none mix-blend-overlay" />
-                <img 
-                  src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?auto=format&fit=crop&q=80&w=1200" 
-                  alt="High Performance Athlete" 
-                  className="w-full h-full object-cover scale-105 hover:scale-100 transition-transform duration-[3000ms]"
-                  fetchPriority="high"
-                  loading="eager"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-transparent z-10" />
-                <div className="absolute bottom-10 left-10 right-10 z-20">
+                
+                {isLoading ? (
                   <div className="space-y-2">
-                    <p className="text-white text-3xl font-black font-display tracking-tight uppercase italic leading-none">
-                      ENGENHARIA <br /> BIOMÉTRICA
-                    </p>
-                    <p className="text-white/60 text-[10px] font-black uppercase tracking-widest leading-relaxed max-w-[240px]">
-                      Monitoramento de nível olímpico para aprimoramento constante.
-                    </p>
+                    <Skeleton className="h-14 w-full max-w-md bg-white/5" />
+                    <Skeleton className="h-14 w-3/4 bg-white/5" />
+                  </div>
+                ) : (
+                  <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-black font-display text-foreground leading-[0.9] tracking-tighter animate-in fade-in slide-in-from-left-4 duration-700 delay-100 uppercase">
+                    DOMINE SUA <br />
+                    <span className="text-gradient-brand">EVOLUÇÃO.</span>
+                  </h1>
+                )}
+                
+                {isLoading ? (
+                  <Skeleton className="h-10 w-full max-w-sm bg-white/5" />
+                ) : (
+                  <p className="text-sm md:text-base text-foreground/70 max-w-sm leading-relaxed font-medium animate-in fade-in slide-in-from-left-4 duration-700 delay-200">
+                    A engenharia definitiva para quem busca a perfeição física. 
+                    Sincronize sua biometria com inteligência preditiva.
+                  </p>
+                )}
+
+                <div className="flex flex-col sm:flex-row items-center gap-3 pt-2 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300">
+                  {isLoading ? (
+                    <>
+                      <Skeleton className="h-12 w-full sm:w-48 bg-white/5" />
+                      <Skeleton className="h-12 w-full sm:w-48 bg-white/5" />
+                    </>
+                  ) : (
+                    <>
+                      <QuickOnboarding isLoggedIn={isLoggedIn} />
+                      <Button variant="outline" size="lg" className="h-12 px-8 text-[10px] font-black uppercase tracking-[0.2em] w-full sm:w-auto backdrop-blur-xl bg-white/[0.02] border-white/10 hover:bg-white/[0.08] hover:border-white/20 transition-all focus-visible:ring-2 focus-visible:ring-primary outline-none shadow-xl" asChild>
+                        <Link to="/about">ENGENHARIA</Link>
+                      </Button>
+                    </>
+                  )}
+                </div>
+
+                {/* Quick stats / Features inline to save space */}
+                <div className="grid grid-cols-3 gap-6 pt-8 border-t border-white/5 animate-in fade-in duration-1000 delay-400">
+                  <div className="space-y-1">
+                    <div className="text-primary font-black text-2xl italic uppercase tracking-tighter">PWA</div>
+                    <div className="text-[9px] font-black text-foreground/40 uppercase tracking-widest leading-none">Offline Ready</div>
+                  </div>
+                  <div className="space-y-1 border-x border-white/5 px-6">
+                    <div className="text-primary font-black text-2xl italic uppercase tracking-tighter">100%</div>
+                    <div className="text-[9px] font-black text-foreground/40 uppercase tracking-widest leading-none">Privacidade</div>
+                  </div>
+                  <div className="space-y-1">
+                    <div className="text-primary font-black text-2xl italic uppercase tracking-tighter">AI</div>
+                    <div className="text-[9px] font-black text-foreground/40 uppercase tracking-widest leading-none">Biometria</div>
                   </div>
                 </div>
               </div>
-              
-              {/* Decorative elements - scaled for tighter layout */}
-              <div className="absolute -top-20 -right-20 w-80 h-80 bg-primary/20 rounded-full blur-[120px] -z-10 opacity-50" />
-              <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-success/20 rounded-full blur-[120px] -z-10 opacity-50" />
-            </div>
-          </div>
-        </section>
 
-        {/* Simplified Features Grid - More compact for single page feel */}
-        <section className="py-8 bg-white/[0.02] backdrop-blur-3xl border-y border-white/5">
-          <div className="container mx-auto px-4 max-w-7xl">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {[
-                { icon: <Target size={20} />, title: "Objetivos", desc: "Planos adaptados.", color: "primary" },
-                { icon: <Zap size={20} />, title: "Performance", desc: "Métricas precisas.", color: "success" },
-                { icon: <ShieldCheck size={20} />, title: "Segurança", desc: "Privacidade total.", color: "info" }
-              ].map((f, i) => (
-                <Link key={i} to="/about" className="group block focus-visible:ring-2 focus-visible:ring-primary outline-none rounded-3xl overflow-hidden">
-                  <FeatureCard 
-                    icon={f.icon}
-                    title={f.title}
-                    description={f.desc}
-                    className={cn(
-                      "transition-all duration-300 p-5 h-full",
-                      i === 0 && "group-hover:border-primary/40 group-hover:bg-primary/5",
-                      i === 1 && "group-hover:border-success/40 group-hover:bg-success/5",
-                      i === 2 && "group-hover:border-info/40 group-hover:bg-info/5"
-                    )}
+              <div className="relative hidden lg:flex h-full items-center justify-center animate-in fade-in zoom-in-95 duration-1000 delay-300">
+                <div className="relative w-full max-w-[520px] z-10 rounded-[3.5rem] overflow-hidden shadow-[0_50px_120px_rgba(0,0,0,0.7)] border border-white/10 transform hover:scale-[1.01] transition-transform duration-700 bg-card/10 backdrop-blur-3xl aspect-[4/5.5]">
+                  <div className="absolute inset-0 bg-gradient-to-tr from-primary/30 to-transparent z-20 pointer-events-none mix-blend-overlay" />
+                  <img 
+                    src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?auto=format&fit=crop&q=80&w=1200" 
+                    alt="High Performance Athlete" 
+                    className="w-full h-full object-cover scale-105 hover:scale-100 transition-transform duration-[3000ms]"
+                    fetchPriority="high"
+                    loading="eager"
                   />
-                </Link>
-              ))}
+                  <div className="absolute inset-0 bg-gradient-to-t from-background/95 via-transparent to-transparent z-10" />
+                  <div className="absolute bottom-12 left-12 right-12 z-20">
+                    <div className="space-y-3">
+                      <p className="text-white text-4xl font-black font-display tracking-tighter uppercase italic leading-[0.9]">
+                        ENGENHARIA <br /> BIOMÉTRICA
+                      </p>
+                      <p className="text-white/60 text-[11px] font-bold uppercase tracking-widest leading-relaxed max-w-[280px]">
+                        Monitoramento de nível olímpico para aprimoramento constante da composição corporal.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Decorative elements */}
+                <div className="absolute -top-24 -right-24 w-96 h-96 bg-primary/20 rounded-full blur-[140px] -z-10 opacity-60" />
+                <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-success/20 rounded-full blur-[140px] -z-10 opacity-60" />
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+
+          {/* Simplified Features Grid - Tighter layout */}
+          <section className="py-6 bg-white/[0.01] backdrop-blur-3xl border-t border-white/5">
+            <div className="container mx-auto px-4 max-w-7xl">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {[
+                  { icon: <Target size={22} />, title: "Objetivos", desc: "Planos adaptados ao seu biotipo.", color: "primary" },
+                  { icon: <Zap size={22} />, title: "Performance", desc: "Métricas de precisão absoluta.", color: "success" },
+                  { icon: <ShieldCheck size={22} />, title: "Segurança", desc: "Privacidade e sigilo total.", color: "info" }
+                ].map((f, i) => (
+                  <Link key={i} to="/about" className="group block focus-visible:ring-2 focus-visible:ring-primary outline-none rounded-[2rem] overflow-hidden">
+                    <FeatureCard 
+                      icon={f.icon}
+                      title={f.title}
+                      description={f.desc}
+                      className={cn(
+                        "transition-all duration-300 p-6 h-full",
+                        i === 0 && "group-hover:border-primary/40 group-hover:bg-primary/5",
+                        i === 1 && "group-hover:border-success/40 group-hover:bg-success/5",
+                        i === 2 && "group-hover:border-info/40 group-hover:bg-info/5"
+                      )}
+                    />
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </section>
+        </main>
 
         {/* Footer - Scaled down */}
         <footer className="mt-auto py-6 border-t border-white/5 bg-background/50 backdrop-blur-md">
@@ -263,6 +267,7 @@ function Index() {
             </div>
           </div>
         </footer>
+      </div>
       </div>
     </div>
   );
@@ -348,7 +353,7 @@ function QuickOnboarding({ isLoggedIn }: { isLoggedIn: boolean }) {
         <Button 
           size="lg" 
           onClick={handleAction}
-          className="h-10 px-6 text-[9px] font-black uppercase tracking-[0.2em] group w-full sm:w-auto bg-brand-gradient hover:scale-105 transition-all border-none shadow-[0_15px_35px_rgba(oklch(0.65_0.22_260),0.3)] focus-visible:ring-2 focus-visible:ring-primary outline-none"
+          className="h-12 px-8 text-[10px] font-black uppercase tracking-[0.2em] group w-full sm:w-auto bg-brand-gradient hover:scale-105 transition-all border-none shadow-[0_20px_40px_rgba(oklch(0.65_0.22_260),0.4)] focus-visible:ring-2 focus-visible:ring-primary outline-none"
         >
           {isLoggedIn ? "NOVO REGISTRO" : "ACESSAR SUÍTE"}
           <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={14} />
