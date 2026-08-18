@@ -27,7 +27,7 @@ import { getSession, clearSession } from "@/lib/auth/auth.functions";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { toast } from "sonner";
 import { SVGToast } from "@/components/ui/svg-toast";
-import { requestNotificationPermission, scheduleNotifications, testDailySummary } from "@/lib/notifications";
+import { requestNotificationPermission, scheduleNotifications, testDailySummary, sendWeeklySummary, getNotificationSettings, saveNotificationSettings } from "@/lib/notifications";
 import { getNotificationHistory, NotificationLog } from "@/lib/notification-history";
 import { useEffect } from "react";
 import { validateLicense, generateLicenseKey, createCheckoutSession } from "@/lib/monetization.functions";
