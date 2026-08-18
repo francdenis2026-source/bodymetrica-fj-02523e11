@@ -250,7 +250,7 @@ function Index() {
                 <span className="text-xs md:text-sm font-semibold font-display tracking-tight">Body Métrica FJ</span>
               </div>
               
-              <nav className="flex gap-8 text-sm text-muted-foreground font-medium">
+              <nav className="flex gap-4 md:gap-8 text-[11px] md:text-sm text-muted-foreground font-medium">
                 <Link to="/about" className="hover:text-primary transition-colors">Sobre</Link>
                 <Link to="/tools" className="hover:text-primary transition-colors">Ferramentas</Link>
                 <Link to="/help" className="hover:text-primary transition-colors">Ajuda</Link>
