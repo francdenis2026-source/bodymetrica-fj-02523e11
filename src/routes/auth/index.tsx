@@ -671,9 +671,9 @@ function AuthPage() {
                   <Info size={10} className="text-blue-500" />
                   MFA_READY
                 </span>
+                </div>
               </div>
             </div>
-          </div>
         </div>
 
         {/* System Info */}
