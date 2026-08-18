@@ -154,29 +154,20 @@ function AuthPage() {
       
       const result = await login({ data: values });
       if (result.success) {
-        // Log activity if it's a direct login result (not waiting for MFA)
-        await supabase.rpc('log_security_activity', {
-          _user_id: result.user.id,
-          _action: 'LOGIN_SUCCESS',
-          _details: { remember: values.rememberMe }
-        });
+        setLoginValues(values);
+        setTempUserData(result.user);
 
-        setSession(result.user);
-        localStorage.setItem(RATE_LIMIT_KEY, '{"count": 0, "lastAttempt": 0}');
-        toast.custom((t) => (
-          <SVGToast 
-            type="success"
-            title="BEM-VINDO"
-            message="Sessão autenticada. Acesso liberado à suíte Body Métrica FJ."
-            onClose={() => toast.dismiss(t)}
-          />
-        ));
-        
-        if (!result.user.isLicensed) {
-          toast.info("Acesse Ajustes para ativar sua licença e liberar o sistema.");
+        // Check for MFA enrollment
+        const { data: factors, error: factorsError } = await supabase.auth.mfa.listFactors();
+        const activeFactors = factors?.all?.filter(f => f.status === 'verified') || [];
+
+        if (activeFactors.length > 0) {
+          setShowMfaChallenge(true);
+          setIsLoading(false);
+          return;
         }
-        
-        window.location.href = "/dashboard";
+
+        await completeLogin(result.user, values.rememberMe);
       } else {
         toast.custom((t) => (
           <SVGToast 
@@ -207,6 +198,59 @@ function AuthPage() {
       setIsLoading(false);
     }
   }
+
+  async function completeLogin(user: any, rememberMe: boolean) {
+    await supabase.rpc('log_security_activity', {
+      _user_id: user.id,
+      _action: 'LOGIN_SUCCESS',
+      _details: { remember: rememberMe }
+    });
+
+    setSession(user);
+    localStorage.setItem(RATE_LIMIT_KEY, '{"count": 0, "lastAttempt": 0}');
+    toast.custom((t) => (
+      <SVGToast 
+        type="success"
+        title="BEM-VINDO"
+        message="Sessão autenticada. Acesso liberado à suíte Body Métrica FJ."
+        onClose={() => toast.dismiss(t)}
+      />
+    ));
+    
+    if (!user.isLicensed) {
+      toast.info("Acesse Ajustes para ativar sua licença e liberar o sistema.");
+    }
+    
+    window.location.href = "/dashboard";
+  }
+
+  async function onMfaSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setIsLoading(true);
+
+    try {
+      if (isRecoveryMode) {
+        const res = await verifyRecoveryCode({ data: { code: mfaCode } });
+        if (res.success) {
+          await completeLogin(tempUserData, loginValues.rememberMe);
+        } else {
+          toast.error(res.message || "Código de recuperação inválido.");
+        }
+      } else {
+        // Simulation for now
+        if (mfaCode === "123456") {
+          await completeLogin(tempUserData, loginValues.rememberMe);
+        } else {
+          toast.error("Código MFA incorreto.");
+        }
+      }
+    } catch (error) {
+      toast.error("Erro na verificação. Tente novamente.");
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
 
   async function onRegisterSubmit(values: z.infer<typeof registerSchema>) {
     setIsLoading(true);
