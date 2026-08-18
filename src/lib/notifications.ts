@@ -3,6 +3,8 @@ import { toast } from "sonner";
 import { SVGToast } from "@/components/ui/svg-toast";
 import React from "react";
 import { addNotificationLog } from "./notification-history";
+import { getAdherenceData } from "./adherence";
+import { buildWeeklySummary } from "./weekly-adherence";
 
 export interface NotificationSettings {
   hydration: {
