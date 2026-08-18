@@ -346,7 +346,7 @@ function AuthPage() {
                 onChange={(e) => setMfaCode(e.target.value)}
                 placeholder={isRecoveryMode ? "XXXXXXXX" : "000000"}
                 className={cn(
-                  "h-14 bg-white/5 border-white/10 rounded-2xl text-center text-2xl font-black",
+                  "h-14 bg-white/5 border-white/10 rounded-2xl text-center text-2xl font-black text-white",
                   !isRecoveryMode && "tracking-[0.5em]"
                 )}
                 maxLength={isRecoveryMode ? 8 : 6}
