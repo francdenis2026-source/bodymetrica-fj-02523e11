@@ -1,7 +1,7 @@
 import * as React from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
-import { generatePDFReport } from "@/lib/reports";
+import { generatePDFReport, generateAdherenceReport } from "@/lib/reports";
 import { exportToCSV } from "@/lib/export";
 import { toast } from "sonner";
 import { SVGToast } from "@/components/ui/svg-toast";
@@ -312,6 +312,24 @@ function DashboardPage() {
           <CardTitle className="text-lg font-display flex items-center gap-2">
             <Calendar size={20} className="text-primary" />
             Adesão e Recomendação
+            <div className="flex gap-2 ml-auto">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="text-[9px] font-black uppercase tracking-widest hover:bg-primary/10"
+                onClick={() => generateAdherenceReport(userName, adherenceData, 'pdf')}
+              >
+                <FileDown size={14} className="mr-1" /> PDF
+              </Button>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="text-[9px] font-black uppercase tracking-widest hover:bg-primary/10"
+                onClick={() => generateAdherenceReport(userName, adherenceData, 'csv')}
+              >
+                <FileDown size={14} className="mr-1" /> CSV
+              </Button>
+            </div>
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-8">
