@@ -22,6 +22,11 @@ export interface NotificationSettings {
     enabled: boolean;
     time: string;
   };
+  weeklySummary: {
+    enabled: boolean;
+    weekday: number; // 0 = Domingo ... 6 = Sábado
+    time: string;
+  };
   adherence: {
     enabled: boolean;
     frequency: 'weekly' | 'daily';
