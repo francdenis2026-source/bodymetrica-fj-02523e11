@@ -156,6 +156,12 @@ function DashboardPage() {
             <FileDown size={20} /> RELATÓRIO PDF
           </Button>
           <Button 
+            className="gap-3 h-14 px-8 font-black uppercase tracking-widest bg-brand-gradient shadow-2xl shadow-primary/40 hover:scale-105 transition-all border-none"
+            onClick={() => generateAdherenceReport(userName, adherenceData, 'pdf')}
+          >
+            <FileDown size={20} /> ADERÊNCIA PDF
+          </Button>
+          <Button 
             variant="outline"
             className="gap-3 h-14 px-8 font-black uppercase tracking-widest border-2 bg-white/5 border-white/10 hover:bg-white/10 hover:scale-105 transition-all"
             onClick={() => exportToCSV([
@@ -163,7 +169,14 @@ function DashboardPage() {
               { Data: "15/08", Peso: 82.4, Hidratacao: "2.1L", Proteina: "185g" }
             ], 'Evolucao_BodyMetrica')}
           >
-            <FileDown size={20} /> EXPORTAR CSV
+            <FileDown size={20} /> EVOLUÇÃO CSV
+          </Button>
+          <Button 
+            variant="outline"
+            className="gap-3 h-14 px-8 font-black uppercase tracking-widest border-2 bg-white/5 border-white/10 hover:bg-white/10 hover:scale-105 transition-all"
+            onClick={() => generateAdherenceReport(userName, adherenceData, 'csv')}
+          >
+            <FileDown size={20} /> ADERÊNCIA CSV
           </Button>
         </div>
       </div>
