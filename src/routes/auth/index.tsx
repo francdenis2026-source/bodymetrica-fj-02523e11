@@ -26,7 +26,7 @@ import { Label } from "@/components/ui/label";
 import { login, register, setSession, requestPasswordReset, updatePassword, verifyRecoveryCode } from "@/lib/auth/auth.functions";
 import { toast } from "sonner";
 import { SVGToast } from "@/components/ui/svg-toast";
-import { ShieldCheck, ArrowLeft, Mail, UserPlus, KeyRound, Lock, Info } from "lucide-react";
+import { ShieldCheck, ArrowLeft, Mail, UserPlus, KeyRound, Lock, Info, LogIn } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 
