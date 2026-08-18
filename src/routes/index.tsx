@@ -167,7 +167,7 @@ function Index() {
                 </div>
 
                 {/* Quick stats / Features inline to save space */}
-                <div className="grid grid-cols-3 gap-4 md:gap-6 pt-4 md:pt-8 border-t border-white/5 animate-in fade-in duration-1000 delay-400">
+                <div className="hidden sm:grid grid-cols-3 gap-4 md:gap-6 pt-4 md:pt-8 border-t border-white/5 animate-in fade-in duration-1000 delay-400">
                   <div className="space-y-1">
                     <div className="text-primary font-black text-xl md:text-2xl italic uppercase tracking-tighter">PWA</div>
                     <div className="text-[8px] md:text-[9px] font-black text-foreground/40 uppercase tracking-widest leading-none">Offline Ready</div>
