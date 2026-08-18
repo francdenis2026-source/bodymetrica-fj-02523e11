@@ -653,7 +653,8 @@ function AuthPage() {
                               <Checkbox
                                 checked={field.value}
                                 onCheckedChange={field.onChange}
-                                className="border-white/20 bg-white/10 data-[state=checked]:bg-primary rounded-md w-4 h-4"
+                                className="border-white/20 bg-white/10 data-[state=checked]:bg-primary rounded-md w-4 h-4 focus:ring-2 focus:ring-primary/20 outline-none"
+                                aria-label="Lembrar de mim"
                               />
                             </FormControl>
                             <FormLabel className="text-[9px] font-black uppercase tracking-widest text-white/30 cursor-pointer select-none">
