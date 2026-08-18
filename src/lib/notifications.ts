@@ -3,6 +3,8 @@ import { toast } from "sonner";
 import { SVGToast } from "@/components/ui/svg-toast";
 import React from "react";
 import { addNotificationLog } from "./notification-history";
+import { getAdherenceData } from "./adherence";
+import { buildWeeklySummary } from "./weekly-adherence";
 
 export interface NotificationSettings {
   hydration: {
@@ -20,6 +22,11 @@ export interface NotificationSettings {
   };
   dailySummary: {
     enabled: boolean;
+    time: string;
+  };
+  weeklySummary: {
+    enabled: boolean;
+    weekday: number; // 0 = Domingo ... 6 = Sábado
     time: string;
   };
   adherence: {
@@ -49,6 +56,11 @@ const DEFAULT_SETTINGS: NotificationSettings = {
     enabled: true,
     time: '21:30'
   },
+  weeklySummary: {
+    enabled: true,
+    weekday: 0,
+    time: '19:00'
+  },
   adherence: {
     enabled: true,
     frequency: 'daily'
@@ -60,7 +72,8 @@ export const getNotificationSettings = (): NotificationSettings => {
   const saved = safeLocalStorage.getItem(SETTINGS_KEY);
   if (!saved) return DEFAULT_SETTINGS;
   try {
-    return JSON.parse(saved);
+    const parsed = JSON.parse(saved);
+    return { ...DEFAULT_SETTINGS, ...parsed, weeklySummary: { ...DEFAULT_SETTINGS.weeklySummary, ...(parsed.weeklySummary ?? {}) } };
   } catch (e) {
     return DEFAULT_SETTINGS;
   }
@@ -151,6 +164,7 @@ export const scheduleNotifications = async () => {
 
   scheduleMealReminders();
   scheduleDailySummary();
+  startWeeklySummaryScheduler();
 
 
   // Run initial check
@@ -158,6 +172,56 @@ export const scheduleNotifications = async () => {
   
   // Setup periodic check every 30 mins while app is open
   setInterval(checkGoals, 30 * 60 * 1000);
+};
+
+const WEEKLY_LAST_SENT_KEY = 'bodymetrica_weekly_summary_last_sent';
+
+export const buildWeeklySummaryText = (): string => {
+  const weeks = buildWeeklySummary(getAdherenceData());
+  const current = weeks[weeks.length - 1];
+  if (!current) return "Ainda não há registros suficientes para o resumo semanal.";
+  const trend =
+    current.trend === 'up' ? `em alta (+${current.deltaMacros}%)` :
+    current.trend === 'down' ? `em queda (${current.deltaMacros}%)` : 'estável';
+  const worst = [...current.days].sort((a, b) => a.macros - b.macros)[0];
+  return `Semana ${current.label}: macros ${current.avgMacros}% e água ${current.avgWater}% (média), ${current.trainings} treino(s). Tendência ${trend}. Dia mais crítico: ${worst ? `${worst.date} (${worst.macros}% macros)` : 'sem dados'}.`;
+};
+
+export const sendWeeklySummary = async () => {
+  const title = "RESUMO SEMANAL DE ADERÊNCIA";
+  const body = buildWeeklySummaryText();
+
+  toast.custom((t) => React.createElement(SVGToast, {
+    type: "info",
+    title,
+    message: body,
+    onClose: () => toast.dismiss(t)
+  }), { duration: 8000 });
+
+  await sendImmediateNotification(title, { body });
+};
+
+/** Verifica a cada minuto se chegou o dia/horário escolhido para o resumo semanal. */
+export const startWeeklySummaryScheduler = () => {
+  if (!isBrowser) return;
+
+  const check = () => {
+    const settings = getNotificationSettings();
+    if (!settings.weeklySummary.enabled) return;
+
+    const now = new Date();
+    const [h, m] = settings.weeklySummary.time.split(':').map(Number);
+    if (now.getDay() !== settings.weeklySummary.weekday) return;
+    if (now.getHours() !== h || Math.abs(now.getMinutes() - (m ?? 0)) > 2) return;
+
+    const stamp = `${now.toISOString().split('T')[0]}-${settings.weeklySummary.time}`;
+    if (safeLocalStorage.getItem(WEEKLY_LAST_SENT_KEY) === stamp) return;
+    safeLocalStorage.setItem(WEEKLY_LAST_SENT_KEY, stamp);
+    void sendWeeklySummary();
+  };
+
+  check();
+  setInterval(check, 60 * 1000);
 };
 
 export const sendImmediateNotification = async (title: string, options?: NotificationOptions) => {

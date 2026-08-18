@@ -3,6 +3,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { generatePDFReport, generateAdherenceReport } from "@/lib/reports";
 import { generateWeeklyAdherenceReport } from "@/lib/weekly-adherence";
+import { WeeklySummaryPreview } from "@/components/weekly-summary-preview";
 import { exportToCSV } from "@/lib/export";
 import { toast } from "sonner";
 import { SVGToast } from "@/components/ui/svg-toast";
@@ -352,22 +353,7 @@ function DashboardPage() {
               >
                 <FileDown size={14} className="mr-1" /> CSV
               </Button>
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                className="text-[9px] font-black uppercase tracking-widest hover:bg-primary/10"
-                onClick={() => generateWeeklyAdherenceReport(userName, adherenceData, 'pdf')}
-              >
-                <FileDown size={14} className="mr-1" /> Semanal PDF
-              </Button>
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                className="text-[9px] font-black uppercase tracking-widest hover:bg-primary/10"
-                onClick={() => generateWeeklyAdherenceReport(userName, adherenceData, 'csv')}
-              >
-                <FileDown size={14} className="mr-1" /> Semanal CSV
-              </Button>
+              <WeeklySummaryPreview userName={userName} data={adherenceData} />
             </div>
           </CardTitle>
         </CardHeader>
