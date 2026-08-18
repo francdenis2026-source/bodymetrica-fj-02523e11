@@ -96,7 +96,22 @@ function BodyPage() {
   const [exportExpiration, setExportExpiration] = useState("7");
   const [compareMode, setCompareMode] = useState(false);
   const [selectedForComparison, setSelectedForComparison] = useState<string[]>([]);
+  const [comparisonPresets, setComparisonPresets] = useState<any[]>([]);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  const saveComparisonPreset = () => {
+    if (selectedForComparison.length < 2) return;
+    const preset = { id: crypto.randomUUID(), ids: selectedForComparison, name: `Preset ${comparisonPresets.length + 1}` };
+    const newPresets = [...comparisonPresets, preset];
+    setComparisonPresets(newPresets);
+    localStorage.setItem('bodymetrica_comparison_presets', JSON.stringify(newPresets));
+    toast.success("Comparativo salvo como preset!");
+  };
+
+  useEffect(() => {
+    const savedPresets = JSON.parse(localStorage.getItem('bodymetrica_comparison_presets') || '[]');
+    setComparisonPresets(savedPresets);
+  }, []);
 
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -333,6 +348,35 @@ function BodyPage() {
                   >
                     {compareMode ? "SAIR DO COMPARATIVO" : "ATIVAR COMPARATIVO"}
                   </Button>
+                  {compareMode && selectedForComparison.length === 2 && (
+                    <Button 
+                      variant="link" 
+                      className="text-[9px] font-black p-0 h-auto text-success ml-2"
+                      onClick={saveComparisonPreset}
+                    >
+                      SALVAR PRESET
+                    </Button>
+                  )}
+                  {comparisonPresets.length > 0 && (
+                    <Select onValueChange={(val) => {
+                      const preset = comparisonPresets.find(p => p.id === val);
+                      if (preset) {
+                        setCompareMode(true);
+                        setSelectedForComparison(preset.ids);
+                      }
+                    }}>
+                      <SelectTrigger className="h-6 w-24 text-[8px] uppercase font-black ml-2 border-white/10">
+                        <SelectValue placeholder="PRESETS" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {comparisonPresets.map(p => (
+                          <SelectItem key={p.id} value={p.id} className="text-[8px] uppercase font-black">
+                            {p.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
                 </div>
               </div>
 

@@ -355,9 +355,21 @@ function SettingsPage() {
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
                     <Label className="text-sm font-medium">Metas de Hidratação</Label>
-                    <p className="text-xs text-muted-foreground">Avisar quando faltar 20% para a meta diária</p>
+                    <p className="text-xs text-muted-foreground">Lembretes e alertas de sensibilidade</p>
                   </div>
-                  <Switch defaultChecked />
+                  <div className="flex items-center gap-4">
+                    <Select defaultValue="medium">
+                      <SelectTrigger className="h-8 w-24 text-[10px] uppercase font-black">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="low">Baixa</SelectItem>
+                        <SelectItem value="medium">Média</SelectItem>
+                        <SelectItem value="high">Alta</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <Switch defaultChecked />
+                  </div>
                 </div>
                 <div className="pl-4 space-y-4 border-l-2 border-primary/20 ml-2">
                    <div className="flex flex-col gap-3">
@@ -389,6 +401,38 @@ function SettingsPage() {
                          <Button variant="ghost" size="sm" className="h-7 w-7 p-0 rounded-full border border-dashed border-muted-foreground/30">+</Button>
                       </div>
                    </div>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label className="text-sm font-medium">Resumo Diário</Label>
+                    <p className="text-xs text-muted-foreground">Insights e pendências do dia</p>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <Input type="time" defaultValue="21:30" className="h-8 w-24 text-[10px]" />
+                    <Switch defaultChecked />
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label className="text-sm font-medium">Janela de Atraso (Macros)</Label>
+                    <p className="text-xs text-muted-foreground">Tempo antes do alerta de atraso</p>
+                  </div>
+                  <Select defaultValue="15">
+                    <SelectTrigger className="h-8 w-24 text-[10px] uppercase font-black">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="5">5 min</SelectItem>
+                      <SelectItem value="15">15 min</SelectItem>
+                      <SelectItem value="30">30 min</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
 

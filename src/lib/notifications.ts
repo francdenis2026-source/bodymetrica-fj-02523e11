@@ -9,11 +9,17 @@ export interface NotificationSettings {
     times: string[];
     frequency: 'daily' | 'custom';
     threshold: number; // e.g., 0.2 means 20% left
+    sensitivity: 'low' | 'medium' | 'high';
   };
   macros: {
     enabled: boolean;
     times: string[];
     frequency: 'daily' | 'custom';
+    delayWindow: number; // in minutes
+  };
+  dailySummary: {
+    enabled: boolean;
+    time: string;
   };
   adherence: {
     enabled: boolean;
@@ -29,12 +35,18 @@ const DEFAULT_SETTINGS: NotificationSettings = {
     enabled: true,
     times: ['08:00', '14:00', '20:00'],
     frequency: 'daily',
-    threshold: 0.2
+    threshold: 0.2,
+    sensitivity: 'medium'
   },
   macros: {
     enabled: true,
     times: ['12:00', '19:00'],
-    frequency: 'daily'
+    frequency: 'daily',
+    delayWindow: 15
+  },
+  dailySummary: {
+    enabled: true,
+    time: '21:30'
   },
   adherence: {
     enabled: true,
@@ -125,12 +137,19 @@ export const scheduleNotifications = async () => {
     console.log("Scheduling meal reminders...");
   };
 
+  const scheduleDailySummary = () => {
+    const settings = getNotificationSettings();
+    if (!settings.dailySummary.enabled) return;
+    console.log(`Scheduling daily summary for ${settings.dailySummary.time}`);
+  };
+
   const checkMealProgress = (meal: string) => {
     // Logic to check if user has confirmed meal X
     console.log(`Checking progress for: ${meal}`);
   };
 
   scheduleMealReminders();
+  scheduleDailySummary();
 
 
   // Run initial check
