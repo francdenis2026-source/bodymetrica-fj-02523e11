@@ -319,14 +319,34 @@ function DashboardPage() {
                 <div key={i} className="flex-1 flex flex-col items-center gap-2 group relative">
                   <div className="w-full flex flex-col gap-1 justify-end h-full">
                     <div 
-                      className="w-full bg-info/20 rounded-t-sm transition-all hover:bg-info/40 cursor-help border-t border-info/40" 
+                      className="w-full bg-info/20 rounded-t-sm transition-all hover:bg-info/40 cursor-pointer border-t border-info/40" 
                       style={{ height: `${record.water * 0.5}%` }}
                       title={`Água: ${record.water}%`}
+                      onClick={() => {
+                        toast.custom((t) => (
+                          <SVGToast 
+                            type="info"
+                            title={`DETALHES DO DIA ${record.date.split('-')[2]}`}
+                            message={`Performance: ${record.macros}% Macros, ${record.water}% Água. ${record.training ? 'Treino realizado.' : 'Sem treino.'}`}
+                            onClose={() => toast.dismiss(t)}
+                          />
+                        ));
+                      }}
                     />
                     <div 
-                      className="w-full bg-primary/30 rounded-t-sm transition-all hover:bg-primary/50 cursor-help border-t border-primary/50" 
+                      className="w-full bg-primary/30 rounded-t-sm transition-all hover:bg-primary/50 cursor-pointer border-t border-primary/50" 
                       style={{ height: `${record.macros * 0.5}%` }}
                       title={`Macros: ${record.macros}%`}
+                      onClick={() => {
+                        toast.custom((t) => (
+                          <SVGToast 
+                            type="info"
+                            title={`DETALHES DO DIA ${record.date.split('-')[2]}`}
+                            message={`Performance: ${record.macros}% Macros, ${record.water}% Água. ${record.training ? 'Treino realizado.' : 'Sem treino.'}`}
+                            onClose={() => toast.dismiss(t)}
+                          />
+                        ));
+                      }}
                     />
                   </div>
                   <div className="absolute bottom-full mb-3 bg-card border border-white/10 p-3 rounded-xl text-[9px] font-black uppercase tracking-widest invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all whitespace-nowrap z-50 shadow-2xl backdrop-blur-xl">
