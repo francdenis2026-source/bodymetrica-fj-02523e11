@@ -412,7 +412,17 @@ function AuthPage() {
             <div className="w-12 h-1 bg-white/5 rounded-full" />
           </div>
 
-          <div className="p-8 sm:p-10">
+          <div className="p-8 sm:p-10 relative">
+            {/* Loading Overlay */}
+            {isLoading && (
+              <div className="absolute inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center transition-all duration-300">
+                <div className="flex flex-col items-center gap-4">
+                  <div className="w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
+                  <p className="text-[10px] font-black text-white uppercase tracking-[0.3em] animate-pulse">PROCESSANDO...</p>
+                </div>
+              </div>
+            )}
+
             {/* Context Header */}
             <div className="mb-8">
               <h2 className="text-3xl font-black italic uppercase tracking-tighter text-white">
