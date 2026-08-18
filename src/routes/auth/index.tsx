@@ -412,7 +412,7 @@ function AuthPage() {
             <div className="w-12 h-1 bg-white/5 rounded-full" />
           </div>
 
-          <div className="p-8 sm:p-10 relative">
+          <div className="flex-1 overflow-y-auto p-8 sm:p-10 relative custom-scrollbar">
             {/* Loading Overlay */}
             {isLoading && (
               <div className="absolute inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center transition-all duration-300">
