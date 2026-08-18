@@ -2,6 +2,7 @@ import * as React from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { generatePDFReport, generateAdherenceReport } from "@/lib/reports";
+import { generateWeeklyAdherenceReport } from "@/lib/weekly-adherence";
 import { exportToCSV } from "@/lib/export";
 import { toast } from "sonner";
 import { SVGToast } from "@/components/ui/svg-toast";
