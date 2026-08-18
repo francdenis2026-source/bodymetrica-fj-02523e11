@@ -271,8 +271,22 @@ function RootComponent() {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (event === 'SIGNED_OUT' || event === 'USER_UPDATED' || event === 'SIGNED_IN') {
         const localSession = getSession();
-        if (event === 'SIGNED_OUT' && localSession) {
-          handleLogout();
+        
+        if (event === 'SIGNED_OUT') {
+          if (localSession) {
+             handleLogout();
+          } else if (location.pathname !== '/auth') {
+             // Handle actual session expiry (when Supabase signs out due to token expiry)
+             toast.custom((t) => (
+               <SVGToast 
+                 type="warning"
+                 title="SESSÃO EXPIRADA"
+                 message="Sua sessão expirou por segurança. Por favor, autentique-se novamente."
+                 onClose={() => toast.dismiss(t)}
+               />
+             ), { duration: 6000 });
+             navigate({ to: '/auth' as any, search: {} as any });
+          }
         } else if (session) {
            // Refresh local license status from DB if possible
            const { data: profile } = await supabase.from('profiles').select('license_status').eq('id', session.user.id).single();

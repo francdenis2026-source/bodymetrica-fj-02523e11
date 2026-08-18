@@ -387,21 +387,35 @@ function AuthPage() {
               <Button 
                 type="submit"
                 disabled={isLoading || (isRecoveryMode ? mfaCode.length < 8 : mfaCode.length < 6)}
-                className="w-full h-14 bg-brand-gradient border-none font-black uppercase tracking-[0.2em] rounded-2xl shadow-xl shadow-primary/10 hover:scale-[1.02] active:scale-95 transition-all"
+                className="w-full h-14 bg-brand-gradient border-none font-black uppercase tracking-[0.2em] rounded-2xl shadow-xl shadow-primary/10 hover:scale-[1.02] active:scale-95 transition-all focus:ring-2 focus:ring-primary focus:outline-none"
               >
                 {isLoading ? "VERIFICANDO..." : "VALIDAR ACESSO"}
               </Button>
-              <Button 
-                type="button"
-                variant="ghost"
-                onClick={() => {
-                  setIsRecoveryMode(!isRecoveryMode);
-                  setMfaCode("");
-                }}
-                className="w-full text-[10px] font-black uppercase text-white/30 hover:text-white transition-colors"
-              >
-                {isRecoveryMode ? "USAR CÓDIGO DO APP" : "PROBLEMAS COM 2FA? USAR RECUPERAÇÃO"}
-              </Button>
+              <div className="flex flex-col gap-2">
+                <Button 
+                  type="button"
+                  variant="ghost"
+                  onClick={() => {
+                    setIsRecoveryMode(!isRecoveryMode);
+                    setMfaCode("");
+                  }}
+                  className="w-full text-[10px] font-black uppercase text-white/30 hover:text-white transition-colors focus:ring-2 focus:ring-white/10 focus:outline-none"
+                >
+                  {isRecoveryMode ? "USAR CÓDIGO DO APP" : "PROBLEMAS COM 2FA? USAR RECUPERAÇÃO"}
+                </Button>
+                {!isRecoveryMode && (
+                   <Button 
+                    type="button"
+                    variant="ghost"
+                    onClick={() => {
+                      toast.info("Acesse seu e-mail cadastrado para instruções de recuperação.");
+                    }}
+                    className="w-full text-[8px] font-bold uppercase tracking-widest text-white/20 hover:text-white/40 transition-colors"
+                  >
+                    REENVIAR CÓDIGO 2FA
+                  </Button>
+                )}
+              </div>
             </div>
           </form>
         </DialogContent>
