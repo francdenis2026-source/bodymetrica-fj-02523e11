@@ -559,9 +559,11 @@ function AuthPage() {
                             <div className="relative">
                               <Input 
                                 placeholder="E-MAIL" 
-                                className="h-14 bg-white/5 border-white/10 rounded-2xl px-5 text-white focus:border-primary/50 font-black transition-all pl-12"
+                                className="h-14 bg-white/5 border-white/10 rounded-2xl px-5 text-white focus:border-primary/50 focus:ring-2 focus:ring-primary/20 transition-all font-black pl-12 outline-none"
                                 {...field} 
                                 disabled={isLoading || isBlocked}
+                                aria-required="true"
+                                type="email"
                               />
                               <Mail size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20" />
                             </div>
