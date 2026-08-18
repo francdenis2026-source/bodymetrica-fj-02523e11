@@ -2,6 +2,7 @@ import { isBrowser, safeLocalStorage } from "./browser-utils";
 import { toast } from "sonner";
 import { SVGToast } from "@/components/ui/svg-toast";
 import React from "react";
+import { addNotificationLog } from "./notification-history";
 
 export interface NotificationSettings {
   hydration: {
@@ -160,7 +161,17 @@ export const scheduleNotifications = async () => {
 };
 
 export const sendImmediateNotification = async (title: string, options?: NotificationOptions) => {
-  if (!isBrowser || Notification.permission !== 'granted') return;
+  if (!isBrowser) return;
+
+  // Log the notification attempt
+  addNotificationLog({
+    title,
+    type: title.toLowerCase().includes('hidratação') ? 'hydration' : 
+          title.toLowerCase().includes('resumo') ? 'summary' : 'macro',
+    status: Notification.permission === 'granted' ? 'sent' : 'pending'
+  });
+
+  if (Notification.permission !== 'granted') return;
   
   const registration = await navigator.serviceWorker.ready;
   if (registration && 'showNotification' in registration) {
@@ -172,4 +183,21 @@ export const sendImmediateNotification = async (title: string, options?: Notific
   } else {
     new Notification(title, options);
   }
+};
+
+export const testDailySummary = async () => {
+  const settings = getNotificationSettings();
+  const summaryTitle = "RESUMO DIÁRIO DE PERFORMANCE";
+  const summaryBody = "Seus registros de hoje: 2.1L de água (70%), 145g de proteína (80%). Pendência: Jantar ainda não registrado.";
+  
+  toast.custom((t) => React.createElement(SVGToast, {
+    type: "info",
+    title: summaryTitle,
+    message: summaryBody,
+    onClose: () => toast.dismiss(t)
+  }), { duration: 6000 });
+
+  await sendImmediateNotification(summaryTitle, {
+    body: summaryBody,
+  });
 };

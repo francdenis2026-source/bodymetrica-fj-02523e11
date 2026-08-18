@@ -26,7 +26,9 @@ import { getSession, clearSession } from "@/lib/auth/auth.functions";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { toast } from "sonner";
 import { SVGToast } from "@/components/ui/svg-toast";
-import { requestNotificationPermission, scheduleNotifications } from "@/lib/notifications";
+import { requestNotificationPermission, scheduleNotifications, testDailySummary } from "@/lib/notifications";
+import { getNotificationHistory, NotificationLog } from "@/lib/notification-history";
+import { useEffect } from "react";
 import { validateLicense, generateLicenseKey, createCheckoutSession } from "@/lib/monetization.functions";
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
@@ -54,6 +56,18 @@ function SettingsPage() {
   const navigate = useNavigate();
   const [licenseKey, setLicenseKey] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [notifHistory, setNotifHistory] = useState<NotificationLog[]>([]);
+
+  useEffect(() => {
+    setNotifHistory(getNotificationHistory());
+  }, []);
+
+  const handleTestNotification = async () => {
+    setIsLoading(true);
+    await testDailySummary();
+    setNotifHistory(getNotificationHistory());
+    setIsLoading(false);
+  };
   
   const validateLicenseFn = useServerFn(validateLicense);
   const generateLicenseFn = useServerFn(generateLicenseKey);
