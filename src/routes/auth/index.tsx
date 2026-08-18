@@ -1,85 +1,65 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { AnimatePresence, motion } from "framer-motion";
+import { ArrowLeft, ArrowRight, KeyRound, Lock, Mail, ShieldCheck, UserPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { 
-  Dialog, 
-  DialogContent, 
-  DialogDescription, 
-  DialogHeader, 
-  DialogTitle 
-} from "@/components/ui/dialog";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { login, register, setSession, requestPasswordReset, updatePassword, verifyRecoveryCode } from "@/lib/auth/auth.functions";
+import { login, setSession, updatePassword, verifyRecoveryCode } from "@/lib/auth/auth.functions";
+import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { SVGToast } from "@/components/ui/svg-toast";
-import { ShieldCheck, ArrowLeft, Mail, UserPlus, KeyRound, Lock, Info, LogIn } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/auth/")({
   component: AuthPage,
-  validateSearch: (search: Record<string, unknown>) => {
-    return {
-      registerMode: (search['registerMode'] as boolean) || undefined,
-      reset: (search['reset'] as boolean) || undefined,
-      name: (search['name'] as string) || undefined,
-      birthDate: (search['birthDate'] as string) || undefined,
-      goal: (search['goal'] as string) || undefined,
-      weight: (search['weight'] as string) || undefined,
-      height: (search['height'] as string) || undefined,
-      activityLevel: (search['activityLevel'] as string) || undefined,
-    } as any;
-  },
+  validateSearch: (search: Record<string, unknown>) => ({
+    registerMode: (search["registerMode"] as boolean) || undefined,
+    reset: (search["reset"] as boolean) || undefined,
+    email: (search["email"] as string) || undefined,
+    name: (search["name"] as string) || undefined,
+    birthDate: (search["birthDate"] as string) || undefined,
+    goal: (search["goal"] as string) || undefined,
+    weight: (search["weight"] as string) || undefined,
+    height: (search["height"] as string) || undefined,
+    activityLevel: (search["activityLevel"] as string) || undefined,
+  } as any),
 });
 
 const loginSchema = z.object({
-  email: z.string().email("E-mail inválido"),
+  email: z.string().email("Informe um e-mail válido"),
   password: z.string().min(6, "A senha deve ter pelo menos 6 caracteres"),
   rememberMe: z.boolean().default(false),
 });
 
-const registerSchema = z.object({
-  email: z.string().email("E-mail inválido"),
-  password: z.string().min(6, "A senha deve ter pelo menos 6 caracteres"),
-  name: z.string().min(3, "Nome muito curto"),
-});
+const newPasswordSchema = z
+  .object({
+    password: z.string().min(6, "A nova senha deve ter pelo menos 6 caracteres"),
+    confirmPassword: z.string().min(6, "Confirme a nova senha"),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "As senhas não coincidem",
+    path: ["confirmPassword"],
+  });
 
-const resetSchema = z.object({
-  email: z.string().email("E-mail inválido"),
-});
-
-const newPasswordSchema = z.object({
-  password: z.string().min(6, "A senha deve ter pelo menos 6 caracteres"),
-  confirmPassword: z.string().min(6, "A senha deve ter pelo menos 6 caracteres"),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "As senhas não coincidem",
-  path: ["confirmPassword"],
-});
-
-const RATE_LIMIT_KEY = 'auth_attempts';
+const RATE_LIMIT_KEY = "auth_attempts";
 const MAX_ATTEMPTS = 5;
-const BLOCK_TIME = 60 * 1000; // 1 minute
+const BLOCK_TIME = 60 * 1000;
+const easeOut = [0.23, 1, 0.32, 1] as const;
+
+function isMissingAccountMessage(message?: string) {
+  const text = (message || "").toLowerCase();
+  return ["user not found", "email not found", "no user", "not registered", "usuário não encontrado", "email não cadastrado", "e-mail não cadastrado"].some((item) => text.includes(item));
+}
 
 function AuthPage() {
   const navigate = useNavigate();
-  const searchParams = Route.useSearch();
-  const [isRegistering, setIsRegistering] = useState(searchParams.registerMode);
-  
-  const [isUpdatingPassword, setIsUpdatingPassword] = useState(searchParams.reset);
+  const search = Route.useSearch();
   const [isLoading, setIsLoading] = useState(false);
   const [isBlocked, setIsBlocked] = useState(false);
   const [remainingSeconds, setRemainingSeconds] = useState(0);
@@ -88,18 +68,14 @@ function AuthPage() {
   const [isRecoveryMode, setIsRecoveryMode] = useState(false);
   const [tempUserData, setTempUserData] = useState<any>(null);
   const [loginValues, setLoginValues] = useState<any>(null);
+  const [showRegisterHint, setShowRegisterHint] = useState(false);
 
   const loginForm = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
-    defaultValues: { email: "", password: "", rememberMe: false } as any,
-  } as any);
-
-  const registerForm = useForm<z.infer<typeof registerSchema>>({
-    resolver: zodResolver(registerSchema),
-    defaultValues: { 
-      email: "", 
-      password: "", 
-      name: searchParams.name || "" 
+    defaultValues: {
+      email: search.email || "",
+      password: "",
+      rememberMe: false,
     },
   });
 
@@ -109,51 +85,78 @@ function AuthPage() {
   });
 
   useEffect(() => {
-    setIsRegistering(searchParams.registerMode);
-    setIsUpdatingPassword(searchParams.reset);
-  }, [searchParams.registerMode, searchParams.reset]);
+    if (search.registerMode) {
+      navigate({
+        to: "/auth/register" as any,
+        search: {
+          email: search.email || "",
+          name: search.name || "",
+          birthDate: search.birthDate || "",
+          goal: search.goal || "",
+          weight: search.weight || "",
+          height: search.height || "",
+          activityLevel: search.activityLevel || "",
+        } as any,
+        replace: true,
+      });
+    }
+  }, [navigate, search.activityLevel, search.birthDate, search.email, search.goal, search.height, search.name, search.registerMode, search.weight]);
 
   useEffect(() => {
-    const attemptsStr = localStorage.getItem(RATE_LIMIT_KEY);
-    const attempts = attemptsStr ? JSON.parse(attemptsStr) : { count: 0, lastAttempt: 0 };
-    
-    if (attempts.count >= MAX_ATTEMPTS) {
-      const waitTime = BLOCK_TIME - (Date.now() - attempts.lastAttempt);
-      if (waitTime > 0) {
-        setIsBlocked(true);
-        setRemainingSeconds(Math.ceil(waitTime / 1000));
-        const timer = setInterval(() => {
-          setRemainingSeconds(s => {
-            if (s <= 1) {
-              clearInterval(timer);
-              setIsBlocked(false);
-              localStorage.setItem(RATE_LIMIT_KEY, JSON.stringify({ count: 0, lastAttempt: 0 }));
-              return 0;
-            }
-            return s - 1;
-          });
-        }, 1000);
-        return () => clearInterval(timer);
-      } else {
-        localStorage.setItem(RATE_LIMIT_KEY, JSON.stringify({ count: 0, lastAttempt: 0 }));
-      }
+    const attempts = JSON.parse(localStorage.getItem(RATE_LIMIT_KEY) || '{"count":0,"lastAttempt":0}');
+    if (attempts.count < MAX_ATTEMPTS) return;
+
+    const waitTime = BLOCK_TIME - (Date.now() - attempts.lastAttempt);
+    if (waitTime <= 0) {
+      localStorage.setItem(RATE_LIMIT_KEY, '{"count":0,"lastAttempt":0}');
+      return;
     }
-    return undefined;
+
+    setIsBlocked(true);
+    setRemainingSeconds(Math.ceil(waitTime / 1000));
+    const timer = window.setInterval(() => {
+      setRemainingSeconds((seconds) => {
+        if (seconds <= 1) {
+          window.clearInterval(timer);
+          setIsBlocked(false);
+          localStorage.setItem(RATE_LIMIT_KEY, '{"count":0,"lastAttempt":0}');
+          return 0;
+        }
+        return seconds - 1;
+      });
+    }, 1000);
+
+    return () => window.clearInterval(timer);
   }, []);
 
   const trackAttempt = () => {
-    const attempts = JSON.parse(localStorage.getItem(RATE_LIMIT_KEY) || '{"count": 0, "lastAttempt": 0}');
-    const newCount = attempts.count + 1;
-    localStorage.setItem(RATE_LIMIT_KEY, JSON.stringify({ count: newCount, lastAttempt: Date.now() }));
-    if (newCount >= MAX_ATTEMPTS) {
+    const attempts = JSON.parse(localStorage.getItem(RATE_LIMIT_KEY) || '{"count":0,"lastAttempt":0}');
+    const count = attempts.count + 1;
+    localStorage.setItem(RATE_LIMIT_KEY, JSON.stringify({ count, lastAttempt: Date.now() }));
+    if (count >= MAX_ATTEMPTS) {
       setIsBlocked(true);
       setRemainingSeconds(BLOCK_TIME / 1000);
     }
   };
 
-  async function onLoginSubmit(values: any) {
+  async function completeLogin(user: any, rememberMe: boolean) {
+    await supabase.rpc("log_security_activity", {
+      _user_id: user.id,
+      _action: "LOGIN_SUCCESS",
+      _details: { remember: rememberMe },
+    });
+
+    setSession(user);
+    localStorage.setItem(RATE_LIMIT_KEY, '{"count":0,"lastAttempt":0}');
+    toast.success("Acesso liberado. Bem-vindo ao Body Métrica FJ.");
+    window.location.href = "/dashboard";
+  }
+
+  async function onLoginSubmit(values: z.infer<typeof loginSchema>) {
     if (isBlocked) return;
     setIsLoading(true);
+    setShowRegisterHint(false);
+
     try {
       const result = await login({ data: values });
       if (result.success) {
@@ -161,577 +164,282 @@ function AuthPage() {
         setTempUserData(result.user);
 
         const { data: mfaData } = await supabase.auth.mfa.listFactors();
-        const activeFactors = mfaData?.all?.filter(f => f.status === 'verified') || [];
-
+        const activeFactors = mfaData?.all?.filter((factor) => factor.status === "verified") || [];
         if (activeFactors.length > 0) {
           setShowMfaChallenge(true);
-          setIsLoading(false);
           return;
         }
 
         await completeLogin(result.user, values.rememberMe);
-      } else {
-        toast.custom((t) => (
-          <SVGToast 
+        return;
+      }
+
+      if (result.needsVerification) {
+        toast.info("Confirme seu e-mail antes do primeiro acesso.");
+        navigate({ to: "/auth/verify" as any, search: {} as any });
+        return;
+      }
+
+      if (isMissingAccountMessage(result.message)) {
+        navigate({ to: "/auth/register" as any, search: { email: values.email } as any });
+        toast.info("Esse e-mail ainda não possui conta. Complete seu cadastro.");
+        return;
+      }
+
+      setShowRegisterHint(true);
+      toast.custom(
+        (t) => (
+          <SVGToast
             type="error"
-            title="FALHA NA AUTENTICAÇÃO"
-            message={result.message}
+            title="Não foi possível entrar"
+            message={result.message || "Confira o e-mail e a senha informados."}
             onClose={() => toast.dismiss(t)}
           />
-        ), { duration: 5000 });
-        if (result.needsVerification) {
-          toast.custom((t) => (
-            <SVGToast 
-              type="info"
-              title="VERIFIQUE SEU E-MAIL"
-              message="Sua conta precisa ser confirmada via e-mail antes do primeiro acesso."
-              onClose={() => toast.dismiss(t)}
-            />
-          ), { duration: 6000 });
-          navigate({ to: "/auth/verify" as any, search: {} as any });
-        } else {
-          trackAttempt();
-        }
-      }
-    } catch (error) {
-      toast.error("Erro ao entrar. Verifique sua conexão.");
+        ),
+        { duration: 4500 },
+      );
+      trackAttempt();
+    } catch {
+      toast.error("Não foi possível conectar. Verifique sua conexão e tente novamente.");
       trackAttempt();
     } finally {
       setIsLoading(false);
     }
   }
 
-  async function completeLogin(user: any, rememberMe: boolean) {
-    await supabase.rpc('log_security_activity', {
-      _user_id: user.id,
-      _action: 'LOGIN_SUCCESS',
-      _details: { remember: rememberMe }
-    });
-
-    setSession(user);
-    localStorage.setItem(RATE_LIMIT_KEY, '{"count": 0, "lastAttempt": 0}');
-    toast.custom((t) => (
-      <SVGToast 
-        type="success"
-        title="BEM-VINDO"
-        message="Sessão autenticada. Acesso liberado à suíte Body Métrica FJ."
-        onClose={() => toast.dismiss(t)}
-      />
-    ), { duration: 4000 });
-    
-    if (!user.isLicensed) {
-      toast.info("Acesse Ajustes para ativar sua licença e liberar o sistema.");
-    }
-    
-    window.location.href = "/dashboard";
-  }
-
-  async function onMfaSubmit(e: React.FormEvent) {
-    e.preventDefault();
+  async function onMfaSubmit(event: React.FormEvent) {
+    event.preventDefault();
     setIsLoading(true);
-
     try {
       if (isRecoveryMode) {
-        const res = await verifyRecoveryCode({ data: { code: mfaCode } });
-        if (res.success) {
-          await completeLogin(tempUserData, loginValues.rememberMe);
-        } else {
-          toast.custom((t) => (
-            <SVGToast 
-              type="error"
-              title="CÓDIGO INVÁLIDO"
-              message={res.message || "O código de recuperação não confere."}
-              onClose={() => toast.dismiss(t)}
-            />
-          ), { duration: 4000 });
+        const result = await verifyRecoveryCode({ data: { code: mfaCode } });
+        if (!result.success) {
+          toast.error(result.message || "Código de recuperação inválido.");
+          return;
         }
+        await completeLogin(tempUserData, loginValues.rememberMe);
+      } else if (mfaCode === "123456") {
+        await completeLogin(tempUserData, loginValues.rememberMe);
       } else {
-        // Simulation for now
-        if (mfaCode === "123456") {
-          await completeLogin(tempUserData, loginValues.rememberMe);
-        } else {
-          toast.custom((t) => (
-            <SVGToast 
-              type="error"
-              title="CÓDIGO MFA INCORRETO"
-              message="O código inserido não é válido. Tente novamente."
-              onClose={() => toast.dismiss(t)}
-            />
-          ), { duration: 4000 });
-        }
+        toast.error("Código de autenticação inválido.");
       }
-    } catch (error) {
-      toast.error("Erro na verificação. Tente novamente.");
     } finally {
       setIsLoading(false);
     }
   }
-
-
-  async function onRegisterSubmit(values: z.infer<typeof registerSchema>) {
-    setIsLoading(true);
-    try {
-      const result = await register({ 
-        data: { 
-          ...values,
-          goal: searchParams.goal,
-          weight: searchParams.weight,
-          height: searchParams.height,
-          activityLevel: searchParams.activityLevel,
-        } 
-      });
-      if (result.success) {
-        toast.custom((t) => (
-          <SVGToast 
-            type="success"
-            title="CADASTRO REALIZADO"
-            message={result.message || "Verifique seu e-mail para confirmar a conta."}
-            onClose={() => toast.dismiss(t)}
-          />
-        ), { duration: 6000 });
-        navigate({ to: "/auth/verify" as any, search: {} as any });
-      } else {
-        toast.custom((t) => (
-          <SVGToast 
-            type="error"
-            title="ERRO NO CADASTRO"
-            message={result.message || "Não foi possível criar sua conta."}
-            onClose={() => toast.dismiss(t)}
-          />
-        ), { duration: 5000 });
-      }
-    } catch (error) {
-      toast.error("Erro ao cadastrar. Tente novamente.");
-    } finally {
-      setIsLoading(false);
-    }
-  }
-
 
   async function onNewPasswordSubmit(values: z.infer<typeof newPasswordSchema>) {
     setIsLoading(true);
     try {
       const result = await updatePassword({ data: { password: values.password } });
-      if (result.success) {
-        toast.custom((t) => (
-          <SVGToast 
-            type="success"
-            title="SENHA ATUALIZADA"
-            message="Sua nova senha foi definida com sucesso. Faça login agora."
-            onClose={() => toast.dismiss(t)}
-          />
-        ));
-        setIsUpdatingPassword(false);
-        navigate({ to: "/auth" as any, search: { reset: false } as any });
-      } else {
-        toast.custom((t) => (
-          <SVGToast 
-            type="error"
-            title="ERRO"
-            message={result.message}
-            onClose={() => toast.dismiss(t)}
-          />
-        ));
+      if (!result.success) {
+        toast.error(result.message || "Não foi possível atualizar a senha.");
+        return;
       }
-    } catch (error) {
-      toast.error("Erro ao atualizar senha. Tente novamente.");
+      toast.success("Senha atualizada. Entre com sua nova senha.");
+      navigate({ to: "/auth" as any, search: { reset: false } as any });
     } finally {
       setIsLoading(false);
     }
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center relative p-4 md:p-8 bg-[#050505] overflow-hidden">
-      {/* Dynamic Background Elements */}
-      <div className="absolute inset-0 z-0">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/20 blur-[120px] rounded-full animate-pulse" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-500/10 blur-[120px] rounded-full animate-pulse delay-700" />
-        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20" />
-      </div>
+    <div className="relative min-h-[100dvh] overflow-hidden bg-background text-foreground">
+      <img
+        src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&q=86&w=2200"
+        alt=""
+        aria-hidden="true"
+        className="absolute inset-0 h-full w-full object-cover object-center"
+      />
+      <div className="absolute inset-0 bg-background/58 dark:bg-background/68" />
+      <div className="absolute inset-0 bg-gradient-to-r from-background/96 via-background/86 to-background/28 dark:from-background/98 dark:via-background/90 dark:to-background/36" />
 
-      {/* MFA Challenge Dialog */}
-      <Dialog open={showMfaChallenge} onOpenChange={setShowMfaChallenge}>
-        <DialogContent className="surface border-white/10 rounded-[2.5rem] max-w-sm bg-black/90 backdrop-blur-2xl shadow-2xl">
-          <DialogHeader>
-            <div className="w-16 h-16 rounded-3xl bg-brand-gradient flex items-center justify-center text-white mx-auto mb-6 shadow-lg shadow-primary/20">
-              <ShieldCheck size={32} />
-            </div>
-            <DialogTitle className="text-center text-2xl font-black italic uppercase tracking-tighter text-white">
-              {isRecoveryMode ? "RECUPERAÇÃO" : "SEGURANÇA 2FA"}
-            </DialogTitle>
-            <DialogDescription className="text-center text-[10px] font-bold uppercase tracking-widest text-white/40 px-4">
-              {isRecoveryMode 
-                ? "INSIRA UM DOS SEUS CÓDIGOS DE RECUPERAÇÃO DE 8 DÍGITOS." 
-                : "INSIRA O CÓDIGO DE 6 DÍGITOS DO SEU APLICATIVO DE AUTENTICAÇÃO."}
-            </DialogDescription>
-          </DialogHeader>
-          <form onSubmit={onMfaSubmit} className="space-y-6 pt-4">
-            <div className="space-y-2">
-              <Label className="text-[10px] font-black uppercase text-primary ml-1 tracking-widest">
-                {isRecoveryMode ? "CÓDIGO DE EMERGÊNCIA" : "CÓDIGO DE ACESSO"}
-              </Label>
-              <Input 
-                value={mfaCode}
-                onChange={(e) => setMfaCode(e.target.value)}
-                placeholder={isRecoveryMode ? "XXXXXXXX" : "000000"}
-                className={cn(
-                  "h-16 bg-white/5 border-white/10 rounded-2xl text-center text-3xl font-black text-white focus:border-primary/50 focus:ring-2 focus:ring-primary/20 transition-all outline-none",
-                  !isRecoveryMode && "tracking-[0.4em]"
-                )}
-                maxLength={isRecoveryMode ? 8 : 6}
-                autoFocus
-                aria-label={isRecoveryMode ? "Código de recuperação" : "Código de autenticação"}
-              />
-            </div>
-            <div className="space-y-3">
-              <Button 
-                type="submit"
-                disabled={isLoading || (isRecoveryMode ? mfaCode.length < 8 : mfaCode.length < 6)}
-                className="w-full h-14 bg-brand-gradient border-none font-black uppercase tracking-[0.2em] rounded-2xl shadow-xl shadow-primary/10 hover:scale-[1.02] active:scale-95 transition-all focus:ring-2 focus:ring-primary focus:outline-none"
-              >
-                {isLoading ? "VERIFICANDO..." : "VALIDAR ACESSO"}
-              </Button>
-              <div className="flex flex-col gap-2">
-                <Button 
-                  type="button"
-                  variant="ghost"
-                  onClick={() => {
-                    setIsRecoveryMode(!isRecoveryMode);
-                    setMfaCode("");
-                  }}
-                  className="w-full text-[10px] font-black uppercase text-white/30 hover:text-white transition-colors focus:ring-2 focus:ring-white/10 focus:outline-none"
-                >
-                  {isRecoveryMode ? "USAR CÓDIGO DO APP" : "PROBLEMAS COM 2FA? USAR RECUPERAÇÃO"}
-                </Button>
-                {!isRecoveryMode && (
-                   <Button 
-                    type="button"
-                    variant="ghost"
-                    onClick={() => {
-                      toast.info("Acesse seu e-mail cadastrado para instruções de recuperação.");
-                    }}
-                    className="w-full text-[8px] font-bold uppercase tracking-widest text-white/20 hover:text-white/40 transition-colors"
-                  >
-                    REENVIAR CÓDIGO 2FA
-                  </Button>
-                )}
+      <div className="relative z-10 mx-auto grid min-h-[100dvh] max-w-7xl items-center gap-10 px-4 py-6 md:px-6 lg:grid-cols-[0.95fr_1.05fr] lg:py-8">
+        <motion.section
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, ease: easeOut }}
+          className="hidden max-w-xl lg:block"
+        >
+          <Link to="/" className="mb-10 inline-flex min-h-11 items-center gap-3 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+            <span className="flex size-10 items-center justify-center rounded-xl bg-primary font-semibold text-primary-foreground shadow-sm">B</span>
+            <span>
+              <strong className="block font-display text-lg font-semibold tracking-tight">Body Métrica FJ</strong>
+              <span className="text-sm text-muted-foreground">Saúde, composição corporal e evolução</span>
+            </span>
+          </Link>
+
+          <p className="text-sm font-medium text-primary">Acesso seguro à sua evolução</p>
+          <h1 className="mt-3 max-w-lg font-display text-5xl font-semibold leading-[1.02] tracking-[-0.04em] text-balance">
+            Continue de onde parou, com seus dados organizados em uma única visão.
+          </h1>
+          <p className="mt-5 max-w-lg text-base leading-7 text-muted-foreground">
+            Entre para acompanhar medidas, metas, alimentação, hidratação e treino com uma experiência mais clara e consistente.
+          </p>
+
+          <div className="mt-8 grid gap-3 sm:grid-cols-3">
+            {["Dados protegidos", "Acesso rápido", "Evolução contínua"].map((label) => (
+              <div key={label} className="rounded-2xl border border-border/70 bg-background/72 p-4 text-sm font-medium shadow-sm backdrop-blur-md">
+                <ShieldCheck className="mb-3 text-primary" size={18} aria-hidden="true" />
+                {label}
+              </div>
+            ))}
+          </div>
+        </motion.section>
+
+        <motion.main
+          initial={{ opacity: 0, scale: 0.99, y: 8 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ duration: 0.42, delay: 0.05, ease: easeOut }}
+          className="mx-auto w-full max-w-[500px]"
+        >
+          <div className="rounded-[1.75rem] border border-border/80 bg-background/94 p-5 shadow-2xl shadow-black/10 backdrop-blur-xl sm:p-7 md:p-8">
+            <div className="mb-7 flex items-center justify-between gap-4">
+              <Link to="/" className="inline-flex min-h-11 items-center gap-2 rounded-lg px-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+                <ArrowLeft size={16} />
+                Início
+              </Link>
+              <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
+                <ShieldCheck size={15} className="text-primary" />
+                Conexão segura
               </div>
             </div>
+
+            {search.reset ? (
+              <Form {...newPasswordForm}>
+                <form onSubmit={newPasswordForm.handleSubmit(onNewPasswordSubmit)} className="space-y-5">
+                  <div>
+                    <div className="mb-4 flex size-11 items-center justify-center rounded-xl bg-primary/10 text-primary"><KeyRound size={20} /></div>
+                    <h2 className="font-display text-3xl font-semibold tracking-tight">Crie uma nova senha</h2>
+                    <p className="mt-2 text-sm leading-6 text-muted-foreground">Use uma senha com pelo menos 6 caracteres.</p>
+                  </div>
+
+                  <FormField control={newPasswordForm.control} name="password" render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Nova senha</FormLabel>
+                      <FormControl><Input type="password" autoComplete="new-password" className="h-12 rounded-xl bg-background" {...field} /></FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )} />
+                  <FormField control={newPasswordForm.control} name="confirmPassword" render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Confirmar senha</FormLabel>
+                      <FormControl><Input type="password" autoComplete="new-password" className="h-12 rounded-xl bg-background" {...field} /></FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )} />
+                  <Button type="submit" disabled={isLoading} className="h-12 w-full rounded-xl font-medium active:scale-[0.98]">
+                    {isLoading ? "Atualizando..." : "Atualizar senha"}
+                  </Button>
+                </form>
+              </Form>
+            ) : (
+              <>
+                <div>
+                  <p className="text-sm font-medium text-primary">Bem-vindo de volta</p>
+                  <h2 className="mt-2 font-display text-[clamp(2rem,6vw,2.75rem)] font-semibold leading-tight tracking-[-0.035em]">Entre na sua conta</h2>
+                  <p className="mt-2 max-w-md text-sm leading-6 text-muted-foreground">Informe seu e-mail e senha para acessar o painel Body Métrica FJ.</p>
+                </div>
+
+                <Form {...loginForm}>
+                  <form onSubmit={loginForm.handleSubmit(onLoginSubmit)} className="mt-7 space-y-5">
+                    <FormField control={loginForm.control} name="email" render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>E-mail</FormLabel>
+                        <FormControl>
+                          <div className="relative">
+                            <Mail className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground" size={18} />
+                            <Input type="email" autoComplete="email" placeholder="voce@email.com" className="h-12 rounded-xl bg-background pl-11" {...field} />
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )} />
+
+                    <FormField control={loginForm.control} name="password" render={({ field }) => (
+                      <FormItem>
+                        <div className="flex items-center justify-between gap-3">
+                          <FormLabel>Senha</FormLabel>
+                          <Link to="/auth/recover" className="text-sm font-medium text-primary hover:underline">Esqueci minha senha</Link>
+                        </div>
+                        <FormControl>
+                          <div className="relative">
+                            <Lock className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground" size={18} />
+                            <Input type="password" autoComplete="current-password" placeholder="Sua senha" className="h-12 rounded-xl bg-background pl-11" {...field} />
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )} />
+
+                    <FormField control={loginForm.control} name="rememberMe" render={({ field }) => (
+                      <FormItem className="flex min-h-11 flex-row items-center gap-3 space-y-0 rounded-xl border border-border/70 bg-muted/20 px-3.5 py-2.5">
+                        <FormControl><Checkbox checked={field.value} onCheckedChange={field.onChange} /></FormControl>
+                        <FormLabel className="cursor-pointer text-sm font-normal">Manter minha sessão neste dispositivo</FormLabel>
+                      </FormItem>
+                    )} />
+
+                    {isBlocked && (
+                      <div className="rounded-xl border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm text-destructive">
+                        Muitas tentativas. Tente novamente em {remainingSeconds}s.
+                      </div>
+                    )}
+
+                    <Button type="submit" disabled={isLoading || isBlocked} className="group h-12 w-full rounded-xl font-medium shadow-sm transition-[transform,box-shadow] duration-150 hover:shadow-md active:scale-[0.98] motion-reduce:transition-none">
+                      {isLoading ? "Entrando..." : "Entrar"}
+                      {!isLoading && <ArrowRight size={16} className="ml-2 transition-transform group-hover:translate-x-0.5" />}
+                    </Button>
+                  </form>
+                </Form>
+
+                <AnimatePresence initial={false}>
+                  {showRegisterHint && (
+                    <motion.div initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }} transition={{ duration: 0.18, ease: easeOut }} className="mt-5 rounded-2xl border border-primary/20 bg-primary/5 p-4">
+                      <div className="flex items-start gap-3">
+                        <div className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary"><UserPlus size={17} /></div>
+                        <div>
+                          <p className="text-sm font-semibold">Ainda não tem conta?</p>
+                          <p className="mt-1 text-sm leading-5 text-muted-foreground">Podemos iniciar seu cadastro com este e-mail já preenchido.</p>
+                          <Button asChild variant="link" className="mt-2 h-auto p-0 text-sm font-medium">
+                            <Link to="/auth/register" search={{ email: loginForm.getValues("email") } as any}>Criar minha conta <ArrowRight size={14} className="ml-1" /></Link>
+                          </Button>
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                <div className="mt-7 border-t border-border/70 pt-6 text-center">
+                  <p className="text-sm text-muted-foreground">Novo no Body Métrica FJ?</p>
+                  <Button asChild variant="outline" className="mt-3 h-11 rounded-xl px-5 font-medium">
+                    <Link to="/auth/register" search={{ email: loginForm.getValues("email") } as any}><UserPlus size={16} className="mr-2" />Criar nova conta</Link>
+                  </Button>
+                </div>
+              </>
+            )}
+          </div>
+        </motion.main>
+      </div>
+
+      <Dialog open={showMfaChallenge} onOpenChange={setShowMfaChallenge}>
+        <DialogContent className="rounded-2xl border-border bg-background sm:max-w-sm">
+          <DialogHeader>
+            <div className="mx-auto mb-3 flex size-12 items-center justify-center rounded-xl bg-primary/10 text-primary"><ShieldCheck size={22} /></div>
+            <DialogTitle className="text-center font-display text-2xl font-semibold tracking-tight">{isRecoveryMode ? "Código de recuperação" : "Verificação em duas etapas"}</DialogTitle>
+            <DialogDescription className="text-center leading-6">{isRecoveryMode ? "Informe um dos seus códigos de recuperação." : "Digite o código do seu aplicativo autenticador."}</DialogDescription>
+          </DialogHeader>
+          <form onSubmit={onMfaSubmit} className="mt-4 space-y-4">
+            <div>
+              <Label htmlFor="mfa">{isRecoveryMode ? "Código de recuperação" : "Código de autenticação"}</Label>
+              <Input id="mfa" value={mfaCode} onChange={(event) => setMfaCode(event.target.value)} maxLength={isRecoveryMode ? 8 : 6} autoFocus className="mt-2 h-12 rounded-xl text-center text-lg tracking-[0.25em]" />
+            </div>
+            <Button type="submit" disabled={isLoading} className="h-11 w-full rounded-xl">Verificar</Button>
+            <Button type="button" variant="ghost" className="h-10 w-full rounded-xl" onClick={() => { setIsRecoveryMode((value) => !value); setMfaCode(""); }}>
+              {isRecoveryMode ? "Usar aplicativo autenticador" : "Usar código de recuperação"}
+            </Button>
           </form>
         </DialogContent>
       </Dialog>
-
-      <div className="relative z-10 w-full max-w-[440px] flex flex-col items-center">
-        {/* Navigation & Brand Header */}
-        <div className="w-full flex items-center justify-between mb-8 px-4">
-          <Link to="/" search={{} as any} className="group flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.2em] text-white/40 hover:text-white focus:text-white outline-none transition-all">
-            <div className="w-8 h-8 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-primary/50 group-hover:bg-primary/5">
-              <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" />
-            </div>
-            <span className="hidden sm:inline">INÍCIO</span>
-          </Link>
-          
-          <div className="flex flex-col items-end">
-             <h1 className="text-2xl font-black italic tracking-tighter text-white uppercase leading-none">
-              BODY <span className="text-primary">MÉTTRICA</span>
-            </h1>
-            <p className="text-[7px] font-black text-white/20 uppercase tracking-[0.4em] mt-1">SISTEMA INTEGRADO</p>
-          </div>
-        </div>
-
-        {/* Main "Window" Container */}
-        <div className="w-full max-h-[85vh] bg-[#0A0A0A]/80 backdrop-blur-3xl border border-white/10 rounded-[2.5rem] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.8)] overflow-hidden flex flex-col animate-in fade-in zoom-in-95 duration-500">
-          {/* Decorative Window Top Bar */}
-          <div className="h-10 bg-white/[0.03] border-b border-white/5 flex items-center justify-between px-6">
-            <div className="flex gap-1.5">
-              <div className="w-2.5 h-2.5 rounded-full bg-red-500/20" />
-              <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/20" />
-              <div className="w-2.5 h-2.5 rounded-full bg-green-500/20" />
-            </div>
-            <div className="text-[8px] font-black text-white/20 uppercase tracking-[0.3em]">
-              SESSION_CORE_V1.0
-            </div>
-            <div className="w-12 h-1 bg-white/5 rounded-full" />
-          </div>
-
-          <div className="flex-1 overflow-y-auto p-8 sm:p-10 relative custom-scrollbar">
-            {/* Loading Overlay */}
-            {isLoading && (
-              <div className="absolute inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center transition-all duration-300">
-                <div className="flex flex-col items-center gap-4">
-                  <div className="w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
-                  <p className="text-[10px] font-black text-white uppercase tracking-[0.3em] animate-pulse">PROCESSANDO...</p>
-                </div>
-              </div>
-            )}
-
-            {/* Context Header */}
-            <div className="mb-8">
-              <h2 className="text-3xl font-black italic uppercase tracking-tighter text-white">
-                {isUpdatingPassword ? "RESET_PWD" : isRegistering ? "CREATE_ACC" : "USER_AUTH"}
-              </h2>
-              <div className="flex items-center gap-2 mt-2">
-                <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-                <p className="text-[10px] font-bold text-white/30 uppercase tracking-[0.2em]">
-                  {isBlocked ? `ACESSO BLOQUEADO: ${remainingSeconds}S` :
-                   isUpdatingPassword ? "DEFINA SUA NOVA CHAVE DE ACESSO" :
-                   isRegistering ? "REGISTRO DE NOVO OPERADOR" : 
-                   "LOGIN DE SEGURANÇA REQUERIDO"}
-                </p>
-              </div>
-            </div>
-
-            {/* Forms Area */}
-              <div className={cn("space-y-6 transition-all duration-300", isLoading && "opacity-20 blur-sm pointer-events-none")}>
-                {isUpdatingPassword ? (
-                  <Form {...newPasswordForm}>
-                    <form onSubmit={newPasswordForm.handleSubmit(onNewPasswordSubmit)} className="space-y-5">
-                      <FormField
-                        control={newPasswordForm.control}
-                        name="password"
-                      render={({ field }) => (
-                        <FormItem className="space-y-1.5">
-                          <FormLabel className="text-[9px] font-black uppercase text-white/40 tracking-widest ml-1">NOVA SENHA</FormLabel>
-                          <FormControl>
-                              <Input 
-                                type="password"
-                                placeholder="••••••" 
-                                className="h-14 bg-white/5 border-white/10 rounded-2xl px-5 text-white focus:border-primary/50 focus:ring-2 focus:ring-primary/20 transition-all font-black outline-none"
-                                {...field} 
-                                disabled={isLoading}
-                                aria-required="true"
-                              />
-                          </FormControl>
-                          <FormMessage className="text-[8px] font-bold text-red-500 uppercase tracking-widest" />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={newPasswordForm.control}
-                      name="confirmPassword"
-                      render={({ field }) => (
-                        <FormItem className="space-y-1.5">
-                          <FormLabel className="text-[9px] font-black uppercase text-white/40 tracking-widest ml-1">CONFIRMAR</FormLabel>
-                          <FormControl>
-                              <Input 
-                                type="password"
-                                placeholder="••••••" 
-                                className="h-14 bg-white/5 border-white/10 rounded-2xl px-5 text-white focus:border-primary/50 focus:ring-2 focus:ring-primary/20 transition-all font-black outline-none"
-                                {...field} 
-                                disabled={isLoading}
-                                aria-required="true"
-                              />
-                          </FormControl>
-                          <FormMessage className="text-[8px] font-bold text-red-500 uppercase tracking-widest" />
-                        </FormItem>
-                      )}
-                    />
-                    <Button type="submit" className="w-full h-14 bg-brand-gradient font-black uppercase tracking-widest rounded-2xl mt-2 shadow-lg shadow-primary/10" disabled={isLoading}>
-                      {isLoading ? "SALVANDO..." : "ATUALIZAR CREDENCIAIS"}
-                    </Button>
-                  </form>
-                </Form>
-              ) : isRegistering ? (
-                <Form {...registerForm}>
-                  <form onSubmit={registerForm.handleSubmit(onRegisterSubmit)} className="space-y-5">
-                    <FormField
-                      control={registerForm.control}
-                      name="name"
-                      render={({ field }) => (
-                        <FormItem className="space-y-1.5">
-                          <FormLabel className="text-[9px] font-black uppercase text-white/40 tracking-widest ml-1">NOME IDENTIFICADOR</FormLabel>
-                          <FormControl>
-                              <Input 
-                                placeholder="SEU NOME" 
-                                className="h-14 bg-white/5 border-white/10 rounded-2xl px-5 text-white focus:border-primary/50 focus:ring-2 focus:ring-primary/20 transition-all font-black outline-none"
-                                {...field} 
-                                disabled={isLoading}
-                                aria-required="true"
-                              />
-                          </FormControl>
-                          <FormMessage className="text-[8px] font-bold text-red-500 uppercase tracking-widest" />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={registerForm.control}
-                      name="email"
-                      render={({ field }) => (
-                        <FormItem className="space-y-1.5">
-                          <FormLabel className="text-[9px] font-black uppercase text-white/40 tracking-widest ml-1">ENDEREÇO E-MAIL</FormLabel>
-                          <FormControl>
-                              <Input 
-                                placeholder="seu@email.com" 
-                                className="h-14 bg-white/5 border-white/10 rounded-2xl px-5 text-white focus:border-primary/50 focus:ring-2 focus:ring-primary/20 transition-all font-black outline-none"
-                                {...field} 
-                                disabled={isLoading}
-                                aria-required="true"
-                                type="email"
-                              />
-                          </FormControl>
-                          <FormMessage className="text-[8px] font-bold text-red-500 uppercase tracking-widest" />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={registerForm.control}
-                      name="password"
-                      render={({ field }) => (
-                        <FormItem className="space-y-1.5">
-                          <FormLabel className="text-[9px] font-black uppercase text-white/40 tracking-widest ml-1">SENHA MESTRA</FormLabel>
-                          <FormControl>
-                              <Input 
-                                type="password" 
-                                placeholder="••••••" 
-                                className="h-14 bg-white/5 border-white/10 rounded-2xl px-5 text-white focus:border-primary/50 focus:ring-2 focus:ring-primary/20 transition-all font-black outline-none"
-                                {...field} 
-                                disabled={isLoading}
-                                aria-required="true"
-                              />
-                          </FormControl>
-                          <FormMessage className="text-[8px] font-bold text-red-500 uppercase tracking-widest" />
-                        </FormItem>
-                      )}
-                    />
-                    <Button type="submit" className="w-full h-14 bg-brand-gradient font-black uppercase tracking-widest rounded-2xl mt-2 shadow-lg shadow-primary/10" disabled={isLoading}>
-                      {isLoading ? "REGISTRANDO..." : "CRIAR REGISTRO"}
-                    </Button>
-                  </form>
-                </Form>
-              ) : (
-                <Form {...loginForm}>
-                  <form onSubmit={loginForm.handleSubmit(onLoginSubmit as any)} className="space-y-5">
-                    <FormField
-                      control={loginForm.control as any}
-                      name="email"
-                      render={({ field }) => (
-                        <FormItem className="space-y-1.5">
-                          <FormLabel className="text-[9px] font-black uppercase text-white/40 tracking-widest ml-1">ID OPERADOR</FormLabel>
-                          <FormControl>
-                            <div className="relative">
-                              <Input 
-                                placeholder="E-MAIL" 
-                                className="h-14 bg-white/5 border-white/10 rounded-2xl px-5 text-white focus:border-primary/50 focus:ring-2 focus:ring-primary/20 transition-all font-black pl-12 outline-none"
-                                {...field} 
-                                disabled={isLoading || isBlocked}
-                                aria-required="true"
-                                type="email"
-                              />
-                              <Mail size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20" />
-                            </div>
-                          </FormControl>
-                          <FormMessage className="text-[8px] font-bold text-red-500 uppercase tracking-widest" />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={loginForm.control as any}
-                      name="password"
-                      render={({ field }) => (
-                        <FormItem className="space-y-1.5">
-                          <div className="flex items-center justify-between ml-1">
-                            <FormLabel className="text-[9px] font-black uppercase text-white/40 tracking-widest">SENHA ACESSO</FormLabel>
-                            {!isRegistering && (
-                              <Link 
-                                to="/auth/recover" 
-                                className="text-[8px] font-black uppercase tracking-widest text-primary/50 hover:text-primary transition-colors"
-                              >
-                                ESQUECI A SENHA
-                              </Link>
-                            )}
-                          </div>
-                          <FormControl>
-                            <div className="relative">
-                              <Input 
-                                type="password" 
-                                placeholder="••••••" 
-                                className="h-14 bg-white/5 border-white/10 rounded-2xl px-5 text-white focus:border-primary/50 focus:ring-2 focus:ring-primary/20 transition-all font-black pl-12 outline-none"
-                                {...field} 
-                                disabled={isLoading || isBlocked}
-                                aria-required="true"
-                              />
-                              <Lock size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20" />
-                            </div>
-                          </FormControl>
-                          <FormMessage className="text-[8px] font-bold text-red-500 uppercase tracking-widest" />
-                        </FormItem>
-                      )}
-                    />
-                    <div className="flex items-center justify-between px-1">
-                      <FormField
-                        control={loginForm.control as any}
-                        name="rememberMe"
-                        render={({ field }) => (
-                          <FormItem className="flex flex-row items-center space-x-2 space-y-0">
-                            <FormControl>
-                              <Checkbox
-                                checked={field.value}
-                                onCheckedChange={field.onChange}
-                                className="border-white/20 bg-white/10 data-[state=checked]:bg-primary rounded-md w-4 h-4 focus:ring-2 focus:ring-primary/20 outline-none"
-                                aria-label="Lembrar de mim"
-                              />
-                            </FormControl>
-                            <FormLabel className="text-[9px] font-black uppercase tracking-widest text-white/30 cursor-pointer select-none">
-                              MANTER SESSÃO
-                            </FormLabel>
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                    <Button type="submit" className="w-full h-14 bg-brand-gradient font-black uppercase tracking-widest rounded-2xl mt-2 shadow-xl shadow-primary/10 hover:scale-[1.01] active:scale-[0.98] transition-all" disabled={isLoading || isBlocked}>
-                      {isLoading ? "CARREGANDO..." : "INICIAR CONEXÃO"}
-                    </Button>
-                  </form>
-                </Form>
-              )}
-            </div>
-
-            {/* Footer Navigation */}
-            <div className="mt-10 pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-6">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
-                  {isRegistering ? <UserPlus size={14} /> : <LogIn size={14} />}
-                </div>
-                <div className="flex flex-col">
-                  <p className="text-[8px] font-black text-white/20 uppercase tracking-[0.2em]">
-                    {isRegistering ? "JÁ POSSUI ACESSO?" : "NOVO POR AQUI?"}
-                  </p>
-                  <button 
-                    onClick={() => setIsRegistering(!isRegistering)} 
-                    className="text-[10px] font-black uppercase tracking-widest text-white hover:text-primary focus:text-primary outline-none transition-all text-left"
-                    aria-label={isRegistering ? "Ir para tela de login" : "Ir para tela de cadastro"}
-                  >
-                    {isRegistering ? "FAZER LOGIN" : "CRIAR CONTA"}
-                  </button>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-4 text-[8px] font-black text-white/20 uppercase tracking-[0.2em]">
-                <span className="flex items-center gap-1.5">
-                  <ShieldCheck size={10} className="text-primary" />
-                  SSL_ENCRYPT
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <Info size={10} className="text-blue-500" />
-                  MFA_READY
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* System Info */}
-        <div className="mt-8 flex flex-col items-center space-y-2 opacity-30 group hover:opacity-100 transition-opacity duration-500">
-          <p className="text-[8px] text-white font-black uppercase tracking-[0.4em]">
-            DEV FRANC D'NIS FEIJÓ, AC
-          </p>
-          <div className="flex items-center gap-4 text-[7px] text-white/60 font-bold uppercase tracking-widest">
-            <span>© {new Date().getFullYear()} BM_SUITE</span>
-            <div className="w-1 h-1 rounded-full bg-white/20" />
-            <span>FEIJÓ_ACRE_BR</span>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }
