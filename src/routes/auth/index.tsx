@@ -250,7 +250,14 @@ function AuthPage() {
         if (mfaCode === "123456") {
           await completeLogin(tempUserData, loginValues.rememberMe);
         } else {
-          toast.error("Código MFA incorreto.");
+          toast.custom((t) => (
+            <SVGToast 
+              type="error"
+              title="CÓDIGO MFA INCORRETO"
+              message="O código inserido não é válido. Tente novamente."
+              onClose={() => toast.dismiss(t)}
+            />
+          ), { duration: 4000 });
         }
       }
     } catch (error) {
