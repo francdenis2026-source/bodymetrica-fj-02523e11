@@ -37,7 +37,7 @@ export const Route = createFileRoute("/onboarding/")({
 
 function OnboardingPage() {
   const [step, setStep] = useState(1);
-  const totalSteps = 4;
+  const totalSteps = 5;
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
@@ -45,7 +45,9 @@ function OnboardingPage() {
     goal: "gain",
     weight: "",
     height: "",
-    activityLevel: "Moderadamente ativo (3-5 dias/semana)"
+    activityLevel: "Moderadamente ativo (3-5 dias/semana)",
+    macroPreference: "Equilibrado",
+    unitSystem: "Métrico"
   });
 
   const validateStep = (currentStep: number) => {
@@ -74,7 +76,9 @@ function OnboardingPage() {
         goal: formData.goal,
         weight: formData.weight,
         height: formData.height,
-        activityLevel: formData.activityLevel
+        activityLevel: formData.activityLevel,
+        macroPreference: formData.macroPreference,
+        unitSystem: formData.unitSystem
       } as any
     });
   };
@@ -202,6 +206,41 @@ function OnboardingPage() {
           )}
 
           {step === 4 && (
+            <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+              <div className="space-y-2">
+                <h1 className="text-2xl font-bold font-display text-primary">Preferências de Macros</h1>
+                <p className="text-muted-foreground text-sm">Como você prefere distribuir seus macronutrientes?</p>
+              </div>
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label>Distribuição de Macros</Label>
+                  <select 
+                    className="flex h-12 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                    value={formData.macroPreference}
+                    onChange={(e) => setFormData({...formData, macroPreference: e.target.value})}
+                  >
+                    <option>Equilibrado (40% C, 30% P, 30% G)</option>
+                    <option>High Protein (30% C, 40% P, 30% G)</option>
+                    <option>Low Carb (20% C, 40% P, 40% G)</option>
+                    <option>Cetogênica (5% C, 25% P, 70% G)</option>
+                  </select>
+                </div>
+                <div className="space-y-2">
+                  <Label>Sistema de Unidades</Label>
+                  <select 
+                    className="flex h-12 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                    value={formData.unitSystem}
+                    onChange={(e) => setFormData({...formData, unitSystem: e.target.value})}
+                  >
+                    <option>Métrico (kg, cm, ml)</option>
+                    <option>Imperial (lbs, in, oz)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {step === 5 && (
             <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 text-center">
               <div className="flex justify-center">
                 <div className="w-20 h-20 rounded-full bg-success/20 text-success flex items-center justify-center">
@@ -211,7 +250,7 @@ function OnboardingPage() {
               <div className="space-y-2">
                 <h1 className="text-2xl font-bold font-display text-primary">Tudo Pronto!</h1>
                 <p className="text-muted-foreground text-sm">
-                  Seu perfil básico foi configurado. Você poderá ajustar todos os detalhes e inserir fotos de evolução no seu dashboard.
+                  Seu perfil estratégico foi configurado. Você poderá ajustar todos os detalhes no seu dashboard de elite.
                 </p>
               </div>
               <div className="surface p-6 text-left space-y-3">
@@ -219,8 +258,8 @@ function OnboardingPage() {
                 <div className="space-y-1 text-sm">
                   <div className="flex justify-between"><span>Nome:</span> <span className="font-bold">{formData.name}</span></div>
                   <div className="flex justify-between"><span>Objetivo:</span> <span className="font-bold">{formData.goal === 'loss' ? 'Emagrecimento' : formData.goal === 'gain' ? 'Hipertrofia' : 'Manutenção'}</span></div>
-                  <div className="flex justify-between"><span>Peso Inicial:</span> <span className="font-bold">{formData.weight} kg</span></div>
-                  <div className="flex justify-between"><span>Altura:</span> <span className="font-bold">{formData.height} cm</span></div>
+                  <div className="flex justify-between"><span>Macros:</span> <span className="font-bold">{formData.macroPreference.split(' (')[0]}</span></div>
+                  <div className="flex justify-between"><span>Sistema:</span> <span className="font-bold">{formData.unitSystem}</span></div>
                 </div>
               </div>
             </div>
@@ -228,12 +267,12 @@ function OnboardingPage() {
         </div>
 
         <div className="flex items-center gap-4 py-8">
-          {step > 1 && step < 4 && (
+          {step > 1 && step < 5 && (
             <Button variant="ghost" className="h-12 gap-2" onClick={prevStep}>
               <ChevronLeft size={18} /> Voltar
             </Button>
           )}
-          {step < 4 ? (
+          {step < 5 ? (
             <Button 
               className="h-12 flex-1 gap-2 text-base font-semibold" 
               onClick={() => {
