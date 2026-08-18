@@ -26,8 +26,7 @@ import { Label } from "@/components/ui/label";
 import { login, register, setSession, requestPasswordReset, updatePassword, verifyRecoveryCode } from "@/lib/auth/auth.functions";
 import { toast } from "sonner";
 import { SVGToast } from "@/components/ui/svg-toast";
-import { ShieldCheck, ArrowLeft, Mail, UserPlus, KeyRound, Lock } from "lucide-react";
-import { ResponsiveHero } from "@/components/responsive-hero";
+import { ShieldCheck, ArrowLeft, Mail, UserPlus, KeyRound, Lock, Info } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -156,18 +155,13 @@ function AuthPage() {
     if (isBlocked) return;
     setIsLoading(true);
     try {
-      // MFA Check first
-      const { data: mfaData, error: mfaError } = await supabase.auth.mfa.listFactors();
-      const factors = mfaData?.all || [];
-      
       const result = await login({ data: values });
       if (result.success) {
         setLoginValues(values);
         setTempUserData(result.user);
 
-        // Check for MFA enrollment
-        const { data: factors, error: factorsError } = await supabase.auth.mfa.listFactors();
-        const activeFactors = factors?.all?.filter(f => f.status === 'verified') || [];
+        const { data: mfaData } = await supabase.auth.mfa.listFactors();
+        const activeFactors = mfaData?.all?.filter(f => f.status === 'verified') || [];
 
         if (activeFactors.length > 0) {
           setShowMfaChallenge(true);
@@ -319,18 +313,25 @@ function AuthPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center relative p-0 overflow-hidden bg-background">
+    <div className="min-h-screen flex items-center justify-center relative p-4 md:p-8 bg-[#050505] overflow-hidden">
+      {/* Dynamic Background Elements */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/20 blur-[120px] rounded-full animate-pulse" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-500/10 blur-[120px] rounded-full animate-pulse delay-700" />
+        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20" />
+      </div>
+
       {/* MFA Challenge Dialog */}
       <Dialog open={showMfaChallenge} onOpenChange={setShowMfaChallenge}>
-        <DialogContent className="surface border-white/10 rounded-[2rem] max-w-sm">
+        <DialogContent className="surface border-white/10 rounded-[2.5rem] max-w-sm bg-black/90 backdrop-blur-2xl shadow-2xl">
           <DialogHeader>
-            <div className="w-16 h-16 rounded-3xl bg-primary/10 flex items-center justify-center text-primary mx-auto mb-4">
+            <div className="w-16 h-16 rounded-3xl bg-brand-gradient flex items-center justify-center text-white mx-auto mb-6 shadow-lg shadow-primary/20">
               <ShieldCheck size={32} />
             </div>
-            <DialogTitle className="text-center text-xl font-black italic uppercase tracking-widest">
-              {isRecoveryMode ? "RECUPERAÇÃO" : "VERIFICAÇÃO 2FA"}
+            <DialogTitle className="text-center text-2xl font-black italic uppercase tracking-tighter text-white">
+              {isRecoveryMode ? "RECUPERAÇÃO" : "SEGURANÇA 2FA"}
             </DialogTitle>
-            <DialogDescription className="text-center text-[11px] font-bold uppercase leading-relaxed text-white/40">
+            <DialogDescription className="text-center text-[10px] font-bold uppercase tracking-widest text-white/40 px-4">
               {isRecoveryMode 
                 ? "INSIRA UM DOS SEUS CÓDIGOS DE RECUPERAÇÃO DE 8 DÍGITOS." 
                 : "INSIRA O CÓDIGO DE 6 DÍGITOS DO SEU APLICATIVO DE AUTENTICAÇÃO."}
@@ -338,16 +339,16 @@ function AuthPage() {
           </DialogHeader>
           <form onSubmit={onMfaSubmit} className="space-y-6 pt-4">
             <div className="space-y-2">
-              <Label className="text-[10px] font-black uppercase text-white/60 ml-1">
-                {isRecoveryMode ? "CÓDIGO DE RECUPERAÇÃO" : "CÓDIGO DE ACESSO"}
+              <Label className="text-[10px] font-black uppercase text-primary ml-1 tracking-widest">
+                {isRecoveryMode ? "CÓDIGO DE EMERGÊNCIA" : "CÓDIGO DE ACESSO"}
               </Label>
               <Input 
                 value={mfaCode}
                 onChange={(e) => setMfaCode(e.target.value)}
                 placeholder={isRecoveryMode ? "XXXXXXXX" : "000000"}
                 className={cn(
-                  "h-14 bg-white/5 border-white/10 rounded-2xl text-center text-2xl font-black text-white",
-                  !isRecoveryMode && "tracking-[0.5em]"
+                  "h-16 bg-white/5 border-white/10 rounded-2xl text-center text-3xl font-black text-white focus:border-primary/50 transition-all",
+                  !isRecoveryMode && "tracking-[0.4em]"
                 )}
                 maxLength={isRecoveryMode ? 8 : 6}
                 autoFocus
@@ -357,9 +358,9 @@ function AuthPage() {
               <Button 
                 type="submit"
                 disabled={isLoading || (isRecoveryMode ? mfaCode.length < 8 : mfaCode.length < 6)}
-                className="w-full h-14 bg-brand-gradient border-none font-black uppercase tracking-widest rounded-2xl"
+                className="w-full h-14 bg-brand-gradient border-none font-black uppercase tracking-[0.2em] rounded-2xl shadow-xl shadow-primary/10 hover:scale-[1.02] active:scale-95 transition-all"
               >
-                {isLoading ? "VERIFICANDO..." : "VERIFICAR E ENTRAR"}
+                {isLoading ? "VERIFICANDO..." : "VALIDAR ACESSO"}
               </Button>
               <Button 
                 type="button"
@@ -368,270 +369,303 @@ function AuthPage() {
                   setIsRecoveryMode(!isRecoveryMode);
                   setMfaCode("");
                 }}
-                className="w-full text-[10px] font-black uppercase text-white/40 hover:text-white"
+                className="w-full text-[10px] font-black uppercase text-white/30 hover:text-white transition-colors"
               >
-                {isRecoveryMode ? "USAR CÓDIGO DO APP" : "PERDEU O ACESSO? USAR RECUPERAÇÃO"}
+                {isRecoveryMode ? "USAR CÓDIGO DO APP" : "PROBLEMAS COM 2FA? USAR RECUPERAÇÃO"}
               </Button>
             </div>
           </form>
         </DialogContent>
       </Dialog>
 
-      <div className="absolute inset-0 z-0">
-        <img 
-          src="https://images.unsplash.com/photo-1593079831268-3381b0db4a77?auto=format&fit=crop&q=80&w=1600"
-          alt="Auth background"
-          className="w-full h-full object-cover opacity-30"
-        />
-        <div className="absolute inset-0 bg-gradient-to-br from-black via-black/80 to-primary/20" />
-      </div>
-
-        {/* Removed redundant hero overlay that was causing layout issues */}
-
-      <div className="relative z-10 w-full max-w-sm px-6 py-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-        <div className="text-center space-y-4 mb-6">
-          <Link to="/" search={{} as any} className="inline-flex items-center text-[10px] font-black uppercase tracking-[0.2em] text-white/50 hover:text-white transition-all mb-2 backdrop-blur-3xl bg-black/40 px-4 py-1.5 rounded-full border border-white/10 hover:border-primary/50">
-            <ArrowLeft size={12} className="mr-2" />
-            VOLTAR AO INÍCIO
+      <div className="relative z-10 w-full max-w-[440px] flex flex-col items-center">
+        {/* Navigation & Brand Header */}
+        <div className="w-full flex items-center justify-between mb-8 px-4">
+          <Link to="/" search={{} as any} className="group flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.2em] text-white/40 hover:text-white transition-all">
+            <div className="w-8 h-8 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-primary/50 group-hover:bg-primary/5">
+              <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" />
+            </div>
+            <span className="hidden sm:inline">INÍCIO</span>
           </Link>
-          <div className="mx-auto w-16 h-16 bg-brand-gradient rounded-[1.25rem] flex items-center justify-center text-primary-foreground font-black text-2xl shadow-2xl border-2 border-white/20 transform rotate-3 hover:rotate-0 transition-transform duration-500">
-            B
-          </div>
-          <div>
-            <h1 className="text-4xl font-black font-display tracking-tighter text-white uppercase italic leading-none">
-              BODY <span className="text-gradient-brand">MÉTTRICA</span>
+          
+          <div className="flex flex-col items-end">
+             <h1 className="text-2xl font-black italic tracking-tighter text-white uppercase leading-none">
+              BODY <span className="text-primary">MÉTTRICA</span>
             </h1>
-            <p className="text-white/60 font-black uppercase tracking-[0.3em] text-[8px] mt-2">PERFORMANCE & RESULTADOS</p>
+            <p className="text-[7px] font-black text-white/20 uppercase tracking-[0.4em] mt-1">SISTEMA INTEGRADO</p>
           </div>
         </div>
 
-        <Card className="surface border-white/5 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.6)] bg-black/60 backdrop-blur-3xl rounded-[2rem] overflow-hidden">
-          <CardHeader className="space-y-1 pb-6 border-b border-white/5 pt-8">
-            <CardTitle className="text-xl font-black text-white text-center uppercase tracking-[0.2em] italic">
-              {isUpdatingPassword ? "NOVA SENHA" : isRegistering ? "CADASTRO" : "AUTENTICAÇÃO"}
-            </CardTitle>
-            <CardDescription className="font-bold text-white/40 text-center uppercase text-[8px] tracking-widest px-4">
-              {isBlocked ? `ACESSO BLOQUEADO POR ${remainingSeconds}s` :
-               isUpdatingPassword ? "DEFINA SUA NOVA SENHA DE ACESSO" :
-               isRegistering ? "CRIE SUA CONTA PROFISSIONAL" : 
-               "INSIRA SEUS DADOS DE ACESSO PROTEGIDO"}
-            </CardDescription>
-          </CardHeader>
+        {/* Main "Window" Container */}
+        <div className="w-full bg-[#0A0A0A]/80 backdrop-blur-3xl border border-white/10 rounded-[2.5rem] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.8)] overflow-hidden animate-in fade-in zoom-in-95 duration-500">
+          {/* Decorative Window Top Bar */}
+          <div className="h-10 bg-white/[0.03] border-b border-white/5 flex items-center justify-between px-6">
+            <div className="flex gap-1.5">
+              <div className="w-2.5 h-2.5 rounded-full bg-red-500/20" />
+              <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/20" />
+              <div className="w-2.5 h-2.5 rounded-full bg-green-500/20" />
+            </div>
+            <div className="text-[8px] font-black text-white/20 uppercase tracking-[0.3em]">
+              SESSION_CORE_V1.0
+            </div>
+            <div className="w-12 h-1 bg-white/5 rounded-full" />
+          </div>
 
-          <CardContent className="pt-6">
-            {isUpdatingPassword ? (
-              <Form {...newPasswordForm}>
-                <form onSubmit={newPasswordForm.handleSubmit(onNewPasswordSubmit)} className="space-y-4">
-                  <FormField
-                    control={newPasswordForm.control}
-                    name="password"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="font-black text-[8px] uppercase tracking-[0.2em] text-primary ml-1">NOVA SENHA</FormLabel>
-                        <FormControl>
-                          <Input 
-                            type="password"
-                            placeholder="••••••" 
-                            className="h-12 text-base font-black bg-white/5 border-white/10 rounded-xl px-4 text-white"
-                            {...field} 
-                            disabled={isLoading}
-                          />
-                        </FormControl>
-                        <FormMessage className="text-[8px] font-bold text-destructive uppercase tracking-widest" />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={newPasswordForm.control}
-                    name="confirmPassword"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="font-black text-[8px] uppercase tracking-[0.2em] text-primary ml-1">CONFIRMAR SENHA</FormLabel>
-                        <FormControl>
-                          <Input 
-                            type="password"
-                            placeholder="••••••" 
-                            className="h-12 text-base font-black bg-white/5 border-white/10 rounded-xl px-4 text-white"
-                            {...field} 
-                            disabled={isLoading}
-                          />
-                        </FormControl>
-                        <FormMessage className="text-[8px] font-bold text-destructive uppercase tracking-widest" />
-                      </FormItem>
-                    )}
-                  />
-                  <Button type="submit" className="w-full h-12 text-sm font-black uppercase tracking-[0.2em] bg-brand-gradient rounded-xl" disabled={isLoading}>
-                    {isLoading ? "SALVANDO..." : "ATUALIZAR SENHA"}
-                  </Button>
-                </form>
-              </Form>
-            ) : isRegistering ? (
-              <Form {...registerForm}>
-                <form onSubmit={registerForm.handleSubmit(onRegisterSubmit)} className="space-y-4">
-                  <FormField
-                    control={registerForm.control}
-                    name="name"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="font-black text-[8px] uppercase tracking-[0.2em] text-primary ml-1">NOME COMPLETO</FormLabel>
-                        <FormControl>
-                          <Input 
-                            placeholder="Seu Nome" 
-                            className="h-12 text-base font-black bg-white/5 border-white/10 rounded-xl px-4 text-white"
-                            {...field} 
-                            disabled={isLoading}
-                          />
-                        </FormControl>
-                        <FormMessage className="text-[8px] font-bold text-destructive uppercase tracking-widest" />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={registerForm.control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="font-black text-[8px] uppercase tracking-[0.2em] text-primary ml-1">E-MAIL</FormLabel>
-                        <FormControl>
-                          <Input 
-                            placeholder="seu@email.com" 
-                            className="h-12 text-base font-black bg-white/5 border-white/10 rounded-xl px-4 text-white"
-                            {...field} 
-                            disabled={isLoading}
-                          />
-                        </FormControl>
-                        <FormMessage className="text-[8px] font-bold text-destructive uppercase tracking-widest" />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={registerForm.control}
-                    name="password"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="font-black text-[8px] uppercase tracking-[0.2em] text-primary ml-1">SENHA (MÍN. 6)</FormLabel>
-                        <FormControl>
-                          <Input 
-                            type="password" 
-                            placeholder="••••••" 
-                            className="h-12 text-base font-black bg-white/5 border-white/10 rounded-xl px-4 text-white"
-                            {...field} 
-                            disabled={isLoading}
-                          />
-                        </FormControl>
-                        <FormMessage className="text-[8px] font-bold text-destructive uppercase tracking-widest" />
-                      </FormItem>
-                    )}
-                  />
-                  <Button type="submit" className="w-full h-12 text-sm font-black uppercase tracking-[0.2em] bg-brand-gradient hover:scale-[1.02] transition-all shadow-xl shadow-primary/20 border-none mt-2 rounded-xl" disabled={isLoading}>
-                    {isLoading ? "CADASTRANDO..." : "CRIAR CONTA"}
-                  </Button>
-                </form>
-              </Form>
-            ) : (
-              <Form {...loginForm}>
-                <form onSubmit={loginForm.handleSubmit(onLoginSubmit as any)} className="space-y-4">
-                  <FormField
-                    control={loginForm.control as any}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="font-black text-[8px] uppercase tracking-[0.2em] text-primary ml-1">E-MAIL</FormLabel>
-                        <FormControl>
-                          <Input 
-                            placeholder="seu@email.com" 
-                            className="h-12 text-base font-black bg-white/5 border-white/10 rounded-xl px-4 text-white"
-                            {...field} 
-                            disabled={isLoading || isBlocked}
-                          />
-                        </FormControl>
-                        <FormMessage className="text-[8px] font-bold text-destructive uppercase tracking-widest" />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={loginForm.control as any}
-                    name="password"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="font-black text-[8px] uppercase tracking-[0.2em] text-primary ml-1">SENHA</FormLabel>
-                        <FormControl>
-                          <Input 
-                            type="password" 
-                            placeholder="••••••" 
-                            className="h-12 text-base font-black bg-white/5 border-white/10 rounded-xl px-4 text-white"
-                            {...field} 
-                            disabled={isLoading || isBlocked}
-                          />
-                        </FormControl>
-                        <FormMessage className="text-[8px] font-bold text-destructive uppercase tracking-widest" />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={loginForm.control as any}
-                    name="rememberMe"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-row items-center space-x-2 space-y-0 px-1">
-                        <FormControl>
-                          <Checkbox
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                            className="border-white/20 bg-white/5"
-                          />
-                        </FormControl>
-                        <FormLabel className="text-[8px] font-black uppercase tracking-widest text-white/40 cursor-pointer">
-                          LEMBRAR DE MIM
-                        </FormLabel>
-                      </FormItem>
-                    )}
-                  />
-                  <Button type="submit" className="w-full h-12 text-sm font-black uppercase tracking-[0.2em] bg-brand-gradient hover:scale-[1.02] transition-all shadow-xl shadow-primary/20 border-none mt-2 rounded-xl" disabled={isLoading || isBlocked}>
-                    {isLoading ? "PROCESSANDO..." : "ACESSAR PLATAFORMA"}
-                  </Button>
-                </form>
-              </Form>
-            )}
-          </CardContent>
-          
-          <CardFooter className="flex flex-col gap-4 border-t border-white/5 pt-6 pb-8 bg-white/[0.02]">
-            <>
-              <>
-                <div className="flex items-start gap-3 text-[8px] text-white/40 leading-relaxed font-bold uppercase tracking-widest px-2">
-                  <ShieldCheck className="text-primary shrink-0" size={16} />
-                  <p>
-                    Protocolo de segurança militar ativo. Criptografia de ponta a ponta.
-                  </p>
-                </div>
-                
-                <div className="w-full space-y-2">
-                  <p className="text-center text-[8px] font-black text-white/30 uppercase tracking-[0.2em]">
-                    {isRegistering ? "JÁ POSSUI UMA CONTA?" : "NÃO POSSUI UMA CONTA?"}{" "}
-                    <button 
-                      onClick={() => setIsRegistering(!isRegistering)} 
-                      className="text-primary hover:text-primary-foreground transition-all"
-                    >
-                      {isRegistering ? "ENTRAR AGORA" : "CADASTRAR AGORA"}
-                    </button>
-                  </p>
-                  {!isRegistering && (
-                    <Button variant="link" className="w-full text-[8px] font-black uppercase tracking-[0.2em] text-white/20 hover:text-white transition-all underline decoration-white/10 underline-offset-4 h-auto p-0" asChild>
-                      <Link to="/auth/recover">RECUPERAR SENHA</Link>
+          <div className="p-8 sm:p-10">
+            {/* Context Header */}
+            <div className="mb-8">
+              <h2 className="text-3xl font-black italic uppercase tracking-tighter text-white">
+                {isUpdatingPassword ? "RESET_PWD" : isRegistering ? "CREATE_ACC" : "USER_AUTH"}
+              </h2>
+              <div className="flex items-center gap-2 mt-2">
+                <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+                <p className="text-[10px] font-bold text-white/30 uppercase tracking-[0.2em]">
+                  {isBlocked ? `ACESSO BLOQUEADO: ${remainingSeconds}S` :
+                   isUpdatingPassword ? "DEFINA SUA NOVA CHAVE DE ACESSO" :
+                   isRegistering ? "REGISTRO DE NOVO OPERADOR" : 
+                   "LOGIN DE SEGURANÇA REQUERIDO"}
+                </p>
+              </div>
+            </div>
+
+            {/* Forms Area */}
+            <div className="space-y-6">
+              {isUpdatingPassword ? (
+                <Form {...newPasswordForm}>
+                  <form onSubmit={newPasswordForm.handleSubmit(onNewPasswordSubmit)} className="space-y-5">
+                    <FormField
+                      control={newPasswordForm.control}
+                      name="password"
+                      render={({ field }) => (
+                        <FormItem className="space-y-1.5">
+                          <FormLabel className="text-[9px] font-black uppercase text-white/40 tracking-widest ml-1">NOVA SENHA</FormLabel>
+                          <FormControl>
+                            <Input 
+                              type="password"
+                              placeholder="••••••" 
+                              className="h-14 bg-white/5 border-white/10 rounded-2xl px-5 text-white focus:border-primary/50 font-black transition-all"
+                              {...field} 
+                              disabled={isLoading}
+                            />
+                          </FormControl>
+                          <FormMessage className="text-[8px] font-bold text-red-500 uppercase tracking-widest" />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={newPasswordForm.control}
+                      name="confirmPassword"
+                      render={({ field }) => (
+                        <FormItem className="space-y-1.5">
+                          <FormLabel className="text-[9px] font-black uppercase text-white/40 tracking-widest ml-1">CONFIRMAR</FormLabel>
+                          <FormControl>
+                            <Input 
+                              type="password"
+                              placeholder="••••••" 
+                              className="h-14 bg-white/5 border-white/10 rounded-2xl px-5 text-white focus:border-primary/50 font-black transition-all"
+                              {...field} 
+                              disabled={isLoading}
+                            />
+                          </FormControl>
+                          <FormMessage className="text-[8px] font-bold text-red-500 uppercase tracking-widest" />
+                        </FormItem>
+                      )}
+                    />
+                    <Button type="submit" className="w-full h-14 bg-brand-gradient font-black uppercase tracking-widest rounded-2xl mt-2 shadow-lg shadow-primary/10" disabled={isLoading}>
+                      {isLoading ? "SALVANDO..." : "ATUALIZAR CREDENCIAIS"}
                     </Button>
-                  )}
+                  </form>
+                </Form>
+              ) : isRegistering ? (
+                <Form {...registerForm}>
+                  <form onSubmit={registerForm.handleSubmit(onRegisterSubmit)} className="space-y-5">
+                    <FormField
+                      control={registerForm.control}
+                      name="name"
+                      render={({ field }) => (
+                        <FormItem className="space-y-1.5">
+                          <FormLabel className="text-[9px] font-black uppercase text-white/40 tracking-widest ml-1">NOME IDENTIFICADOR</FormLabel>
+                          <FormControl>
+                            <Input 
+                              placeholder="SEU NOME" 
+                              className="h-14 bg-white/5 border-white/10 rounded-2xl px-5 text-white focus:border-primary/50 font-black transition-all"
+                              {...field} 
+                              disabled={isLoading}
+                            />
+                          </FormControl>
+                          <FormMessage className="text-[8px] font-bold text-red-500 uppercase tracking-widest" />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={registerForm.control}
+                      name="email"
+                      render={({ field }) => (
+                        <FormItem className="space-y-1.5">
+                          <FormLabel className="text-[9px] font-black uppercase text-white/40 tracking-widest ml-1">ENDEREÇO E-MAIL</FormLabel>
+                          <FormControl>
+                            <Input 
+                              placeholder="seu@email.com" 
+                              className="h-14 bg-white/5 border-white/10 rounded-2xl px-5 text-white focus:border-primary/50 font-black transition-all"
+                              {...field} 
+                              disabled={isLoading}
+                            />
+                          </FormControl>
+                          <FormMessage className="text-[8px] font-bold text-red-500 uppercase tracking-widest" />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={registerForm.control}
+                      name="password"
+                      render={({ field }) => (
+                        <FormItem className="space-y-1.5">
+                          <FormLabel className="text-[9px] font-black uppercase text-white/40 tracking-widest ml-1">SENHA MESTRA</FormLabel>
+                          <FormControl>
+                            <Input 
+                              type="password" 
+                              placeholder="••••••" 
+                              className="h-14 bg-white/5 border-white/10 rounded-2xl px-5 text-white focus:border-primary/50 font-black transition-all"
+                              {...field} 
+                              disabled={isLoading}
+                            />
+                          </FormControl>
+                          <FormMessage className="text-[8px] font-bold text-red-500 uppercase tracking-widest" />
+                        </FormItem>
+                      )}
+                    />
+                    <Button type="submit" className="w-full h-14 bg-brand-gradient font-black uppercase tracking-widest rounded-2xl mt-2 shadow-lg shadow-primary/10" disabled={isLoading}>
+                      {isLoading ? "REGISTRANDO..." : "CRIAR REGISTRO"}
+                    </Button>
+                  </form>
+                </Form>
+              ) : (
+                <Form {...loginForm}>
+                  <form onSubmit={loginForm.handleSubmit(onLoginSubmit as any)} className="space-y-5">
+                    <FormField
+                      control={loginForm.control as any}
+                      name="email"
+                      render={({ field }) => (
+                        <FormItem className="space-y-1.5">
+                          <FormLabel className="text-[9px] font-black uppercase text-white/40 tracking-widest ml-1">ID OPERADOR</FormLabel>
+                          <FormControl>
+                            <div className="relative">
+                              <Input 
+                                placeholder="E-MAIL" 
+                                className="h-14 bg-white/5 border-white/10 rounded-2xl px-5 text-white focus:border-primary/50 font-black transition-all pl-12"
+                                {...field} 
+                                disabled={isLoading || isBlocked}
+                              />
+                              <Mail size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20" />
+                            </div>
+                          </FormControl>
+                          <FormMessage className="text-[8px] font-bold text-red-500 uppercase tracking-widest" />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={loginForm.control as any}
+                      name="password"
+                      render={({ field }) => (
+                        <FormItem className="space-y-1.5">
+                          <div className="flex items-center justify-between ml-1">
+                            <FormLabel className="text-[9px] font-black uppercase text-white/40 tracking-widest">SENHA ACESSO</FormLabel>
+                            {!isRegistering && (
+                              <Link 
+                                to="/auth/recover" 
+                                className="text-[8px] font-black uppercase tracking-widest text-primary/50 hover:text-primary transition-colors"
+                              >
+                                ESQUECI A SENHA
+                              </Link>
+                            )}
+                          </div>
+                          <FormControl>
+                            <div className="relative">
+                              <Input 
+                                type="password" 
+                                placeholder="••••••" 
+                                className="h-14 bg-white/5 border-white/10 rounded-2xl px-5 text-white focus:border-primary/50 font-black transition-all pl-12"
+                                {...field} 
+                                disabled={isLoading || isBlocked}
+                              />
+                              <Lock size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20" />
+                            </div>
+                          </FormControl>
+                          <FormMessage className="text-[8px] font-bold text-red-500 uppercase tracking-widest" />
+                        </FormItem>
+                      )}
+                    />
+                    <div className="flex items-center justify-between px-1">
+                      <FormField
+                        control={loginForm.control as any}
+                        name="rememberMe"
+                        render={({ field }) => (
+                          <FormItem className="flex flex-row items-center space-x-2 space-y-0">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value}
+                                onCheckedChange={field.onChange}
+                                className="border-white/20 bg-white/10 data-[state=checked]:bg-primary rounded-md w-4 h-4"
+                              />
+                            </FormControl>
+                            <FormLabel className="text-[9px] font-black uppercase tracking-widest text-white/30 cursor-pointer select-none">
+                              MANTER SESSÃO
+                            </FormLabel>
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    <Button type="submit" className="w-full h-14 bg-brand-gradient font-black uppercase tracking-widest rounded-2xl mt-2 shadow-xl shadow-primary/10 hover:scale-[1.01] active:scale-[0.98] transition-all" disabled={isLoading || isBlocked}>
+                      {isLoading ? "CARREGANDO..." : "INICIAR CONEXÃO"}
+                    </Button>
+                  </form>
+                </Form>
+              )}
+            </div>
+
+            {/* Footer Navigation */}
+            <div className="mt-10 pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-6">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
+                  {isRegistering ? <UserPlus size={14} /> : <LogIn size={14} />}
                 </div>
-              </>
-            </>
-          </CardFooter>
-        </Card>
-        
-        <div className="mt-6 text-center space-y-1">
-          <p className="text-[8px] text-white/40 uppercase tracking-[0.2em] font-bold">
-            dev Franc D'nis Feijó, AC
+                <div className="flex flex-col">
+                  <p className="text-[8px] font-black text-white/20 uppercase tracking-[0.2em]">
+                    {isRegistering ? "JÁ POSSUI ACESSO?" : "NOVO POR AQUI?"}
+                  </p>
+                  <button 
+                    onClick={() => setIsRegistering(!isRegistering)} 
+                    className="text-[10px] font-black uppercase tracking-widest text-white hover:text-primary transition-all text-left"
+                  >
+                    {isRegistering ? "FAZER LOGIN" : "CRIAR CONTA"}
+                  </button>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-4 text-[8px] font-black text-white/20 uppercase tracking-[0.2em]">
+                <span className="flex items-center gap-1.5">
+                  <ShieldCheck size={10} className="text-primary" />
+                  SSL_ENCRYPT
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <Info size={10} className="text-blue-500" />
+                  MFA_READY
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* System Info */}
+        <div className="mt-8 flex flex-col items-center space-y-2 opacity-30 group hover:opacity-100 transition-opacity duration-500">
+          <p className="text-[8px] text-white font-black uppercase tracking-[0.4em]">
+            DEV FRANC D'NIS FEIJÓ, AC
           </p>
-          <p className="text-[8px] text-white/30 font-medium">
-            © {new Date().getFullYear()} Body Métrica FJ. Todos os direitos reservados.
-          </p>
+          <div className="flex items-center gap-4 text-[7px] text-white/60 font-bold uppercase tracking-widest">
+            <span>© {new Date().getFullYear()} BM_SUITE</span>
+            <div className="w-1 h-1 rounded-full bg-white/20" />
+            <span>FEIJÓ_ACRE_BR</span>
+          </div>
         </div>
       </div>
     </div>
