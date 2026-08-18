@@ -236,7 +236,14 @@ function AuthPage() {
         if (res.success) {
           await completeLogin(tempUserData, loginValues.rememberMe);
         } else {
-          toast.error(res.message || "Código de recuperação inválido.");
+          toast.custom((t) => (
+            <SVGToast 
+              type="error"
+              title="CÓDIGO INVÁLIDO"
+              message={res.message || "O código de recuperação não confere."}
+              onClose={() => toast.dismiss(t)}
+            />
+          ), { duration: 4000 });
         }
       } else {
         // Simulation for now
