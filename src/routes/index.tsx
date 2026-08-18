@@ -159,8 +159,10 @@ function Index() {
                   ) : (
                     <>
                       <QuickOnboarding isLoggedIn={isLoggedIn} />
-                      <Button variant="outline" size="lg" className="h-12 px-8 text-[10px] font-black uppercase tracking-[0.2em] w-full sm:w-auto backdrop-blur-xl bg-white/[0.02] border-white/10 hover:bg-white/[0.08] hover:border-white/20 transition-all focus-visible:ring-2 focus-visible:ring-primary outline-none shadow-xl" asChild>
-                        <Link to="/about">ENGENHARIA</Link>
+                      <Button variant="outline" size="lg" className="h-12 px-10 text-[10px] font-black uppercase tracking-[0.3em] w-full sm:w-auto backdrop-blur-3xl bg-white/[0.01] border-white/10 hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all duration-500 focus-visible:ring-2 focus-visible:ring-primary outline-none shadow-2xl group" asChild>
+                        <Link to="/about" className="flex items-center gap-2">
+                          ENGENHARIA <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                        </Link>
                       </Button>
                     </>
                   )}
@@ -223,9 +225,9 @@ function Index() {
             <div className="container mx-auto px-4 md:px-6 max-w-7xl">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-6">
                 {[
-                  { icon: <Target size={20} />, title: "Objetivos", desc: "Planos adaptados ao seu biotipo.", color: "primary" },
-                  { icon: <Zap size={20} />, title: "Performance", desc: "Métricas de precisão absoluta.", color: "success" },
-                  { icon: <ShieldCheck size={20} />, title: "Segurança", desc: "Privacidade e sigilo total.", color: "info" }
+                  { icon: <Target size={20} />, title: "Precision", desc: "Metas calibradas ao milímetro.", color: "primary" },
+                  { icon: <Zap size={20} />, title: "Velocity", desc: "Resultados em tempo real.", color: "success" },
+                  { icon: <ShieldCheck size={20} />, title: "Intelligence", desc: "Privacidade de nível militar.", color: "info" }
                 ].map((f, i) => (
                   <Link key={i} to="/about" className="group block focus-visible:ring-2 focus-visible:ring-primary outline-none rounded-[1.5rem] md:rounded-[2rem] overflow-hidden">
                     <FeatureCard 
@@ -281,11 +283,11 @@ function Index() {
 
 function FeatureCard({ icon, title, description, className }: { icon: React.ReactNode; title: string; description: string; className?: string }) {
   return (
-    <div className={cn("surface p-3 md:p-4 space-y-2 md:space-y-3 border border-white/5 backdrop-blur-3xl bg-white/[0.03] relative overflow-hidden h-full group rounded-[1.2rem] md:rounded-[1.5rem]", className)}>
+    <div className={cn("surface p-4 md:p-6 space-y-3 md:space-y-4 border border-white/[0.03] backdrop-blur-3xl bg-white/[0.01] hover:bg-white/[0.03] relative overflow-hidden h-full group rounded-[2rem] transition-all duration-500", className)}>
       <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl bg-brand-gradient flex items-center justify-center shadow-lg border border-white/10 transform group-hover:rotate-6 transition-transform text-white mb-1 md:mb-2">
         {icon}
       </div>
-      <h3 className="text-lg font-black font-display tracking-tight text-primary uppercase italic leading-none">{title}</h3>
+      <h3 className="text-xl font-black font-display tracking-tighter text-foreground group-hover:text-primary transition-colors uppercase italic leading-none">{title}</h3>
       <p className="text-xs text-muted-foreground leading-tight font-medium">
         {description}
       </p>
