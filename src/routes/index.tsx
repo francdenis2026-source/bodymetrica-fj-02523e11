@@ -276,8 +276,8 @@ function Index() {
 
 function FeatureCard({ icon, title, description, className }: { icon: React.ReactNode; title: string; description: string; className?: string }) {
   return (
-    <div className={cn("surface p-4 space-y-3 border border-white/5 backdrop-blur-3xl bg-white/[0.03] relative overflow-hidden h-full group rounded-[1.5rem]", className)}>
-      <div className="w-10 h-10 rounded-xl bg-brand-gradient flex items-center justify-center shadow-lg border border-white/10 transform group-hover:rotate-6 transition-transform text-white mb-2">
+    <div className={cn("surface p-3 md:p-4 space-y-2 md:space-y-3 border border-white/5 backdrop-blur-3xl bg-white/[0.03] relative overflow-hidden h-full group rounded-[1.2rem] md:rounded-[1.5rem]", className)}>
+      <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl bg-brand-gradient flex items-center justify-center shadow-lg border border-white/10 transform group-hover:rotate-6 transition-transform text-white mb-1 md:mb-2">
         {icon}
       </div>
       <h3 className="text-lg font-black font-display tracking-tight text-primary uppercase italic leading-none">{title}</h3>
