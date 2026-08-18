@@ -304,28 +304,64 @@ function NutritionPage() {
         <TabsContent value="calculator" className="space-y-6">
           <Card className="surface border-none p-8">
             <CardHeader className="px-0 pt-0">
-              <CardTitle className="text-2xl font-black font-display uppercase tracking-tighter italic">Simulador de Macros</CardTitle>
-              <CardDescription className="text-[10px] font-bold uppercase tracking-widest opacity-60">Ajuste fino para seus objetivos de elite</CardDescription>
+              <div className="flex justify-between items-start">
+                <div>
+                  <CardTitle className="text-2xl font-black font-display uppercase tracking-tighter italic">Calculadora de Elite</CardTitle>
+                  <CardDescription className="text-[10px] font-bold uppercase tracking-widest opacity-60">Ajuste fino e recomendações automáticas de performance</CardDescription>
+                </div>
+                <div className="p-4 bg-primary/10 rounded-2xl border border-primary/20 max-w-xs animate-pulse">
+                  <div className="flex items-center gap-2 mb-1">
+                    <TrendingUp className="text-primary" size={14} />
+                    <span className="text-[9px] font-black uppercase tracking-widest text-primary">Recomendação IA</span>
+                  </div>
+                  <p className="text-[10px] font-bold text-foreground/80 leading-tight italic">
+                    "Baseado no seu peso (-0.5kg/semana), sugerimos aumentar a proteína para 2.2g/kg para preservar massa magra."
+                  </p>
+                </div>
+              </div>
             </CardHeader>
             <CardContent className="px-0 space-y-8">
               <div className="grid md:grid-cols-2 gap-8">
                 <div className="space-y-4">
                   <label className="text-[10px] font-black uppercase tracking-widest opacity-60">Peso Atual (kg)</label>
-                  <Input type="number" placeholder="Ex: 80" className="h-12 bg-white/5 border-white/10" />
+                  <Input type="number" placeholder="Ex: 80" className="h-12 bg-white/5 border-white/10" defaultValue="82.4" />
                 </div>
                 <div className="space-y-4">
-                  <label className="text-[10px] font-black uppercase tracking-widest opacity-60">Objetivo</label>
+                  <label className="text-[10px] font-black uppercase tracking-widest opacity-60">Objetivo Estratégico</label>
                   <select className="w-full h-12 bg-white/5 border border-white/10 rounded-lg px-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary">
-                    <option>Perda de Gordura</option>
-                    <option>Ganho de Massa (Bulking)</option>
-                    <option>Manutenção</option>
+                    <option value="loss">Perda de Gordura (Déficit)</option>
+                    <option value="gain" selected>Ganho de Massa (Superávit)</option>
+                    <option value="maint">Manutenção (Normocalórica)</option>
                   </select>
                 </div>
               </div>
-              <Button className="w-full h-14 font-black uppercase tracking-widest bg-brand-gradient border-none">Calcular Estratégia</Button>
+
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                 <div className="p-4 rounded-2xl bg-white/5 border border-white/10 text-center">
+                    <div className="text-[8px] font-black text-muted-foreground uppercase mb-1">CALORIAS REC.</div>
+                    <div className="text-xl font-black italic text-primary">2.450</div>
+                 </div>
+                 <div className="p-4 rounded-2xl bg-white/5 border border-white/10 text-center">
+                    <div className="text-[8px] font-black text-muted-foreground uppercase mb-1">PROTEÍNAS</div>
+                    <div className="text-xl font-black italic text-success">185g</div>
+                 </div>
+                 <div className="p-4 rounded-2xl bg-white/5 border border-white/10 text-center">
+                    <div className="text-[8px] font-black text-muted-foreground uppercase mb-1">CARBOS</div>
+                    <div className="text-xl font-black italic text-info">240g</div>
+                 </div>
+                 <div className="p-4 rounded-2xl bg-white/5 border border-white/10 text-center">
+                    <div className="text-[8px] font-black text-muted-foreground uppercase mb-1">GORDURAS</div>
+                    <div className="text-xl font-black italic text-warning">75g</div>
+                 </div>
+              </div>
+
+              <Button className="w-full h-16 font-black uppercase tracking-[0.2em] bg-brand-gradient border-none rounded-2xl hover:scale-[1.02] transition-all">
+                APLICAR RECOMENDAÇÃO AO PLANO
+              </Button>
             </CardContent>
           </Card>
         </TabsContent>
+
 
         <TabsContent value="plan" className="space-y-6">
           <div className="grid gap-6 md:grid-cols-3">
