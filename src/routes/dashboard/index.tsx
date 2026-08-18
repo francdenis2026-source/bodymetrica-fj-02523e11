@@ -383,6 +383,7 @@ function DashboardPage() {
                                       </span>
                                     </div>
                                   </div>
+                                  <p className="text-[11px] opacity-70 italic">
                                     {status === 'abaixo' 
                                       ? "Dica: Tente aumentar a ingestão de proteínas na próxima refeição." 
                                       : "Parabéns! Você manteve a disciplina de elite hoje."}
