@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
-import { ShieldAlert, Lock, ArrowRight } from 'lucide-react';
+import { Lock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Link, useNavigate } from '@tanstack/react-router';
-
+import { Link, useLocation, useNavigate } from '@tanstack/react-router';
 
 interface AccessGateProps {
   title?: string;
@@ -13,57 +12,66 @@ interface AccessGateProps {
   needsLicense?: boolean;
 }
 
-export function AccessGate({ 
-  title = "ACESSO RESTRITO", 
-  description = "ESTA ÁREA REQUER AUTENTICAÇÃO DE ALTO NÍVEL PARA SER ACESSADA.", 
-  children, 
+const PUBLIC_AUTH_ROUTES = ['/auth', '/auth/register', '/auth/verify', '/auth/recover'];
+
+export function AccessGate({
+  title = 'ACESSO RESTRITO',
+  description = 'ESTA ÁREA REQUER AUTENTICAÇÃO DE ALTO NÍVEL PARA SER ACESSADA.',
+  children,
   isAllowed,
   needsVerification = false,
-  needsLicense = false
+  needsLicense = false,
 }: AccessGateProps) {
   const navigate = useNavigate();
+  const location = useLocation();
+  const isPublicAuthRoute = PUBLIC_AUTH_ROUTES.includes(location.pathname);
+  const effectiveAllowed = isAllowed || isPublicAuthRoute;
 
   useEffect(() => {
-    const redirectTarget = needsVerification ? "/auth/verify" : needsLicense ? "/settings" : "/auth";
+    const redirectTarget = needsVerification ? '/auth/verify' : needsLicense ? '/settings' : '/auth';
 
-    let timer: any;
-    if (!isAllowed) {
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    if (!effectiveAllowed) {
       timer = setTimeout(() => {
-        navigate({ 
-          to: redirectTarget, 
-          search: { 
-            registerMode: false, 
-            name: "", 
-            birthDate: "",
-            goal: "",
-            weight: "",
-            height: "",
-            activityLevel: ""
-          } 
+        navigate({
+          to: redirectTarget,
+          search: {
+            registerMode: false,
+            name: '',
+            birthDate: '',
+            goal: '',
+            weight: '',
+            height: '',
+            activityLevel: '',
+          },
         } as any);
       }, 3500);
     }
+
     return () => {
       if (timer) clearTimeout(timer);
     };
-  }, [isAllowed, navigate]);
+  }, [effectiveAllowed, navigate, needsLicense, needsVerification]);
 
-  if (isAllowed) return <>{children}</>;
+  if (effectiveAllowed) return <>{children}</>;
 
-  const displayTitle = needsVerification ? "E-MAIL NÃO CONFIRMADO" : needsLicense ? "LICENÇA NECESSÁRIA" : title;
-  const displayDescription = needsVerification 
-    ? "POR FAVOR, CONFIRME SEU E-MAIL PARA LIBERAR O ACESSO ÀS FERRAMENTAS." 
+  const displayTitle = needsVerification
+    ? 'E-MAIL NÃO CONFIRMADO'
     : needsLicense
-    ? "ESTA FERRAMENTA REQUER UMA LICENÇA ATIVA. ADQUIRA A SUA NOS AJUSTES."
-    : description;
-
-  const redirectTarget = needsVerification ? "/auth/verify" : needsLicense ? "/settings" : "/auth";
+      ? 'LICENÇA NECESSÁRIA'
+      : title;
+  const displayDescription = needsVerification
+    ? 'POR FAVOR, CONFIRME SEU E-MAIL PARA LIBERAR O ACESSO ÀS FERRAMENTAS.'
+    : needsLicense
+      ? 'ESTA FERRAMENTA REQUER UMA LICENÇA ATIVA. ADQUIRA A SUA NOS AJUSTES.'
+      : description;
+  const redirectTarget = needsVerification ? '/auth/verify' : needsLicense ? '/settings' : '/auth';
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center p-6 animate-in fade-in duration-700">
       <div className="surface max-w-xl w-full p-12 md:p-20 text-center space-y-10 relative overflow-hidden border-white/5 shadow-[0_50px_100px_rgba(0,0,0,0.6)] rounded-[3.5rem] bg-black/40 backdrop-blur-3xl group">
         <div className="absolute inset-0 bg-gradient-to-tr from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
-        
+
         <div className="relative z-10 space-y-8">
           <div className="mx-auto w-28 h-28 bg-brand-gradient rounded-[2rem] flex items-center justify-center text-primary-foreground shadow-[0_20px_50px_rgba(oklch(0.65_0.22_260),0.3)] border-2 border-white/20 animate-in zoom-in duration-700">
             <Lock size={56} className="group-hover:scale-110 transition-transform duration-500" />
@@ -85,20 +93,24 @@ export function AccessGate({
           </div>
 
           <div className="pt-6">
-            <Button size="lg" className="w-full sm:w-auto px-16 h-16 font-black uppercase tracking-[0.2em] bg-brand-gradient shadow-[0_20px_40px_rgba(oklch(0.65_0.22_260),0.4)] hover:scale-105 transition-all border-none rounded-[1.5rem]" asChild>
-              <Link 
-                to={redirectTarget as any} 
-                search={{ 
-                  registerMode: false, 
-                  name: "", 
-                  birthDate: "",
-                  goal: "",
-                  weight: "",
-                  height: "",
-                  activityLevel: ""
+            <Button
+              size="lg"
+              className="w-full sm:w-auto px-16 h-16 font-black uppercase tracking-[0.2em] bg-brand-gradient shadow-[0_20px_40px_rgba(oklch(0.65_0.22_260),0.4)] hover:scale-105 transition-all border-none rounded-[1.5rem]"
+              asChild
+            >
+              <Link
+                to={redirectTarget as any}
+                search={{
+                  registerMode: false,
+                  name: '',
+                  birthDate: '',
+                  goal: '',
+                  weight: '',
+                  height: '',
+                  activityLevel: '',
                 } as any}
               >
-                {needsVerification ? "VERIFICAR AGORA" : needsLicense ? "ADQUIRIR LICENÇA" : "ENTRAR AGORA"}
+                {needsVerification ? 'VERIFICAR AGORA' : needsLicense ? 'ADQUIRIR LICENÇA' : 'ENTRAR AGORA'}
               </Link>
             </Button>
           </div>
