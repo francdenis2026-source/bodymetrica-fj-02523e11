@@ -242,12 +242,12 @@ function Index() {
         </main>
 
         {/* Footer - Scaled down */}
-        <footer className="mt-auto py-6 border-t border-white/5 bg-background/50 backdrop-blur-md">
+        <footer className="mt-auto py-4 md:py-6 border-t border-white/5 bg-background/50 backdrop-blur-md">
           <div className="container mx-auto px-4 max-w-6xl">
-            <div className="flex flex-col md:flex-row justify-between items-center gap-8 text-center md:text-left">
+            <div className="flex flex-col md:flex-row justify-between items-center gap-4 md:gap-8 text-center md:text-left">
               <div className="flex items-center gap-2 opacity-80 grayscale hover:grayscale-0 transition-all">
-                <div className="w-6 h-6 bg-brand-gradient rounded flex items-center justify-center text-[10px] text-white font-bold">B</div>
-                <span className="text-sm font-semibold font-display tracking-tight">Body Métrica FJ</span>
+                <div className="w-5 h-5 bg-brand-gradient rounded flex items-center justify-center text-[9px] text-white font-bold">B</div>
+                <span className="text-xs md:text-sm font-semibold font-display tracking-tight">Body Métrica FJ</span>
               </div>
               
               <nav className="flex gap-8 text-sm text-muted-foreground font-medium">
