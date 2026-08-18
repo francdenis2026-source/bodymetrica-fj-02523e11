@@ -1,195 +1,173 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowLeft, Code2, MapPin, Zap, Globe } from "lucide-react";
+import { ArrowLeft, ArrowRight, BarChart3, Code2, MapPin, ShieldCheck, WifiOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ResponsiveHero } from "@/components/responsive-hero";
 
 export const Route = createFileRoute("/about/")({
   component: AboutPage,
   head: () => ({
-    title: "Sobre o Body Métrica FJ — Inovação em Performance Humana",
+    title: "Sobre o Body Métrica FJ",
     meta: [
-      { name: "description", content: "Conheça o Body Métrica FJ, uma plataforma de elite criada por Franc D'nis Feijó para transformar dados em resultados físicos reais usando IA." },
+      {
+        name: "description",
+        content:
+          "Conheça a proposta do Body Métrica FJ e como a plataforma reúne composição corporal, nutrição, hidratação e treino.",
+      },
       { property: "og:title", content: "Sobre o Body Métrica FJ" },
-      { property: "og:description", content: "Conheça a história e a tecnologia por trás da plataforma de performance física definitiva." },
-      { property: "og:image", content: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1200" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ]
-  })
+      {
+        property: "og:description",
+        content: "Tecnologia aplicada ao acompanhamento de saúde e composição corporal.",
+      },
+    ],
+  }),
 });
+
+const PRINCIPLES = [
+  {
+    icon: BarChart3,
+    title: "Clareza antes de complexidade",
+    description: "Os dados existem para ajudar na decisão, não para transformar a experiência em um painel técnico difícil de ler.",
+  },
+  {
+    icon: WifiOff,
+    title: "Resiliência no uso diário",
+    description: "O projeto considera cenários de conectividade limitada e prioriza continuidade de uso sempre que possível.",
+  },
+  {
+    icon: ShieldCheck,
+    title: "Privacidade por padrão",
+    description: "Informações pessoais e métricas corporais merecem uma experiência discreta, previsível e segura.",
+  },
+];
 
 function AboutPage() {
   return (
-    <div className="min-h-screen bg-background pb-20 relative overflow-hidden text-foreground">
-      {/* Background Decor */}
-      <div className="fixed inset-0 z-0 opacity-10 pointer-events-none">
-        <img 
-          src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&q=80&w=1600" 
-          alt="Tech background" 
-          className="w-full h-full object-cover"
-        />
-      </div>
-
-      <header className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-md border-b border-white/5">
-        <div className="container mx-auto px-4 h-16 flex items-center gap-4">
-          <Button variant="ghost" size="icon" asChild>
-            <Link to="/" search={{} as any}><ArrowLeft size={20} /></Link>
+    <div className="min-h-[100dvh] bg-background text-foreground">
+      <header className="sticky top-0 z-50 border-b border-border/70 bg-background/90 backdrop-blur-xl supports-[backdrop-filter]:bg-background/75">
+        <div className="container mx-auto flex h-16 max-w-7xl items-center gap-3 px-4 md:px-6">
+          <Button variant="ghost" size="icon" asChild className="rounded-xl">
+            <Link to="/" search={{} as any} aria-label="Voltar para a página inicial">
+              <ArrowLeft size={18} />
+            </Link>
           </Button>
-          <h1 className="text-lg font-bold font-display uppercase tracking-tighter italic">Sobre a Plataforma</h1>
+          <div>
+            <p className="font-display text-base font-semibold tracking-tight">Sobre o Body Métrica FJ</p>
+            <p className="hidden text-xs text-muted-foreground sm:block">Propósito, princípios e desenvolvimento</p>
+          </div>
         </div>
       </header>
 
-      <main className="relative z-10 pt-16 container mx-auto px-4 max-w-6xl space-y-24 py-12 md:py-24">
-        <ResponsiveHero 
-          imageUrl="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1600"
-          overlayOpacity={0.7}
-          height="h-[50vh] min-h-[400px]"
-          className="rounded-[3.5rem] shadow-2xl overflow-hidden border border-white/5"
-        >
-          <div className="flex flex-col items-center justify-center h-full text-center space-y-8 px-6 relative z-10">
-            <div className="w-24 h-24 bg-brand-gradient rounded-3xl flex items-center justify-center text-white shadow-2xl border border-white/20 animate-in zoom-in duration-1000">
-              <Zap size={48} />
+      <main>
+        <section className="border-b border-border/60">
+          <div className="container mx-auto grid max-w-7xl gap-12 px-4 py-14 md:px-6 md:py-20 lg:grid-cols-[0.95fr_1.05fr] lg:items-center lg:py-24">
+            <div className="max-w-2xl">
+              <p className="text-sm font-medium text-primary">Uma plataforma de acompanhamento pessoal</p>
+              <h1 className="mt-3 font-display text-4xl font-semibold leading-[1.05] tracking-[-0.035em] sm:text-5xl md:text-6xl">
+                Tecnologia para enxergar sua evolução com mais contexto.
+              </h1>
+              <p className="mt-6 max-w-xl text-base leading-7 text-muted-foreground md:text-lg md:leading-8">
+                O Body Métrica FJ nasceu para reunir informações que normalmente ficam espalhadas: composição corporal, alimentação, hidratação, treino e metas. A proposta é transformar registros isolados em uma leitura contínua da evolução.
+              </p>
+
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                <Button asChild size="lg" className="h-12 rounded-xl px-6">
+                  <Link
+                    to="/auth"
+                    search={{ registerMode: true, reset: false, name: "", birthDate: "", goal: "", weight: "", height: "", activityLevel: "" }}
+                  >
+                    Criar conta
+                    <ArrowRight size={16} className="ml-2" />
+                  </Link>
+                </Button>
+                <Button asChild size="lg" variant="outline" className="h-12 rounded-xl px-6">
+                  <Link to="/tools">Ver ferramentas</Link>
+                </Button>
+              </div>
             </div>
-            <div className="space-y-4">
-              <h2 className="text-5xl md:text-8xl font-black font-display tracking-tighter text-white uppercase italic leading-none">
-                BODY MÉTTRICA <span className="text-primary">FJ</span>
-              </h2>
-              <p className="text-white/60 font-black uppercase tracking-[0.4em] text-[10px] md:text-sm">
-                TECNOLOGIA A SERVIÇO DA PERFORMANCE HUMANA
+
+            <div className="overflow-hidden rounded-[2rem] border border-border bg-muted shadow-xl shadow-black/10">
+              <div className="relative aspect-[4/3]">
+                <img
+                  src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=85&w=1600"
+                  alt="Dados e métricas exibidos em uma tela"
+                  className="h-full w-full object-cover"
+                  loading="eager"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 p-6 text-white md:p-8">
+                  <p className="max-w-md font-display text-2xl font-semibold leading-tight md:text-3xl">
+                    O dado só é útil quando ajuda você a entender o que mudou e por quê.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="container mx-auto max-w-7xl px-4 py-14 md:px-6 md:py-20">
+          <div className="max-w-2xl">
+            <p className="text-sm font-medium text-primary">Princípios do produto</p>
+            <h2 className="mt-2 font-display text-3xl font-semibold tracking-tight md:text-4xl">
+              Menos espetáculo visual. Mais confiança no que você está vendo.
+            </h2>
+          </div>
+
+          <div className="mt-8 grid gap-4 md:grid-cols-3">
+            {PRINCIPLES.map(({ icon: Icon, title, description }) => (
+              <article key={title} className="rounded-2xl border border-border bg-card p-6">
+                <div className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <Icon size={20} />
+                </div>
+                <h3 className="mt-5 font-display text-xl font-semibold tracking-tight">{title}</h3>
+                <p className="mt-2 text-sm leading-6 text-muted-foreground">{description}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="border-y border-border/60 bg-muted/25">
+          <div className="container mx-auto grid max-w-7xl gap-10 px-4 py-14 md:px-6 md:py-20 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
+            <div>
+              <div className="flex size-12 items-center justify-center rounded-2xl border border-border bg-background text-primary shadow-sm">
+                <Code2 size={22} />
+              </div>
+              <h2 className="mt-5 font-display text-3xl font-semibold tracking-tight md:text-4xl">Desenvolvido em Feijó, Acre</h2>
+              <div className="mt-3 flex items-center gap-2 text-sm text-muted-foreground">
+                <MapPin size={16} />
+                Feijó, AC · Brasil
+              </div>
+            </div>
+
+            <div className="max-w-2xl space-y-5 text-base leading-7 text-muted-foreground md:text-lg md:leading-8">
+              <p>
+                O projeto é desenvolvido por Franc D'nis com foco em resolver necessidades reais de acompanhamento pessoal por meio de software acessível, responsivo e simples de usar.
+              </p>
+              <p>
+                A evolução do Body Métrica FJ combina engenharia de software, experiência de uso e organização de dados para construir um produto útil no cotidiano — sem depender de uma estética exageradamente técnica para parecer avançado.
               </p>
             </div>
           </div>
-        </ResponsiveHero>
-
-        <div className="grid md:grid-cols-2 gap-12 lg:gap-20 items-stretch">
-          {/* A Engenharia */}
-          <section className="surface p-10 md:p-16 space-y-12 border-white/5 bg-card/30 backdrop-blur-3xl rounded-[3rem] shadow-2xl hover:shadow-primary/20 transition-all border group relative overflow-hidden flex flex-col justify-between">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full -mr-32 -mt-32 blur-[100px] group-hover:bg-primary/20 transition-colors" />
-            
-            <div className="space-y-10">
-              <div className="space-y-4">
-                <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-primary/10 text-primary text-[10px] font-black uppercase tracking-[0.2em] border border-primary/20">
-                  <Zap size={14} className="fill-primary" />
-                  <span>A Engenharia</span>
-                </div>
-                <h3 className="text-5xl lg:text-6xl font-black font-display text-foreground italic uppercase tracking-tighter leading-[0.85] group-hover:translate-x-1 transition-transform">
-                  PERFORMANCE <br /> & CIÊNCIA.
-                </h3>
-              </div>
-
-              <div className="space-y-10">
-                <p className="text-xl text-foreground/60 leading-tight font-medium">
-                  O Body Métrica FJ consolida uma suíte de elite para a transformação física definitiva, unindo biometria e análise avançada.
-                </p>
-                
-                <div className="space-y-8">
-                  <div className="flex gap-6 items-start">
-                    <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center shrink-0 border border-primary/20 group-hover:scale-110 transition-transform">
-                      <Zap size={20} className="text-primary" />
-                    </div>
-                    <div className="space-y-1">
-                      <h5 className="text-[12px] font-black uppercase tracking-[0.2em] text-foreground">Inteligência Preditiva</h5>
-                      <p className="text-[14px] text-foreground/40 leading-snug font-medium">Metabolismo de precisão baseado em dados reais e bioimpedância avançada.</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex gap-6 items-start">
-                    <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center shrink-0 border border-primary/20 group-hover:scale-110 transition-transform">
-                      <Globe size={20} className="text-primary" />
-                    </div>
-                    <div className="space-y-1">
-                      <h5 className="text-[12px] font-black uppercase tracking-[0.2em] text-foreground">Ecossistema Offline</h5>
-                      <p className="text-[14px] text-foreground/40 leading-snug font-medium">Sincronização resiliente que mantém seus registros seguros sem necessidade de conexão.</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex flex-wrap gap-3 pt-10 border-t border-white/5">
-              {["Performance", "Inteligência", "Offline First", "Analytics"].map(tag => (
-                <span key={tag} className="bg-white/5 px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-widest border border-white/5 text-foreground/40 group-hover:text-primary group-hover:bg-primary/5 group-hover:border-primary/20 transition-all">
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </section>
-
-          {/* O Visionário */}
-          <section className="surface p-10 md:p-16 space-y-12 border-white/5 bg-card/30 backdrop-blur-3xl rounded-[3rem] shadow-2xl hover:shadow-primary/20 transition-all border group relative overflow-hidden flex flex-col justify-between">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full -mr-32 -mt-32 blur-[100px] group-hover:bg-primary/20 transition-colors" />
-            
-            <div className="space-y-10">
-              <div className="space-y-4">
-                <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-primary/10 text-primary text-[10px] font-black uppercase tracking-[0.2em] border border-primary/20">
-                  <MapPin size={14} />
-                  <span>O Visionário</span>
-                </div>
-                <h3 className="text-5xl lg:text-6xl font-black font-display text-foreground italic uppercase tracking-tighter leading-[0.85] group-hover:translate-x-1 transition-transform">
-                  FRANC D'NIS <br /> FEIJÓ.
-                </h3>
-              </div>
-
-              <div className="flex items-center gap-8 py-4">
-                <div className="w-28 h-28 rounded-[2rem] bg-brand-gradient flex items-center justify-center text-white shadow-2xl border border-white/10 shrink-0 transform group-hover:rotate-3 transition-all group-hover:scale-105">
-                  <Code2 size={56} />
-                </div>
-                <div className="space-y-3">
-                  <p className="text-[12px] font-black uppercase tracking-[0.2em] text-foreground">Software Architect</p>
-                  <div className="flex items-center gap-3 text-primary">
-                    <MapPin size={16} />
-                    <span className="text-[11px] font-black uppercase tracking-[0.3em]">Feijó, Acre</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-8">
-                <p className="text-xl text-foreground/60 leading-tight font-medium">
-                  Especialista em arquitetura de software e soluções tecnológicas de alto impacto, integrando IA avançada diretamente do coração do Acre.
-                </p>
-                <p className="text-lg text-foreground/40 leading-relaxed font-medium">
-                  Sua missão é unir ciência do esporte e engenharia de dados para criar experiências que resolvem problemas reais de forma intuitiva e performante.
-                </p>
-              </div>
-            </div>
-
-            <div className="flex gap-10 pt-10 border-t border-white/5">
-              <a href="#" className="text-foreground/40 hover:text-primary transition-all flex items-center gap-3 text-[11px] font-black uppercase tracking-widest hover:translate-x-1">
-                <Code2 size={20} /> GitHub
-              </a>
-              <a href="#" className="text-foreground/40 hover:text-primary transition-all flex items-center gap-3 text-[11px] font-black uppercase tracking-widest hover:translate-x-1">
-                <Globe size={20} /> Portfolio
-              </a>
-            </div>
-          </section>
-        </div>
-
-        {/* Vision Section */}
-        <section className="surface p-16 md:p-24 text-center space-y-10 bg-brand-gradient border-none rounded-[4rem] shadow-2xl relative overflow-hidden group">
-          <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-          <div className="relative z-10 space-y-10">
-            <h3 className="text-4xl md:text-7xl font-black font-display text-white italic uppercase tracking-tighter leading-[0.85]">
-              TRANSFORMANDO DADOS EM <br className="hidden md:block" />
-              <span className="text-black">RESULTADOS DE ELITE.</span>
-            </h3>
-            <p className="text-white/70 text-sm md:text-xl font-bold uppercase tracking-[0.3em] max-w-3xl mx-auto leading-relaxed">
-              Seja bem-vindo à nova era do monitoramento físico. Uma ferramenta construída para quem não aceita o medíocre.
-            </p>
-            <div className="pt-6">
-              <Button size="lg" variant="secondary" className="px-12 h-14 md:px-16 md:h-16 rounded-[1.5rem] font-black uppercase tracking-[0.2em] hover:scale-105 transition-all shadow-2xl text-xs md:text-sm" asChild>
-                <Link to="/auth" search={{ registerMode: true, reset: false, name: "", birthDate: "", goal: "", weight: "", height: "", activityLevel: "" }}>FAZER PARTE DA ELITE</Link>
-              </Button>
-            </div>
-          </div>
-          
-          {/* Decorative background accent */}
-          <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-white/10 rounded-full blur-[120px] pointer-events-none" />
         </section>
 
-        <div className="text-center pb-12">
-          <p className="text-[10px] text-foreground/20 uppercase tracking-[0.6em] font-black italic">
-            Body Métrica FJ • dev Franc D'nis Feijó, AC • 2026
-          </p>
-        </div>
+        <section className="container mx-auto max-w-7xl px-4 py-14 md:px-6 md:py-20">
+          <div className="rounded-[2rem] border border-border bg-card p-7 md:p-10 lg:flex lg:items-center lg:justify-between lg:gap-10">
+            <div className="max-w-2xl">
+              <p className="text-sm font-medium text-primary">Próximo passo</p>
+              <h2 className="mt-2 font-display text-3xl font-semibold tracking-tight">Use a plataforma e acompanhe seus próprios dados.</h2>
+              <p className="mt-3 text-sm leading-6 text-muted-foreground md:text-base">
+                Comece com seus registros atuais e construa uma visão mais consistente da sua evolução ao longo do tempo.
+              </p>
+            </div>
+            <Button asChild size="lg" className="mt-6 h-12 rounded-xl px-6 lg:mt-0">
+              <Link
+                to="/auth"
+                search={{ registerMode: true, reset: false, name: "", birthDate: "", goal: "", weight: "", height: "", activityLevel: "" }}
+              >
+                Começar agora
+                <ArrowRight size={16} className="ml-2" />
+              </Link>
+            </Button>
+          </div>
+        </section>
       </main>
     </div>
   );
