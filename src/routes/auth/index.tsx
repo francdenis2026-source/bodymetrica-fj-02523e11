@@ -187,7 +187,7 @@ function AuthPage() {
               message="Sua conta precisa ser confirmada via e-mail antes do primeiro acesso."
               onClose={() => toast.dismiss(t)}
             />
-          ));
+          ), { duration: 6000 });
           navigate({ to: "/auth/verify" as any, search: {} as any });
         } else {
           trackAttempt();
@@ -217,7 +217,7 @@ function AuthPage() {
         message="Sessão autenticada. Acesso liberado à suíte Body Métrica FJ."
         onClose={() => toast.dismiss(t)}
       />
-    ));
+    ), { duration: 4000 });
     
     if (!user.isLicensed) {
       toast.info("Acesse Ajustes para ativar sua licença e liberar o sistema.");
