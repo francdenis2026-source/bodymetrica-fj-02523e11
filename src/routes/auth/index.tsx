@@ -277,7 +277,14 @@ function AuthPage() {
         ), { duration: 6000 });
         navigate({ to: "/auth/verify" as any, search: {} as any });
       } else {
-        toast.error(result.message || "Erro ao cadastrar.");
+        toast.custom((t) => (
+          <SVGToast 
+            type="error"
+            title="ERRO NO CADASTRO"
+            message={result.message || "Não foi possível criar sua conta."}
+            onClose={() => toast.dismiss(t)}
+          />
+        ), { duration: 5000 });
       }
     } catch (error) {
       toast.error("Erro ao cadastrar. Tente novamente.");
