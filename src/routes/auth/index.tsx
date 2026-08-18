@@ -178,7 +178,7 @@ function AuthPage() {
             message={result.message}
             onClose={() => toast.dismiss(t)}
           />
-        ));
+        ), { duration: 5000 });
         if (result.needsVerification) {
           toast.custom((t) => (
             <SVGToast 
@@ -187,7 +187,7 @@ function AuthPage() {
               message="Sua conta precisa ser confirmada via e-mail antes do primeiro acesso."
               onClose={() => toast.dismiss(t)}
             />
-          ));
+          ), { duration: 6000 });
           navigate({ to: "/auth/verify" as any, search: {} as any });
         } else {
           trackAttempt();
@@ -217,7 +217,7 @@ function AuthPage() {
         message="Sessão autenticada. Acesso liberado à suíte Body Métrica FJ."
         onClose={() => toast.dismiss(t)}
       />
-    ));
+    ), { duration: 4000 });
     
     if (!user.isLicensed) {
       toast.info("Acesse Ajustes para ativar sua licença e liberar o sistema.");
@@ -236,14 +236,28 @@ function AuthPage() {
         if (res.success) {
           await completeLogin(tempUserData, loginValues.rememberMe);
         } else {
-          toast.error(res.message || "Código de recuperação inválido.");
+          toast.custom((t) => (
+            <SVGToast 
+              type="error"
+              title="CÓDIGO INVÁLIDO"
+              message={res.message || "O código de recuperação não confere."}
+              onClose={() => toast.dismiss(t)}
+            />
+          ), { duration: 4000 });
         }
       } else {
         // Simulation for now
         if (mfaCode === "123456") {
           await completeLogin(tempUserData, loginValues.rememberMe);
         } else {
-          toast.error("Código MFA incorreto.");
+          toast.custom((t) => (
+            <SVGToast 
+              type="error"
+              title="CÓDIGO MFA INCORRETO"
+              message="O código inserido não é válido. Tente novamente."
+              onClose={() => toast.dismiss(t)}
+            />
+          ), { duration: 4000 });
         }
       }
     } catch (error) {
@@ -267,10 +281,24 @@ function AuthPage() {
         } 
       });
       if (result.success) {
-        toast.success(result.message || "Cadastro realizado! Verifique seu e-mail.");
+        toast.custom((t) => (
+          <SVGToast 
+            type="success"
+            title="CADASTRO REALIZADO"
+            message={result.message || "Verifique seu e-mail para confirmar a conta."}
+            onClose={() => toast.dismiss(t)}
+          />
+        ), { duration: 6000 });
         navigate({ to: "/auth/verify" as any, search: {} as any });
       } else {
-        toast.error(result.message || "Erro ao cadastrar.");
+        toast.custom((t) => (
+          <SVGToast 
+            type="error"
+            title="ERRO NO CADASTRO"
+            message={result.message || "Não foi possível criar sua conta."}
+            onClose={() => toast.dismiss(t)}
+          />
+        ), { duration: 5000 });
       }
     } catch (error) {
       toast.error("Erro ao cadastrar. Tente novamente.");
@@ -347,11 +375,12 @@ function AuthPage() {
                 onChange={(e) => setMfaCode(e.target.value)}
                 placeholder={isRecoveryMode ? "XXXXXXXX" : "000000"}
                 className={cn(
-                  "h-16 bg-white/5 border-white/10 rounded-2xl text-center text-3xl font-black text-white focus:border-primary/50 transition-all",
+                  "h-16 bg-white/5 border-white/10 rounded-2xl text-center text-3xl font-black text-white focus:border-primary/50 focus:ring-2 focus:ring-primary/20 transition-all outline-none",
                   !isRecoveryMode && "tracking-[0.4em]"
                 )}
                 maxLength={isRecoveryMode ? 8 : 6}
                 autoFocus
+                aria-label={isRecoveryMode ? "Código de recuperação" : "Código de autenticação"}
               />
             </div>
             <div className="space-y-3">
@@ -381,7 +410,7 @@ function AuthPage() {
       <div className="relative z-10 w-full max-w-[440px] flex flex-col items-center">
         {/* Navigation & Brand Header */}
         <div className="w-full flex items-center justify-between mb-8 px-4">
-          <Link to="/" search={{} as any} className="group flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.2em] text-white/40 hover:text-white transition-all">
+          <Link to="/" search={{} as any} className="group flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.2em] text-white/40 hover:text-white focus:text-white outline-none transition-all">
             <div className="w-8 h-8 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-primary/50 group-hover:bg-primary/5">
               <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" />
             </div>
@@ -397,7 +426,7 @@ function AuthPage() {
         </div>
 
         {/* Main "Window" Container */}
-        <div className="w-full bg-[#0A0A0A]/80 backdrop-blur-3xl border border-white/10 rounded-[2.5rem] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.8)] overflow-hidden animate-in fade-in zoom-in-95 duration-500">
+        <div className="w-full max-h-[85vh] bg-[#0A0A0A]/80 backdrop-blur-3xl border border-white/10 rounded-[2.5rem] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.8)] overflow-hidden flex flex-col animate-in fade-in zoom-in-95 duration-500">
           {/* Decorative Window Top Bar */}
           <div className="h-10 bg-white/[0.03] border-b border-white/5 flex items-center justify-between px-6">
             <div className="flex gap-1.5">
@@ -411,7 +440,17 @@ function AuthPage() {
             <div className="w-12 h-1 bg-white/5 rounded-full" />
           </div>
 
-          <div className="p-8 sm:p-10">
+          <div className="flex-1 overflow-y-auto p-8 sm:p-10 relative custom-scrollbar">
+            {/* Loading Overlay */}
+            {isLoading && (
+              <div className="absolute inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center transition-all duration-300">
+                <div className="flex flex-col items-center gap-4">
+                  <div className="w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
+                  <p className="text-[10px] font-black text-white uppercase tracking-[0.3em] animate-pulse">PROCESSANDO...</p>
+                </div>
+              </div>
+            )}
+
             {/* Context Header */}
             <div className="mb-8">
               <h2 className="text-3xl font-black italic uppercase tracking-tighter text-white">
@@ -429,24 +468,25 @@ function AuthPage() {
             </div>
 
             {/* Forms Area */}
-            <div className="space-y-6">
-              {isUpdatingPassword ? (
-                <Form {...newPasswordForm}>
-                  <form onSubmit={newPasswordForm.handleSubmit(onNewPasswordSubmit)} className="space-y-5">
-                    <FormField
-                      control={newPasswordForm.control}
-                      name="password"
+              <div className={cn("space-y-6 transition-all duration-300", isLoading && "opacity-20 blur-sm pointer-events-none")}>
+                {isUpdatingPassword ? (
+                  <Form {...newPasswordForm}>
+                    <form onSubmit={newPasswordForm.handleSubmit(onNewPasswordSubmit)} className="space-y-5">
+                      <FormField
+                        control={newPasswordForm.control}
+                        name="password"
                       render={({ field }) => (
                         <FormItem className="space-y-1.5">
                           <FormLabel className="text-[9px] font-black uppercase text-white/40 tracking-widest ml-1">NOVA SENHA</FormLabel>
                           <FormControl>
-                            <Input 
-                              type="password"
-                              placeholder="••••••" 
-                              className="h-14 bg-white/5 border-white/10 rounded-2xl px-5 text-white focus:border-primary/50 font-black transition-all"
-                              {...field} 
-                              disabled={isLoading}
-                            />
+                              <Input 
+                                type="password"
+                                placeholder="••••••" 
+                                className="h-14 bg-white/5 border-white/10 rounded-2xl px-5 text-white focus:border-primary/50 focus:ring-2 focus:ring-primary/20 transition-all font-black outline-none"
+                                {...field} 
+                                disabled={isLoading}
+                                aria-required="true"
+                              />
                           </FormControl>
                           <FormMessage className="text-[8px] font-bold text-red-500 uppercase tracking-widest" />
                         </FormItem>
@@ -459,13 +499,14 @@ function AuthPage() {
                         <FormItem className="space-y-1.5">
                           <FormLabel className="text-[9px] font-black uppercase text-white/40 tracking-widest ml-1">CONFIRMAR</FormLabel>
                           <FormControl>
-                            <Input 
-                              type="password"
-                              placeholder="••••••" 
-                              className="h-14 bg-white/5 border-white/10 rounded-2xl px-5 text-white focus:border-primary/50 font-black transition-all"
-                              {...field} 
-                              disabled={isLoading}
-                            />
+                              <Input 
+                                type="password"
+                                placeholder="••••••" 
+                                className="h-14 bg-white/5 border-white/10 rounded-2xl px-5 text-white focus:border-primary/50 focus:ring-2 focus:ring-primary/20 transition-all font-black outline-none"
+                                {...field} 
+                                disabled={isLoading}
+                                aria-required="true"
+                              />
                           </FormControl>
                           <FormMessage className="text-[8px] font-bold text-red-500 uppercase tracking-widest" />
                         </FormItem>
@@ -486,12 +527,13 @@ function AuthPage() {
                         <FormItem className="space-y-1.5">
                           <FormLabel className="text-[9px] font-black uppercase text-white/40 tracking-widest ml-1">NOME IDENTIFICADOR</FormLabel>
                           <FormControl>
-                            <Input 
-                              placeholder="SEU NOME" 
-                              className="h-14 bg-white/5 border-white/10 rounded-2xl px-5 text-white focus:border-primary/50 font-black transition-all"
-                              {...field} 
-                              disabled={isLoading}
-                            />
+                              <Input 
+                                placeholder="SEU NOME" 
+                                className="h-14 bg-white/5 border-white/10 rounded-2xl px-5 text-white focus:border-primary/50 focus:ring-2 focus:ring-primary/20 transition-all font-black outline-none"
+                                {...field} 
+                                disabled={isLoading}
+                                aria-required="true"
+                              />
                           </FormControl>
                           <FormMessage className="text-[8px] font-bold text-red-500 uppercase tracking-widest" />
                         </FormItem>
@@ -504,12 +546,14 @@ function AuthPage() {
                         <FormItem className="space-y-1.5">
                           <FormLabel className="text-[9px] font-black uppercase text-white/40 tracking-widest ml-1">ENDEREÇO E-MAIL</FormLabel>
                           <FormControl>
-                            <Input 
-                              placeholder="seu@email.com" 
-                              className="h-14 bg-white/5 border-white/10 rounded-2xl px-5 text-white focus:border-primary/50 font-black transition-all"
-                              {...field} 
-                              disabled={isLoading}
-                            />
+                              <Input 
+                                placeholder="seu@email.com" 
+                                className="h-14 bg-white/5 border-white/10 rounded-2xl px-5 text-white focus:border-primary/50 focus:ring-2 focus:ring-primary/20 transition-all font-black outline-none"
+                                {...field} 
+                                disabled={isLoading}
+                                aria-required="true"
+                                type="email"
+                              />
                           </FormControl>
                           <FormMessage className="text-[8px] font-bold text-red-500 uppercase tracking-widest" />
                         </FormItem>
@@ -522,13 +566,14 @@ function AuthPage() {
                         <FormItem className="space-y-1.5">
                           <FormLabel className="text-[9px] font-black uppercase text-white/40 tracking-widest ml-1">SENHA MESTRA</FormLabel>
                           <FormControl>
-                            <Input 
-                              type="password" 
-                              placeholder="••••••" 
-                              className="h-14 bg-white/5 border-white/10 rounded-2xl px-5 text-white focus:border-primary/50 font-black transition-all"
-                              {...field} 
-                              disabled={isLoading}
-                            />
+                              <Input 
+                                type="password" 
+                                placeholder="••••••" 
+                                className="h-14 bg-white/5 border-white/10 rounded-2xl px-5 text-white focus:border-primary/50 focus:ring-2 focus:ring-primary/20 transition-all font-black outline-none"
+                                {...field} 
+                                disabled={isLoading}
+                                aria-required="true"
+                              />
                           </FormControl>
                           <FormMessage className="text-[8px] font-bold text-red-500 uppercase tracking-widest" />
                         </FormItem>
@@ -552,9 +597,11 @@ function AuthPage() {
                             <div className="relative">
                               <Input 
                                 placeholder="E-MAIL" 
-                                className="h-14 bg-white/5 border-white/10 rounded-2xl px-5 text-white focus:border-primary/50 font-black transition-all pl-12"
+                                className="h-14 bg-white/5 border-white/10 rounded-2xl px-5 text-white focus:border-primary/50 focus:ring-2 focus:ring-primary/20 transition-all font-black pl-12 outline-none"
                                 {...field} 
                                 disabled={isLoading || isBlocked}
+                                aria-required="true"
+                                type="email"
                               />
                               <Mail size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20" />
                             </div>
@@ -584,9 +631,10 @@ function AuthPage() {
                               <Input 
                                 type="password" 
                                 placeholder="••••••" 
-                                className="h-14 bg-white/5 border-white/10 rounded-2xl px-5 text-white focus:border-primary/50 font-black transition-all pl-12"
+                                className="h-14 bg-white/5 border-white/10 rounded-2xl px-5 text-white focus:border-primary/50 focus:ring-2 focus:ring-primary/20 transition-all font-black pl-12 outline-none"
                                 {...field} 
                                 disabled={isLoading || isBlocked}
+                                aria-required="true"
                               />
                               <Lock size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20" />
                             </div>
@@ -605,7 +653,8 @@ function AuthPage() {
                               <Checkbox
                                 checked={field.value}
                                 onCheckedChange={field.onChange}
-                                className="border-white/20 bg-white/10 data-[state=checked]:bg-primary rounded-md w-4 h-4"
+                                className="border-white/20 bg-white/10 data-[state=checked]:bg-primary rounded-md w-4 h-4 focus:ring-2 focus:ring-primary/20 outline-none"
+                                aria-label="Lembrar de mim"
                               />
                             </FormControl>
                             <FormLabel className="text-[9px] font-black uppercase tracking-widest text-white/30 cursor-pointer select-none">
@@ -635,7 +684,8 @@ function AuthPage() {
                   </p>
                   <button 
                     onClick={() => setIsRegistering(!isRegistering)} 
-                    className="text-[10px] font-black uppercase tracking-widest text-white hover:text-primary transition-all text-left"
+                    className="text-[10px] font-black uppercase tracking-widest text-white hover:text-primary focus:text-primary outline-none transition-all text-left"
+                    aria-label={isRegistering ? "Ir para tela de login" : "Ir para tela de cadastro"}
                   >
                     {isRegistering ? "FAZER LOGIN" : "CRIAR CONTA"}
                   </button>

@@ -210,3 +210,20 @@
     color-mix(in oklch, var(--color-primary) 55%, var(--color-info))
   );
 }
+213: 
+214: @utility custom-scrollbar {
+215:   &::-webkit-scrollbar {
+216:     display: block;
+217:     width: 4px;
+218:   }
+219:   &::-webkit-scrollbar-track {
+220:     background: transparent;
+221:   }
+222:   &::-webkit-scrollbar-thumb {
+223:     background: oklch(0.98 0.005 245 / 0.1);
+224:     border-radius: 10px;
+225:   }
+226:   &::-webkit-scrollbar-thumb:hover {
+227:     background: oklch(0.98 0.005 245 / 0.2);
+228:   }
+229: }
