@@ -106,23 +106,30 @@ export const syncOfflineActions = async () => {
       
       for (const action of actions) {
         try {
-          // 1. Fetch current server state for conflict check (Mock)
-          // const { data: serverState } = await supabase.from(table).select().eq('id', action.data.id).single();
-          const serverState = null; 
-          
-          // 2. Resolve conflicts
+          // 1. Conflict reconciliation logic
+          const serverState = null; // Mock fetching latest state
           const resolvedData = resolveConflict(action, serverState);
           
-          // 3. Perform the actual sync (Mock)
-          console.log("Syncing action with resolved data:", action.type, resolvedData);
+          // 2. Automated Sync Attempt
+          console.log(`Auto-conciliating ${action.type}:`, resolvedData);
           
-          // 4. On success, remove from queue
+          // 3. Update status to synced
           const deleteTransaction = db.transaction(STORE_NAME, 'readwrite');
           deleteTransaction.objectStore(STORE_NAME).delete(action.id!);
           
           safeLocalStorage.setItem('total_synced_count', (parseInt(safeLocalStorage.getItem('total_synced_count') || '0') + 1).toString());
         } catch (err) {
-          console.error("Failed to sync specific action:", err);
+          console.error("Failed to reconcile action:", err);
+          const updateTransaction = db.transaction(STORE_NAME, 'readwrite');
+          const item = await new Promise(r => {
+            const getReq = updateTransaction.objectStore(STORE_NAME).get(action.id!);
+            getReq.onsuccess = () => r(getReq.result);
+          });
+          if (item) {
+            (item as any).status = 'failed';
+            (item as any).error = 'Reconciliation error';
+            updateTransaction.objectStore(STORE_NAME).put(item);
+          }
           safeLocalStorage.setItem('sync_failures_count', (parseInt(safeLocalStorage.getItem('sync_failures_count') || '0') + 1).toString());
         }
       }

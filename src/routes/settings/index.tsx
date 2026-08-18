@@ -395,6 +395,30 @@ function SettingsPage() {
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
+                    <Label className="text-sm font-medium">Lembretes de Refeições</Label>
+                    <p className="text-xs text-muted-foreground">Notificar nos horários estratégicos de alimentação</p>
+                  </div>
+                  <Switch defaultChecked />
+                </div>
+                <div className="pl-4 space-y-4 border-l-2 border-primary/20 ml-2">
+                   <div className="flex flex-col gap-3">
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
+                        <Clock size={12} /> Horários Customizados
+                      </span>
+                      <div className="flex flex-wrap gap-2">
+                         <Button variant="outline" size="sm" className="h-7 text-[9px] border-primary/30">07:30</Button>
+                         <Button variant="outline" size="sm" className="h-7 text-[9px] border-primary/30">12:30</Button>
+                         <Button variant="outline" size="sm" className="h-7 text-[9px] border-primary/30">16:00</Button>
+                         <Button variant="outline" size="sm" className="h-7 text-[9px] border-primary/30">20:00</Button>
+                         <Button variant="ghost" size="sm" className="h-7 w-7 p-0 rounded-full border border-dashed border-muted-foreground/30">+</Button>
+                      </div>
+                   </div>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
                     <Label className="text-sm font-medium">Macronutrientes</Label>
                     <p className="text-xs text-muted-foreground">Avisar sobre batimento de proteínas e calorias</p>
                   </div>
