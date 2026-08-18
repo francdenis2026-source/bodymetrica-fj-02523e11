@@ -312,6 +312,63 @@ function AuthPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center relative p-0 overflow-hidden bg-background">
+      {/* MFA Challenge Dialog */}
+      <Dialog open={showMfaChallenge} onOpenChange={setShowMfaChallenge}>
+        <DialogContent className="surface border-white/10 rounded-[2rem] max-w-sm">
+          <DialogHeader>
+            <div className="w-16 h-16 rounded-3xl bg-primary/10 flex items-center justify-center text-primary mx-auto mb-4">
+              <ShieldCheck size={32} />
+            </div>
+            <DialogTitle className="text-center text-xl font-black italic uppercase tracking-widest">
+              {isRecoveryMode ? "RECUPERAÇÃO" : "VERIFICAÇÃO 2FA"}
+            </DialogTitle>
+            <DialogDescription className="text-center text-[11px] font-bold uppercase leading-relaxed text-white/40">
+              {isRecoveryMode 
+                ? "INSIRA UM DOS SEUS CÓDIGOS DE RECUPERAÇÃO DE 8 DÍGITOS." 
+                : "INSIRA O CÓDIGO DE 6 DÍGITOS DO SEU APLICATIVO DE AUTENTICAÇÃO."}
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={onMfaSubmit} className="space-y-6 pt-4">
+            <div className="space-y-2">
+              <Label className="text-[10px] font-black uppercase text-white/60 ml-1">
+                {isRecoveryMode ? "CÓDIGO DE RECUPERAÇÃO" : "CÓDIGO DE ACESSO"}
+              </Label>
+              <Input 
+                value={mfaCode}
+                onChange={(e) => setMfaCode(e.target.value)}
+                placeholder={isRecoveryMode ? "XXXXXXXX" : "000000"}
+                className={cn(
+                  "h-14 bg-white/5 border-white/10 rounded-2xl text-center text-2xl font-black",
+                  !isRecoveryMode && "tracking-[0.5em]"
+                )}
+                maxLength={isRecoveryMode ? 8 : 6}
+                autoFocus
+              />
+            </div>
+            <div className="space-y-3">
+              <Button 
+                type="submit"
+                disabled={isLoading || (isRecoveryMode ? mfaCode.length < 8 : mfaCode.length < 6)}
+                className="w-full h-14 bg-brand-gradient border-none font-black uppercase tracking-widest rounded-2xl"
+              >
+                {isLoading ? "VERIFICANDO..." : "VERIFICAR E ENTRAR"}
+              </Button>
+              <Button 
+                type="button"
+                variant="ghost"
+                onClick={() => {
+                  setIsRecoveryMode(!isRecoveryMode);
+                  setMfaCode("");
+                }}
+                className="w-full text-[10px] font-black uppercase text-white/40 hover:text-white"
+              >
+                {isRecoveryMode ? "USAR CÓDIGO DO APP" : "PERDEU O ACESSO? USAR RECUPERAÇÃO"}
+              </Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
+
       <div className="absolute inset-0 z-0">
         <img 
           src="https://images.unsplash.com/photo-1593079831268-3381b0db4a77?auto=format&fit=crop&q=80&w=1600"
