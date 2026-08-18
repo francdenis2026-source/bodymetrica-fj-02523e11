@@ -228,8 +228,10 @@ function BodyPage() {
           <TabsTrigger value="overview" className="h-11 px-10 rounded-xl font-black uppercase tracking-widest text-[10px] data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all">GERAL</TabsTrigger>
           <TabsTrigger value="measurements" className="h-11 px-10 rounded-xl font-black uppercase tracking-widest text-[10px] data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all">MEDIDAS</TabsTrigger>
           <TabsTrigger value="photos" className="h-11 px-10 rounded-xl font-black uppercase tracking-widest text-[10px] data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all">EVOLUÇÃO</TabsTrigger>
+          <TabsTrigger value="comparison" className="h-11 px-10 rounded-xl font-black uppercase tracking-widest text-[10px] data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all">COMPARATIVO MENSAL</TabsTrigger>
           <TabsTrigger value="exports" className="h-11 px-10 rounded-xl font-black uppercase tracking-widest text-[10px] data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all">EXPORTAÇÕES</TabsTrigger>
         </TabsList>
+
 
 
 
@@ -396,8 +398,36 @@ function BodyPage() {
           </Card>
 
         </TabsContent>
+        
+        <TabsContent value="comparison" className="space-y-6">
+          <Card className="surface border-none p-8">
+            <CardHeader className="px-0 pt-0">
+              <CardTitle className="text-2xl font-black font-display uppercase tracking-tighter italic">Variação Mês a Mês</CardTitle>
+              <CardDescription className="text-[10px] font-bold uppercase tracking-widest opacity-60">Análise técnica de variação percentual e consistência</CardDescription>
+            </CardHeader>
+            <CardContent className="px-0 space-y-8">
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <VariationItem label="Peso Corporal" value="-2.6kg" percent="-3.1%" trend="down" />
+                <VariationItem label="Calorias (Média)" value="+120 kcal" percent="+5.2%" trend="up" />
+                <VariationItem label="Ingestão Hídrica" value="+450ml" percent="+18.5%" trend="up" />
+                <VariationItem label="Massa Muscular" value="+0.5kg" percent="+1.2%" trend="up" />
+              </div>
+              
+              <div className="p-6 rounded-[2.5rem] bg-primary/5 border border-primary/10">
+                <div className="flex items-center gap-3 mb-4">
+                  <TrendingUp className="text-primary" size={20} />
+                  <h3 className="text-sm font-black uppercase tracking-widest italic">Diagnóstico de Evolução</h3>
+                </div>
+                <p className="text-xs font-bold leading-relaxed text-foreground/70 italic">
+                  "Sua variação de peso está alinhada com o aumento da ingestão hídrica, sugerindo uma melhora na composição corporal e redução de retenção. O aumento de 5.2% nas calorias foi convertido em massa magra (+1.2%), validando a estratégia atual de superávit controlado."
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
 
         <TabsContent value="measurements">
+
           <div className="grid gap-4 md:grid-cols-2">
             <Card className="surface border-none">
               <CardHeader>

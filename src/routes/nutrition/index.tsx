@@ -20,8 +20,10 @@ import {
   Heart,
   FileDown,
   Download,
-  TrendingUp
+  TrendingUp,
+  Target
 } from "lucide-react";
+
 
 import { Input } from "@/components/ui/input";
 import { queueOfflineAction } from "@/lib/offline-sync";
@@ -366,7 +368,14 @@ function NutritionPage() {
 
 
         <TabsContent value="plan" className="space-y-6">
+          <div className="flex flex-col md:flex-row gap-6 mb-8">
+            <MealGoalCard name="Café da Manhã" kcal={550} p={40} c={60} g={15} />
+            <MealGoalCard name="Almoço" kcal={850} p={60} c={90} g={25} />
+            <MealGoalCard name="Jantar" kcal={700} p={55} c={50} g={20} />
+          </div>
+          
           <div className="grid gap-6 md:grid-cols-3">
+
             <div className="md:col-span-2 space-y-4">
               <MealCard 
                 name="Café da Manhã" 
