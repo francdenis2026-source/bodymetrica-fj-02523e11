@@ -35,6 +35,8 @@ import { EmptyState } from "@/components/ui/status-states";
 import { getSession } from "@/lib/auth/auth.functions";
 
 
+import { getAdherenceData, saveAdherenceRecord, DailyAdherence } from "@/lib/adherence";
+
 export const Route = createFileRoute("/nutrition/")({
   component: NutritionPage,
 });
@@ -485,6 +487,20 @@ function NutritionPage() {
                                 onClose={() => toast.dismiss(t)}
                               />
                             ));
+                          } else {
+                            // User can mark future/pending days as consumed if they want to pre-log
+                            const confirmMark = confirm(`Deseja marcar o dia ${day}/08 como consumido (100% macros/água)?`);
+                            if (confirmMark) {
+                              saveAdherenceRecord({
+                                date: `2026-08-${day.toString().padStart(2, '0')}`,
+                                macros: 100,
+                                water: 100,
+                                training: true
+                              });
+                              toast.success(`Dia ${day} marcado como concluído.`);
+                              // Force a reload or update state if necessary
+                              window.location.reload();
+                            }
                           }
                         }}
                       >

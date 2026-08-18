@@ -1,13 +1,15 @@
 import * as React from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
-import { generatePDFReport } from "@/lib/reports";
+import { generatePDFReport, generateAdherenceReport } from "@/lib/reports";
 import { exportToCSV } from "@/lib/export";
+import { toast } from "sonner";
+import { SVGToast } from "@/components/ui/svg-toast";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PageHeaderSkeleton, StatsSkeleton } from "@/components/ui/loading-states";
 import { EmptyState } from "@/components/ui/status-states";
 import { getSession } from "@/lib/auth/auth.functions";
-import { getAdherenceData, DailyAdherence } from "@/lib/adherence";
+import { getAdherenceData, DailyAdherence, saveAdherenceRecord } from "@/lib/adherence";
 
 import { 
   ArrowRight, 
@@ -154,6 +156,12 @@ function DashboardPage() {
             <FileDown size={20} /> RELATÓRIO PDF
           </Button>
           <Button 
+            className="gap-3 h-14 px-8 font-black uppercase tracking-widest bg-brand-gradient shadow-2xl shadow-primary/40 hover:scale-105 transition-all border-none"
+            onClick={() => generateAdherenceReport(userName, adherenceData, 'pdf')}
+          >
+            <FileDown size={20} /> ADERÊNCIA PDF
+          </Button>
+          <Button 
             variant="outline"
             className="gap-3 h-14 px-8 font-black uppercase tracking-widest border-2 bg-white/5 border-white/10 hover:bg-white/10 hover:scale-105 transition-all"
             onClick={() => exportToCSV([
@@ -161,7 +169,14 @@ function DashboardPage() {
               { Data: "15/08", Peso: 82.4, Hidratacao: "2.1L", Proteina: "185g" }
             ], 'Evolucao_BodyMetrica')}
           >
-            <FileDown size={20} /> EXPORTAR CSV
+            <FileDown size={20} /> EVOLUÇÃO CSV
+          </Button>
+          <Button 
+            variant="outline"
+            className="gap-3 h-14 px-8 font-black uppercase tracking-widest border-2 bg-white/5 border-white/10 hover:bg-white/10 hover:scale-105 transition-all"
+            onClick={() => generateAdherenceReport(userName, adherenceData, 'csv')}
+          >
+            <FileDown size={20} /> ADERÊNCIA CSV
           </Button>
         </div>
       </div>
@@ -310,6 +325,24 @@ function DashboardPage() {
           <CardTitle className="text-lg font-display flex items-center gap-2">
             <Calendar size={20} className="text-primary" />
             Adesão e Recomendação
+            <div className="flex gap-2 ml-auto">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="text-[9px] font-black uppercase tracking-widest hover:bg-primary/10"
+                onClick={() => generateAdherenceReport(userName, adherenceData, 'pdf')}
+              >
+                <FileDown size={14} className="mr-1" /> PDF
+              </Button>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="text-[9px] font-black uppercase tracking-widest hover:bg-primary/10"
+                onClick={() => generateAdherenceReport(userName, adherenceData, 'csv')}
+              >
+                <FileDown size={14} className="mr-1" /> CSV
+              </Button>
+            </div>
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-8">
@@ -319,14 +352,62 @@ function DashboardPage() {
                 <div key={i} className="flex-1 flex flex-col items-center gap-2 group relative">
                   <div className="w-full flex flex-col gap-1 justify-end h-full">
                     <div 
-                      className="w-full bg-info/20 rounded-t-sm transition-all hover:bg-info/40 cursor-help border-t border-info/40" 
+                      className="w-full bg-info/20 rounded-t-sm transition-all hover:bg-info/40 cursor-pointer border-t border-info/40" 
                       style={{ height: `${record.water * 0.5}%` }}
                       title={`Água: ${record.water}%`}
+                      onClick={() => {
+                        toast.custom((t) => {
+                          const status = record.macros < 80 || record.water < 80 ? 'abaixo' : record.macros > 100 ? 'acima' : 'na meta';
+                          const color = status === 'abaixo' ? 'text-warning' : status === 'acima' ? 'text-destructive' : 'text-success';
+                          
+                          return (
+                            <SVGToast 
+                              type="info"
+                              title={`ANÁLISE DO DIA ${record.date.split('-')[2]}`}
+                              message={
+                                <div className="space-y-2">
+                                  <p className="text-[13px]">Performance: <span className={color}>{record.macros}% Macros</span> e <span className={record.water < 80 ? 'text-warning' : 'text-info'}>{record.water}% Água</span>.</p>
+                                  <p className="text-[11px] opacity-70 italic">
+                                    {status === 'abaixo' 
+                                      ? "Dica: Tente aumentar a ingestão de proteínas na próxima refeição." 
+                                      : "Parabéns! Você manteve a disciplina de elite hoje."}
+                                  </p>
+                                </div>
+                              }
+                              onClose={() => toast.dismiss(t)}
+                            />
+                          );
+                        });
+                      }}
                     />
                     <div 
-                      className="w-full bg-primary/30 rounded-t-sm transition-all hover:bg-primary/50 cursor-help border-t border-primary/50" 
+                      className="w-full bg-primary/30 rounded-t-sm transition-all hover:bg-primary/50 cursor-pointer border-t border-primary/50" 
                       style={{ height: `${record.macros * 0.5}%` }}
                       title={`Macros: ${record.macros}%`}
+                      onClick={() => {
+                        toast.custom((t) => {
+                          const status = record.macros < 80 || record.water < 80 ? 'abaixo' : record.macros > 100 ? 'acima' : 'na meta';
+                          const color = status === 'abaixo' ? 'text-warning' : status === 'acima' ? 'text-destructive' : 'text-success';
+                          
+                          return (
+                            <SVGToast 
+                              type="info"
+                              title={`ANÁLISE DO DIA ${record.date.split('-')[2]}`}
+                              message={
+                                <div className="space-y-2">
+                                  <p className="text-[13px]">Performance: <span className={color}>{record.macros}% Macros</span> e <span className={record.water < 80 ? 'text-warning' : 'text-info'}>{record.water}% Água</span>.</p>
+                                  <p className="text-[11px] opacity-70 italic">
+                                    {status === 'abaixo' 
+                                      ? "Dica: Tente aumentar a ingestão de proteínas na próxima refeição." 
+                                      : "Parabéns! Você manteve a disciplina de elite hoje."}
+                                  </p>
+                                </div>
+                              }
+                              onClose={() => toast.dismiss(t)}
+                            />
+                          );
+                        });
+                      }}
                     />
                   </div>
                   <div className="absolute bottom-full mb-3 bg-card border border-white/10 p-3 rounded-xl text-[9px] font-black uppercase tracking-widest invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all whitespace-nowrap z-50 shadow-2xl backdrop-blur-xl">
