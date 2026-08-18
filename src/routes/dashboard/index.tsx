@@ -7,6 +7,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { PageHeaderSkeleton, StatsSkeleton } from "@/components/ui/loading-states";
 import { EmptyState } from "@/components/ui/status-states";
 import { getSession } from "@/lib/auth/auth.functions";
+import { getAdherenceData, DailyAdherence } from "@/lib/adherence";
 
 import { 
   ArrowRight, 
@@ -35,8 +36,10 @@ export const Route = createFileRoute("/dashboard/")({
 function DashboardPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [userData, setUserData] = useState<any>(null);
+  const [adherenceData, setAdherenceData] = useState<DailyAdherence[]>([]);
 
   useEffect(() => {
+    setAdherenceData(getAdherenceData());
     const session = getSession();
     if (session) {
       setUserData(session);
@@ -312,30 +315,53 @@ function DashboardPage() {
         <CardContent className="space-y-8">
           <div className="flex flex-col md:flex-row gap-8">
             <div className="flex-1 flex justify-between items-end h-40 gap-3">
-              {[60, 85, 45, 92, 100, 75, 88].map((val, i) => (
+              {adherenceData.length > 0 ? adherenceData.map((record, i) => (
                 <div key={i} className="flex-1 flex flex-col items-center gap-2 group relative">
-                  <div 
-                    className="w-full bg-primary/20 rounded-t-xl transition-all hover:bg-primary/40 cursor-help border-t-2 border-primary/40" 
-                    style={{ height: `${val}%` }}
-                  >
-                    {val > 90 && (
-                      <div className="absolute -top-6 left-1/2 -translate-x-1/2 text-primary">
-                        <TrendingUp size={12} />
-                      </div>
-                    )}
+                  <div className="w-full flex flex-col gap-1 justify-end h-full">
+                    <div 
+                      className="w-full bg-info/20 rounded-t-sm transition-all hover:bg-info/40 cursor-help border-t border-info/40" 
+                      style={{ height: `${record.water * 0.5}%` }}
+                      title={`Água: ${record.water}%`}
+                    />
+                    <div 
+                      className="w-full bg-primary/30 rounded-t-sm transition-all hover:bg-primary/50 cursor-help border-t border-primary/50" 
+                      style={{ height: `${record.macros * 0.5}%` }}
+                      title={`Macros: ${record.macros}%`}
+                    />
                   </div>
                   <div className="absolute bottom-full mb-3 bg-card border border-white/10 p-3 rounded-xl text-[9px] font-black uppercase tracking-widest invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all whitespace-nowrap z-50 shadow-2xl backdrop-blur-xl">
-                    <div className="flex items-center gap-2 mb-1">
-                      <div className={`w-2 h-2 rounded-full ${val > 80 ? 'bg-success' : 'bg-warning'}`} />
-                      ADERÊNCIA: {val}%
+                    <div className="flex flex-col gap-1">
+                      <div className="flex items-center gap-2">
+                        <div className={`w-2 h-2 rounded-full ${record.macros > 80 ? 'bg-success' : 'bg-warning'}`} />
+                        MACROS: {record.macros}%
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className={`w-2 h-2 rounded-full ${record.water > 80 ? 'bg-info' : 'bg-warning'}`} />
+                        ÁGUA: {record.water}%
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className={`w-2 h-2 rounded-full ${record.training ? 'bg-success' : 'bg-muted'}`} />
+                        TREINO: {record.training ? 'SIM' : 'NÃO'}
+                      </div>
                     </div>
-                    {val > 80 ? 'EXCELENTE PERFORMANCE' : 'FOCO NA CONSISTÊNCIA'}
                   </div>
                   <span className="text-[10px] text-muted-foreground font-black uppercase tracking-tighter">
-                    {['SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB', 'DOM'][i]}
+                    {record.date.split('-')[2]}
                   </span>
                 </div>
-              ))}
+              )) : (
+                [60, 85, 45, 92, 100, 75, 88].map((val, i) => (
+                  <div key={i} className="flex-1 flex flex-col items-center gap-2 group relative">
+                    <div 
+                      className="w-full bg-primary/20 rounded-t-xl transition-all hover:bg-primary/40 cursor-help border-t-2 border-primary/40" 
+                      style={{ height: `${val}%` }}
+                    />
+                    <span className="text-[10px] text-muted-foreground font-black uppercase tracking-tighter">
+                      {['SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB', 'DOM'][i]}
+                    </span>
+                  </div>
+                ))
+              )}
             </div>
 
             <div className="md:w-72 space-y-4">
