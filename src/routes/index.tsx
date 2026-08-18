@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -59,50 +58,55 @@ const HOME_FEATURES = [
   {
     icon: BarChart3,
     title: "Evolução clara",
-    description: "Visualize tendências e compare seus registros sem ruído visual.",
+    description: "Tendências e registros em uma leitura simples.",
   },
   {
     icon: Target,
     title: "Metas conectadas",
-    description: "Peso, medidas, nutrição e treino organizados em torno do seu objetivo.",
+    description: "Peso, medidas, alimentação e treino no mesmo objetivo.",
   },
   {
     icon: ShieldCheck,
     title: "Dados sob controle",
-    description: "Uma experiência pensada para acompanhamento pessoal e privacidade.",
+    description: "Acompanhamento pessoal com foco em privacidade.",
   },
 ];
 
 function Index() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userName, setUserName] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const session = getSession();
     setIsLoggedIn(!!session);
-    setUserName(session?.user?.name || "");
 
-    const timer = window.setTimeout(() => setIsLoading(false), 350);
+    const timer = window.setTimeout(() => setIsLoading(false), 300);
     return () => window.clearTimeout(timer);
   }, []);
 
   return (
     <div className="min-h-[100dvh] bg-background text-foreground">
-      <header className="sticky top-0 z-50 border-b border-border/70 bg-background/90 backdrop-blur-xl supports-[backdrop-filter]:bg-background/75">
+      <header className="relative z-50 border-b border-white/10 bg-background/90 backdrop-blur-xl supports-[backdrop-filter]:bg-background/75">
         <div className="container mx-auto flex h-16 max-w-7xl items-center justify-between px-4 md:px-6">
-          <Link to="/" className="group flex items-center gap-3 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+          <Link
+            to="/"
+            className="group flex items-center gap-3 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          >
             <div className="flex size-9 items-center justify-center rounded-xl bg-primary text-sm font-semibold text-primary-foreground shadow-sm transition-transform group-hover:-translate-y-0.5">
               B
             </div>
             <div className="leading-tight">
-              <span className="block font-display text-base font-semibold tracking-tight md:text-lg">Body Métrica FJ</span>
-              <span className="hidden text-xs text-muted-foreground sm:block">Saúde e composição corporal</span>
+              <span className="block font-display text-base font-semibold tracking-tight md:text-lg">
+                Body Métrica FJ
+              </span>
+              <span className="hidden text-xs text-muted-foreground sm:block">
+                Saúde e composição corporal
+              </span>
             </div>
           </Link>
 
           {isLoggedIn ? (
-            <Button asChild size="sm" variant="outline" className="rounded-xl">
+            <Button asChild size="sm" variant="outline" className="rounded-xl bg-background/70">
               <Link to="/dashboard">Abrir painel</Link>
             </Button>
           ) : (
@@ -127,38 +131,45 @@ function Index() {
         </div>
       </header>
 
-      <main>
-        <section className="relative overflow-hidden border-b border-border/60">
-          <div className="absolute inset-0 -z-20 bg-background" />
-          <div className="absolute inset-x-0 top-0 -z-10 h-[28rem] bg-gradient-to-b from-primary/[0.07] via-primary/[0.02] to-transparent" />
+      <main className="relative isolate min-h-[calc(100dvh-4rem)] overflow-hidden">
+        <img
+          src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=82&w=2200"
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 -z-30 h-full w-full object-cover object-center"
+        />
+        <div className="absolute inset-0 -z-20 bg-background/86 dark:bg-background/88" />
+        <div className="absolute inset-0 -z-10 bg-gradient-to-r from-background via-background/92 to-background/58" />
+        <div className="absolute inset-x-0 bottom-0 -z-10 h-56 bg-gradient-to-t from-background via-background/70 to-transparent" />
 
-          <div className="container mx-auto grid max-w-7xl items-center gap-12 px-4 py-14 md:px-6 md:py-20 lg:grid-cols-[1.08fr_0.92fr] lg:gap-16 lg:py-24">
+        <section className="container mx-auto flex min-h-[calc(100dvh-4rem)] max-w-7xl flex-col px-4 md:px-6">
+          <div className="grid flex-1 items-center gap-8 py-8 md:py-10 lg:grid-cols-[1.06fr_0.94fr] lg:gap-12 lg:py-8">
             <div className="max-w-2xl">
               {isLoading ? (
                 <div className="space-y-5">
                   <Skeleton className="h-7 w-48 rounded-full" />
+                  <Skeleton className="h-14 w-full max-w-xl" />
+                  <Skeleton className="h-14 w-4/5 max-w-lg" />
                   <Skeleton className="h-16 w-full max-w-xl" />
-                  <Skeleton className="h-16 w-4/5 max-w-lg" />
-                  <Skeleton className="h-20 w-full max-w-xl" />
                 </div>
               ) : (
                 <>
-                  <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1.5 text-sm text-muted-foreground shadow-sm">
+                  <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-border/80 bg-background/80 px-3 py-1.5 text-sm text-muted-foreground shadow-sm backdrop-blur-md">
                     <span className="size-2 rounded-full bg-primary" aria-hidden="true" />
-                    Acompanhamento integrado da sua evolução
+                    Sua evolução em uma única visão
                   </div>
 
-                  <h1 className="max-w-3xl font-display text-4xl font-semibold leading-[1.03] tracking-[-0.035em] sm:text-5xl md:text-6xl lg:text-7xl">
+                  <h1 className="max-w-3xl font-display text-[2.6rem] font-semibold leading-[1.02] tracking-[-0.04em] sm:text-5xl md:text-[3.5rem] lg:text-[4rem] xl:text-[4.45rem]">
                     Entenda seu corpo. Acompanhe o que realmente muda.
                   </h1>
 
-                  <p className="mt-6 max-w-xl text-base leading-7 text-muted-foreground md:text-lg md:leading-8">
-                    Reúna composição corporal, alimentação, hidratação e treino em uma rotina simples de acompanhar — com dados organizados para ajudar você a tomar decisões melhores ao longo do tempo.
+                  <p className="mt-5 max-w-xl text-base leading-7 text-muted-foreground md:text-lg md:leading-8">
+                    Composição corporal, alimentação, hidratação e treino reunidos em uma experiência direta, visual e fácil de acompanhar todos os dias.
                   </p>
                 </>
               )}
 
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+              <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
                 {isLoading ? (
                   <>
                     <Skeleton className="h-12 w-full rounded-xl sm:w-44" />
@@ -167,7 +178,12 @@ function Index() {
                 ) : (
                   <>
                     <QuickOnboarding isLoggedIn={isLoggedIn} />
-                    <Button asChild variant="outline" size="lg" className="h-12 rounded-xl px-6">
+                    <Button
+                      asChild
+                      variant="outline"
+                      size="lg"
+                      className="h-12 rounded-xl border-border/80 bg-background/65 px-6 backdrop-blur-md"
+                    >
                       <Link to="/about" className="gap-2">
                         Conhecer o projeto
                         <ArrowRight size={16} />
@@ -177,95 +193,66 @@ function Index() {
                 )}
               </div>
 
-              <div className="mt-10 grid max-w-xl grid-cols-1 gap-4 border-t border-border/70 pt-6 sm:grid-cols-3">
-                <Metric label="Funciona offline" value="PWA" />
-                <Metric label="Visão integrada" value="4 áreas" />
-                <Metric label="Foco" value="Evolução" />
+              <div className="mt-7 grid max-w-2xl gap-3 sm:grid-cols-3">
+                {HOME_FEATURES.map(({ icon: Icon, title, description }) => (
+                  <div
+                    key={title}
+                    className="rounded-2xl border border-border/70 bg-background/70 p-4 shadow-sm backdrop-blur-md"
+                  >
+                    <div className="mb-3 flex size-9 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                      <Icon size={18} />
+                    </div>
+                    <h2 className="font-display text-sm font-semibold tracking-tight md:text-base">
+                      {title}
+                    </h2>
+                    <p className="mt-1 text-xs leading-5 text-muted-foreground">
+                      {description}
+                    </p>
+                  </div>
+                ))}
               </div>
             </div>
 
-            <div className="relative mx-auto w-full max-w-[520px] lg:max-w-none">
-              <div className="overflow-hidden rounded-[2rem] border border-border bg-card shadow-2xl shadow-black/10">
-                <div className="relative aspect-[4/5] overflow-hidden bg-muted">
+            <div className="relative mx-auto w-full max-w-[430px] lg:max-w-[480px] xl:max-w-[510px]">
+              <div className="overflow-hidden rounded-[1.75rem] border border-white/15 bg-card shadow-2xl shadow-black/20">
+                <div className="relative aspect-[4/4.7] overflow-hidden bg-muted sm:aspect-[4/4.6] lg:aspect-[4/4.45]">
                   <img
-                    src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&q=85&w=1400"
-                    alt="Pessoa treinando com acompanhamento de composição corporal"
-                    className="h-full w-full object-cover"
+                    src="https://images.unsplash.com/photo-1599058917212-d750089bc07e?auto=format&fit=crop&q=88&w=1400"
+                    alt="Pessoa treinando em ambiente profissional"
+                    className="h-full w-full object-cover object-center"
                     fetchPriority="high"
                     loading="eager"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-                  <div className="absolute inset-x-0 bottom-0 p-6 text-white md:p-8">
-                    <p className="text-sm font-medium text-white/75">Dados que fazem sentido no dia a dia</p>
-                    <p className="mt-2 max-w-sm font-display text-2xl font-semibold leading-tight md:text-3xl">
-                      Menos ruído. Mais clareza sobre a sua evolução.
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent" />
+                  <div className="absolute inset-x-0 bottom-0 p-5 text-white md:p-6">
+                    <p className="text-xs font-medium text-white/75 md:text-sm">
+                      Acompanhamento que cabe na rotina
+                    </p>
+                    <p className="mt-1.5 max-w-sm font-display text-xl font-semibold leading-tight md:text-2xl">
+                      Dados organizados para mostrar progresso com clareza.
                     </p>
                   </div>
                 </div>
               </div>
 
-              <div className="absolute -bottom-5 -left-3 hidden max-w-[240px] rounded-2xl border border-border bg-background/95 p-4 shadow-xl backdrop-blur md:block">
-                <p className="text-xs font-medium text-muted-foreground">Acompanhamento</p>
-                <p className="mt-1 text-sm font-semibold">Composição, nutrição, água e treino no mesmo fluxo.</p>
+              <div className="absolute -bottom-4 -left-4 hidden max-w-[220px] rounded-2xl border border-border/80 bg-background/92 p-3.5 shadow-xl backdrop-blur md:block">
+                <p className="text-xs font-medium text-muted-foreground">Visão integrada</p>
+                <p className="mt-1 text-sm font-semibold">Corpo, nutrição, água e treino no mesmo fluxo.</p>
               </div>
             </div>
           </div>
-        </section>
 
-        <section className="container mx-auto max-w-7xl px-4 py-14 md:px-6 md:py-20">
-          <div className="mb-8 max-w-2xl">
-            <p className="text-sm font-medium text-primary">O que você acompanha</p>
-            <h2 className="mt-2 font-display text-3xl font-semibold tracking-tight md:text-4xl">
-              Uma visão completa sem transformar sua rotina em uma planilha.
-            </h2>
-          </div>
-
-          <div className="grid gap-4 md:grid-cols-3">
-            {HOME_FEATURES.map(({ icon: Icon, title, description }) => (
-              <Link
-                key={title}
-                to="/about"
-                className="group rounded-2xl border border-border bg-card p-6 transition-[transform,border-color,box-shadow] duration-200 hover:-translate-y-1 hover:border-primary/30 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-              >
-                <div className="mb-5 flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                  <Icon size={20} />
-                </div>
-                <h3 className="font-display text-xl font-semibold tracking-tight">{title}</h3>
-                <p className="mt-2 text-sm leading-6 text-muted-foreground">{description}</p>
-                <span className="mt-5 inline-flex items-center gap-1 text-sm font-medium text-primary">
-                  Saiba mais
-                  <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
-                </span>
-              </Link>
-            ))}
-          </div>
+          <footer className="flex flex-col gap-3 border-t border-border/60 py-4 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+            <p>Body Métrica FJ · Feijó, Acre · desenvolvido por Franc D'nis</p>
+            <nav className="flex flex-wrap gap-x-4 gap-y-1" aria-label="Rodapé">
+              <Link to="/about" className="transition-colors hover:text-foreground">Sobre</Link>
+              <Link to="/tools" className="transition-colors hover:text-foreground">Ferramentas</Link>
+              <Link to="/help" className="transition-colors hover:text-foreground">Ajuda</Link>
+              <Link to="/terms" className="transition-colors hover:text-foreground">Termos</Link>
+            </nav>
+          </footer>
         </section>
       </main>
-
-      <footer className="border-t border-border/70 bg-muted/20">
-        <div className="container mx-auto flex max-w-7xl flex-col gap-6 px-4 py-8 md:flex-row md:items-center md:justify-between md:px-6">
-          <div>
-            <p className="font-display font-semibold">Body Métrica FJ</p>
-            <p className="mt-1 text-sm text-muted-foreground">Feijó, Acre · desenvolvido por Franc D'nis</p>
-          </div>
-
-          <nav className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted-foreground" aria-label="Rodapé">
-            <Link to="/about" className="transition-colors hover:text-foreground">Sobre</Link>
-            <Link to="/tools" className="transition-colors hover:text-foreground">Ferramentas</Link>
-            <Link to="/help" className="transition-colors hover:text-foreground">Ajuda</Link>
-            <Link to="/terms" className="transition-colors hover:text-foreground">Termos</Link>
-          </nav>
-        </div>
-      </footer>
-    </div>
-  );
-}
-
-function Metric({ label, value }: { label: string; value: string }) {
-  return (
-    <div>
-      <p className="font-display text-lg font-semibold tracking-tight">{value}</p>
-      <p className="mt-0.5 text-xs leading-5 text-muted-foreground">{label}</p>
     </div>
   );
 }
