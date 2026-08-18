@@ -184,7 +184,7 @@ function Index() {
               </div>
 
               <div className="relative hidden lg:flex h-full items-center justify-center animate-in fade-in zoom-in-95 duration-1000 delay-300">
-                <div className="relative w-full max-w-[480px] z-10 rounded-[3.5rem] overflow-hidden shadow-[0_50px_120px_rgba(0,0,0,0.7)] border border-white/10 transform hover:scale-[1.01] transition-transform duration-700 bg-card/10 backdrop-blur-3xl aspect-[4/5]">
+                <div className="relative w-full max-w-[420px] z-10 rounded-[3.5rem] overflow-hidden shadow-[0_50px_120px_rgba(0,0,0,0.7)] border border-white/10 transform hover:scale-[1.01] transition-transform duration-700 bg-card/10 backdrop-blur-3xl aspect-[4/5]">
                   <div className="absolute inset-0 bg-gradient-to-tr from-primary/30 to-transparent z-20 pointer-events-none mix-blend-overlay" />
                   <img 
                     src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?auto=format&fit=crop&q=80&w=1200" 
