@@ -35,6 +35,13 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Badge } from "@/components/ui/badge";
 import { AlertCircle } from "lucide-react";
+import { 
+  Select, 
+  SelectContent, 
+  SelectItem, 
+  SelectTrigger, 
+  SelectValue 
+} from "@/components/ui/select";
 
 
 export const Route = createFileRoute("/settings/")({
@@ -438,6 +445,13 @@ function SettingsPage() {
 
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label className="text-sm font-medium">Metas de Refeições</Label>
+                    <p className="text-xs text-muted-foreground">Configurar horários e lembretes específicos</p>
+                  </div>
+                  <Switch defaultChecked />
+                </div>
+              </div>
                   <div className="space-y-0.5">
                     <Label className="text-sm font-medium">Lembretes de Refeições</Label>
                     <p className="text-xs text-muted-foreground">Notificar nos horários estratégicos de alimentação</p>
