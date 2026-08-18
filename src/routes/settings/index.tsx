@@ -58,14 +58,37 @@ function SettingsPage() {
   const [licenseKey, setLicenseKey] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [notifHistory, setNotifHistory] = useState<NotificationLog[]>([]);
+  const [historyPeriod, setHistoryPeriod] = useState<"7" | "30" | "all">("7");
+  const [historyStatus, setHistoryStatus] = useState<"all" | "sent" | "read" | "pending">("all");
+  const [weekly, setWeekly] = useState({ enabled: true, weekday: 0, time: "19:00" });
 
   useEffect(() => {
     setNotifHistory(getNotificationHistory());
+    setWeekly(getNotificationSettings().weeklySummary);
   }, []);
+
+  const persistWeekly = (next: { enabled: boolean; weekday: number; time: string }) => {
+    setWeekly(next);
+    saveNotificationSettings({ ...getNotificationSettings(), weeklySummary: next });
+  };
+
+  const filteredHistory = notifHistory.filter((log) => {
+    if (historyStatus !== "all" && log.status !== historyStatus) return false;
+    if (historyPeriod === "all") return true;
+    const days = Number(historyPeriod);
+    return new Date(log.timestamp).getTime() >= Date.now() - days * 86400000;
+  });
 
   const handleTestNotification = async () => {
     setIsLoading(true);
     await testDailySummary();
+    setNotifHistory(getNotificationHistory());
+    setIsLoading(false);
+  };
+
+  const handleWeeklyNow = async () => {
+    setIsLoading(true);
+    await sendWeeklySummary();
     setNotifHistory(getNotificationHistory());
     setIsLoading(false);
   };
