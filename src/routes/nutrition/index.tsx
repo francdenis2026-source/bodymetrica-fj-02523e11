@@ -35,7 +35,7 @@ import { EmptyState } from "@/components/ui/status-states";
 import { getSession } from "@/lib/auth/auth.functions";
 
 
-import { getAdherenceData, saveAdherenceRecord, DailyAdherence } from "@/lib/adherence";
+import { getAdherenceData, saveAdherenceRecord, DailyAdherence, addAuditLog } from "@/lib/adherence";
 
 export const Route = createFileRoute("/nutrition/")({
   component: NutritionPage,
@@ -483,7 +483,31 @@ function NutritionPage() {
                               <SVGToast 
                                 type="info"
                                 title={`STATUS DO DIA ${day}/08`}
-                                message="Consumo: Café (OK), Almoço (OK), Jantar (Pendente). Treino: Concluído."
+                                message={
+                                  <div className="space-y-2">
+                                    <p>Consumo: Café (OK), Almoço (OK), Jantar (Pendente).</p>
+                                    <div className="pt-2 border-t border-white/5 flex gap-2">
+                                      <Button 
+                                        size="sm" 
+                                        className="h-7 text-[8px] uppercase font-black tracking-widest bg-primary hover:bg-primary/80"
+                                        onClick={() => {
+                                          const newGrams = prompt("Ajustar gramas da porção principal:", "200");
+                                          if (newGrams) {
+                                            addAuditLog({
+                                              action: 'Edição Rápida',
+                                              details: `Porção do dia ${day}/08 alterada para ${newGrams}g.`,
+                                              type: 'meal'
+                                            });
+                                            toast.success("Porção atualizada!");
+                                            toast.dismiss();
+                                          }
+                                        }}
+                                      >
+                                        Ajustar Porção
+                                      </Button>
+                                    </div>
+                                  </div>
+                                }
                                 onClose={() => toast.dismiss(t)}
                               />
                             ));
@@ -573,6 +597,11 @@ function MealCard({ name, time, items, confirmed: initialConfirmed }: { name: st
   
   const handleConfirm = () => {
     setConfirmed(true);
+    addAuditLog({
+      action: 'Refeição Confirmada',
+      details: `Refeição: ${name} (${time}) marcada como consumida.`,
+      type: 'meal'
+    });
     queueOfflineAction({
       type: 'MEAL_CONFIRM',
       data: { name, time }

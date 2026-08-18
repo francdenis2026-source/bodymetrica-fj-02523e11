@@ -39,9 +39,11 @@ function DashboardPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [userData, setUserData] = useState<any>(null);
   const [adherenceData, setAdherenceData] = useState<DailyAdherence[]>([]);
+  const [auditLogs, setAuditLogs] = useState<AuditLog[]>([]);
 
   useEffect(() => {
     setAdherenceData(getAdherenceData());
+    setAuditLogs(getAuditLogs());
     const session = getSession();
     if (session) {
       setUserData(session);
@@ -164,12 +166,17 @@ function DashboardPage() {
           <Button 
             variant="outline"
             className="gap-3 h-14 px-8 font-black uppercase tracking-widest border-2 bg-white/5 border-white/10 hover:bg-white/10 hover:scale-105 transition-all"
-            onClick={() => exportToCSV([
-              { Data: "01/08", Peso: 84.5, Hidratacao: "1.2L", Proteina: "180g" },
-              { Data: "15/08", Peso: 82.4, Hidratacao: "2.1L", Proteina: "185g" }
-            ], 'Evolucao_BodyMetrica')}
+            onClick={() => {
+              const data = auditLogs.map(log => ({
+                Data: new Date(log.timestamp).toLocaleString(),
+                Acao: log.action,
+                Detalhes: log.details,
+                Tipo: log.type
+              }));
+              exportToCSV(data, `Auditoria_BodyMetrica_${userName.replace(/\s+/g, '_')}`);
+            }}
           >
-            <FileDown size={20} /> EVOLUÇÃO CSV
+            <HistoryIcon size={20} /> AUDITORIA CSV
           </Button>
           <Button 
             variant="outline"
@@ -367,7 +374,15 @@ function DashboardPage() {
                               message={
                                 <div className="space-y-2">
                                   <p className="text-[13px]">Performance: <span className={color}>{record.macros}% Macros</span> e <span className={record.water < 80 ? 'text-warning' : 'text-info'}>{record.water}% Água</span>.</p>
-                                  <p className="text-[11px] opacity-70 italic">
+                                  <div className="mt-2 pt-2 border-t border-white/5">
+                                    <p className="text-[10px] font-black uppercase text-primary mb-1">Tendência Semanal</p>
+                                    <div className="flex items-center gap-2">
+                                      <TrendingUp size={12} className={record.macros > 80 ? "text-success" : "text-warning"} />
+                                      <span className="text-[9px] font-bold italic">
+                                        {record.macros > 80 ? "+12% acima da média da semana" : "-5% abaixo da média da semana"}
+                                      </span>
+                                    </div>
+                                  </div>
                                     {status === 'abaixo' 
                                       ? "Dica: Tente aumentar a ingestão de proteínas na próxima refeição." 
                                       : "Parabéns! Você manteve a disciplina de elite hoje."}
@@ -464,6 +479,46 @@ function DashboardPage() {
                 </p>
               </div>
             </div>
+          </div>
+        </CardContent>
+      </Card>
+      <Card className="surface border-none relative z-10 mt-12">
+        <CardHeader>
+          <CardTitle className="text-lg font-display flex items-center gap-2">
+            <HistoryIcon size={20} className="text-primary" />
+            Histórico de Auditoria
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+            {auditLogs.length > 0 ? auditLogs.map((log) => (
+              <div key={log.id} className="p-4 rounded-2xl bg-white/[0.02] border border-white/5 hover:bg-white/[0.04] transition-colors">
+                <div className="flex justify-between items-start mb-2">
+                  <div className="flex items-center gap-3">
+                    <span className={cn(
+                      "px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest",
+                      log.type === 'meal' ? 'bg-info/20 text-info' :
+                      log.type === 'goal' ? 'bg-warning/20 text-warning' :
+                      log.type === 'weight' ? 'bg-success/20 text-success' :
+                      'bg-primary/20 text-primary'
+                    )}>
+                      {log.type}
+                    </span>
+                    <span className="text-sm font-black italic tracking-tight">{log.action}</span>
+                  </div>
+                  <span className="text-[9px] font-bold text-muted-foreground uppercase">
+                    {new Date(log.timestamp).toLocaleString('pt-BR')}
+                  </span>
+                </div>
+                <p className="text-[11px] text-foreground/60 leading-relaxed italic">
+                  {log.details}
+                </p>
+              </div>
+            )) : (
+              <div className="text-center py-12 opacity-40 italic text-sm">
+                Nenhuma atividade registrada no sistema de auditoria.
+              </div>
+            )}
           </div>
         </CardContent>
       </Card>
