@@ -378,8 +378,28 @@ function NutritionPage() {
             <MealGoalCard name="Jantar" kcal={700} p={55} c={50} g={20} />
           </div>
           
+          <div className="flex justify-end gap-2 mb-4">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="text-[9px] font-black uppercase tracking-widest bg-white/5"
+              onClick={() => {
+                const confirmLote = confirm("Marcar todas as refeições de hoje como concluídas?");
+                if (confirmLote) {
+                  addAuditLog({
+                    action: 'Ação em Lote',
+                    details: 'Todas as refeições marcadas como consumidas via Plano Alimentar.',
+                    type: 'meal'
+                  });
+                  toast.success("Ação em lote realizada com sucesso.");
+                }
+              }}
+            >
+              Concluir Todas
+            </Button>
+          </div>
+          
           <div className="grid gap-6 md:grid-cols-3">
-
             <div className="md:col-span-2 space-y-4">
               <MealCard 
                 name="Café da Manhã" 
