@@ -44,6 +44,8 @@ import {
   ResponsiveContainer 
 } from "recharts";
 import { ModuleHeader } from "@/components/module-header";
+import { cn } from "@/lib/utils";
+
 import { Skeleton } from "@/components/ui/skeleton";
 import { PageHeaderSkeleton, StatsSkeleton } from "@/components/ui/loading-states";
 import { EmptyState } from "@/components/ui/status-states";
