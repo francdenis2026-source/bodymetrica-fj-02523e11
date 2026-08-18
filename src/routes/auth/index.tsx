@@ -15,7 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { login, register, setSession, requestPasswordReset, updatePassword } from "@/lib/auth/auth.functions";
+import { login, register, setSession, requestPasswordReset, updatePassword, verifyRecoveryCode } from "@/lib/auth/auth.functions";
 import { toast } from "sonner";
 import { SVGToast } from "@/components/ui/svg-toast";
 import { ShieldCheck, ArrowLeft, Mail, UserPlus, KeyRound, Lock } from "lucide-react";
