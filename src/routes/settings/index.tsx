@@ -16,7 +16,8 @@ import {
   LifeBuoy,
   Settings,
   Save,
-  Clock
+  Clock,
+  History as HistoryIcon
 } from "lucide-react";
 import { ModuleHeader } from "@/components/module-header";
 import { cn } from "@/lib/utils";
