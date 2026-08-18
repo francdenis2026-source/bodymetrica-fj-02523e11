@@ -71,8 +71,7 @@ function Index() {
 
   return (
     <div className="flex flex-col h-screen bg-background relative overflow-hidden">
-      <div className="flex flex-col h-full bg-background relative overflow-y-auto custom-scrollbar">
-      {/* Professional Full Background Image with better contrast */}
+      {/* Optimized Background Image - priority load */}
       <div 
         className="fixed inset-0 z-0 pointer-events-none opacity-40 transition-opacity duration-700"
         style={{
@@ -85,6 +84,8 @@ function Index() {
       
       {/* Professional Gradient Overlay */}
       <div className="fixed inset-0 z-0 pointer-events-none bg-gradient-to-tr from-background via-background/60 to-primary/10" />
+
+      <div className="flex flex-col h-full bg-transparent relative overflow-x-hidden overflow-y-auto custom-scrollbar">
 
       
       <div className="relative z-10 flex flex-col flex-1">
@@ -114,11 +115,11 @@ function Index() {
 
 
         {/* Main Content Area */}
-        <main className="flex-1 flex flex-col">
+        <main className="flex-1 flex flex-col pt-14 md:pt-16 max-h-[calc(100vh-60px)] md:max-h-none">
           {/* Hero Section - Optimized for Single Page View */}
-          <section className="relative flex-1 flex items-center py-4 px-4 overflow-hidden min-h-[calc(100vh-180px)]">
-            <div className="container mx-auto max-w-7xl grid lg:grid-cols-2 gap-8 items-center">
-              <div className="text-left space-y-4 relative z-10 flex flex-col justify-center">
+          <section className="relative flex-1 flex flex-col justify-center py-2 md:py-6 px-4 md:px-6 overflow-hidden">
+            <div className="container mx-auto max-w-7xl grid lg:grid-cols-2 gap-2 lg:gap-8 items-center">
+              <div className="text-left space-y-2 md:space-y-4 relative z-10 flex flex-col justify-center">
                 {isLoading ? (
                   <Skeleton className="h-8 w-48 rounded-full bg-white/5" />
                 ) : (
@@ -134,7 +135,7 @@ function Index() {
                     <Skeleton className="h-14 w-3/4 bg-white/5" />
                   </div>
                 ) : (
-                  <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-black font-display text-foreground leading-[0.9] tracking-tighter animate-in fade-in slide-in-from-left-4 duration-700 delay-100 uppercase">
+                  <h1 className="text-3xl sm:text-6xl md:text-7xl lg:text-8xl font-black font-display text-foreground leading-[0.85] tracking-tighter animate-in fade-in slide-in-from-left-4 duration-700 delay-100 uppercase">
                     DOMINE SUA <br />
                     <span className="text-gradient-brand">EVOLUÇÃO.</span>
                   </h1>
@@ -166,24 +167,24 @@ function Index() {
                 </div>
 
                 {/* Quick stats / Features inline to save space */}
-                <div className="grid grid-cols-3 gap-6 pt-8 border-t border-white/5 animate-in fade-in duration-1000 delay-400">
+                <div className="hidden sm:grid grid-cols-3 gap-4 md:gap-6 pt-4 md:pt-8 border-t border-white/5 animate-in fade-in duration-1000 delay-400">
                   <div className="space-y-1">
-                    <div className="text-primary font-black text-2xl italic uppercase tracking-tighter">PWA</div>
-                    <div className="text-[9px] font-black text-foreground/40 uppercase tracking-widest leading-none">Offline Ready</div>
+                    <div className="text-primary font-black text-xl md:text-2xl italic uppercase tracking-tighter">PWA</div>
+                    <div className="text-[8px] md:text-[9px] font-black text-foreground/40 uppercase tracking-widest leading-none">Offline Ready</div>
                   </div>
-                  <div className="space-y-1 border-x border-white/5 px-6">
-                    <div className="text-primary font-black text-2xl italic uppercase tracking-tighter">100%</div>
-                    <div className="text-[9px] font-black text-foreground/40 uppercase tracking-widest leading-none">Privacidade</div>
+                  <div className="space-y-1 border-x border-white/5 px-4 md:px-6">
+                    <div className="text-primary font-black text-xl md:text-2xl italic uppercase tracking-tighter">100%</div>
+                    <div className="text-[8px] md:text-[9px] font-black text-foreground/40 uppercase tracking-widest leading-none">Privacidade</div>
                   </div>
                   <div className="space-y-1">
-                    <div className="text-primary font-black text-2xl italic uppercase tracking-tighter">AI</div>
-                    <div className="text-[9px] font-black text-foreground/40 uppercase tracking-widest leading-none">Biometria</div>
+                    <div className="text-primary font-black text-xl md:text-2xl italic uppercase tracking-tighter">AI</div>
+                    <div className="text-[8px] md:text-[9px] font-black text-foreground/40 uppercase tracking-widest leading-none">Biometria</div>
                   </div>
                 </div>
               </div>
 
               <div className="relative hidden lg:flex h-full items-center justify-center animate-in fade-in zoom-in-95 duration-1000 delay-300">
-                <div className="relative w-full max-w-[520px] z-10 rounded-[3.5rem] overflow-hidden shadow-[0_50px_120px_rgba(0,0,0,0.7)] border border-white/10 transform hover:scale-[1.01] transition-transform duration-700 bg-card/10 backdrop-blur-3xl aspect-[4/5.5]">
+                <div className="relative w-full max-w-[420px] z-10 rounded-[3.5rem] overflow-hidden shadow-[0_50px_120px_rgba(0,0,0,0.7)] border border-white/10 transform hover:scale-[1.01] transition-transform duration-700 bg-card/10 backdrop-blur-3xl aspect-[4/5]">
                   <div className="absolute inset-0 bg-gradient-to-tr from-primary/30 to-transparent z-20 pointer-events-none mix-blend-overlay" />
                   <img 
                     src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?auto=format&fit=crop&q=80&w=1200" 
@@ -213,21 +214,21 @@ function Index() {
           </section>
 
           {/* Simplified Features Grid - Tighter layout */}
-          <section className="py-6 bg-white/[0.01] backdrop-blur-3xl border-t border-white/5">
-            <div className="container mx-auto px-4 max-w-7xl">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <section className="py-2 md:py-8 bg-white/[0.01] backdrop-blur-3xl border-t border-white/5 mt-auto hidden sm:block">
+            <div className="container mx-auto px-4 md:px-6 max-w-7xl">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-6">
                 {[
-                  { icon: <Target size={22} />, title: "Objetivos", desc: "Planos adaptados ao seu biotipo.", color: "primary" },
-                  { icon: <Zap size={22} />, title: "Performance", desc: "Métricas de precisão absoluta.", color: "success" },
-                  { icon: <ShieldCheck size={22} />, title: "Segurança", desc: "Privacidade e sigilo total.", color: "info" }
+                  { icon: <Target size={20} />, title: "Objetivos", desc: "Planos adaptados ao seu biotipo.", color: "primary" },
+                  { icon: <Zap size={20} />, title: "Performance", desc: "Métricas de precisão absoluta.", color: "success" },
+                  { icon: <ShieldCheck size={20} />, title: "Segurança", desc: "Privacidade e sigilo total.", color: "info" }
                 ].map((f, i) => (
-                  <Link key={i} to="/about" className="group block focus-visible:ring-2 focus-visible:ring-primary outline-none rounded-[2rem] overflow-hidden">
+                  <Link key={i} to="/about" className="group block focus-visible:ring-2 focus-visible:ring-primary outline-none rounded-[1.5rem] md:rounded-[2rem] overflow-hidden">
                     <FeatureCard 
                       icon={f.icon}
                       title={f.title}
                       description={f.desc}
                       className={cn(
-                        "transition-all duration-300 p-6 h-full",
+                        "transition-all duration-300 p-4 md:p-6 h-full",
                         i === 0 && "group-hover:border-primary/40 group-hover:bg-primary/5",
                         i === 1 && "group-hover:border-success/40 group-hover:bg-success/5",
                         i === 2 && "group-hover:border-info/40 group-hover:bg-info/5"
@@ -241,15 +242,15 @@ function Index() {
         </main>
 
         {/* Footer - Scaled down */}
-        <footer className="mt-auto py-6 border-t border-white/5 bg-background/50 backdrop-blur-md">
+        <footer className="mt-auto py-2 md:py-6 border-t border-white/5 bg-background/50 backdrop-blur-md">
           <div className="container mx-auto px-4 max-w-6xl">
-            <div className="flex flex-col md:flex-row justify-between items-center gap-8 text-center md:text-left">
+            <div className="flex flex-col md:flex-row justify-between items-center gap-4 md:gap-8 text-center md:text-left">
               <div className="flex items-center gap-2 opacity-80 grayscale hover:grayscale-0 transition-all">
-                <div className="w-6 h-6 bg-brand-gradient rounded flex items-center justify-center text-[10px] text-white font-bold">B</div>
-                <span className="text-sm font-semibold font-display tracking-tight">Body Métrica FJ</span>
+                <div className="w-5 h-5 bg-brand-gradient rounded flex items-center justify-center text-[9px] text-white font-bold">B</div>
+                <span className="text-xs md:text-sm font-semibold font-display tracking-tight">Body Métrica FJ</span>
               </div>
               
-              <nav className="flex gap-8 text-sm text-muted-foreground font-medium">
+              <nav className="flex gap-4 md:gap-8 text-[11px] md:text-sm text-muted-foreground font-medium">
                 <Link to="/about" className="hover:text-primary transition-colors">Sobre</Link>
                 <Link to="/tools" className="hover:text-primary transition-colors">Ferramentas</Link>
                 <Link to="/help" className="hover:text-primary transition-colors">Ajuda</Link>
@@ -257,10 +258,10 @@ function Index() {
               </nav>
               
               <div className="flex flex-col items-center md:items-end gap-1">
-                <p className="text-xs text-muted-foreground/80 font-medium">
+                <p className="text-[10px] md:text-xs text-muted-foreground/80 font-medium">
                   © {new Date().getFullYear()} Body Métrica FJ.
                 </p>
-                <p className="text-[10px] text-muted-foreground/60 uppercase tracking-widest font-bold">
+                <p className="text-[9px] md:text-[10px] text-muted-foreground/60 uppercase tracking-widest font-bold">
                   dev Franc D'nis Feijó, AC
                 </p>
               </div>
@@ -275,8 +276,8 @@ function Index() {
 
 function FeatureCard({ icon, title, description, className }: { icon: React.ReactNode; title: string; description: string; className?: string }) {
   return (
-    <div className={cn("surface p-4 space-y-3 border border-white/5 backdrop-blur-3xl bg-white/[0.03] relative overflow-hidden h-full group rounded-[1.5rem]", className)}>
-      <div className="w-10 h-10 rounded-xl bg-brand-gradient flex items-center justify-center shadow-lg border border-white/10 transform group-hover:rotate-6 transition-transform text-white mb-2">
+    <div className={cn("surface p-3 md:p-4 space-y-2 md:space-y-3 border border-white/5 backdrop-blur-3xl bg-white/[0.03] relative overflow-hidden h-full group rounded-[1.2rem] md:rounded-[1.5rem]", className)}>
+      <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl bg-brand-gradient flex items-center justify-center shadow-lg border border-white/10 transform group-hover:rotate-6 transition-transform text-white mb-1 md:mb-2">
         {icon}
       </div>
       <h3 className="text-lg font-black font-display tracking-tight text-primary uppercase italic leading-none">{title}</h3>
