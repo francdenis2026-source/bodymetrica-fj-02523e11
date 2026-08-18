@@ -507,7 +507,22 @@ function ProfilePage() {
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
                   <Lock size={24} />
+              </div>
+              
+              <div className="p-6 rounded-3xl bg-white/[0.03] border border-white/5 flex items-center justify-between">
+                <div>
+                  <div className="text-sm font-black uppercase italic">CÓDIGOS DE RECUPERAÇÃO</div>
+                  <div className="text-[10px] font-bold text-white/40 uppercase tracking-widest mt-1">ACESSO DE EMERGÊNCIA AO 2FA</div>
                 </div>
+                <Button 
+                  onClick={handleGenerateRecoveryCodes}
+                  disabled={isSaving}
+                  variant="outline"
+                  className="rounded-2xl border-white/10 bg-white/5 text-white/60 text-[10px] font-black uppercase"
+                >
+                  REGENERAR
+                </Button>
+              </div>
                 <div>
                   <CardTitle className="text-xl font-black uppercase italic tracking-widest">PROTEÇÃO EXTRA</CardTitle>
                   <CardDescription className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">
