@@ -450,17 +450,83 @@ function SettingsPage() {
                   </div>
                 </div>
 
+                <div className="pt-4 border-t border-white/5 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-0.5">
+                      <Label className="text-sm font-medium">Resumo Semanal de Aderência</Label>
+                      <p className="text-xs text-muted-foreground">Notificação automática com tendências da semana</p>
+                    </div>
+                    <Switch
+                      checked={weekly.enabled}
+                      onCheckedChange={(v) => persistWeekly({ ...weekly, enabled: v })}
+                    />
+                  </div>
+                  <div className="flex flex-wrap items-center gap-3">
+                    <Select value={String(weekly.weekday)} onValueChange={(v) => persistWeekly({ ...weekly, weekday: Number(v) })}>
+                      <SelectTrigger className="h-8 w-36 text-[10px] uppercase font-black">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {["Domingo","Segunda","Terça","Quarta","Quinta","Sexta","Sábado"].map((d, i) => (
+                          <SelectItem key={d} value={String(i)}>{d}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <input
+                      type="time"
+                      value={weekly.time}
+                      onChange={(e) => persistWeekly({ ...weekly, time: e.target.value })}
+                      className="h-8 rounded-md bg-white/5 border border-white/10 px-3 text-[11px] font-bold"
+                    />
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="h-8 text-[9px] font-black uppercase tracking-widest border-primary/20 hover:bg-primary/10"
+                      onClick={handleWeeklyNow}
+                      disabled={isLoading}
+                    >
+                      Enviar Agora
+                    </Button>
+                  </div>
+                </div>
+
                 <div className="mt-6 space-y-3">
                   <h4 className="text-[10px] font-black uppercase tracking-widest text-primary flex items-center gap-2">
-                    <HistoryIcon size={12} /> Histórico de Notificações
+                    <HistoryIcon size={12} /> Central de Notificações
                   </h4>
+                  <div className="flex flex-wrap gap-2">
+                    <Select value={historyPeriod} onValueChange={(v) => setHistoryPeriod(v as typeof historyPeriod)}>
+                      <SelectTrigger className="h-8 w-36 text-[10px] uppercase font-black">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="7">Últimos 7 dias</SelectItem>
+                        <SelectItem value="30">Últimos 30 dias</SelectItem>
+                        <SelectItem value="all">Todo o período</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <Select value={historyStatus} onValueChange={(v) => setHistoryStatus(v as typeof historyStatus)}>
+                      <SelectTrigger className="h-8 w-32 text-[10px] uppercase font-black">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">Todas</SelectItem>
+                        <SelectItem value="sent">Enviadas</SelectItem>
+                        <SelectItem value="read">Lidas</SelectItem>
+                        <SelectItem value="pending">Pendentes</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
                   <div className="space-y-2 max-h-48 overflow-y-auto custom-scrollbar pr-2">
-                    {notifHistory.length > 0 ? (
-                      notifHistory.map((log) => (
+                    {filteredHistory.length > 0 ? (
+                      filteredHistory.map((log) => (
                         <div key={log.id} className="p-3 rounded-xl bg-white/5 border border-white/5 flex items-center justify-between">
                           <div className="space-y-0.5">
                             <p className="text-[11px] font-bold">{log.title}</p>
-                            <p className="text-[9px] text-muted-foreground uppercase">{format(new Date(log.timestamp), "HH:mm - dd/MM", { locale: ptBR })}</p>
+                            <p className="text-[9px] text-muted-foreground uppercase">
+                              {format(new Date(log.timestamp), "HH:mm - dd/MM", { locale: ptBR })}
+                              {log.type === 'adherence' ? ' • Alerta de desvio' : ''}
+                            </p>
                           </div>
                           <Badge variant="outline" className={cn(
                             "text-[8px] font-black uppercase px-2 py-0",
@@ -472,7 +538,7 @@ function SettingsPage() {
                         </div>
                       ))
                     ) : (
-                      <p className="text-[10px] text-muted-foreground italic text-center py-4">Nenhuma notificação registrada.</p>
+                      <p className="text-[10px] text-muted-foreground italic text-center py-4">Nenhuma notificação no período selecionado.</p>
                     )}
                   </div>
                 </div>
