@@ -17,7 +17,9 @@ import {
   History as HistoryIcon,
   LifeBuoy,
   Calendar,
-  Heart
+  Heart,
+  FileDown,
+  Download
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { queueOfflineAction } from "@/lib/offline-sync";
@@ -173,11 +175,35 @@ function NutritionPage() {
                   <CardDescription className="text-[10px] font-bold uppercase tracking-widest opacity-60 italic">INTELIGÊNCIA ALIMENTAR E CONTROLE DE MACROS</CardDescription>
                 </div>
                 <div className="flex gap-2">
-                  <Button size="sm" variant="outline" className="text-[10px] font-bold uppercase tracking-widest border-white/10 bg-white/5">
-                    <HistoryIcon size={14} className="mr-2" /> HISTÓRICO
+                  <Button 
+                    size="sm" 
+                    variant="outline" 
+                    className="text-[10px] font-bold uppercase tracking-widest border-white/10 bg-white/5"
+                    onClick={() => {
+                      const mockData = [
+                        { Refeicao: "Café da Manhã", Calorias: 450, Proteina: "30g", Data: "2026-08-18" },
+                        { Refeicao: "Almoço", Calorias: 750, Proteina: "50g", Data: "2026-08-18" }
+                      ];
+                      const { exportToPDF } = require("@/lib/export");
+                      exportToPDF(mockData, "Diario_Alimentar", "Diário de Nutrição - Body Métrica FJ");
+                    }}
+                  >
+                    <FileDown size={14} className="mr-2" /> PDF
                   </Button>
-                  <Button size="sm" variant="outline" className="text-[10px] font-bold uppercase tracking-widest border-white/10 bg-white/5">
-                    <Calendar size={14} className="mr-2" /> AGENDA
+                  <Button 
+                    size="sm" 
+                    variant="outline" 
+                    className="text-[10px] font-bold uppercase tracking-widest border-white/10 bg-white/5"
+                    onClick={() => {
+                       const mockData = [
+                        { Refeicao: "Café da Manhã", Calorias: 450, Proteina: "30g", Data: "2026-08-18" },
+                        { Refeicao: "Almoço", Calorias: 750, Proteina: "50g", Data: "2026-08-18" }
+                      ];
+                      const { exportToCSV } = require("@/lib/export");
+                      exportToCSV(mockData, "Diario_Alimentar");
+                    }}
+                  >
+                    <Download size={14} className="mr-2" /> CSV
                   </Button>
                 </div>
               </CardHeader>
