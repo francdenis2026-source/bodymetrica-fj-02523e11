@@ -70,34 +70,35 @@ function Index() {
   }, []);
 
   return (
-    <div className="flex flex-col h-screen bg-background relative overflow-hidden">
+    <div className="flex flex-col h-screen bg-background relative overflow-hidden font-sans">
       {/* Optimized Background Image - priority load */}
       <div 
-        className="fixed inset-0 z-0 pointer-events-none opacity-40 transition-opacity duration-700"
+        className="fixed inset-0 z-0 pointer-events-none opacity-20 grayscale transition-opacity duration-1000"
         style={{
-          backgroundImage: 'url(https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=2000)',
+          backgroundImage: 'url(https://images.unsplash.com/photo-1593079831268-3381b0db4a77?auto=format&fit=crop&q=80&w=2000)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
-          filter: 'contrast(1.1) brightness(0.5)'
+          filter: 'contrast(1.2) brightness(0.4)'
         }}
       />
       
-      {/* Professional Gradient Overlay */}
-      <div className="fixed inset-0 z-0 pointer-events-none bg-gradient-to-tr from-background via-background/60 to-primary/10" />
+      {/* High-End Mesh Gradient Overlay */}
+      <div className="fixed inset-0 z-0 pointer-events-none bg-[radial-gradient(circle_at_50%_50%,rgba(oklch(0.7_0.2_260),0.05),transparent_50%)]" />
+      <div className="fixed inset-0 z-0 pointer-events-none bg-gradient-to-b from-transparent via-background/80 to-background" />
 
-      <div className="flex flex-col h-full bg-transparent relative overflow-x-hidden overflow-y-auto custom-scrollbar">
+      <div className="flex flex-col h-full bg-transparent relative overflow-x-hidden overflow-y-auto custom-scrollbar scroll-smooth">
 
       
       <div className="relative z-10 flex flex-col flex-1">
         {/* Header */}
-        <header className="fixed top-0 w-full z-50 bg-background/60 backdrop-blur-xl border-b border-white/5">
-          <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-brand-gradient rounded-xl flex items-center justify-center text-primary-foreground font-bold shadow-xl border border-white/10">
+        <header className="fixed top-0 w-full z-50 bg-background/40 backdrop-blur-2xl border-b border-white/[0.03]">
+          <div className="container mx-auto px-6 h-16 flex items-center justify-between">
+            <div className="flex items-center gap-3 group cursor-default">
+              <div className="w-10 h-10 bg-brand-gradient rounded-xl flex items-center justify-center text-primary-foreground font-black shadow-[0_0_20px_rgba(oklch(0.7_0.2_260),0.3)] border border-white/20 group-hover:scale-105 transition-transform">
                 B
               </div>
-              <span className="text-2xl font-bold font-display text-foreground tracking-tighter">
-                BODY MÉTTRICA FJ
+              <span className="text-xl md:text-2xl font-black font-display text-foreground tracking-tighter uppercase italic leading-none">
+                Body Métrica FJ
               </span>
             </div>
             
@@ -119,34 +120,33 @@ function Index() {
           {/* Hero Section - Optimized for Single Page View */}
           <section className="relative flex-1 flex flex-col justify-center py-2 md:py-6 px-4 md:px-6 overflow-hidden">
             <div className="container mx-auto max-w-7xl grid lg:grid-cols-2 gap-2 lg:gap-8 items-center">
-              <div className="text-left space-y-2 md:space-y-4 relative z-10 flex flex-col justify-center">
+              <div className="text-left space-y-4 md:space-y-6 relative z-10 flex flex-col justify-center max-w-2xl">
                 {isLoading ? (
                   <Skeleton className="h-8 w-48 rounded-full bg-white/5" />
                 ) : (
-                  <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-[10px] font-black uppercase tracking-[0.2em] w-fit animate-in fade-in slide-in-from-left-4 duration-700 border border-primary/20 backdrop-blur-md">
+                  <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-[10px] font-black uppercase tracking-[0.25em] w-fit animate-in fade-in slide-in-from-left-4 duration-1000 border border-primary/20 backdrop-blur-md">
                     <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-                    <span>Alta Performance & Precisão</span>
+                    <span>Engenharia Biométrica Avançada</span>
                   </div>
                 )}
                 
                 {isLoading ? (
                   <div className="space-y-2">
-                    <Skeleton className="h-14 w-full max-w-md bg-white/5" />
-                    <Skeleton className="h-14 w-3/4 bg-white/5" />
+                    <Skeleton className="h-16 w-full max-w-md bg-white/5" />
+                    <Skeleton className="h-16 w-3/4 bg-white/5" />
                   </div>
                 ) : (
-                  <h1 className="text-3xl sm:text-6xl md:text-7xl lg:text-8xl font-black font-display text-foreground leading-[0.85] tracking-tighter animate-in fade-in slide-in-from-left-4 duration-700 delay-100 uppercase">
-                    DOMINE SUA <br />
-                    <span className="text-gradient-brand">EVOLUÇÃO.</span>
+                  <h1 className="text-4xl sm:text-7xl md:text-8xl lg:text-9xl font-black font-display text-foreground leading-[0.85] tracking-tighter animate-in fade-in slide-in-from-left-4 duration-1000 delay-100 uppercase italic">
+                    FORJE SUA <br />
+                    <span className="text-gradient-brand">MELHOR VERSÃO.</span>
                   </h1>
                 )}
                 
                 {isLoading ? (
-                  <Skeleton className="h-10 w-full max-w-sm bg-white/5" />
+                  <Skeleton className="h-12 w-full max-w-sm bg-white/5" />
                 ) : (
-                  <p className="text-sm md:text-base text-foreground/70 max-w-sm leading-relaxed font-medium animate-in fade-in slide-in-from-left-4 duration-700 delay-200">
-                    A engenharia definitiva para quem busca a perfeição física. 
-                    Sincronize sua biometria com inteligência preditiva.
+                  <p className="text-base md:text-lg text-foreground/60 max-w-lg leading-relaxed font-medium animate-in fade-in slide-in-from-left-4 duration-1000 delay-200">
+                    A suíte definitiva de performance humana. Sincronize biometria, nutrição e treinamento em uma arquitetura de alta precisão.
                   </p>
                 )}
 
@@ -183,32 +183,37 @@ function Index() {
                 </div>
               </div>
 
-              <div className="relative hidden lg:flex h-full items-center justify-center animate-in fade-in zoom-in-95 duration-1000 delay-300">
-                <div className="relative w-full max-w-[420px] z-10 rounded-[3.5rem] overflow-hidden shadow-[0_50px_120px_rgba(0,0,0,0.7)] border border-white/10 transform hover:scale-[1.01] transition-transform duration-700 bg-card/10 backdrop-blur-3xl aspect-[4/5]">
-                  <div className="absolute inset-0 bg-gradient-to-tr from-primary/30 to-transparent z-20 pointer-events-none mix-blend-overlay" />
+              <div className="relative hidden lg:flex h-full items-center justify-center animate-in fade-in zoom-in-95 duration-[1500ms] delay-300">
+                {/* Modern 3D/Glassmorphic Frame */}
+                <div className="relative w-full max-w-[460px] z-10 rounded-[3rem] overflow-hidden shadow-[0_60px_150px_rgba(0,0,0,0.8)] border border-white/10 group bg-card/5 backdrop-blur-3xl aspect-[4/5] transform hover:-rotate-1 transition-transform duration-700">
+                  <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 via-transparent to-transparent z-20 pointer-events-none mix-blend-overlay opacity-50 group-hover:opacity-100 transition-opacity" />
                   <img 
-                    src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?auto=format&fit=crop&q=80&w=1200" 
-                    alt="High Performance Athlete" 
-                    className="w-full h-full object-cover scale-105 hover:scale-100 transition-transform duration-[3000ms]"
+                    src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&q=80&w=1200" 
+                    alt="Precision Training" 
+                    className="w-full h-full object-cover scale-110 group-hover:scale-105 transition-transform duration-[4000ms]"
                     fetchPriority="high"
                     loading="eager"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-background/95 via-transparent to-transparent z-10" />
-                  <div className="absolute bottom-12 left-12 right-12 z-20">
-                    <div className="space-y-3">
-                      <p className="text-white text-4xl font-black font-display tracking-tighter uppercase italic leading-[0.9]">
-                        ENGENHARIA <br /> BIOMÉTRICA
-                      </p>
-                      <p className="text-white/60 text-[11px] font-bold uppercase tracking-widest leading-relaxed max-w-[280px]">
-                        Monitoramento de nível olímpico para aprimoramento constante da composição corporal.
+                  {/* Digital HUD elements */}
+                  <div className="absolute inset-0 z-20 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10 mix-blend-overlay" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent z-10" />
+                  
+                  <div className="absolute bottom-12 left-10 right-10 z-20">
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-2">
+                        <div className="w-8 h-[2px] bg-primary" />
+                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-primary/80">Protocolo Alpha</span>
+                      </div>
+                      <p className="text-white text-5xl font-black font-display tracking-tighter uppercase italic leading-[0.85]">
+                        DADOS QUE <br /> TRANSFORMAM
                       </p>
                     </div>
                   </div>
                 </div>
                 
-                {/* Decorative elements */}
-                <div className="absolute -top-24 -right-24 w-96 h-96 bg-primary/20 rounded-full blur-[140px] -z-10 opacity-60" />
-                <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-success/20 rounded-full blur-[140px] -z-10 opacity-60" />
+                {/* Professional Decorative Elements */}
+                <div className="absolute -top-32 -right-32 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[160px] -z-10 animate-pulse duration-[10s]" />
+                <div className="absolute -bottom-32 -left-32 w-[500px] h-[500px] bg-success/5 rounded-full blur-[160px] -z-10 animate-pulse duration-[8s]" />
               </div>
             </div>
           </section>
