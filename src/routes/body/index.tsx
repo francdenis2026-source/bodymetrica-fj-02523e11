@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { SVGToast } from "@/components/ui/svg-toast";
 import { generateComparisonPDF, exportReportAsImage } from "@/lib/comparison-reports";
 import { generateMonthlyPDF } from "@/lib/monthly-reports";
+import { generateInsights } from "@/lib/insights";
 
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -435,9 +436,9 @@ function BodyPage() {
                   <TrendingUp className="text-primary" size={20} />
                   <h3 className="text-sm font-black uppercase tracking-widest italic">Diagnóstico de Evolução</h3>
                 </div>
-                <p className="text-xs font-bold leading-relaxed text-foreground/70 italic">
-                  "Sua variação de peso está alinhada com o aumento da ingestão hídrica, sugerindo uma melhora na composição corporal e redução de retenção. O aumento de 5.2% nas calorias foi convertido em massa magra (+1.2%), validando a estratégia atual de superávit controlado."
-                </p>
+                  <p className="text-xs font-bold leading-relaxed text-foreground/70 italic">
+                    {generateInsights(mockWeightData, { protein: 180 })}
+                  </p>
               </div>
             </CardContent>
           </Card>
