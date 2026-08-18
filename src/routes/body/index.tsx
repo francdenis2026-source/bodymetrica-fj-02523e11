@@ -321,8 +321,9 @@ function BodyPage() {
             <CardHeader className="flex flex-col md:flex-row md:items-center justify-between p-8 gap-6">
               <div className="space-y-1">
                 <CardTitle className="text-xl font-black uppercase tracking-widest italic">HISTÓRICO DE PERFORMANCE</CardTitle>
-                <p className="text-[10px] font-bold text-foreground/40 uppercase tracking-widest">REGISTROS CRONOLÓGICOS DE EVOLUÇÃO</p>
+                <p className="text-[10px] font-bold text-foreground/40 uppercase tracking-widest">ANÁLISE DETALHADA E DRILL-DOWN DE REGISTROS</p>
               </div>
+
               <div className="flex items-center gap-3">
                 <Button 
                   variant="outline" 
@@ -378,19 +379,33 @@ function BodyPage() {
             </CardHeader>
             <CardContent className="px-0">
               <div className="space-y-0">
-                {[1, 2, 3].map((i) => (
-                  <div key={i} className="flex items-center justify-between px-8 py-6 hover:bg-white/5 transition-all border-b border-white/5 last:border-0 group">
+                {[
+                  { date: "13 AGO, 08:30", type: "Medição", desc: "MEDIÇÃO MATINAL EM JEJUM", value: "82.4 KG", change: "-0.3 KG" },
+                  { date: "12 AGO, 12:45", type: "Alimentação", desc: "ALMOÇO DE ALTA PROTEÍNA", value: "850 KCAL", change: "+15% P" },
+                  { date: "11 AGO, 19:30", type: "Treino", desc: "TREINO DE FORÇA (A)", value: "VOLUME ALTO", change: "RECORD" }
+                ].map((item, i) => (
+                  <div key={i} className="flex items-center justify-between px-8 py-6 hover:bg-white/5 transition-all border-b border-white/5 last:border-0 group cursor-pointer" onClick={() => {
+                    toast.custom((t) => (
+                      <SVGToast 
+                        type="info"
+                        title={`DETALHES: ${item.type}`}
+                        message={`Visualizando drill-down para ${item.date}. ${item.desc}`}
+                        onClose={() => toast.dismiss(t)}
+                      />
+                    ));
+                  }}>
                     <div className="flex flex-col gap-1">
-                      <span className="text-xs font-black uppercase tracking-[0.2em] text-foreground/80 group-hover:text-primary transition-colors">13 AGO, 08:30</span>
-                      <span className="text-[10px] font-bold text-foreground/40 uppercase tracking-widest italic">MEDIÇÃO MATINAL EM JEJUM</span>
+                      <span className="text-xs font-black uppercase tracking-[0.2em] text-foreground/80 group-hover:text-primary transition-colors">{item.date}</span>
+                      <span className="text-[10px] font-bold text-foreground/40 uppercase tracking-widest italic">{item.desc}</span>
                     </div>
                     <div className="text-right space-y-1">
-                      <div className="text-2xl font-black font-display tracking-tighter italic uppercase group-hover:scale-110 transition-transform">82.4 KG</div>
-                      <div className="text-[10px] font-black uppercase tracking-widest text-success bg-success/10 px-2 py-0.5 rounded-full inline-block">-0.3 KG</div>
+                      <div className="text-2xl font-black font-display tracking-tighter italic uppercase group-hover:scale-110 transition-transform">{item.value}</div>
+                      <div className="text-[10px] font-black uppercase tracking-widest text-success bg-success/10 px-2 py-0.5 rounded-full inline-block">{item.change}</div>
                     </div>
                   </div>
                 ))}
               </div>
+
               <div className="p-8 text-center bg-white/[0.01]">
                 <Button variant="ghost" className="text-[10px] font-black uppercase tracking-[0.3em] text-foreground/40 hover:text-foreground gap-3">
                   <History size={16} /> VER HISTÓRICO COMPLETO
