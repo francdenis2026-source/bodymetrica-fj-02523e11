@@ -1,0 +1,40 @@
+name: Install Emil Kowalski Skills
+
+on:
+  push:
+    paths:
+      - '.skills-install-trigger'
+
+permissions:
+  contents: write
+
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Emil Kowalski skill collection
+        env:
+          DISABLE_TELEMETRY: '1'
+        run: npx -y skills@latest add emilkowalski/skills --all
+
+      - name: Commit installed skills
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No skill changes to commit."
+            exit 0
+          fi
+          git commit -m "install emilkowalski skill collection"
+          git push origin HEAD:main
