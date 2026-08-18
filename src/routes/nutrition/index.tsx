@@ -36,6 +36,7 @@ import { getSession } from "@/lib/auth/auth.functions";
 
 
 import { getAdherenceData, saveAdherenceRecord, DailyAdherence, addAuditLog } from "@/lib/adherence";
+import { alertOnDeviation } from "@/lib/deviation-alerts";
 
 export const Route = createFileRoute("/nutrition/")({
   component: NutritionPage,
@@ -513,13 +514,23 @@ function NutritionPage() {
                                         onClick={() => {
                                           const newGrams = prompt("Ajustar gramas da porção principal:", "200");
                                           if (newGrams) {
+                                            const dateStr = `2026-08-${day.toString().padStart(2, '0')}`;
+                                            const factor = Math.max(0, Number(newGrams) || 0) / 200;
+                                            const recalculated = {
+                                              date: dateStr,
+                                              macros: Math.round(Math.min(200, factor * 100)),
+                                              water: getAdherenceData().find(r => r.date === dateStr)?.water ?? 100,
+                                              training: getAdherenceData().find(r => r.date === dateStr)?.training ?? false
+                                            };
+                                            saveAdherenceRecord(recalculated);
                                             addAuditLog({
                                               action: 'Edição Rápida',
-                                              details: `Porção do dia ${day}/08 alterada para ${newGrams}g.`,
+                                              details: `Porção do dia ${day}/08 alterada para ${newGrams}g (macros recalculados: ${recalculated.macros}%).`,
                                               type: 'meal'
                                             });
-                                            toast.success("Porção atualizada!");
                                             toast.dismiss();
+                                            toast.success("Porção atualizada!");
+                                            alertOnDeviation(recalculated, `Edição de porção do dia ${day}/08`);
                                           }
                                         }}
                                       >
