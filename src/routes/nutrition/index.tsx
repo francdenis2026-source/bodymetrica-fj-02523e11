@@ -186,11 +186,11 @@ function NutritionPage() {
                     className="text-[10px] font-bold uppercase tracking-widest border-white/10 bg-white/5"
                     onClick={() => {
                       const mockData = [
-                        { Refeicao: "Café da Manhã", Calorias: 450, Proteina: "30g", Data: "2026-08-18" },
-                        { Refeicao: "Almoço", Calorias: 750, Proteina: "50g", Data: "2026-08-18" }
+                        { Refeicao: "Café da Manhã", Calorias: 450, Proteina: "30g", Status: "Concluído", Data: "2026-08-18" },
+                        { Refeicao: "Almoço", Calorias: 750, Proteina: "50g", Status: "Pendente", Data: "2026-08-18" }
                       ];
                       const { exportToPDF } = require("@/lib/export");
-                      exportToPDF(mockData, "Diario_Alimentar", "Diário de Nutrição - Body Métrica FJ");
+                      exportToPDF(mockData, "Planejamento_Diario", "Planejamento e Checklist - Body Métrica FJ");
                     }}
                   >
                     <FileDown size={14} className="mr-2" /> PDF
@@ -201,11 +201,11 @@ function NutritionPage() {
                     className="text-[10px] font-bold uppercase tracking-widest border-white/10 bg-white/5"
                     onClick={() => {
                        const mockData = [
-                        { Refeicao: "Café da Manhã", Calorias: 450, Proteina: "30g", Data: "2026-08-18" },
-                        { Refeicao: "Almoço", Calorias: 750, Proteina: "50g", Data: "2026-08-18" }
+                        { Refeicao: "Café da Manhã", Calorias: 450, Proteina: "30g", Status: "Concluído", Data: "2026-08-18" },
+                        { Refeicao: "Almoço", Calorias: 750, Proteina: "50g", Status: "Pendente", Data: "2026-08-18" }
                       ];
                       const { exportToCSV } = require("@/lib/export");
-                      exportToCSV(mockData, "Diario_Alimentar");
+                      exportToCSV(mockData, "Planejamento_Diario");
                     }}
                   >
                     <Download size={14} className="mr-2" /> CSV
