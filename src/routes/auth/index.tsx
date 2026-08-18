@@ -178,7 +178,7 @@ function AuthPage() {
             message={result.message}
             onClose={() => toast.dismiss(t)}
           />
-        ));
+        ), { duration: 5000 });
         if (result.needsVerification) {
           toast.custom((t) => (
             <SVGToast 
