@@ -352,22 +352,7 @@ function DashboardPage() {
               >
                 <FileDown size={14} className="mr-1" /> CSV
               </Button>
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                className="text-[9px] font-black uppercase tracking-widest hover:bg-primary/10"
-                onClick={() => generateWeeklyAdherenceReport(userName, adherenceData, 'pdf')}
-              >
-                <FileDown size={14} className="mr-1" /> Semanal PDF
-              </Button>
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                className="text-[9px] font-black uppercase tracking-widest hover:bg-primary/10"
-                onClick={() => generateWeeklyAdherenceReport(userName, adherenceData, 'csv')}
-              >
-                <FileDown size={14} className="mr-1" /> Semanal CSV
-              </Button>
+              <WeeklySummaryPreview userName={userName} data={adherenceData} />
             </div>
           </CardTitle>
         </CardHeader>
