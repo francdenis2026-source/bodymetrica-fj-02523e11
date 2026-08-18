@@ -76,6 +76,11 @@ function AuthPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [isBlocked, setIsBlocked] = useState(false);
   const [remainingSeconds, setRemainingSeconds] = useState(0);
+  const [showMfaChallenge, setShowMfaChallenge] = useState(false);
+  const [mfaCode, setMfaCode] = useState("");
+  const [isRecoveryMode, setIsRecoveryMode] = useState(false);
+  const [tempUserData, setTempUserData] = useState<any>(null);
+  const [loginValues, setLoginValues] = useState<any>(null);
 
   const loginForm = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
