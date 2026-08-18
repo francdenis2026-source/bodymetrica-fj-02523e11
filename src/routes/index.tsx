@@ -214,7 +214,7 @@ function Index() {
           </section>
 
           {/* Simplified Features Grid - Tighter layout */}
-          <section className="py-4 md:py-8 bg-white/[0.01] backdrop-blur-3xl border-t border-white/5 mt-auto">
+          <section className="py-2 md:py-8 bg-white/[0.01] backdrop-blur-3xl border-t border-white/5 mt-auto">
             <div className="container mx-auto px-4 md:px-6 max-w-7xl">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-6">
                 {[
