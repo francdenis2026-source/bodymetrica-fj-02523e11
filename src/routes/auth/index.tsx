@@ -410,7 +410,7 @@ function AuthPage() {
       <div className="relative z-10 w-full max-w-[440px] flex flex-col items-center">
         {/* Navigation & Brand Header */}
         <div className="w-full flex items-center justify-between mb-8 px-4">
-          <Link to="/" search={{} as any} className="group flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.2em] text-white/40 hover:text-white transition-all">
+          <Link to="/" search={{} as any} className="group flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.2em] text-white/40 hover:text-white focus:text-white outline-none transition-all">
             <div className="w-8 h-8 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-primary/50 group-hover:bg-primary/5">
               <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" />
             </div>
