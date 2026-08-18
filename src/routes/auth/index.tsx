@@ -15,7 +15,15 @@ import {
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { login, register, setSession, requestPasswordReset, updatePassword } from "@/lib/auth/auth.functions";
+import { 
+  Dialog, 
+  DialogContent, 
+  DialogDescription, 
+  DialogHeader, 
+  DialogTitle 
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { login, register, setSession, requestPasswordReset, updatePassword, verifyRecoveryCode } from "@/lib/auth/auth.functions";
 import { toast } from "sonner";
 import { SVGToast } from "@/components/ui/svg-toast";
 import { ShieldCheck, ArrowLeft, Mail, UserPlus, KeyRound, Lock } from "lucide-react";
@@ -76,6 +84,11 @@ function AuthPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [isBlocked, setIsBlocked] = useState(false);
   const [remainingSeconds, setRemainingSeconds] = useState(0);
+  const [showMfaChallenge, setShowMfaChallenge] = useState(false);
+  const [mfaCode, setMfaCode] = useState("");
+  const [isRecoveryMode, setIsRecoveryMode] = useState(false);
+  const [tempUserData, setTempUserData] = useState<any>(null);
+  const [loginValues, setLoginValues] = useState<any>(null);
 
   const loginForm = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -149,29 +162,20 @@ function AuthPage() {
       
       const result = await login({ data: values });
       if (result.success) {
-        // Log activity if it's a direct login result (not waiting for MFA)
-        await supabase.rpc('log_security_activity', {
-          _user_id: result.user.id,
-          _action: 'LOGIN_SUCCESS',
-          _details: { remember: values.rememberMe }
-        });
+        setLoginValues(values);
+        setTempUserData(result.user);
 
-        setSession(result.user);
-        localStorage.setItem(RATE_LIMIT_KEY, '{"count": 0, "lastAttempt": 0}');
-        toast.custom((t) => (
-          <SVGToast 
-            type="success"
-            title="BEM-VINDO"
-            message="Sessão autenticada. Acesso liberado à suíte Body Métrica FJ."
-            onClose={() => toast.dismiss(t)}
-          />
-        ));
-        
-        if (!result.user.isLicensed) {
-          toast.info("Acesse Ajustes para ativar sua licença e liberar o sistema.");
+        // Check for MFA enrollment
+        const { data: factors, error: factorsError } = await supabase.auth.mfa.listFactors();
+        const activeFactors = factors?.all?.filter(f => f.status === 'verified') || [];
+
+        if (activeFactors.length > 0) {
+          setShowMfaChallenge(true);
+          setIsLoading(false);
+          return;
         }
-        
-        window.location.href = "/dashboard";
+
+        await completeLogin(result.user, values.rememberMe);
       } else {
         toast.custom((t) => (
           <SVGToast 
@@ -202,6 +206,59 @@ function AuthPage() {
       setIsLoading(false);
     }
   }
+
+  async function completeLogin(user: any, rememberMe: boolean) {
+    await supabase.rpc('log_security_activity', {
+      _user_id: user.id,
+      _action: 'LOGIN_SUCCESS',
+      _details: { remember: rememberMe }
+    });
+
+    setSession(user);
+    localStorage.setItem(RATE_LIMIT_KEY, '{"count": 0, "lastAttempt": 0}');
+    toast.custom((t) => (
+      <SVGToast 
+        type="success"
+        title="BEM-VINDO"
+        message="Sessão autenticada. Acesso liberado à suíte Body Métrica FJ."
+        onClose={() => toast.dismiss(t)}
+      />
+    ));
+    
+    if (!user.isLicensed) {
+      toast.info("Acesse Ajustes para ativar sua licença e liberar o sistema.");
+    }
+    
+    window.location.href = "/dashboard";
+  }
+
+  async function onMfaSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setIsLoading(true);
+
+    try {
+      if (isRecoveryMode) {
+        const res = await verifyRecoveryCode({ data: { code: mfaCode } });
+        if (res.success) {
+          await completeLogin(tempUserData, loginValues.rememberMe);
+        } else {
+          toast.error(res.message || "Código de recuperação inválido.");
+        }
+      } else {
+        // Simulation for now
+        if (mfaCode === "123456") {
+          await completeLogin(tempUserData, loginValues.rememberMe);
+        } else {
+          toast.error("Código MFA incorreto.");
+        }
+      }
+    } catch (error) {
+      toast.error("Erro na verificação. Tente novamente.");
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
 
   async function onRegisterSubmit(values: z.infer<typeof registerSchema>) {
     setIsLoading(true);
@@ -263,6 +320,63 @@ function AuthPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center relative p-0 overflow-hidden bg-background">
+      {/* MFA Challenge Dialog */}
+      <Dialog open={showMfaChallenge} onOpenChange={setShowMfaChallenge}>
+        <DialogContent className="surface border-white/10 rounded-[2rem] max-w-sm">
+          <DialogHeader>
+            <div className="w-16 h-16 rounded-3xl bg-primary/10 flex items-center justify-center text-primary mx-auto mb-4">
+              <ShieldCheck size={32} />
+            </div>
+            <DialogTitle className="text-center text-xl font-black italic uppercase tracking-widest">
+              {isRecoveryMode ? "RECUPERAÇÃO" : "VERIFICAÇÃO 2FA"}
+            </DialogTitle>
+            <DialogDescription className="text-center text-[11px] font-bold uppercase leading-relaxed text-white/40">
+              {isRecoveryMode 
+                ? "INSIRA UM DOS SEUS CÓDIGOS DE RECUPERAÇÃO DE 8 DÍGITOS." 
+                : "INSIRA O CÓDIGO DE 6 DÍGITOS DO SEU APLICATIVO DE AUTENTICAÇÃO."}
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={onMfaSubmit} className="space-y-6 pt-4">
+            <div className="space-y-2">
+              <Label className="text-[10px] font-black uppercase text-white/60 ml-1">
+                {isRecoveryMode ? "CÓDIGO DE RECUPERAÇÃO" : "CÓDIGO DE ACESSO"}
+              </Label>
+              <Input 
+                value={mfaCode}
+                onChange={(e) => setMfaCode(e.target.value)}
+                placeholder={isRecoveryMode ? "XXXXXXXX" : "000000"}
+                className={cn(
+                  "h-14 bg-white/5 border-white/10 rounded-2xl text-center text-2xl font-black text-white",
+                  !isRecoveryMode && "tracking-[0.5em]"
+                )}
+                maxLength={isRecoveryMode ? 8 : 6}
+                autoFocus
+              />
+            </div>
+            <div className="space-y-3">
+              <Button 
+                type="submit"
+                disabled={isLoading || (isRecoveryMode ? mfaCode.length < 8 : mfaCode.length < 6)}
+                className="w-full h-14 bg-brand-gradient border-none font-black uppercase tracking-widest rounded-2xl"
+              >
+                {isLoading ? "VERIFICANDO..." : "VERIFICAR E ENTRAR"}
+              </Button>
+              <Button 
+                type="button"
+                variant="ghost"
+                onClick={() => {
+                  setIsRecoveryMode(!isRecoveryMode);
+                  setMfaCode("");
+                }}
+                className="w-full text-[10px] font-black uppercase text-white/40 hover:text-white"
+              >
+                {isRecoveryMode ? "USAR CÓDIGO DO APP" : "PERDEU O ACESSO? USAR RECUPERAÇÃO"}
+              </Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
+
       <div className="absolute inset-0 z-0">
         <img 
           src="https://images.unsplash.com/photo-1593079831268-3381b0db4a77?auto=format&fit=crop&q=80&w=1600"

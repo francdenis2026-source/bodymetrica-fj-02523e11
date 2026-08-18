@@ -32,7 +32,8 @@ import {
   changeEmail,
   deleteAccount,
   getSecurityLogs,
-  logoutSession
+  logoutSession,
+  generateRecoveryCodes
 } from "@/lib/auth/auth.functions";
 import { Skeleton } from "@/components/ui/skeleton";
 import { 
@@ -58,6 +59,8 @@ function ProfilePage() {
   const [securityLogs, setSecurityLogs] = useState<any[]>([]);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showMfaSetup, setShowMfaSetup] = useState(false);
+  const [showRecoveryCodes, setShowRecoveryCodes] = useState(false);
+  const [recoveryCodes, setRecoveryCodes] = useState<string[]>([]);
   const navigate = useNavigate();
 
   // Profile Form State
@@ -288,6 +291,30 @@ function ProfilePage() {
     }, 1500);
   };
 
+  const handleGenerateRecoveryCodes = async () => {
+    setIsSaving(true);
+    try {
+      const res = await generateRecoveryCodes();
+      if (res.success) {
+        setRecoveryCodes(res.codes);
+        setShowRecoveryCodes(true);
+        toast.custom((t) => (
+          <SVGToast 
+            type="success"
+            title="CÓDIGOS GERADOS"
+            message="Guarde seus códigos de recuperação em local seguro."
+            onClose={() => toast.dismiss(t)}
+          />
+        ));
+      }
+    } catch (error) {
+      toast.error("Erro ao gerar códigos de recuperação.");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+
   if (isLoading) {
     return (
       <div className="flex-1 space-y-12 p-4 md:p-12 pt-10 bg-background animate-in fade-in duration-700">
@@ -480,7 +507,22 @@ function ProfilePage() {
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
                   <Lock size={24} />
+              </div>
+              
+              <div className="p-6 rounded-3xl bg-white/[0.03] border border-white/5 flex items-center justify-between">
+                <div>
+                  <div className="text-sm font-black uppercase italic">CÓDIGOS DE RECUPERAÇÃO</div>
+                  <div className="text-[10px] font-bold text-white/40 uppercase tracking-widest mt-1">ACESSO DE EMERGÊNCIA AO 2FA</div>
                 </div>
+                <Button 
+                  onClick={handleGenerateRecoveryCodes}
+                  disabled={isSaving}
+                  variant="outline"
+                  className="rounded-2xl border-white/10 bg-white/5 text-white/60 text-[10px] font-black uppercase"
+                >
+                  REGENERAR
+                </Button>
+              </div>
                 <div>
                   <CardTitle className="text-xl font-black uppercase italic tracking-widest">PROTEÇÃO EXTRA</CardTitle>
                   <CardDescription className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">
@@ -657,6 +699,50 @@ function ProfilePage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Recovery Codes Modal */}
+      <Dialog open={showRecoveryCodes} onOpenChange={setShowRecoveryCodes}>
+        <DialogContent className="surface border-white/10 rounded-[2rem] max-w-md">
+          <DialogHeader>
+            <div className="w-16 h-16 rounded-3xl bg-primary/10 flex items-center justify-center text-primary mx-auto mb-4">
+              <Key size={32} />
+            </div>
+            <DialogTitle className="text-center text-xl font-black italic uppercase tracking-widest">CÓDIGOS DE RECUPERAÇÃO</DialogTitle>
+            <DialogDescription className="text-center text-[11px] font-bold uppercase leading-relaxed text-white/40">
+              GUARDE ESTES CÓDIGOS EM LOCAL SEGURO. CADA CÓDIGO SÓ PODE SER USADO UMA VEZ PARA RECUPERAR SEU ACESSO CASO PERCA SEU DISPOSITIVO 2FA.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="py-6">
+            <div className="grid grid-cols-2 gap-3 bg-black/40 p-6 rounded-3xl border border-white/5">
+              {recoveryCodes.map((code, index) => (
+                <div key={index} className="flex items-center gap-2">
+                  <span className="text-[8px] font-black text-white/20">{index + 1}.</span>
+                  <code className="text-sm font-black tracking-widest text-primary font-mono">{code}</code>
+                </div>
+              ))}
+            </div>
+          </div>
+          <DialogFooter className="flex-col gap-3">
+            <Button 
+              onClick={() => {
+                const text = recoveryCodes.join('\n');
+                navigator.clipboard.writeText(text);
+                toast.success("Códigos copiados!");
+              }}
+              className="w-full h-14 bg-white/5 border border-white/10 font-black uppercase tracking-widest rounded-2xl"
+            >
+              COPIAR CÓDIGOS
+            </Button>
+            <Button 
+              onClick={() => setShowRecoveryCodes(false)}
+              className="w-full h-14 bg-brand-gradient border-none font-black uppercase tracking-widest rounded-2xl"
+            >
+              CONCLUÍDO
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
+
   );
 }
