@@ -7,7 +7,7 @@ export type SVGToastType = "success" | "error" | "info" | "warning";
 interface SVGToastProps {
   type: SVGToastType;
   title: string;
-  message: string;
+  message: React.ReactNode;
   action?: {
     label: string;
     onClick: () => void;
