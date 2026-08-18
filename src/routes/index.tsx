@@ -70,7 +70,8 @@ function Index() {
   }, []);
 
   return (
-    <div className="flex flex-col min-h-screen bg-background relative overflow-x-hidden">
+    <div className="flex flex-col h-screen bg-background relative overflow-hidden">
+      <div className="flex flex-col h-full bg-background relative overflow-y-auto custom-scrollbar">
       {/* Professional Full Background Image with better contrast */}
       <div 
         className="fixed inset-0 z-0 pointer-events-none opacity-40 transition-opacity duration-700"
