@@ -366,8 +366,8 @@ function DashboardPage() {
                               title={`ANÁLISE DO DIA ${record.date.split('-')[2]}`}
                               message={
                                 <div className="space-y-2">
-                                  <p>Performance: <span className={color}>{record.macros}% Macros</span> e <span className={record.water < 80 ? 'text-warning' : 'text-info'}>{record.water}% Água</span>.</p>
-                                  <p className="text-[10px] opacity-70 italic">
+                                  <p className="text-[13px]">Performance: <span className={color}>{record.macros}% Macros</span> e <span className={record.water < 80 ? 'text-warning' : 'text-info'}>{record.water}% Água</span>.</p>
+                                  <p className="text-[11px] opacity-70 italic">
                                     {status === 'abaixo' 
                                       ? "Dica: Tente aumentar a ingestão de proteínas na próxima refeição." 
                                       : "Parabéns! Você manteve a disciplina de elite hoje."}
@@ -395,8 +395,8 @@ function DashboardPage() {
                               title={`ANÁLISE DO DIA ${record.date.split('-')[2]}`}
                               message={
                                 <div className="space-y-2">
-                                  <p>Performance: <span className={color}>{record.macros}% Macros</span> e <span className={record.water < 80 ? 'text-warning' : 'text-info'}>{record.water}% Água</span>.</p>
-                                  <p className="text-[10px] opacity-70 italic">
+                                  <p className="text-[13px]">Performance: <span className={color}>{record.macros}% Macros</span> e <span className={record.water < 80 ? 'text-warning' : 'text-info'}>{record.water}% Água</span>.</p>
+                                  <p className="text-[11px] opacity-70 italic">
                                     {status === 'abaixo' 
                                       ? "Dica: Tente aumentar a ingestão de proteínas na próxima refeição." 
                                       : "Parabéns! Você manteve a disciplina de elite hoje."}
