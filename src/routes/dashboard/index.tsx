@@ -9,7 +9,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { PageHeaderSkeleton, StatsSkeleton } from "@/components/ui/loading-states";
 import { EmptyState } from "@/components/ui/status-states";
 import { getSession } from "@/lib/auth/auth.functions";
-import { getAdherenceData, DailyAdherence, saveAdherenceRecord } from "@/lib/adherence";
+import { getAdherenceData, DailyAdherence, saveAdherenceRecord, getAuditLogs, AuditLog } from "@/lib/adherence";
 
 import { 
   ArrowRight, 
