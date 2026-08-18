@@ -742,6 +742,23 @@ function MeasurementItem({ label, value }: { label: string; value: number }) {
   );
 }
 
+function VariationItem({ label, value, percent, trend }: { label: string; value: string; percent: string; trend: 'up' | 'down' }) {
+  return (
+    <div className="p-6 rounded-[2rem] bg-white/5 border border-white/10 space-y-2 group hover:bg-white/10 transition-all">
+      <p className="text-[9px] font-black text-muted-foreground uppercase tracking-widest">{label}</p>
+      <div className="flex items-baseline gap-2">
+        <span className="text-2xl font-black font-display italic uppercase tracking-tighter">{value}</span>
+        <span className={cn(
+          "text-[10px] font-black px-2 py-0.5 rounded-full",
+          trend === 'up' ? "bg-success/10 text-success" : "bg-destructive/10 text-destructive"
+        )}>
+          {percent}
+        </span>
+      </div>
+    </div>
+  );
+}
+
 function PhotoPlaceholder({ label }: { label: string }) {
   return (
     <div className="relative aspect-[3/4] rounded-xl bg-muted overflow-hidden group border">
