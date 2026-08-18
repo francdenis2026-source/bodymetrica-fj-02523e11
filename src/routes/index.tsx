@@ -214,21 +214,21 @@ function Index() {
           </section>
 
           {/* Simplified Features Grid - Tighter layout */}
-          <section className="py-8 bg-white/[0.01] backdrop-blur-3xl border-t border-white/5 mt-auto">
+          <section className="py-4 md:py-8 bg-white/[0.01] backdrop-blur-3xl border-t border-white/5 mt-auto">
             <div className="container mx-auto px-4 md:px-6 max-w-7xl">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-6">
                 {[
-                  { icon: <Target size={22} />, title: "Objetivos", desc: "Planos adaptados ao seu biotipo.", color: "primary" },
-                  { icon: <Zap size={22} />, title: "Performance", desc: "Métricas de precisão absoluta.", color: "success" },
-                  { icon: <ShieldCheck size={22} />, title: "Segurança", desc: "Privacidade e sigilo total.", color: "info" }
+                  { icon: <Target size={20} />, title: "Objetivos", desc: "Planos adaptados ao seu biotipo.", color: "primary" },
+                  { icon: <Zap size={20} />, title: "Performance", desc: "Métricas de precisão absoluta.", color: "success" },
+                  { icon: <ShieldCheck size={20} />, title: "Segurança", desc: "Privacidade e sigilo total.", color: "info" }
                 ].map((f, i) => (
-                  <Link key={i} to="/about" className="group block focus-visible:ring-2 focus-visible:ring-primary outline-none rounded-[2rem] overflow-hidden">
+                  <Link key={i} to="/about" className="group block focus-visible:ring-2 focus-visible:ring-primary outline-none rounded-[1.5rem] md:rounded-[2rem] overflow-hidden">
                     <FeatureCard 
                       icon={f.icon}
                       title={f.title}
                       description={f.desc}
                       className={cn(
-                        "transition-all duration-300 p-6 h-full",
+                        "transition-all duration-300 p-4 md:p-6 h-full",
                         i === 0 && "group-hover:border-primary/40 group-hover:bg-primary/5",
                         i === 1 && "group-hover:border-success/40 group-hover:bg-success/5",
                         i === 2 && "group-hover:border-info/40 group-hover:bg-info/5"
