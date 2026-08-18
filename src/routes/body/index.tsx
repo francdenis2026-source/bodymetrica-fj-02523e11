@@ -8,7 +8,7 @@ import { generateComparisonPDF, exportReportAsImage } from "@/lib/comparison-rep
 import { generateMonthlyPDF } from "@/lib/monthly-reports";
 
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
@@ -44,6 +44,8 @@ import {
   ResponsiveContainer 
 } from "recharts";
 import { ModuleHeader } from "@/components/module-header";
+import { cn } from "@/lib/utils";
+
 import { Skeleton } from "@/components/ui/skeleton";
 import { PageHeaderSkeleton, StatsSkeleton } from "@/components/ui/loading-states";
 import { EmptyState } from "@/components/ui/status-states";
@@ -228,8 +230,10 @@ function BodyPage() {
           <TabsTrigger value="overview" className="h-11 px-10 rounded-xl font-black uppercase tracking-widest text-[10px] data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all">GERAL</TabsTrigger>
           <TabsTrigger value="measurements" className="h-11 px-10 rounded-xl font-black uppercase tracking-widest text-[10px] data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all">MEDIDAS</TabsTrigger>
           <TabsTrigger value="photos" className="h-11 px-10 rounded-xl font-black uppercase tracking-widest text-[10px] data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all">EVOLUÇÃO</TabsTrigger>
+          <TabsTrigger value="comparison" className="h-11 px-10 rounded-xl font-black uppercase tracking-widest text-[10px] data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all">COMPARATIVO MENSAL</TabsTrigger>
           <TabsTrigger value="exports" className="h-11 px-10 rounded-xl font-black uppercase tracking-widest text-[10px] data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all">EXPORTAÇÕES</TabsTrigger>
         </TabsList>
+
 
 
 
@@ -317,8 +321,9 @@ function BodyPage() {
             <CardHeader className="flex flex-col md:flex-row md:items-center justify-between p-8 gap-6">
               <div className="space-y-1">
                 <CardTitle className="text-xl font-black uppercase tracking-widest italic">HISTÓRICO DE PERFORMANCE</CardTitle>
-                <p className="text-[10px] font-bold text-foreground/40 uppercase tracking-widest">REGISTROS CRONOLÓGICOS DE EVOLUÇÃO</p>
+                <p className="text-[10px] font-bold text-foreground/40 uppercase tracking-widest">ANÁLISE DETALHADA E DRILL-DOWN DE REGISTROS</p>
               </div>
+
               <div className="flex items-center gap-3">
                 <Button 
                   variant="outline" 
@@ -374,19 +379,33 @@ function BodyPage() {
             </CardHeader>
             <CardContent className="px-0">
               <div className="space-y-0">
-                {[1, 2, 3].map((i) => (
-                  <div key={i} className="flex items-center justify-between px-8 py-6 hover:bg-white/5 transition-all border-b border-white/5 last:border-0 group">
+                {[
+                  { date: "13 AGO, 08:30", type: "Medição", desc: "MEDIÇÃO MATINAL EM JEJUM", value: "82.4 KG", change: "-0.3 KG" },
+                  { date: "12 AGO, 12:45", type: "Alimentação", desc: "ALMOÇO DE ALTA PROTEÍNA", value: "850 KCAL", change: "+15% P" },
+                  { date: "11 AGO, 19:30", type: "Treino", desc: "TREINO DE FORÇA (A)", value: "VOLUME ALTO", change: "RECORD" }
+                ].map((item, i) => (
+                  <div key={i} className="flex items-center justify-between px-8 py-6 hover:bg-white/5 transition-all border-b border-white/5 last:border-0 group cursor-pointer" onClick={() => {
+                    toast.custom((t) => (
+                      <SVGToast 
+                        type="info"
+                        title={`DETALHES: ${item.type}`}
+                        message={`Visualizando drill-down para ${item.date}. ${item.desc}`}
+                        onClose={() => toast.dismiss(t)}
+                      />
+                    ));
+                  }}>
                     <div className="flex flex-col gap-1">
-                      <span className="text-xs font-black uppercase tracking-[0.2em] text-foreground/80 group-hover:text-primary transition-colors">13 AGO, 08:30</span>
-                      <span className="text-[10px] font-bold text-foreground/40 uppercase tracking-widest italic">MEDIÇÃO MATINAL EM JEJUM</span>
+                      <span className="text-xs font-black uppercase tracking-[0.2em] text-foreground/80 group-hover:text-primary transition-colors">{item.date}</span>
+                      <span className="text-[10px] font-bold text-foreground/40 uppercase tracking-widest italic">{item.desc}</span>
                     </div>
                     <div className="text-right space-y-1">
-                      <div className="text-2xl font-black font-display tracking-tighter italic uppercase group-hover:scale-110 transition-transform">82.4 KG</div>
-                      <div className="text-[10px] font-black uppercase tracking-widest text-success bg-success/10 px-2 py-0.5 rounded-full inline-block">-0.3 KG</div>
+                      <div className="text-2xl font-black font-display tracking-tighter italic uppercase group-hover:scale-110 transition-transform">{item.value}</div>
+                      <div className="text-[10px] font-black uppercase tracking-widest text-success bg-success/10 px-2 py-0.5 rounded-full inline-block">{item.change}</div>
                     </div>
                   </div>
                 ))}
               </div>
+
               <div className="p-8 text-center bg-white/[0.01]">
                 <Button variant="ghost" className="text-[10px] font-black uppercase tracking-[0.3em] text-foreground/40 hover:text-foreground gap-3">
                   <History size={16} /> VER HISTÓRICO COMPLETO
@@ -396,8 +415,36 @@ function BodyPage() {
           </Card>
 
         </TabsContent>
+        
+        <TabsContent value="comparison" className="space-y-6">
+          <Card className="surface border-none p-8">
+            <CardHeader className="px-0 pt-0">
+              <CardTitle className="text-2xl font-black font-display uppercase tracking-tighter italic">Variação Mês a Mês</CardTitle>
+              <CardDescription className="text-[10px] font-bold uppercase tracking-widest opacity-60">Análise técnica de variação percentual e consistência</CardDescription>
+            </CardHeader>
+            <CardContent className="px-0 space-y-8">
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <VariationItem label="Peso Corporal" value="-2.6kg" percent="-3.1%" trend="down" />
+                <VariationItem label="Calorias (Média)" value="+120 kcal" percent="+5.2%" trend="up" />
+                <VariationItem label="Ingestão Hídrica" value="+450ml" percent="+18.5%" trend="up" />
+                <VariationItem label="Massa Muscular" value="+0.5kg" percent="+1.2%" trend="up" />
+              </div>
+              
+              <div className="p-6 rounded-[2.5rem] bg-primary/5 border border-primary/10">
+                <div className="flex items-center gap-3 mb-4">
+                  <TrendingUp className="text-primary" size={20} />
+                  <h3 className="text-sm font-black uppercase tracking-widest italic">Diagnóstico de Evolução</h3>
+                </div>
+                <p className="text-xs font-bold leading-relaxed text-foreground/70 italic">
+                  "Sua variação de peso está alinhada com o aumento da ingestão hídrica, sugerindo uma melhora na composição corporal e redução de retenção. O aumento de 5.2% nas calorias foi convertido em massa magra (+1.2%), validando a estratégia atual de superávit controlado."
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
 
         <TabsContent value="measurements">
+
           <div className="grid gap-4 md:grid-cols-2">
             <Card className="surface border-none">
               <CardHeader>
@@ -708,6 +755,23 @@ function MeasurementItem({ label, value }: { label: string; value: number }) {
     <div className="flex items-center justify-between py-2 border-b border-muted/50 last:border-0">
       <span className="text-sm font-medium">{label}</span>
       <span className="text-sm font-bold font-display">{value} cm</span>
+    </div>
+  );
+}
+
+function VariationItem({ label, value, percent, trend }: { label: string; value: string; percent: string; trend: 'up' | 'down' }) {
+  return (
+    <div className="p-6 rounded-[2rem] bg-white/5 border border-white/10 space-y-2 group hover:bg-white/10 transition-all">
+      <p className="text-[9px] font-black text-muted-foreground uppercase tracking-widest">{label}</p>
+      <div className="flex items-baseline gap-2">
+        <span className="text-2xl font-black font-display italic uppercase tracking-tighter">{value}</span>
+        <span className={cn(
+          "text-[10px] font-black px-2 py-0.5 rounded-full",
+          trend === 'up' ? "bg-success/10 text-success" : "bg-destructive/10 text-destructive"
+        )}>
+          {percent}
+        </span>
+      </div>
     </div>
   );
 }
