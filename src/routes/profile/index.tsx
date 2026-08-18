@@ -32,7 +32,8 @@ import {
   changeEmail,
   deleteAccount,
   getSecurityLogs,
-  logoutSession
+  logoutSession,
+  generateRecoveryCodes
 } from "@/lib/auth/auth.functions";
 import { Skeleton } from "@/components/ui/skeleton";
 import { 
