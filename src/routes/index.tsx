@@ -102,7 +102,7 @@ function Index() {
 
             <div className="relative mx-auto w-full max-w-[430px] lg:max-w-[480px] xl:max-w-[510px]">
               <div className="overflow-hidden rounded-[1.75rem] border border-white/20 bg-card shadow-lg shadow-black/15 ring-1 ring-black/5">
-                <div className="relative aspect-[4/4.7] overflow-hidden bg-muted sm:aspect-[4/4.6] lg:aspect-[4/4.45]">
+                <div className="on-media relative aspect-[4/4.7] overflow-hidden bg-muted sm:aspect-[4/4.6] lg:aspect-[4/4.45]">
                   <img src="https://images.unsplash.com/photo-1599058917212-d750089bc07e?auto=format&fit=crop&q=82&w=1100" alt="Pessoa treinando em ambiente profissional" className="h-full w-full object-cover object-[center_38%]" fetchPriority="high" loading="eager" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/86 via-black/18 to-black/5" />
                   <div className="absolute left-4 top-4 flex items-center gap-2 rounded-xl border border-white/20 bg-black/55 px-3 py-1.5 text-xs font-medium text-white shadow-sm md:left-5 md:top-5"><BarChart3 size={14} aria-hidden="true" />Visão de progresso</div>

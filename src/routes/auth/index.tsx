@@ -32,7 +32,7 @@ const loginSchema = z.object({
     return isValidCpf(value);
   }, "Informe um e-mail ou CPF válido"),
   password: z.string().min(6, "A senha deve ter pelo menos 6 caracteres"),
-  rememberMe: z.boolean().default(false),
+  rememberMe: z.boolean(),
 });
 
 const newPasswordSchema = z.object({
@@ -171,7 +171,7 @@ function AuthPage() {
       <div className="absolute inset-0 bg-gradient-to-br from-background/96 via-background/82 to-background/48 dark:from-background/98 dark:via-background/90 dark:to-background/62" />
       <div className="relative z-10 flex min-h-[100dvh] items-center justify-center px-4 py-5 md:px-6 md:py-7">
         <div className="grid w-full max-w-5xl overflow-hidden rounded-[2rem] border border-border/80 bg-background/96 shadow-2xl lg:grid-cols-[0.9fr_1.1fr]">
-          <section className="relative hidden min-h-[620px] overflow-hidden lg:block">
+          <section className="on-media relative hidden min-h-[620px] overflow-hidden lg:block">
             <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&q=84&w=1200" alt="Pessoa treinando" className="absolute inset-0 h-full w-full object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/92 via-black/40 to-black/15" />
             <div className="relative flex h-full flex-col justify-between p-8 text-white">

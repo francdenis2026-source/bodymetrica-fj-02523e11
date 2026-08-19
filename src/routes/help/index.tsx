@@ -116,7 +116,7 @@ function HelpCenterPage() {
           <div className="absolute inset-0 -z-20 bg-black/45 dark:bg-black/58" />
           <div className="absolute inset-0 -z-10 bg-gradient-to-r from-black/82 via-black/58 to-black/28" />
 
-          <div className="container mx-auto grid min-h-[430px] max-w-7xl items-center gap-10 px-4 py-10 text-white md:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:py-12">
+          <div className="on-media container mx-auto grid min-h-[430px] max-w-7xl items-center gap-10 px-4 py-10 text-white md:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:py-12">
             <div className="max-w-2xl">
               <div className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-black/28 px-3.5 py-1.5 text-sm font-semibold shadow-sm">
                 <Sparkles size={15} className="text-primary" />
