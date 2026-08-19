@@ -63,7 +63,7 @@ function AdminLoginPage() {
       });
 
       if (loginError) {
-        toast.error("Não foi possível validar suas credenciais.");
+        showAdminToast("error", "CREDENCIAIS INVÁLIDAS", "Verifique o e-mail e a senha informados.");
         return;
       }
 
@@ -72,15 +72,15 @@ function AdminLoginPage() {
 
       if (adminError || !sessionRow?.user_id) {
         await supabase.auth.signOut();
-        toast.error("Esta conta não possui autorização administrativa.");
+        showAdminToast("warning", "ACESSO NEGADO", "Esta conta não possui papel administrativo ativo.");
         return;
       }
 
-      toast.success("Acesso administrativo autorizado.");
+      showAdminToast("success", "ACESSO AUTORIZADO", "Redirecionando para o painel administrativo.");
       navigate({ to: "/admin" as any, replace: true });
     } catch {
       await supabase.auth.signOut();
-      toast.error("Não foi possível validar o acesso neste momento.");
+      showAdminToast("error", "FALHA INESPERADA", "Não foi possível validar o acesso. Tente novamente.");
     } finally {
       setIsLoading(false);
     }
