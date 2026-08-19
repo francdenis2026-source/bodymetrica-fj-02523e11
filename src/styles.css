@@ -233,3 +233,30 @@
     background: oklch(0.98 0.005 245 / 0.2);
   }
 }
+
+/* Single-window application shell. The global shell no longer creates a
+   second visual page below route content. Dense desktop modules scroll
+   inside the application frame; mobile keeps its natural document flow. */
+body main.flex-1.flex.flex-col.min-w-0 > footer.py-20.mt-auto {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  html,
+  body {
+    height: 100dvh;
+    overflow: hidden;
+  }
+
+  body main.flex-1.flex.flex-col.min-w-0 {
+    height: 100dvh;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  body main.flex-1.flex.flex-col.min-w-0 > div.flex-1 {
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+}
