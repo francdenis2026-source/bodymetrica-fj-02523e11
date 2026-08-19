@@ -16,6 +16,16 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { SVGToast } from "@/components/ui/svg-toast";
+
+const TOAST_DURATION = 4500;
+
+const showAdminToast = (type: "success" | "error" | "warning", title: string, message: string) => {
+  toast.custom(
+    (t) => <SVGToast type={type} title={title} message={message} onClose={() => toast.dismiss(t)} />,
+    { duration: TOAST_DURATION },
+  );
+};
 
 export const Route = createFileRoute("/admin/login")({
   component: AdminLoginPage,
