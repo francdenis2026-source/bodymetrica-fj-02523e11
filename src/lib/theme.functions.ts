@@ -3,6 +3,7 @@ import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
 
 const THEME_KEY = 'bodymetrica_user_theme';
+const LEGACY_THEME_KEY = 'theme';
 
 export const getUserTheme = createServerFn({ method: "GET" })
   .handler(async () => {
@@ -32,14 +33,15 @@ export const updateUserTheme = createServerFn({ method: "POST" })
     return { success: !error };
   });
 
-// Client-side helper to persist theme to local storage as fallback
 export const setLocalTheme = (theme: 'light' | 'dark') => {
   if (typeof window !== 'undefined') {
     localStorage.setItem(THEME_KEY, theme);
+    localStorage.setItem(LEGACY_THEME_KEY, theme);
   }
 };
 
 export const getLocalTheme = (): 'light' | 'dark' | null => {
   if (typeof window === 'undefined') return null;
-  return localStorage.getItem(THEME_KEY) as 'light' | 'dark' | null;
+  const stored = localStorage.getItem(THEME_KEY) || localStorage.getItem(LEGACY_THEME_KEY);
+  return stored === 'light' || stored === 'dark' ? stored : null;
 };
