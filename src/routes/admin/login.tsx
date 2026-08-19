@@ -20,7 +20,7 @@ import { SVGToast } from "@/components/ui/svg-toast";
 
 const TOAST_DURATION = 4500;
 
-const showAdminToast = (type: "success" | "error" | "warning", title: string, message: string) => {
+const showAdminToast = (type: "success" | "error" | "info" | "warning", title: string, message: string) => {
   toast.custom(
     (t) => <SVGToast type={type} title={title} message={message} onClose={() => toast.dismiss(t)} />,
     { duration: TOAST_DURATION },
