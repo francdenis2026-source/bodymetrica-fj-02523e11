@@ -1,5 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowLeft, ArrowRight, BarChart3, Code2, MapPin, ShieldCheck, WifiOff } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  BarChart3,
+  MapPin,
+  ShieldCheck,
+  Sparkles,
+  WifiOff,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/about/")({
@@ -15,7 +23,8 @@ export const Route = createFileRoute("/about/")({
       { property: "og:title", content: "Sobre o Body Métrica FJ" },
       {
         property: "og:description",
-        content: "Tecnologia aplicada ao acompanhamento de saúde e composição corporal.",
+        content:
+          "Tecnologia aplicada ao acompanhamento de saúde e composição corporal.",
       },
     ],
   }),
@@ -24,149 +33,147 @@ export const Route = createFileRoute("/about/")({
 const PRINCIPLES = [
   {
     icon: BarChart3,
-    title: "Clareza antes de complexidade",
-    description: "Os dados existem para ajudar na decisão, não para transformar a experiência em um painel técnico difícil de ler.",
+    label: "CLAREZA",
+    title: "Dados que fazem sentido",
+    description: "Informação organizada para mostrar evolução sem transformar a rotina em um painel técnico.",
   },
   {
     icon: WifiOff,
-    title: "Resiliência no uso diário",
-    description: "O projeto considera cenários de conectividade limitada e prioriza continuidade de uso sempre que possível.",
+    label: "CONTINUIDADE",
+    title: "Feito para o uso real",
+    description: "Uma experiência leve, direta e preparada para diferentes condições de acesso e conexão.",
   },
   {
     icon: ShieldCheck,
-    title: "Privacidade por padrão",
-    description: "Informações pessoais e métricas corporais merecem uma experiência discreta, previsível e segura.",
+    label: "PRIVACIDADE",
+    title: "Controle em primeiro lugar",
+    description: "Métricas pessoais tratadas com discrição, previsibilidade e foco em segurança.",
   },
 ];
+
+const authSearch = {
+  registerMode: true,
+  reset: false,
+  name: "",
+  birthDate: "",
+  goal: "",
+  weight: "",
+  height: "",
+  activityLevel: "",
+};
 
 function AboutPage() {
   return (
     <div className="min-h-[100dvh] bg-background text-foreground">
-      <header className="sticky top-0 z-50 border-b border-border/70 bg-background/90 backdrop-blur-xl supports-[backdrop-filter]:bg-background/75">
-        <div className="container mx-auto flex h-16 max-w-7xl items-center gap-3 px-4 md:px-6">
-          <Button variant="ghost" size="icon" asChild className="rounded-xl">
-            <Link to="/" search={{} as any} aria-label="Voltar para a página inicial">
-              <ArrowLeft size={18} />
-            </Link>
-          </Button>
-          <div>
-            <p className="font-display text-base font-semibold tracking-tight">Sobre o Body Métrica FJ</p>
-            <p className="hidden text-xs text-muted-foreground sm:block">Propósito, princípios e desenvolvimento</p>
+      <header className="relative z-50 border-b border-border/70 bg-background/95">
+        <div className="container mx-auto flex h-16 max-w-7xl items-center justify-between px-4 md:px-6">
+          <div className="flex items-center gap-3">
+            <Button variant="ghost" size="icon" asChild className="rounded-xl">
+              <Link to="/" search={{} as any} aria-label="Voltar para a página inicial">
+                <ArrowLeft size={18} />
+              </Link>
+            </Button>
+            <div className="leading-tight">
+              <p className="font-display text-base font-semibold tracking-tight">Body Métrica FJ</p>
+              <p className="hidden text-xs text-muted-foreground sm:block">Sobre o projeto</p>
+            </div>
           </div>
+
+          <Button asChild size="sm" variant="outline" className="min-h-10 rounded-xl bg-background px-4">
+            <Link to="/auth" search={authSearch}>Criar conta</Link>
+          </Button>
         </div>
       </header>
 
-      <main>
-        <section className="border-b border-border/60">
-          <div className="container mx-auto grid max-w-7xl gap-12 px-4 py-14 md:px-6 md:py-20 lg:grid-cols-[0.95fr_1.05fr] lg:items-center lg:py-24">
+      <main className="relative isolate min-h-[calc(100dvh-4rem)] overflow-hidden">
+        <img
+          src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=1800"
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 -z-30 h-full w-full object-cover object-center"
+        />
+        <div className="absolute inset-0 -z-20 bg-background/42 dark:bg-background/55" />
+        <div className="absolute inset-0 -z-10 bg-gradient-to-r from-background/97 via-background/82 to-background/48 dark:from-background/98 dark:via-background/88 dark:to-background/58" />
+
+        <section className="container mx-auto flex min-h-[calc(100dvh-4rem)] max-w-7xl flex-col px-4 py-7 md:px-6 md:py-9 lg:py-10">
+          <div className="grid flex-1 items-center gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:gap-12">
             <div className="max-w-2xl">
-              <p className="text-sm font-medium text-primary">Uma plataforma de acompanhamento pessoal</p>
-              <h1 className="mt-3 font-display text-4xl font-semibold leading-[1.05] tracking-[-0.035em] sm:text-5xl md:text-6xl">
-                Tecnologia para enxergar sua evolução com mais contexto.
+              <div className="inline-flex items-center gap-2 rounded-xl border border-primary/20 bg-background/92 px-3.5 py-1.5 text-sm font-semibold text-foreground shadow-sm">
+                <Sparkles size={15} className="text-primary" aria-hidden="true" />
+                Conheça o projeto
+              </div>
+
+              <h1 className="mt-5 max-w-3xl font-display text-[clamp(2.65rem,6vw,4.8rem)] font-semibold leading-[1.01] tracking-[-0.045em] text-balance">
+                Menos ruído. <span className="text-primary">Mais clareza sobre sua evolução.</span>
               </h1>
-              <p className="mt-6 max-w-xl text-base leading-7 text-muted-foreground md:text-lg md:leading-8">
-                O Body Métrica FJ nasceu para reunir informações que normalmente ficam espalhadas: composição corporal, alimentação, hidratação, treino e metas. A proposta é transformar registros isolados em uma leitura contínua da evolução.
+
+              <p className="mt-5 max-w-xl text-base font-medium leading-7 text-foreground/76 md:text-lg md:leading-8">
+                O Body Métrica FJ reúne composição corporal, alimentação, hidratação, treino e metas em uma única experiência. A ideia é simples: transformar registros soltos em contexto útil para acompanhar o que realmente muda.
               </p>
 
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <Button asChild size="lg" className="h-12 rounded-xl px-6">
-                  <Link
-                    to="/auth"
-                    search={{ registerMode: true, reset: false, name: "", birthDate: "", goal: "", weight: "", height: "", activityLevel: "" }}
-                  >
-                    Criar conta
+              <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+                <Button asChild size="lg" className="h-12 rounded-xl px-6 font-semibold shadow-sm">
+                  <Link to="/auth" search={authSearch}>
+                    Começar agora
                     <ArrowRight size={16} className="ml-2" />
                   </Link>
                 </Button>
-                <Button asChild size="lg" variant="outline" className="h-12 rounded-xl px-6">
+                <Button asChild size="lg" variant="outline" className="h-12 rounded-xl bg-background/92 px-6 font-medium shadow-sm">
                   <Link to="/tools">Ver ferramentas</Link>
                 </Button>
               </div>
+
+              <div className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-foreground/66">
+                <span className="inline-flex items-center gap-2 font-medium">
+                  <MapPin size={15} className="text-primary" />
+                  Feijó, Acre
+                </span>
+                <span className="hidden h-4 w-px bg-border sm:block" aria-hidden="true" />
+                <span>Desenvolvido por Franc D&apos;nis</span>
+              </div>
             </div>
 
-            <div className="overflow-hidden rounded-[2rem] border border-border bg-muted shadow-xl shadow-black/10">
-              <div className="relative aspect-[4/3]">
-                <img
-                  src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=85&w=1600"
-                  alt="Dados e métricas exibidos em uma tela"
-                  className="h-full w-full object-cover"
-                  loading="eager"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-transparent" />
-                <div className="absolute inset-x-0 bottom-0 p-6 text-white md:p-8">
-                  <p className="max-w-md font-display text-2xl font-semibold leading-tight md:text-3xl">
-                    O dado só é útil quando ajuda você a entender o que mudou e por quê.
+            <div className="lg:pl-2">
+              <div className="overflow-hidden rounded-[1.75rem] border border-border/80 bg-background/94 shadow-xl shadow-black/10">
+                <div className="border-b border-border/70 px-5 py-4 md:px-6">
+                  <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-primary">Princípios do produto</p>
+                  <h2 className="mt-1 font-display text-xl font-semibold tracking-tight md:text-2xl">
+                    Feito para acompanhar, não para impressionar.
+                  </h2>
+                </div>
+
+                <div className="divide-y divide-border/70">
+                  {PRINCIPLES.map(({ icon: Icon, label, title, description }) => (
+                    <article key={title} className="grid grid-cols-[auto_1fr] gap-4 px-5 py-4 md:px-6 md:py-5">
+                      <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary" aria-hidden="true">
+                        <Icon size={19} strokeWidth={2} />
+                      </div>
+                      <div>
+                        <p className="text-[10px] font-bold tracking-[0.14em] text-primary/80">{label}</p>
+                        <h3 className="mt-1 font-display text-base font-semibold tracking-tight md:text-lg">{title}</h3>
+                        <p className="mt-1 text-sm leading-6 text-foreground/62">{description}</p>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+
+                <div className="border-t border-border/70 bg-muted/35 px-5 py-4 md:px-6">
+                  <p className="text-sm leading-6 text-foreground/65">
+                    Produto em evolução contínua, com foco em experiência de uso, organização de dados e decisões mais simples no cotidiano.
                   </p>
                 </div>
               </div>
             </div>
           </div>
-        </section>
 
-        <section className="container mx-auto max-w-7xl px-4 py-14 md:px-6 md:py-20">
-          <div className="max-w-2xl">
-            <p className="text-sm font-medium text-primary">Princípios do produto</p>
-            <h2 className="mt-2 font-display text-3xl font-semibold tracking-tight md:text-4xl">
-              Menos espetáculo visual. Mais confiança no que você está vendo.
-            </h2>
-          </div>
-
-          <div className="mt-8 grid gap-4 md:grid-cols-3">
-            {PRINCIPLES.map(({ icon: Icon, title, description }) => (
-              <article key={title} className="rounded-2xl border border-border bg-card p-6">
-                <div className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                  <Icon size={20} />
-                </div>
-                <h3 className="mt-5 font-display text-xl font-semibold tracking-tight">{title}</h3>
-                <p className="mt-2 text-sm leading-6 text-muted-foreground">{description}</p>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section className="border-y border-border/60 bg-muted/25">
-          <div className="container mx-auto grid max-w-7xl gap-10 px-4 py-14 md:px-6 md:py-20 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
-            <div>
-              <div className="flex size-12 items-center justify-center rounded-2xl border border-border bg-background text-primary shadow-sm">
-                <Code2 size={22} />
-              </div>
-              <h2 className="mt-5 font-display text-3xl font-semibold tracking-tight md:text-4xl">Desenvolvido em Feijó, Acre</h2>
-              <div className="mt-3 flex items-center gap-2 text-sm text-muted-foreground">
-                <MapPin size={16} />
-                Feijó, AC · Brasil
-              </div>
+          <footer className="mt-8 flex flex-col gap-2 border-t border-border/60 py-4 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+            <p>Body Métrica FJ · saúde, composição corporal e rotina em uma única visão.</p>
+            <div className="flex items-center gap-4">
+              <Link to="/privacy" className="transition-colors hover:text-foreground">Privacidade</Link>
+              <Link to="/terms" className="transition-colors hover:text-foreground">Termos</Link>
+              <Link to="/help" className="transition-colors hover:text-foreground">Ajuda</Link>
             </div>
-
-            <div className="max-w-2xl space-y-5 text-base leading-7 text-muted-foreground md:text-lg md:leading-8">
-              <p>
-                O projeto é desenvolvido por Franc D'nis com foco em resolver necessidades reais de acompanhamento pessoal por meio de software acessível, responsivo e simples de usar.
-              </p>
-              <p>
-                A evolução do Body Métrica FJ combina engenharia de software, experiência de uso e organização de dados para construir um produto útil no cotidiano — sem depender de uma estética exageradamente técnica para parecer avançado.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        <section className="container mx-auto max-w-7xl px-4 py-14 md:px-6 md:py-20">
-          <div className="rounded-[2rem] border border-border bg-card p-7 md:p-10 lg:flex lg:items-center lg:justify-between lg:gap-10">
-            <div className="max-w-2xl">
-              <p className="text-sm font-medium text-primary">Próximo passo</p>
-              <h2 className="mt-2 font-display text-3xl font-semibold tracking-tight">Use a plataforma e acompanhe seus próprios dados.</h2>
-              <p className="mt-3 text-sm leading-6 text-muted-foreground md:text-base">
-                Comece com seus registros atuais e construa uma visão mais consistente da sua evolução ao longo do tempo.
-              </p>
-            </div>
-            <Button asChild size="lg" className="mt-6 h-12 rounded-xl px-6 lg:mt-0">
-              <Link
-                to="/auth"
-                search={{ registerMode: true, reset: false, name: "", birthDate: "", goal: "", weight: "", height: "", activityLevel: "" }}
-              >
-                Começar agora
-                <ArrowRight size={16} className="ml-2" />
-              </Link>
-            </Button>
-          </div>
+          </footer>
         </section>
       </main>
     </div>
