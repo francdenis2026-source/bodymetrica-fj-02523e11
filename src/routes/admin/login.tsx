@@ -9,6 +9,13 @@ import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/admin/login")({
   component: AdminLoginPage,
+  head: () => ({
+    title: "Acesso institucional — Body Métrica FJ",
+    meta: [
+      { name: "robots", content: "noindex,nofollow" },
+      { name: "description", content: "Área institucional de acesso restrito do Body Métrica FJ." },
+    ],
+  }),
 });
 
 function AdminLoginPage() {
@@ -30,7 +37,7 @@ function AdminLoginPage() {
       });
 
       if (loginError) {
-        toast.error("Credenciais inválidas ou acesso indisponível.");
+        toast.error("Não foi possível validar suas credenciais.");
         return;
       }
 
@@ -39,15 +46,15 @@ function AdminLoginPage() {
 
       if (adminError || !sessionRow?.user_id) {
         await supabase.auth.signOut();
-        toast.error("Esta conta não possui permissão administrativa.");
+        toast.error("Esta conta não possui autorização institucional.");
         return;
       }
 
-      toast.success("Acesso administrativo autorizado.");
+      toast.success("Acesso autorizado.");
       navigate({ to: "/admin" as any, replace: true });
     } catch {
       await supabase.auth.signOut();
-      toast.error("Não foi possível validar o acesso administrativo.");
+      toast.error("Não foi possível validar o acesso neste momento.");
     } finally {
       setIsLoading(false);
     }
@@ -61,36 +68,36 @@ function AdminLoginPage() {
         aria-hidden="true"
         className="absolute inset-0 h-full w-full object-cover object-center"
       />
-      <div className="absolute inset-0 bg-background/82 dark:bg-background/88" />
-      <div className="absolute inset-0 bg-gradient-to-br from-background via-background/96 to-background/72" />
+      <div className="absolute inset-0 bg-background/84 dark:bg-background/90" />
+      <div className="absolute inset-0 bg-gradient-to-br from-background via-background/96 to-background/76" />
 
       <div className="relative z-10 flex min-h-[100dvh] items-center justify-center px-4 py-6">
-        <div className="grid w-full max-w-4xl overflow-hidden rounded-[1.8rem] border border-border/80 bg-background/96 shadow-2xl shadow-black/15 md:grid-cols-[0.9fr_1.1fr]">
-          <section className="relative hidden min-h-[520px] overflow-hidden md:block">
+        <div className="grid w-full max-w-[860px] overflow-hidden rounded-[1.75rem] border border-border/80 bg-background/97 shadow-xl shadow-black/10 md:grid-cols-[0.92fr_1.08fr]">
+          <section className="relative hidden min-h-[500px] overflow-hidden md:block">
             <img
               src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&q=88&w=1200"
-              alt="Ambiente corporativo"
+              alt="Ambiente corporativo contemporâneo"
               className="absolute inset-0 h-full w-full object-cover object-center"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/88 via-black/42 to-black/12" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/46 to-black/14" />
             <div className="relative flex h-full flex-col justify-between p-7 text-white">
               <div className="inline-flex w-fit items-center gap-2 rounded-xl border border-white/15 bg-black/20 px-3 py-2 text-xs font-medium text-white/78">
-                <ShieldCheck size={15} className="text-primary" />
-                Área institucional
+                <ShieldCheck size={15} className="text-sky-300" />
+                Ambiente reservado
               </div>
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-white/58">Body Métrica FJ</p>
-                <h1 className="mt-3 max-w-sm font-display text-4xl font-semibold leading-[1.04] tracking-[-0.04em]">
-                  Controle administrativo com acesso restrito.
+                <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-white/55">Body Métrica FJ</p>
+                <h1 className="mt-3 max-w-sm font-display text-[2.15rem] font-semibold leading-[1.04] tracking-[-0.04em]">
+                  Gestão segura, sem interferir na experiência pública.
                 </h1>
-                <p className="mt-3 max-w-sm text-sm leading-6 text-white/66">
-                  Ambiente reservado para gestão, auditoria e operações sensíveis do sistema.
+                <p className="mt-3 max-w-sm text-sm leading-6 text-white/65">
+                  Área reservada para operações institucionais, auditoria e administração autorizada do sistema.
                 </p>
               </div>
             </div>
           </section>
 
-          <main className="flex min-h-[520px] items-center px-5 py-7 sm:px-8 md:px-9">
+          <main className="flex min-h-[500px] items-center px-5 py-7 sm:px-8 md:px-9">
             <div className="mx-auto w-full max-w-sm">
               <div className="mb-7 flex items-center justify-between gap-4">
                 <Button variant="ghost" size="sm" asChild className="-ml-2 h-9 rounded-lg px-2 text-muted-foreground">
@@ -103,19 +110,19 @@ function AdminLoginPage() {
 
               <div>
                 <span className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary"><ShieldCheck size={19} /></span>
-                <p className="mt-4 text-xs font-bold uppercase tracking-[0.14em] text-primary">Acesso administrativo</p>
-                <h2 className="mt-2 font-display text-3xl font-semibold tracking-[-0.035em]">Identifique-se</h2>
-                <p className="mt-2 text-sm leading-6 text-muted-foreground">Use uma conta autorizada para continuar.</p>
+                <p className="mt-4 text-[11px] font-bold uppercase tracking-[0.15em] text-primary">Acesso institucional</p>
+                <h2 className="mt-2 font-display text-3xl font-semibold tracking-[-0.035em]">Continuar com credenciais</h2>
+                <p className="mt-2 max-w-xs text-sm leading-6 text-muted-foreground">Esta área não faz parte do fluxo comum de usuários.</p>
               </div>
 
               <form onSubmit={handleLogin} className="mt-6 space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="admin-email">E-mail</Label>
+                  <Label htmlFor="institutional-email">E-mail</Label>
                   <Input
-                    id="admin-email"
+                    id="institutional-email"
                     type="email"
                     autoComplete="username"
-                    placeholder="seu@email.com"
+                    placeholder="conta autorizada"
                     value={email}
                     onChange={(event) => setEmail(event.target.value)}
                     required
@@ -125,10 +132,10 @@ function AdminLoginPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="admin-password">Senha</Label>
+                  <Label htmlFor="institutional-password">Senha</Label>
                   <div className="relative">
                     <Input
-                      id="admin-password"
+                      id="institutional-password"
                       type={showPassword ? "text" : "password"}
                       autoComplete="current-password"
                       value={password}
@@ -149,14 +156,15 @@ function AdminLoginPage() {
                 </div>
 
                 <Button type="submit" className="h-11 w-full rounded-xl font-semibold" disabled={isLoading}>
-                  {isLoading ? "Validando acesso..." : "Continuar"}
+                  {isLoading ? "Validando..." : "Continuar"}
                   {!isLoading && <ArrowRight size={16} className="ml-2" />}
                 </Button>
               </form>
 
-              <p className="mt-5 border-t border-border/70 pt-4 text-[11px] leading-5 text-muted-foreground">
-                Tentativas e operações administrativas podem ser registradas para fins de segurança e auditoria.
-              </p>
+              <div className="mt-5 flex items-start gap-2.5 border-t border-border/70 pt-4 text-[11px] leading-5 text-muted-foreground">
+                <LockKeyhole size={14} className="mt-0.5 shrink-0 text-primary/70" />
+                <p>O acesso é validado pelo provedor de autenticação e pelas permissões administrativas registradas no sistema.</p>
+              </div>
             </div>
           </main>
         </div>
