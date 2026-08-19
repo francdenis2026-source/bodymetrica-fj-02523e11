@@ -1,272 +1,145 @@
 import React, { useEffect, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getSession } from "@/lib/auth/auth.functions";
 import {
-  Activity,
-  ArrowRight,
-  Droplets,
-  Dumbbell,
-  HeartPulse,
-  LockKeyhole,
-  Salad,
-  ShieldCheck,
-  Sparkles,
-  Target,
-  TrendingUp,
+  Activity, ArrowRight, Check, ChevronDown, Droplets, Dumbbell,
+  HeartPulse, LockKeyhole, Menu, Salad, ShieldCheck, TrendingUp, X,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   component: Index,
   head: () => ({
-    title: "Body Métrica FJ — Saúde, rotina e evolução",
+    title: "BodyMetrica — Saúde e progresso com contexto",
     meta: [
-      {
-        name: "description",
-        content:
-          "Corpo, nutrição, hidratação, treino e metas organizados em uma experiência clara para acompanhar sua evolução.",
-      },
+      { name: "description", content: "Acompanhe composição corporal, alimentação, hidratação e treinos em uma visão simples, privada e integrada." },
+      { property: "og:title", content: "BodyMetrica" },
+      { property: "og:description", content: "Saúde e progresso com contexto." },
+      { property: "og:image", content: "/og-bodymetrica.jpg" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
 });
 
 const authSearch = {
-  registerMode: false,
-  reset: false,
-  name: "",
-  birthDate: "",
-  goal: "",
-  weight: "",
-  height: "",
-  activityLevel: "",
+  registerMode: false, reset: false, name: "", birthDate: "", goal: "",
+  weight: "", height: "", activityLevel: "",
 } as any;
 
-const modules = [
-  {
-    icon: HeartPulse,
-    title: "Corpo",
-    text: "Medidas e composição com histórico contínuo.",
-  },
-  {
-    icon: Salad,
-    title: "Nutrição",
-    text: "Rotina alimentar e metas no mesmo contexto.",
-  },
-  {
-    icon: Droplets,
-    title: "Hidratação",
-    text: "Acompanhamento diário sem perder consistência.",
-  },
-  {
-    icon: Dumbbell,
-    title: "Treino",
-    text: "Sessões, frequência e evolução organizadas.",
-  },
+const panels = [
+  { label: "Hoje", value: "78%", detail: "da rotina concluída", stat: "6 de 8 hábitos" },
+  { label: "Semana", value: "5 dias", detail: "em movimento", stat: "+12% de consistência" },
+  { label: "Evolução", value: "−3,4 kg", detail: "nos últimos 60 dias", stat: "ritmo sustentável" },
 ];
 
-const signalRows = [
-  { icon: Activity, label: "Rotina", value: "Visão integrada" },
-  { icon: Target, label: "Metas", value: "Objetivos claros" },
-  { icon: TrendingUp, label: "Evolução", value: "Tendências legíveis" },
-];
+const tools = [
+  { icon: HeartPulse, title: "Corpo & medidas", text: "Registre peso e medidas, compare períodos e acompanhe tendências com contexto.", to: "/body" },
+  { icon: Droplets, title: "Hidratação", text: "Defina uma meta ajustável e registre a água do dia com apenas um toque.", to: "/hydration" },
+  { icon: Salad, title: "Alimentação", text: "Organize refeições e preferências sem dietas genéricas ou restrições silenciosas.", to: "/nutrition" },
+  { icon: Dumbbell, title: "Treinos", text: "Registre séries, cargas e constância para visualizar sua evolução de desempenho.", to: "/training" },
+] as const;
+
+function Logo() {
+  return (
+    <span className="flex items-center gap-2.5 text-xl font-black tracking-[-.04em]">
+      <span className="grid size-8 grid-cols-3 items-end gap-0.5 rounded-[10px] bg-[#a3ed72] px-2 py-2" aria-hidden="true">
+        <i className="h-2 rounded-full bg-[#062a29]"/><i className="h-4 rounded-full bg-[#062a29]"/><i className="h-3 rounded-full bg-[#062a29]"/>
+      </span>
+      <span>Body<span className="font-normal">Metrica</span></span>
+    </span>
+  );
+}
 
 function Index() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [activePanel, setActivePanel] = useState(0);
 
   useEffect(() => {
     setIsLoggedIn(!!getSession());
-
-    const globalThemeToggle = document.getElementById("bodymetrica-global-theme-toggle");
-    globalThemeToggle?.remove();
-
-    const statusIndicator = document.querySelector<HTMLElement>(".fixed.bottom-24.right-4, .fixed.top-20.right-3");
-    if (statusIndicator) {
-      statusIndicator.style.top = "auto";
-      statusIndicator.style.right = "auto";
-      statusIndicator.style.bottom = "14px";
-      statusIndicator.style.left = "14px";
-      statusIndicator.style.opacity = "0.68";
-      statusIndicator.style.transform = "scale(0.78)";
-      statusIndicator.style.transformOrigin = "bottom left";
-    }
-
-    return () => {
-      if (statusIndicator) {
-        statusIndicator.style.top = "";
-        statusIndicator.style.right = "";
-        statusIndicator.style.bottom = "";
-        statusIndicator.style.left = "";
-        statusIndicator.style.opacity = "";
-        statusIndicator.style.transform = "";
-        statusIndicator.style.transformOrigin = "";
-      }
-    };
+    document.getElementById("bodymetrica-global-theme-toggle")?.remove();
   }, []);
 
+  const primaryTo = isLoggedIn ? "/dashboard" : "/auth";
+  const primarySearch = isLoggedIn ? undefined : ({ ...authSearch, registerMode: true } as any);
+
   return (
-    <div className="min-h-[100dvh] bg-background text-foreground selection:bg-primary/20">
-      <div className="mx-auto flex min-h-[100dvh] max-w-[1500px] flex-col px-4 sm:px-6 lg:px-8">
-        <header className="flex h-[76px] shrink-0 items-center justify-between gap-5 border-b border-border/70">
-          <Link
-            to="/"
-            aria-label="Body Métrica FJ — início"
-            className="group flex min-h-11 items-center gap-3 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          >
-            <div className="flex size-10 items-center justify-center rounded-2xl bg-primary font-black text-primary-foreground shadow-sm transition-transform duration-200 group-active:scale-[.96]">
-              B
-            </div>
-            <div className="leading-none">
-              <div className="font-display text-base font-black tracking-[-0.035em] sm:text-lg">
-                BODY MÉTRICA
-              </div>
-              <div className="mt-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
-                saúde • rotina • evolução
-              </div>
-            </div>
-          </Link>
-
-          <nav className="hidden items-center gap-1 rounded-full border border-border bg-card/70 p-1 backdrop-blur-xl md:flex" aria-label="Navegação principal">
-            <Link to="/tools" className="rounded-full px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground">Recursos</Link>
-            <Link to="/about" className="rounded-full px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground">Sobre</Link>
-            <Link to="/help" className="rounded-full px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground">Ajuda</Link>
+    <div className="bm-landing min-h-[100dvh] bg-[#fbfaf6] text-[#0a2827] selection:bg-[#a3ed72]/40">
+      <header className="sticky top-0 z-50 border-b border-white/10 bg-[#062a29]/95 text-white backdrop-blur-xl">
+        <div className="mx-auto flex h-[72px] max-w-[1500px] items-center justify-between px-5 sm:px-8 lg:px-12">
+          <Link to="/" aria-label="BodyMetrica — início" className="rounded-xl focus-visible:ring-[#a3ed72]"><Logo /></Link>
+          <nav className="hidden items-center gap-8 text-sm font-semibold text-white/75 md:flex" aria-label="Navegação principal">
+            <a href="#metodo" className="transition-colors hover:text-white">Como funciona</a>
+            <a href="#recursos" className="transition-colors hover:text-white">Recursos</a>
+            <a href="#seguranca" className="transition-colors hover:text-white">Privacidade</a>
           </nav>
-
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 sm:gap-4">
             {isLoggedIn ? (
-              <Button asChild className="rounded-full px-5">
-                <Link to="/dashboard">Abrir painel</Link>
-              </Button>
+              <Link to="/dashboard" className="inline-flex h-11 items-center gap-2 rounded-full bg-[#a3ed72] px-5 text-sm font-extrabold text-[#062a29] transition hover:-translate-y-0.5">Abrir painel <ArrowRight className="size-4"/></Link>
             ) : (
               <>
-                <Button asChild variant="ghost" className="hidden rounded-full px-5 sm:inline-flex">
-                  <Link to="/auth" search={authSearch}>Entrar</Link>
-                </Button>
-                <Button asChild className="rounded-full px-5">
-                  <Link to="/auth" search={{ ...authSearch, registerMode: true } as any}>Criar conta</Link>
-                </Button>
+                <Link to="/auth" search={authSearch} className="hidden px-3 py-2 text-sm font-bold text-white/80 transition hover:text-white sm:block">Entrar</Link>
+                <Link to="/auth" search={{ ...authSearch, registerMode: true } as any} className="inline-flex h-11 items-center gap-2 rounded-full bg-[#a3ed72] px-5 text-sm font-extrabold text-[#062a29] transition hover:-translate-y-0.5">Começar <ArrowRight className="size-4"/></Link>
               </>
             )}
+            <button type="button" className="grid size-11 place-items-center rounded-full text-white md:hidden" onClick={() => setMenuOpen(!menuOpen)} aria-label="Abrir menu" aria-expanded={menuOpen}>{menuOpen ? <X/> : <Menu/>}</button>
           </div>
-        </header>
+        </div>
+        {menuOpen && <nav className="border-t border-white/10 bg-[#0b3835] px-5 py-5 text-sm font-bold md:hidden"><a href="#metodo" onClick={()=>setMenuOpen(false)} className="block py-3">Como funciona</a><a href="#recursos" onClick={()=>setMenuOpen(false)} className="block py-3">Recursos</a><a href="#seguranca" onClick={()=>setMenuOpen(false)} className="block py-3">Privacidade</a></nav>}
+      </header>
 
-        <main className="grid min-h-0 flex-1 gap-5 py-5 lg:grid-cols-[1.04fr_.96fr] lg:gap-6">
-          <section className="flex min-h-0 flex-col justify-between rounded-[32px] border border-border bg-card px-6 py-7 shadow-sm sm:px-8 lg:px-10 lg:py-10">
-            <div className="max-w-[760px]">
-              <Badge variant="secondary" className="rounded-full px-3 py-1.5 text-[11px] uppercase tracking-[0.14em]">
-                <Sparkles data-icon="inline-start" />
-                Plataforma integrada
-              </Badge>
-
-              <h1 className="mt-7 max-w-[760px] font-display text-[clamp(3.1rem,6.3vw,6.6rem)] font-black leading-[0.9] tracking-[-0.065em] text-balance">
-                Entenda sua rotina.
-                <span className="block text-primary">Evolua com clareza.</span>
-              </h1>
-
-              <p className="mt-6 max-w-[640px] text-base font-medium leading-7 text-muted-foreground sm:text-lg sm:leading-8">
-                Corpo, alimentação, água, treino e metas deixam de ser informações soltas e passam a formar uma visão única da sua evolução.
-              </p>
-
-              <div className="mt-7 flex flex-wrap gap-3">
-                <Button asChild size="lg" className="h-12 rounded-full px-6 font-semibold shadow-sm transition-transform active:scale-[.98]">
-                  <Link
-                    to={isLoggedIn ? "/dashboard" : "/auth"}
-                    search={isLoggedIn ? undefined : ({ ...authSearch, registerMode: true } as any)}
-                    className="gap-2"
-                  >
-                    {isLoggedIn ? "Ir para meu painel" : "Começar agora"}
-                    <ArrowRight data-icon="inline-end" />
-                  </Link>
-                </Button>
-                <Button asChild variant="outline" size="lg" className="h-12 rounded-full px-6 font-semibold active:scale-[.98]">
-                  <Link to="/about">Conhecer a plataforma</Link>
-                </Button>
+      <main>
+        <section className="relative overflow-hidden bg-[#062a29] text-white">
+          <div className="pointer-events-none absolute -left-72 top-28 size-[520px] rounded-full border border-[#a3ed72]/15 shadow-[0_0_0_75px_rgba(163,237,114,.025),0_0_0_150px_rgba(163,237,114,.018)]"/>
+          <div className="relative mx-auto grid min-h-[700px] max-w-[1500px] items-center gap-14 px-5 py-20 sm:px-8 lg:grid-cols-[.96fr_1.04fr] lg:px-12 lg:py-24">
+            <div className="relative z-10 max-w-3xl">
+              <p className="flex items-center gap-3 text-[11px] font-extrabold uppercase tracking-[.2em] text-[#a3ed72]"><span className="h-px w-6 bg-current"/> Saúde em uma visão completa</p>
+              <h1 className="mt-6 font-serif text-[clamp(3.1rem,5.4vw,5.5rem)] font-normal leading-[.98] tracking-[-.055em]">Seu corpo conta uma história.<br/><em className="font-normal text-[#a3ed72]">Entenda cada capítulo.</em></h1>
+              <p className="mt-7 max-w-2xl text-base leading-8 text-[#c5d3ce] sm:text-lg">Reúna medidas, alimentação, hidratação e treinos em um só lugar — e transforme registros diários em decisões que fazem sentido para você.</p>
+              <div className="mt-9 flex flex-wrap items-center gap-5">
+                <Link to={primaryTo} search={primarySearch} className="inline-flex h-13 items-center gap-3 rounded-full bg-[#a3ed72] px-6 text-sm font-extrabold text-[#062a29] shadow-xl transition hover:-translate-y-0.5">{isLoggedIn ? "Ir para meu painel" : "Criar minha jornada"}<ArrowRight className="size-4"/></Link>
+                <a href="#metodo" className="inline-flex items-center gap-2 px-3 py-3 text-sm font-bold">Conhecer o método <ChevronDown className="size-4"/></a>
               </div>
+              <div className="mt-8 flex flex-wrap gap-5 text-xs text-white/65"><span className="flex items-center gap-2"><Check className="size-4 text-[#a3ed72]"/>Dados sempre seus</span><span className="flex items-center gap-2"><Check className="size-4 text-[#a3ed72]"/>Sem cobrança no cadastro</span></div>
             </div>
 
-            <div className="mt-8 grid gap-3 sm:grid-cols-3">
-              <div className="flex items-start gap-3 rounded-2xl border border-border bg-background/70 p-4">
-                <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary"><ShieldCheck /></div>
-                <div>
-                  <p className="text-sm font-semibold">Dados sob controle</p>
-                  <p className="mt-1 text-xs leading-5 text-muted-foreground">Acesso associado à sua própria conta.</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3 rounded-2xl border border-border bg-background/70 p-4">
-                <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary"><LockKeyhole /></div>
-                <div>
-                  <p className="text-sm font-semibold">Acesso protegido</p>
-                  <p className="mt-1 text-xs leading-5 text-muted-foreground">Autenticação para separar seus registros.</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3 rounded-2xl border border-border bg-background/70 p-4">
-                <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary"><TrendingUp /></div>
-                <div>
-                  <p className="text-sm font-semibold">Progresso legível</p>
-                  <p className="mt-1 text-xs leading-5 text-muted-foreground">Tendências sem excesso de informação.</p>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <section className="grid min-h-0 gap-4 sm:grid-cols-2 lg:grid-cols-1 lg:grid-rows-[1.18fr_.82fr]">
-            <Card className="group relative min-h-[320px] overflow-hidden rounded-[32px] border border-border shadow-sm">
-              <img
-                src="https://images.unsplash.com/photo-1594381898411-846e7d193883?auto=format&fit=crop&q=90&w=1800"
-                alt="Pessoa acompanhando a rotina de treino na academia"
-                className="absolute inset-0 h-full w-full object-cover object-[62%_center] transition-transform duration-700 ease-out group-hover:scale-[1.025] motion-reduce:transform-none"
-                fetchPriority="high"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
-              <CardContent className="absolute inset-x-0 bottom-0 z-10 p-5 sm:p-6">
-                <Badge variant="secondary" className="rounded-full border-white/10 bg-black/35 text-white backdrop-blur-md">
-                  Visão diária
-                </Badge>
-                <h2 className="mt-4 max-w-md font-display text-3xl font-bold tracking-[-0.04em] text-white sm:text-4xl">
-                  Um único lugar para ler seus sinais.
-                </h2>
-                <p className="mt-3 max-w-lg text-sm leading-6 text-white/75">
-                  Organize a rotina sem transformar o acompanhamento em um painel complicado.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="rounded-[32px] border border-border shadow-sm">
-              <CardHeader className="pb-3">
-                <CardDescription className="text-xs font-semibold uppercase tracking-[0.14em]">Leitura integrada</CardDescription>
-                <CardTitle className="font-display text-2xl tracking-[-0.035em]">O essencial em contexto</CardTitle>
-              </CardHeader>
-              <CardContent className="grid gap-2.5 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
-                {signalRows.map(({ icon: Icon, label, value }) => (
-                  <div key={label} className="rounded-2xl border border-border bg-background/65 p-4">
-                    <Icon className="text-primary" />
-                    <p className="mt-4 text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">{label}</p>
-                    <p className="mt-1 text-sm font-semibold">{value}</p>
+            <div className="relative mx-auto w-full max-w-[680px]">
+              <div className="relative min-h-[560px] overflow-hidden rounded-[38px_10px] shadow-[0_45px_110px_rgba(0,0,0,.34)]">
+                <img src="/hero-bodymetrica.jpg" alt="Pessoa acompanhando sua rotina de treino pelo relógio" className="absolute inset-0 h-full w-full object-cover object-center" fetchPriority="high"/>
+                <div className="absolute inset-0 bg-gradient-to-t from-[#031d1c]/50 via-transparent to-transparent"/>
+                <div className="absolute bottom-6 left-4 right-4 max-w-[390px] rounded-[24px] border border-white/30 bg-[#f8faf6]/95 p-5 text-[#0a2827] shadow-2xl backdrop-blur-xl sm:bottom-9 sm:left-[-24px]">
+                  <div className="flex items-center justify-between"><div><small className="block text-[10px] text-[#71807b]">Bom dia, Franc</small><strong className="font-serif text-2xl font-normal">Seu progresso</strong></div><span className="grid size-9 place-items-center rounded-full bg-[#062a29] text-xs font-extrabold text-[#a3ed72]">F</span></div>
+                  <div className="mt-4 flex rounded-xl bg-[#e8ede6] p-1" role="tablist" aria-label="Período do resumo">{panels.map((p,i)=><button key={p.label} type="button" role="tab" aria-selected={activePanel===i} onClick={()=>setActivePanel(i)} className={`flex-1 rounded-lg px-2 py-2 text-[10px] font-extrabold transition ${activePanel===i ? "bg-white shadow-sm" : "text-[#71807b]"}`}>{p.label}</button>)}</div>
+                  <div className="mt-4 grid grid-cols-[112px_1fr] items-center gap-5">
+                    <div className="grid aspect-square place-items-center rounded-full bg-[conic-gradient(#a3ed72_78%,#dfe5dc_0)] p-3"><div className="grid size-full place-items-center rounded-full bg-[#f9faf6] text-center"><div><strong className="block font-serif text-2xl font-normal">{panels[activePanel].value}</strong><small className="block max-w-16 text-[8px] leading-tight text-[#71807b]">{panels[activePanel].detail}</small></div></div></div>
+                    <div><span className="text-[8px] font-extrabold tracking-[.16em] text-[#7f8c87]">STATUS</span><strong className="mt-2 block text-xs">{panels[activePanel].stat}</strong><div className="mt-5 flex h-10 items-end gap-1.5">{[12,22,17,29,24,38,32].map((h,i)=><i key={i} style={{height:h}} className={`w-2 rounded-full ${i>4 ? "bg-[#8cdd5b]" : "bg-[#d8e0d6]"}`}/>)}</div></div>
                   </div>
-                ))}
-              </CardContent>
-            </Card>
-          </section>
-        </main>
-
-        <section className="grid shrink-0 gap-3 pb-5 sm:grid-cols-2 lg:grid-cols-4" aria-label="Principais áreas da plataforma">
-          {modules.map(({ icon: Icon, title, text }) => (
-            <Link key={title} to="/tools" className="group rounded-[24px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
-              <Card className="h-full rounded-[24px] border border-border shadow-sm transition-transform duration-200 group-hover:-translate-y-0.5 group-active:scale-[.99] motion-reduce:transform-none">
-                <CardHeader className="flex-row items-start justify-between gap-4 pb-2">
-                  <div className="flex size-10 items-center justify-center rounded-2xl bg-primary/10 text-primary"><Icon /></div>
-                  <ArrowRight className="text-muted-foreground transition-transform duration-200 group-hover:translate-x-0.5" />
-                </CardHeader>
-                <CardContent>
-                  <CardTitle className="font-display text-xl tracking-[-0.03em]">{title}</CardTitle>
-                  <CardDescription className="mt-2 leading-5">{text}</CardDescription>
-                </CardContent>
-              </Card>
-            </Link>
-          ))}
+                </div>
+                <div className="absolute right-3 top-8 rounded-xl bg-white px-4 py-3 text-[10px] font-bold text-[#062a29] shadow-xl sm:-right-2"><span className="mr-2 inline-block size-2 rounded-full bg-[#a3ed72] shadow-[0_0_0_5px_rgba(163,237,114,.2)]"/>Rotina em equilíbrio</div>
+              </div>
+            </div>
+          </div>
         </section>
-      </div>
+
+        <section className="border-b border-[#d8ded7] bg-[#e9eee6]" aria-label="Pilares"><div className="mx-auto flex max-w-[1500px] flex-col justify-between gap-4 px-5 py-7 sm:px-8 md:flex-row md:items-center lg:px-12"><p className="text-xs text-[#71807b]">Uma visão integrada de</p><div className="flex flex-wrap items-center gap-4 font-serif text-sm sm:gap-7"><span>Composição corporal</span><i className="size-1 rounded-full bg-[#82cd52]"/><span>Nutrição</span><i className="size-1 rounded-full bg-[#82cd52]"/><span>Hidratação</span><i className="size-1 rounded-full bg-[#82cd52]"/><span>Treino</span></div></div></section>
+
+        <section id="metodo" className="mx-auto max-w-[1500px] px-5 py-20 sm:px-8 lg:px-12 lg:py-28">
+          <p className="text-[10px] font-extrabold uppercase tracking-[.2em] text-[#6f9068]">01 — Clareza</p>
+          <div className="mt-8 grid items-end gap-8 lg:grid-cols-[1fr_.8fr]"><h2 className="font-serif text-[clamp(2.8rem,4.5vw,4.2rem)] font-normal leading-[1.02] tracking-[-.045em]">Menos números soltos.<br/><em className="font-normal text-[#4c7450]">Mais contexto.</em></h2><p className="max-w-xl text-base leading-8 text-[#62706c]">O BodyMetrica conecta os pontos da sua rotina. Assim, você enxerga o que está funcionando e avança com decisões possíveis — sem culpa, atalhos ou promessas irreais.</p></div>
+          <div className="mt-14 grid gap-5 lg:grid-cols-[1.1fr_.9fr]">
+            <article className="rounded-[28px] bg-[#e7ece5] p-7 sm:p-10 lg:row-span-2"><span className="text-[9px] font-extrabold tracking-[.18em]">EVOLUÇÃO CORPORAL</span><h3 className="mt-5 font-serif text-3xl font-normal leading-tight">Veja a mudança<br/>além da balança.</h3><p className="mt-4 max-w-md text-sm leading-7 text-[#62706c]">Peso, medidas e fotos privadas organizados em uma linha do tempo simples de compreender.</p><div className="mt-12 rounded-2xl bg-[#fafbf7] p-6 shadow-xl"><small className="text-[10px] text-[#71807b]">Últimos 6 meses</small><div className="mt-2 flex items-center justify-between"><strong className="font-serif text-3xl font-normal">− 6,8 kg</strong><span className="rounded-full bg-[#e3f5d8] px-3 py-1 text-[9px] font-bold text-[#398344]">ritmo consistente</span></div><svg viewBox="0 0 500 150" className="mt-5 h-36 w-full" aria-hidden="true"><path d="M0 20 C70 35 95 45 150 54 S235 68 282 98 S365 94 418 125 S470 138 500 142" fill="none" stroke="#65a940" strokeWidth="4"/><path d="M0 20 C70 35 95 45 150 54 S235 68 282 98 S365 94 418 125 S470 138 500 142 L500 150 L0 150Z" fill="rgba(163,237,114,.2)"/></svg></div></article>
+            <article className="rounded-[28px] bg-[#062a29] p-7 text-white sm:p-9"><span className="text-[9px] font-extrabold tracking-[.18em] text-[#a3ed72]">ROTINA DE HOJE</span><h3 className="mt-5 font-serif text-3xl font-normal leading-tight">O próximo passo,<br/>na hora certa.</h3><div className="mt-7 space-y-1">{[[Check,"Hidratação","7 de 10 copos","70%"],[Activity,"Treino de força","18:30 · 45 min","Hoje"],[TrendingUp,"Registrar almoço","Adicione em segundos","Agora"]].map(([Icon,label,sub,end]:any,i)=><div key={label} className="grid grid-cols-[38px_1fr_auto] items-center gap-3 border-t border-white/10 py-3"><span className={`grid size-8 place-items-center rounded-full ${i===0?"bg-[#a3ed72] text-[#062a29]":"bg-white/10"}`}><Icon className="size-4"/></span><p><strong className="block text-xs">{label}</strong><small className="text-[10px] text-white/50">{sub}</small></p><b className="text-[10px] text-white/65">{end}</b></div>)}</div></article>
+            <article className="rounded-[28px] bg-[#a3ed72] p-7 sm:p-9"><span className="text-[9px] font-extrabold tracking-[.18em]">CONSISTÊNCIA</span><h3 className="mt-5 font-serif text-3xl font-normal leading-tight">Pequenos hábitos.<br/>Progresso real.</h3><p className="mt-4 max-w-md text-sm leading-7 text-[#365246]">Acompanhe sua frequência sem transformar a rotina em uma cobrança.</p><div className="mt-7 grid grid-cols-7 gap-2">{["S","T","Q","Q","S","S","D"].map((d,i)=><div key={i} className="text-center"><small className="text-[9px] font-bold">{d}</small><span className={`mt-2 grid h-8 place-items-center rounded-lg border border-[#062a29]/20 text-xs ${i<5?"bg-[#062a29] text-[#a3ed72]":""}`}>{i<5&&<Check className="size-3"/>}</span></div>)}</div></article>
+          </div>
+        </section>
+
+        <section id="recursos" className="bg-[#f0f1eb] px-5 py-20 sm:px-8 lg:px-12 lg:py-28"><div className="mx-auto max-w-[1500px]"><p className="text-[10px] font-extrabold uppercase tracking-[.2em] text-[#6f9068]">02 — Tudo conectado</p><h2 className="mt-8 font-serif text-[clamp(2.7rem,4.5vw,4.2rem)] font-normal leading-[1.03] tracking-[-.045em]">Uma ferramenta para cada parte.<br/><em className="font-normal text-[#4c7450]">Uma visão para o todo.</em></h2><div className="mt-14 grid border-y border-[#cbd3ca] sm:grid-cols-2 lg:grid-cols-4">{tools.map(({icon:Icon,title,text,to})=><Link key={title} to={to} className="group flex min-h-72 flex-col border-b border-[#cbd3ca] p-7 transition hover:-translate-y-1 hover:bg-white hover:shadow-xl sm:border-r lg:border-b-0"><span className="grid size-11 place-items-center rounded-full bg-[#dfe9da] text-[#416c45]"><Icon className="size-5"/></span><h3 className="mt-8 font-serif text-2xl font-normal">{title}</h3><p className="mt-3 text-sm leading-7 text-[#62706c]">{text}</p><span className="mt-auto grid size-9 place-items-center rounded-full border border-[#cbd3ca]"><ArrowRight className="size-4 transition group-hover:translate-x-0.5"/></span></Link>)}</div></div></section>
+
+        <section id="seguranca" className="bg-[#062a29] px-5 py-20 text-white sm:px-8 lg:px-12 lg:py-28"><div className="mx-auto grid max-w-[1300px] items-center gap-16 lg:grid-cols-[.85fr_1.15fr]"><div className="relative mx-auto grid aspect-square w-full max-w-[390px] place-items-center rounded-full border border-[#a3ed72]/25"><div className="grid size-[72%] place-items-center rounded-full border border-[#a3ed72]/20"><div className="grid size-[58%] place-items-center rounded-full bg-[#a3ed72]/10"><LockKeyhole className="size-14 text-[#a3ed72]"/></div></div><i className="absolute left-[8%] top-[20%] size-2 rounded-full bg-[#a3ed72] shadow-[0_0_20px_#a3ed72]"/><i className="absolute right-[12%] top-[40%] size-2 rounded-full bg-[#a3ed72] shadow-[0_0_20px_#a3ed72]"/></div><div><p className="flex items-center gap-3 text-[11px] font-extrabold uppercase tracking-[.2em] text-[#a3ed72]"><span className="h-px w-6 bg-current"/>Privacidade desde o princípio</p><h2 className="mt-6 font-serif text-[clamp(2.8rem,4.5vw,4.2rem)] font-normal leading-[1.02] tracking-[-.045em]">Sua saúde é pessoal.<br/><em className="font-normal text-[#a3ed72]">Seus dados também.</em></h2><p className="mt-6 max-w-xl text-base leading-8 text-[#b5c8c2]">Você controla o que registra, quem pode acessar e quando deseja excluir. Fotos e informações sensíveis são privadas por padrão.</p><div className="mt-8 flex flex-wrap gap-5 text-xs text-white/80"><span className="flex gap-2"><ShieldCheck className="size-4 text-[#a3ed72]"/>Controle dos seus dados</span><span className="flex gap-2"><Check className="size-4 text-[#a3ed72]"/>Privacidade por padrão</span></div><Link to="/privacy" className="mt-9 inline-flex h-12 items-center gap-3 rounded-full bg-white px-6 text-sm font-extrabold text-[#062a29]">Conheça nossa abordagem <ArrowRight className="size-4"/></Link></div></div></section>
+
+        <section className="bg-[#a3ed72] px-5 py-16 sm:px-8 lg:px-12 lg:py-20"><div className="mx-auto flex max-w-[1300px] flex-col items-start justify-between gap-9 lg:flex-row lg:items-end"><div><p className="text-[9px] font-extrabold tracking-[.2em]">COMECE PELO QUE IMPORTA</p><h2 className="mt-5 font-serif text-[clamp(2.7rem,4.2vw,4rem)] font-normal leading-none tracking-[-.045em]">Seu próximo capítulo<br/>começa com clareza.</h2><p className="mt-5 max-w-2xl text-sm leading-7 text-[#365246]">Crie sua conta e monte uma jornada que respeita seu ritmo, seus objetivos e a sua realidade.</p></div><Link to={primaryTo} search={primarySearch} className="inline-flex h-13 shrink-0 items-center gap-3 rounded-full bg-[#062a29] px-7 text-sm font-extrabold text-white">{isLoggedIn?"Abrir meu painel":"Começar gratuitamente"}<ArrowRight className="size-4"/></Link></div></section>
+      </main>
+
+      <footer className="bg-[#041f1e] px-5 py-10 text-white sm:px-8 lg:px-12"><div className="mx-auto grid max-w-[1500px] gap-7 md:grid-cols-[1fr_auto] md:items-center"><Logo/><nav className="flex flex-wrap gap-6 text-xs text-white/60" aria-label="Rodapé"><Link to="/privacy">Privacidade</Link><Link to="/terms">Termos</Link><Link to="/help">Ajuda</Link><Link to="/admin/login">Área administrativa</Link></nav><p className="border-t border-white/10 pt-6 text-[10px] text-white/40 md:col-span-2">© 2026 BodyMetrica. Informações de apoio, não substituem orientação profissional.</p></div></footer>
     </div>
   );
 }
