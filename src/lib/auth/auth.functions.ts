@@ -80,15 +80,15 @@ export const login = createServerFn({ method: "POST" })
 
     const isLicensed = profile?.license_status === 'active';
     
-    // Check if user is admin
-    const { data: roleData } = await supabase
+    // Resolve administrative roles independently from consumer licensing.
+    const { data: roleRows } = await supabase
       .from('user_roles')
       .select('role')
-      .eq('user_id', authData.user.id)
-      .eq('role', 'admin')
-      .single();
-    
-    const role = roleData ? "admin" : "user";
+      .eq('user_id', authData.user.id);
+
+    const role = roleRows
+      ?.map((row) => String(row.role))
+      .find((value) => value === 'super_admin' || value === 'admin') || 'user';
 
     return {
       success: true,
@@ -149,7 +149,7 @@ export const requestPasswordReset = createServerFn({ method: "POST" })
     // Determine the base URL for the reset link
     const origin = process.env['LOVABLE_APP_DOMAIN'] 
       ? `https://${process.env['LOVABLE_APP_DOMAIN']}`
-      : 'http://localhost:8080';
+      : 'https://bodymetrica-fj.lovable.app';
       
     const { error } = await supabase.auth.resetPasswordForEmail(data.email, {
       redirectTo: `${origin}/auth?reset=true`,
