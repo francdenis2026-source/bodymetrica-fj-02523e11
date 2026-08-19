@@ -51,7 +51,7 @@ function Index() {
   }, []);
 
   return (
-    <div className="home-page min-h-[100dvh] bg-background text-foreground">
+    <div className="home-page min-h-[100dvh] bg-background text-foreground" style={{ height: "auto", minHeight: "100dvh", overflow: "visible" }}>
       <header className="relative z-50 border-b border-border/90 bg-background/96 shadow-[0_1px_0_rgba(0,0,0,.03)] backdrop-blur-xl">
         <div className="container mx-auto flex h-16 max-w-7xl items-center justify-between px-4 md:px-6">
           <Link to="/" aria-label="Ir para a página inicial" className="group flex min-h-11 items-center gap-3 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background">
@@ -69,12 +69,12 @@ function Index() {
         </div>
       </header>
 
-      <main className="relative isolate min-h-[calc(100dvh-4rem)] overflow-hidden">
+      <main className="relative isolate min-h-[calc(100dvh-4rem)] overflow-visible" style={{ height: "auto", minHeight: "calc(100dvh - 4rem)", overflow: "visible" }}>
         <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=1800" alt="" aria-hidden="true" className="absolute inset-0 -z-30 h-full w-full object-cover object-center saturate-[.88] dark:saturate-[.72]" />
         <div className="absolute inset-0 -z-20 bg-background/58 dark:bg-background/64" />
         <div className="absolute inset-0 -z-10 bg-gradient-to-r from-background via-background/90 to-background/42 dark:from-background dark:via-background/94 dark:to-background/56" />
 
-        <section className="container mx-auto flex min-h-[calc(100dvh-4rem)] max-w-7xl flex-col px-4 md:px-6">
+        <section className="container mx-auto flex min-h-[calc(100dvh-4rem)] max-w-7xl flex-col px-4 md:px-6" style={{ height: "auto", minHeight: "calc(100dvh - 4rem)", overflow: "visible" }}>
           <div className="grid flex-1 items-center gap-7 py-6 md:py-8 lg:grid-cols-[1.06fr_0.94fr] lg:gap-10 lg:py-7">
             <div className="max-w-2xl rounded-[1.75rem] border border-border/90 bg-background/88 p-5 shadow-[0_18px_60px_rgba(0,0,0,.08)] backdrop-blur-xl sm:p-6 lg:p-7 dark:bg-card/78 dark:shadow-[0_18px_60px_rgba(0,0,0,.28)]">
               {isLoading ? (
