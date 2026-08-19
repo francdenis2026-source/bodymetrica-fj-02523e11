@@ -213,31 +213,82 @@
     transition: background-color .25s ease, border-color .25s ease, color .25s ease, box-shadow .25s ease;
   }
 
-  /* Compatibility layer for screens that historically hardcoded dark surfaces. */
-  html:not(.dark) .bg-\[\#06090d\],
-  html:not(.dark) .bg-\[\#05080c\] {
-    background-color: var(--background) !important;
+  /* ---------------------------------------------------------------
+     Light-mode legibility layer.
+     Screens historically authored with hardcoded dark surfaces are
+     remapped to semantic tokens when the light theme is active.
+     Anything inside `.on-media` (text sitting on top of a photo or a
+     dark gradient) keeps its original high-contrast styling.
+     --------------------------------------------------------------- */
+  html:not(.dark) [class*="text-white"]:not(.on-media):not(.on-media *) {
+    color: var(--foreground);
   }
 
-  html:not(.dark) .text-white { color: var(--foreground) !important; }
-  html:not(.dark) .text-white\/55,
-  html:not(.dark) .text-white\/50,
-  html:not(.dark) .text-white\/45,
-  html:not(.dark) .text-white\/40,
-  html:not(.dark) .text-white\/35,
-  html:not(.dark) .text-white\/30,
-  html:not(.dark) .text-white\/20 { color: var(--muted-foreground) !important; }
+  html:not(.dark) [class*="text-white/"]:not(.on-media):not(.on-media *),
+  html:not(.dark) [class*="text-white\\/"]:not(.on-media):not(.on-media *) {
+    color: var(--muted-foreground);
+  }
 
-  html:not(.dark) .border-white\/10,
-  html:not(.dark) .border-white\/15,
-  html:not(.dark) .border-white\/5,
-  html:not(.dark) .border-white\/\[\.06\] { border-color: var(--border) !important; }
+  html:not(.dark) [class*="border-white"]:not(.on-media):not(.on-media *) {
+    border-color: var(--border);
+  }
 
-  html:not(.dark) .bg-white\/\[\.035\],
-  html:not(.dark) .bg-white\/\[\.04\],
-  html:not(.dark) .bg-white\/5,
-  html:not(.dark) .bg-white\/10 { background-color: color-mix(in oklch, var(--card) 92%, var(--muted)) !important; }
+  html:not(.dark) [class*="bg-white/"]:not(.on-media):not(.on-media *),
+  html:not(.dark) [class*="bg-white\\/"]:not(.on-media):not(.on-media *),
+  html:not(.dark) [class*="bg-white\\["]:not(.on-media):not(.on-media *) {
+    background-color: color-mix(in oklch, var(--card) 88%, var(--muted));
+  }
+
+  html:not(.dark) [class*="bg-black/"]:not(.on-media):not(.on-media *),
+  html:not(.dark) [class*="bg-black\\/"]:not(.on-media):not(.on-media *) {
+    background-color: color-mix(in oklch, var(--muted) 70%, var(--card));
+  }
+
+  /* Hardcoded near-black hex backgrounds (auth, admin, legacy modules). */
+  html:not(.dark) [class*="bg-[#0"]:not(.on-media):not(.on-media *) {
+    background-color: var(--background);
+  }
+
+  html:not(.dark) [class*="bg-[#0"][class*="/9"]:not(.on-media):not(.on-media *),
+  html:not(.dark) [class*="bg-[#0"][class*="rounded"]:not(.on-media):not(.on-media *) {
+    background-color: var(--card);
+    color: var(--card-foreground);
+  }
+
+  /* Inputs keep a solid, readable field in light mode. */
+  html:not(.dark) input:not(.on-media *),
+  html:not(.dark) textarea:not(.on-media *) {
+    color: var(--foreground);
+  }
+
+  html:not(.dark) input::placeholder,
+  html:not(.dark) textarea::placeholder {
+    color: color-mix(in oklch, var(--muted-foreground) 85%, transparent);
+  }
+
+  /* Media overlays: lighter and less muddy in light mode so the photo
+     stays visible, deeper in dark mode to preserve the night aesthetic. */
+  .on-media {
+    color: oklch(0.99 0 0);
+  }
+
+  .media-scrim {
+    background: linear-gradient(to top, oklch(0.12 0.02 245 / 0.82), oklch(0.12 0.02 245 / 0.34) 55%, oklch(0.12 0.02 245 / 0.18));
+  }
+
+  .dark .media-scrim {
+    background: linear-gradient(to top, oklch(0.04 0.01 245 / 0.9), oklch(0.04 0.01 245 / 0.45) 55%, oklch(0.04 0.01 245 / 0.25));
+  }
+
+  html:not(.dark) .on-media img {
+    filter: saturate(1.06) brightness(1.02);
+  }
+
+  .dark .on-media img {
+    filter: saturate(0.96) brightness(0.9);
+  }
 }
+
 
 @utility surface {
   background-color: var(--card);
