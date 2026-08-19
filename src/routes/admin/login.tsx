@@ -117,7 +117,7 @@ function AdminLoginPage() {
                   Controle do sistema em um ambiente reservado.
                 </h1>
                 <p className="mt-4 max-w-lg text-sm leading-6 text-white/68 sm:text-base sm:leading-7">
-                  Um ponto único para acessar operações administrativas, governança de contas e recursos institucionais do Body Métrica FJ.
+                  Acesso exclusivo para administradores previamente autorizados. Esta página não permite criação de contas nem solicitação de privilégios.
                 </p>
 
                 <div className="mt-6 grid gap-2.5 sm:grid-cols-3 lg:mt-8">
@@ -152,17 +152,17 @@ function AdminLoginPage() {
                     <h2 className="mt-1 font-display text-2xl font-semibold tracking-[-0.035em] sm:text-3xl">Identifique-se para continuar</h2>
                   </div>
                 </div>
-                <p className="mt-4 text-sm leading-6 text-white/50">Somente contas previamente autorizadas podem abrir o painel institucional.</p>
+                <p className="mt-4 text-sm leading-6 text-white/50">Insira somente as credenciais de uma conta administrativa já autorizada no sistema.</p>
               </div>
 
               <form onSubmit={handleLogin} className="mt-5 space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="institutional-email" className="text-xs font-medium text-white/72">E-mail institucional</Label>
+                  <Label htmlFor="institutional-email" className="text-xs font-medium text-white/72">E-mail do administrador</Label>
                   <Input
                     id="institutional-email"
                     type="email"
                     autoComplete="username"
-                    placeholder="conta autorizada"
+                    placeholder="administrador@dominio.com"
                     value={email}
                     onChange={(event) => setEmail(event.target.value)}
                     required
@@ -201,15 +201,9 @@ function AdminLoginPage() {
                 </Button>
               </form>
 
-              <div className="mt-5 grid gap-2.5 sm:grid-cols-2">
-                <div className="rounded-xl border border-white/8 bg-white/[0.025] p-3.5">
-                  <div className="flex items-center gap-2 text-xs font-semibold text-white/72"><ShieldCheck size={15} className="text-emerald-300" /> Autorização por papel</div>
-                  <p className="mt-1.5 text-[11px] leading-4 text-white/38">A conta precisa estar registrada como admin ou super_admin.</p>
-                </div>
-                <div className="rounded-xl border border-white/8 bg-white/[0.025] p-3.5">
-                  <div className="flex items-center gap-2 text-xs font-semibold text-white/72"><Fingerprint size={15} className="text-sky-300" /> Sessão verificada</div>
-                  <p className="mt-1.5 text-[11px] leading-4 text-white/38">A entrada é confirmada pelo provedor de autenticação e pelo banco.</p>
-                </div>
+              <div className="mt-5 rounded-xl border border-white/8 bg-white/[0.025] p-3.5">
+                <div className="flex items-center gap-2 text-xs font-semibold text-white/72"><ShieldCheck size={15} className="text-emerald-300" /> Acesso somente por autorização prévia</div>
+                <p className="mt-1.5 text-[11px] leading-4 text-white/38">Não existe cadastro público de administrador. A conta precisa estar registrada como admin ou super_admin antes do login.</p>
               </div>
 
               <p className="mt-5 text-center text-[10px] uppercase tracking-[0.11em] text-white/24">Ambiente reservado · acesso monitorado</p>
