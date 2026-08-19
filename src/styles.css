@@ -58,7 +58,7 @@
 /* Otimização de compacidade e profissionalismo */
 @layer base {
   html {
-    font-size: 15px; /* Ligeiramente menor para visual compacto */
+    font-size: 15px;
   }
 
   body {
@@ -159,11 +159,10 @@
 
   body {
     background-color: var(--color-background);
-    background-image: 
+    background-image:
       radial-gradient(at 0% 0%, oklch(var(--primary) / 0.1) 0px, transparent 50%),
       radial-gradient(at 100% 0%, oklch(var(--success) / 0.05) 0px, transparent 50%),
       radial-gradient(at 50% 100%, oklch(var(--primary) / 0.03) 0px, transparent 50%);
-
     background-attachment: fixed;
     color: var(--color-foreground);
     font-family: var(--font-sans);
@@ -183,6 +182,15 @@
   :focus-visible {
     outline: 2px solid var(--color-ring);
     outline-offset: 2px;
+  }
+
+  /* Atualiza somente as imagens da experiência de autenticação sem tocar na lógica da rota. */
+  img[src*="photo-1571019613454-1cb2f99b2d8b"] {
+    content: url("https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&q=84&w=2000");
+  }
+
+  img[src*="photo-1571019614242-c5c5dee9f50b"] {
+    content: url("https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?auto=format&fit=crop&q=88&w=1200");
   }
 }
 
