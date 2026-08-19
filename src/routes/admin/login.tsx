@@ -100,7 +100,7 @@ function AdminLoginPage() {
 
       <div className="relative z-10 flex min-h-[100dvh] items-center justify-center px-4 py-4 sm:px-6">
         <div className="grid w-full max-w-[980px] overflow-hidden rounded-[1.65rem] border border-white/12 bg-[#08111a]/98 shadow-[0_30px_90px_rgba(0,0,0,0.56)] lg:h-[590px] lg:grid-cols-[0.92fr_1.08fr]">
-          <section className="relative min-h-[260px] overflow-hidden border-b border-white/10 lg:min-h-0 lg:border-b-0 lg:border-r">
+          <section className="on-media relative min-h-[260px] overflow-hidden border-b border-white/10 lg:min-h-0 lg:border-b-0 lg:border-r">
             <img
               src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=88&w=1400"
               alt="Ambiente tecnológico profissional para gestão do sistema"

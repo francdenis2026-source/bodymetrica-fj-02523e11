@@ -55,7 +55,7 @@ export function AccessGate({
       <div className="absolute inset-0 bg-gradient-to-br from-background/96 via-background/82 to-background/48 dark:from-background/98 dark:via-background/90 dark:to-background/62" />
 
       <div className="relative z-10 grid w-full max-w-4xl overflow-hidden rounded-[1.75rem] border border-border/80 bg-background/96 shadow-2xl shadow-black/15 md:grid-cols-[0.95fr_1.05fr]">
-        <section className="relative min-h-[300px] overflow-hidden md:min-h-[430px]">
+        <section className="on-media relative min-h-[300px] overflow-hidden md:min-h-[430px]">
           <img
             src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?auto=format&fit=crop&q=86&w=1200"
             alt="Pessoa treinando com foco e acompanhamento"

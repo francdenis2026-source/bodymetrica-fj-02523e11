@@ -66,7 +66,7 @@ function RecoverPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center relative p-4 md:p-8 bg-[#050505] overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center relative p-4 md:p-8 bg-background overflow-hidden">
       {/* Dynamic Background Elements */}
       <div className="absolute inset-0 z-0">
         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/20 blur-[120px] rounded-full animate-pulse" />
@@ -97,7 +97,7 @@ function RecoverPage() {
         </div>
 
         {/* Main "Window" Container */}
-        <div className="w-full max-h-[85vh] bg-[#0A0A0A]/80 backdrop-blur-3xl border border-white/10 rounded-[2.5rem] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.8)] overflow-hidden flex flex-col animate-in fade-in zoom-in-95 duration-500">
+        <div className="w-full max-h-[85vh] bg-card/90 backdrop-blur-3xl border border-white/10 rounded-[2.5rem] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.8)] overflow-hidden flex flex-col animate-in fade-in zoom-in-95 duration-500">
           {/* Decorative Window Top Bar */}
           <div className="h-10 bg-white/[0.03] border-b border-white/5 flex items-center justify-between px-6">
             <div className="flex gap-1.5">

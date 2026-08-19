@@ -127,7 +127,7 @@ function RegisterPage() {
 
       <div className="relative z-10 mx-auto flex min-h-[100dvh] max-w-6xl items-center px-4 py-6 md:px-6">
         <div className="grid w-full overflow-hidden rounded-[2rem] border border-border/80 bg-background/96 shadow-2xl lg:grid-cols-[0.72fr_1.28fr]">
-          <section className="relative hidden min-h-[760px] overflow-hidden lg:block">
+          <section className="on-media relative hidden min-h-[760px] overflow-hidden lg:block">
             <img src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&q=88&w=1400" alt="Pessoa em rotina de treino e bem-estar" className="absolute inset-0 h-full w-full object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/45 to-black/15" />
             <div className="relative flex h-full flex-col justify-between p-8 text-white">
