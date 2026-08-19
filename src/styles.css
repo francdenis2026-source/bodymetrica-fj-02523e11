@@ -224,8 +224,7 @@
     color: var(--foreground);
   }
 
-  html:not(.dark) [class*="text-white/"]:not(.on-media):not(.on-media *),
-  html:not(.dark) [class*="text-white\\/"]:not(.on-media):not(.on-media *) {
+  html:not(.dark) [class*="text-white/"]:not(.on-media):not(.on-media *) {
     color: var(--muted-foreground);
   }
 
@@ -234,13 +233,11 @@
   }
 
   html:not(.dark) [class*="bg-white/"]:not(.on-media):not(.on-media *),
-  html:not(.dark) [class*="bg-white\\/"]:not(.on-media):not(.on-media *),
-  html:not(.dark) [class*="bg-white\\["]:not(.on-media):not(.on-media *) {
+  html:not(.dark) [class*="bg-white["]:not(.on-media):not(.on-media *) {
     background-color: color-mix(in oklch, var(--card) 88%, var(--muted));
   }
 
-  html:not(.dark) [class*="bg-black/"]:not(.on-media):not(.on-media *),
-  html:not(.dark) [class*="bg-black\\/"]:not(.on-media):not(.on-media *) {
+  html:not(.dark) [class*="bg-black/"]:not(.on-media):not(.on-media *) {
     background-color: color-mix(in oklch, var(--muted) 70%, var(--card));
   }
 
