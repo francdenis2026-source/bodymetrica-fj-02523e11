@@ -146,29 +146,34 @@ function RootShell({ children }: { children: ReactNode }) {
   return (
     <html lang="pt-BR" suppressHydrationWarning>
       <head>
-        <HeadContent />
-      </head>
-      <body className="antialiased selection:bg-primary selection:text-primary-foreground" suppressHydrationWarning>
-        {children}
-        <Scripts />
         <script
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
                 try {
-                  const theme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-                  document.documentElement.classList.add(theme);
-                  const metaThemeColor = document.querySelector('meta[name="theme-color"]');
-                  if (metaThemeColor) {
-                    metaThemeColor.setAttribute('content', theme === 'dark' ? '#0a0a0a' : '#ffffff');
-                  }
+                  var stored = localStorage.getItem('bodymetrica_user_theme') || localStorage.getItem('theme');
+                  var theme = (stored === 'light' || stored === 'dark')
+                    ? stored
+                    : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+                  var root = document.documentElement;
+                  root.classList.remove('light', 'dark');
+                  root.classList.add(theme);
+                  root.style.colorScheme = theme;
+                  localStorage.setItem('bodymetrica_user_theme', theme);
+                  localStorage.setItem('theme', theme);
                 } catch (e) {}
               })();
             `,
           }}
         />
+        <HeadContent />
+      </head>
+      <body className="antialiased selection:bg-primary selection:text-primary-foreground" suppressHydrationWarning>
+        {children}
+        <Scripts />
       </body>
     </html>
+
   );
 }
 
