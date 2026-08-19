@@ -16,6 +16,7 @@ import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminLoginRouteImport } from './routes/admin/login'
 import { Route as AuthIndexRouteImport } from './routes/auth/index'
 import { Route as AuthRecoverRouteImport } from './routes/auth/recover'
+import { Route as AuthRegisterRouteImport } from './routes/auth/register'
 import { Route as AuthVerifyRouteImport } from './routes/auth/verify'
 import { Route as BodyIndexRouteImport } from './routes/body/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
@@ -66,6 +67,11 @@ const AuthIndexRoute = AuthIndexRouteImport.update({
 const AuthRecoverRoute = AuthRecoverRouteImport.update({
   id: '/auth/recover',
   path: '/auth/recover',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRegisterRoute = AuthRegisterRouteImport.update({
+  id: '/auth/register',
+  path: '/auth/register',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthVerifyRoute = AuthVerifyRouteImport.update({
@@ -154,6 +160,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteRouteWithChildren
   '/admin/login': typeof AdminLoginRoute
   '/auth/recover': typeof AuthRecoverRoute
+  '/auth/register': typeof AuthRegisterRoute
   '/auth/verify': typeof AuthVerifyRoute
   '/about/': typeof AboutIndexRoute
   '/admin/': typeof AdminIndexRoute
@@ -178,6 +185,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin/login': typeof AdminLoginRoute
   '/auth/recover': typeof AuthRecoverRoute
+  '/auth/register': typeof AuthRegisterRoute
   '/auth/verify': typeof AuthVerifyRoute
   '/about': typeof AboutIndexRoute
   '/admin': typeof AdminIndexRoute
@@ -204,6 +212,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteRouteWithChildren
   '/admin/login': typeof AdminLoginRoute
   '/auth/recover': typeof AuthRecoverRoute
+  '/auth/register': typeof AuthRegisterRoute
   '/auth/verify': typeof AuthVerifyRoute
   '/about/': typeof AboutIndexRoute
   '/admin/': typeof AdminIndexRoute
@@ -231,6 +240,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/admin/login'
     | '/auth/recover'
+    | '/auth/register'
     | '/auth/verify'
     | '/about/'
     | '/admin/'
@@ -255,6 +265,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin/login'
     | '/auth/recover'
+    | '/auth/register'
     | '/auth/verify'
     | '/about'
     | '/admin'
@@ -280,6 +291,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/admin/login'
     | '/auth/recover'
+    | '/auth/register'
     | '/auth/verify'
     | '/about/'
     | '/admin/'
@@ -305,6 +317,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRouteRoute: typeof AdminRouteRouteWithChildren
   AuthRecoverRoute: typeof AuthRecoverRoute
+  AuthRegisterRoute: typeof AuthRegisterRoute
   AuthVerifyRoute: typeof AuthVerifyRoute
   AboutIndexRoute: typeof AboutIndexRoute
   AuthIndexRoute: typeof AuthIndexRoute
@@ -374,6 +387,13 @@ declare module '@tanstack/react-router' {
       path: '/auth/recover'
       fullPath: '/auth/recover'
       preLoaderRoute: typeof AuthRecoverRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/register': {
+      id: '/auth/register'
+      path: '/auth/register'
+      fullPath: '/auth/register'
+      preLoaderRoute: typeof AuthRegisterRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth/verify': {
@@ -509,6 +529,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRouteRoute: AdminRouteRouteWithChildren,
   AuthRecoverRoute: AuthRecoverRoute,
+  AuthRegisterRoute: AuthRegisterRoute,
   AuthVerifyRoute: AuthVerifyRoute,
   AboutIndexRoute: AboutIndexRoute,
   AuthIndexRoute: AuthIndexRoute,
