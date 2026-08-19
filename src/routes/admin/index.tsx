@@ -1,802 +1,185 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from '@tanstack/react-router';
+import { useMemo, useState } from 'react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
-  Activity,
-  ArrowRight,
-  Calendar,
-  CheckCircle2,
-  Copy,
-  CreditCard,
-  Database,
-  Droplets,
-  Dumbbell,
-  ExternalLink,
-  Eye,
-  Filter,
-  Gauge,
-  History,
-  KeyRound,
-  LayoutDashboard,
-  Lock,
-  LogOut,
-  Pill,
-  Plus,
-  RefreshCw,
-  Search,
-  Server,
-  Settings,
-  ShieldCheck,
-  Sparkles,
-  Trash2,
-  UserRound,
-  Utensils,
-  Webhook,
-} from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useServerFn } from "@tanstack/react-start";
-import { toast } from "sonner";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+  Activity, BadgeDollarSign, Ban, BarChart3, CheckCircle2, CircleDollarSign, CreditCard,
+  Edit3, Eye, Image, KeyRound, LogOut, Mail, MoreHorizontal, Plus, RefreshCcw, Search,
+  ShieldCheck, Trash2, UserCog, Users, Wifi, XCircle,
+} from 'lucide-react';
+import { toast } from 'sonner';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription,
+  AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { SVGToast } from "@/components/ui/svg-toast";
-import { clearSession } from "@/lib/auth/auth.functions";
+  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
+} from '@/components/ui/table';
+import { supabase } from '@/integrations/supabase/client';
+import { clearSession } from '@/lib/auth/auth.functions';
 import {
-  generateLicenseKey,
-  getAdminSetting,
-  listAuditLogs,
-  listLicenses,
-  listWebhookEvents,
-  revokeLicense,
-  updateAdminSetting,
-} from "@/lib/monetization.functions";
-import { supabase } from "@/integrations/supabase/client";
+  createCustomer, deletePlan, deleteSponsorAd, getAdminOverview, listAccessLogs, listCustomers,
+  listPlans, listSales, listSponsorAds, savePlan, saveSponsorAd, sendCustomerPasswordReset,
+  setCustomerStatus, updateCustomer,
+} from '@/lib/admin-control';
+import { generateLicenseKey, listLicenses, revokeLicense } from '@/lib/monetization.functions';
+import { useServerFn } from '@tanstack/react-start';
 
-export const Route = createFileRoute("/admin/")({
-  component: AdminDashboard,
-});
+export const Route = createFileRoute('/admin/')({ component: AdminControlCenter });
 
-const PLATFORM_MODULES = [
-  { title: "Dashboard", description: "Visão do usuário e evolução geral", to: "/dashboard", icon: LayoutDashboard },
-  { title: "Perfil", description: "Dados cadastrais e objetivos", to: "/profile", icon: UserRound },
-  { title: "Composição", description: "Métricas e composição corporal", to: "/body", icon: Gauge },
-  { title: "Nutrição", description: "Plano e registros alimentares", to: "/nutrition", icon: Utensils },
-  { title: "Hidratação", description: "Metas e consumo de água", to: "/hydration", icon: Droplets },
-  { title: "Protocolos", description: "Suplementos e protocolos", to: "/supplements", icon: Pill },
-  { title: "Performance", description: "Treinos e acompanhamento", to: "/training", icon: Dumbbell },
-  { title: "Configurações", description: "Preferências e conta", to: "/settings", icon: Settings },
-];
+const money = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
+const date = (value?: string | null) => value ? new Date(value).toLocaleString('pt-BR') : '—';
 
-function AdminDashboard() {
+function AdminControlCenter() {
   const queryClient = useQueryClient();
-  const listLicensesFn = useServerFn(listLicenses);
   const generateLicenseFn = useServerFn(generateLicenseKey);
+  const listLicensesFn = useServerFn(listLicenses);
   const revokeLicenseFn = useServerFn(revokeLicense);
-  const updateSettingFn = useServerFn(updateAdminSetting);
-  const getSettingFn = useServerFn(getAdminSetting);
-  const listAuditLogsFn = useServerFn(listAuditLogs);
-  const listWebhookEventsFn = useServerFn(listWebhookEvents);
+  const [search, setSearch] = useState('');
+  const [customerDialog, setCustomerDialog] = useState<{ mode: 'create' | 'edit'; customer?: any } | null>(null);
+  const [planDialog, setPlanDialog] = useState<any | null>(null);
+  const [adDialog, setAdDialog] = useState<any | null>(null);
+  const [deleteCustomer, setDeleteCustomer] = useState<any | null>(null);
+  const [logoutOpen, setLogoutOpen] = useState(false);
 
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [mpAccessToken, setMpAccessToken] = useState("");
-  const [mpWebhookSecret, setMpWebhookSecret] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState<"all" | "active" | "unused" | "revoked">("all");
-  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
-  const [licenseToRevoke, setLicenseToRevoke] = useState<any>(null);
-  const [isSigningOut, setIsSigningOut] = useState(false);
+  const overview = useQuery({ queryKey: ['admin-overview'], queryFn: getAdminOverview, refetchInterval: 60000 });
+  const customers = useQuery({ queryKey: ['admin-customers'], queryFn: listCustomers });
+  const logs = useQuery({ queryKey: ['admin-access-logs'], queryFn: listAccessLogs });
+  const plans = useQuery({ queryKey: ['admin-plans'], queryFn: listPlans });
+  const sales = useQuery({ queryKey: ['admin-sales'], queryFn: listSales });
+  const ads = useQuery({ queryKey: ['admin-ads'], queryFn: listSponsorAds });
+  const licenses = useQuery({ queryKey: ['admin-licenses-control'], queryFn: () => listLicensesFn() });
 
-  const { data: licensesData, isLoading: isLoadingLicenses } = useQuery({
-    queryKey: ["admin-licenses"],
-    queryFn: () => listLicensesFn(),
-  });
+  const filteredCustomers = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    if (!q) return customers.data || [];
+    return (customers.data || []).filter((c: any) =>
+      [c.name, c.email, c.cpf, c.account_status, c.license_status].some((v) => String(v || '').toLowerCase().includes(q)),
+    );
+  }, [customers.data, search]);
 
-  const { data: auditData, isLoading: isLoadingAudit } = useQuery({
-    queryKey: ["admin-audit"],
-    queryFn: () => listAuditLogsFn(),
-  });
+  const refreshAll = () => queryClient.invalidateQueries({ queryKey: ['admin'] });
 
-  useEffect(() => {
-    getSettingFn({ data: "mercadopago_access_token" }).then((res) => {
-      if (res.success) setMpAccessToken(res.value || "");
-    });
-    getSettingFn({ data: "mercadopago_webhook_secret" }).then((res) => {
-      if (res.success) setMpWebhookSecret(res.value || "");
-    });
-  }, []);
-
-  const generateMutation = useMutation({
-    mutationFn: (days: number) => generateLicenseFn({ data: { expiresInDays: days } }),
-    onSuccess: (result) => {
-      if (result.success) {
-        toast.custom((t) => (
-          <SVGToast
-            type="success"
-            title="CHAVE GERADA"
-            message={`Nova licença: ${result.licenseKey}`}
-            onClose={() => toast.dismiss(t)}
-          />
-        ));
-        queryClient.invalidateQueries({ queryKey: ["admin-licenses"] });
-        queryClient.invalidateQueries({ queryKey: ["admin-audit"] });
-      } else {
-        toast.custom((t) => (
-          <SVGToast
-            type="error"
-            title="ERRO NA GERAÇÃO"
-            message={result.message}
-            onClose={() => toast.dismiss(t)}
-          />
-        ));
-      }
-      setIsGenerating(false);
-    },
-  });
-
-  const revokeMutation = useMutation({
-    mutationFn: (id: string) => revokeLicenseFn({ data: { licenseId: id, reason: "Revogação manual admin" } }),
-    onSuccess: (result) => {
-      setLicenseToRevoke(null);
-      if (result.success) {
-        toast.custom((t) => (
-          <SVGToast
-            type="success"
-            title="LICENÇA REVOGADA"
-            message={result.message}
-            onClose={() => toast.dismiss(t)}
-          />
-        ));
-        queryClient.invalidateQueries({ queryKey: ["admin-licenses"] });
-        queryClient.invalidateQueries({ queryKey: ["admin-audit"] });
-      } else {
-        toast.custom((t) => (
-          <SVGToast
-            type="error"
-            title="ERRO NA REVOGAÇÃO"
-            message={result.message}
-            onClose={() => toast.dismiss(t)}
-          />
-        ));
-      }
-    },
-  });
-
-  const updateTokenMutation = useMutation({
-    mutationFn: (value: string) => updateSettingFn({ data: { key: "mercadopago_access_token", value } }),
-    onSuccess: (res) => {
-      toast.custom((t) => (
-        <SVGToast
-          type={res.success ? "success" : "error"}
-          title={res.success ? "TOKEN ATUALIZADO" : "ERRO AO SALVAR"}
-          message={res.success ? "Credencial do Mercado Pago salva com sucesso." : res.message}
-          onClose={() => toast.dismiss(t)}
-        />
-      ));
-    },
-  });
-
-  const updateWebhookSecretMutation = useMutation({
-    mutationFn: (value: string) => updateSettingFn({ data: { key: "mercadopago_webhook_secret", value } }),
-    onSuccess: (res) => {
-      toast.custom((t) => (
-        <SVGToast
-          type={res.success ? "success" : "error"}
-          title={res.success ? "WEBHOOK CONFIGURADO" : "ERRO AO SALVAR"}
-          message={res.success ? "Secret de verificação salvo com sucesso." : res.message}
-          onClose={() => toast.dismiss(t)}
-        />
-      ));
-    },
-  });
-
-  const licenses = licensesData?.licenses || [];
-  const activeLicenses = licenses.filter((license: any) => license.status === "active").length;
-  const unusedLicenses = licenses.filter((license: any) => license.status === "unused").length;
-  const revokedLicenses = licenses.filter((license: any) => license.status === "revoked").length;
-  const recentAuditCount = (auditData?.logs || []).length;
-
-  const filteredLicenses = useMemo(() => {
-    const normalizedSearch = searchTerm.trim().toLowerCase();
-    return licenses.filter((license: any) => {
-      const matchesStatus = statusFilter === "all" || license.status === statusFilter;
-      const searchable = [
-        license.license_key,
-        license.profiles?.email,
-        license.profiles?.name,
-        license.profiles?.full_name,
-      ]
-        .filter(Boolean)
-        .join(" ")
-        .toLowerCase();
-      return matchesStatus && (!normalizedSearch || searchable.includes(normalizedSearch));
-    });
-  }, [licenses, searchTerm, statusFilter]);
-
-  const handleGenerate = (days: number) => {
-    setIsGenerating(true);
-    generateMutation.mutate(days);
-  };
-
-  const refreshAdminData = () => {
-    queryClient.invalidateQueries({ queryKey: ["admin-licenses"] });
-    queryClient.invalidateQueries({ queryKey: ["admin-audit"] });
-    queryClient.invalidateQueries({ queryKey: ["admin-webhooks"] });
-    toast.success("Dados administrativos atualizados.");
-  };
-
-  const copyLicense = async (licenseKey: string) => {
-    try {
-      await navigator.clipboard.writeText(licenseKey);
-      toast.success("Chave copiada.");
-    } catch {
-      toast.error("Não foi possível copiar a chave.");
-    }
-  };
-
-  const handleLogout = async () => {
-    setIsSigningOut(true);
-    try {
-      await supabase.auth.signOut();
-    } finally {
-      clearSession();
-      window.location.href = "/admin/login";
-    }
-  };
+  async function handleLogout() {
+    await supabase.auth.signOut();
+    clearSession();
+    window.location.href = '/admin/login';
+  }
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-background text-foreground">
-      <div className="pointer-events-none fixed inset-0">
-        <img
-          src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&q=86&w=2200"
-          alt=""
-          aria-hidden="true"
-          className="h-full w-full object-cover object-center opacity-[0.14]"
-        />
-        <div className="absolute inset-0 bg-gradient-to-br from-background via-background/96 to-primary/10" />
-        <div className="absolute -right-32 top-12 h-96 w-96 rounded-full bg-primary/10 blur-3xl" />
-        <div className="absolute -left-28 bottom-0 h-80 w-80 rounded-full bg-primary/5 blur-3xl" />
+    <div className="min-h-screen bg-[#06090d] text-white">
+      <div className="relative overflow-hidden border-b border-white/10">
+        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=82&w=2000" alt="" className="absolute inset-0 h-full w-full object-cover opacity-25" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#05080c] via-[#07111b]/95 to-[#07111b]/70" />
+        <div className="relative mx-auto max-w-[1600px] px-5 py-7 md:px-8 md:py-9">
+          <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+            <div className="max-w-3xl">
+              <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1 text-[11px] font-bold uppercase tracking-[.16em] text-cyan-300">
+                <ShieldCheck size={14} /> Central administrativa
+              </div>
+              <h1 className="mt-4 font-display text-3xl font-semibold tracking-[-.04em] md:text-5xl">Controle total da operação Body Métrica FJ</h1>
+              <p className="mt-3 max-w-2xl text-sm leading-6 text-white/55">Contas, acessos, planos, vendas, licenças, receita, patrocínios e auditoria em uma única janela administrativa.</p>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <Button variant="outline" onClick={refreshAll} className="border-white/15 bg-black/25 text-white hover:bg-white/10"><RefreshCcw size={15} className="mr-2" />Atualizar</Button>
+              <Button variant="outline" onClick={() => setLogoutOpen(true)} className="border-red-400/20 bg-red-500/10 text-red-300 hover:bg-red-500/20"><LogOut size={15} className="mr-2" />Sair</Button>
+            </div>
+          </div>
+
+          <div className="mt-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-8">
+            <Metric icon={<Users size={17} />} label="Clientes" value={overview.data?.customers ?? 0} />
+            <Metric icon={<Wifi size={17} />} label="Online agora" value={overview.data?.online ?? 0} accent />
+            <Metric icon={<UserCog size={17} />} label="Novos no mês" value={overview.data?.createdThisMonth ?? 0} />
+            <Metric icon={<CheckCircle2 size={17} />} label="Licenças ativas" value={overview.data?.activeLicenses ?? 0} />
+            <Metric icon={<KeyRound size={17} />} label="Keys livres" value={overview.data?.availableKeys ?? 0} />
+            <Metric icon={<CreditCard size={17} />} label="Planos vendidos" value={overview.data?.plansSold ?? 0} />
+            <Metric icon={<BarChart3 size={17} />} label="Planos ativos" value={overview.data?.activePlans ?? 0} />
+            <Metric icon={<CircleDollarSign size={17} />} label="Receita" value={money.format(overview.data?.revenue ?? 0)} moneyValue />
+          </div>
+        </div>
       </div>
 
-      <div className="relative z-10 mx-auto w-full max-w-[1600px] space-y-6 px-4 py-4 sm:px-6 md:space-y-8 md:px-8 md:py-7 xl:px-10">
-        <section className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-card/78 shadow-2xl shadow-black/20 backdrop-blur-2xl">
-          <img
-            src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=88&w=2000"
-            alt="Academia moderna"
-            className="absolute inset-0 h-full w-full object-cover object-center opacity-30"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/90 to-background/45" />
-          <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-transparent" />
+      <main className="mx-auto max-w-[1600px] px-4 py-5 md:px-8 md:py-7">
+        <Tabs defaultValue="customers" className="space-y-5">
+          <TabsList className="flex h-auto w-full flex-wrap justify-start gap-1 rounded-2xl border border-white/10 bg-white/[.035] p-1.5">
+            <Tab value="customers" label="Contas" icon={<Users size={14} />} />
+            <Tab value="finance" label="Financeiro" icon={<BadgeDollarSign size={14} />} />
+            <Tab value="plans" label="Planos" icon={<CreditCard size={14} />} />
+            <Tab value="licenses" label="Keys" icon={<KeyRound size={14} />} />
+            <Tab value="ads" label="Patrocínios" icon={<Image size={14} />} />
+            <Tab value="logs" label="Logs de acesso" icon={<Activity size={14} />} />
+          </TabsList>
 
-          <div className="relative grid min-h-[340px] gap-8 p-6 md:grid-cols-[1.2fr_0.8fr] md:p-9 lg:p-11">
-            <div className="flex max-w-3xl flex-col justify-between gap-8">
-              <div>
-                <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.18em] text-primary">
-                  <ShieldCheck size={14} />
-                  Central administrativa
-                </div>
-                <h1 className="mt-5 max-w-3xl font-display text-4xl font-semibold leading-[0.98] tracking-[-0.045em] sm:text-5xl lg:text-6xl">
-                  Controle a plataforma inteira em um só lugar.
-                </h1>
-                <p className="mt-5 max-w-2xl text-sm leading-6 text-muted-foreground sm:text-base">
-                  Licenças, auditoria, pagamentos, webhooks e acesso rápido aos módulos do Body Métrica FJ em uma visão operacional única.
-                </p>
-              </div>
-
-              <div className="flex flex-wrap gap-2.5">
-                <Button onClick={() => handleGenerate(365)} disabled={isGenerating} className="h-11 rounded-xl px-5 font-semibold">
-                  <Plus size={16} className="mr-2" /> Gerar licença anual
-                </Button>
-                <Button onClick={() => handleGenerate(30)} disabled={isGenerating} variant="secondary" className="h-11 rounded-xl px-5 font-semibold">
-                  <KeyRound size={16} className="mr-2" /> Gerar 30 dias
-                </Button>
-                <Button onClick={refreshAdminData} variant="outline" className="h-11 rounded-xl bg-background/55 px-4 font-semibold backdrop-blur">
-                  <RefreshCw size={16} className="mr-2" /> Atualizar dados
-                </Button>
-              </div>
-            </div>
-
-            <div className="flex items-end md:justify-end">
-              <div className="w-full max-w-sm rounded-[1.5rem] border border-white/10 bg-black/35 p-5 backdrop-blur-xl">
-                <div className="flex items-center justify-between gap-3">
-                  <div>
-                    <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/50">Status operacional</p>
-                    <p className="mt-1 text-lg font-semibold text-white">Sistema disponível</p>
-                  </div>
-                  <div className="flex size-11 items-center justify-center rounded-2xl bg-emerald-500/15 text-emerald-400">
-                    <CheckCircle2 size={21} />
-                  </div>
-                </div>
-                <div className="mt-5 grid grid-cols-2 gap-2">
-                  <HeroMetric label="Licenças ativas" value={activeLicenses.toString()} />
-                  <HeroMetric label="Eventos de auditoria" value={recentAuditCount.toString()} />
-                </div>
-                <div className="mt-4 flex items-center gap-2 text-[11px] text-white/50">
-                  <Server size={13} className="text-primary" />
-                  Supabase + painel administrativo sincronizados
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
-          <MetricCard title="Total de licenças" value={licenses.length.toString()} description="Base completa" icon={KeyRound} />
-          <MetricCard title="Ativas" value={activeLicenses.toString()} description="Acesso liberado" icon={ShieldCheck} emphasis="success" />
-          <MetricCard title="Disponíveis" value={unusedLicenses.toString()} description="Prontas para ativação" icon={History} />
-          <MetricCard title="Revogadas" value={revokedLicenses.toString()} description="Sem acesso" icon={Lock} emphasis="danger" />
-          <MetricCard title="Auditoria" value={recentAuditCount.toString()} description="Eventos carregados" icon={Activity} />
-        </section>
-
-        <section className="rounded-[1.75rem] border border-border/70 bg-card/72 p-5 shadow-xl shadow-black/5 backdrop-blur-xl md:p-6">
-          <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-            <div>
-              <div className="flex items-center gap-2 text-primary">
-                <Sparkles size={17} />
-                <span className="text-[11px] font-bold uppercase tracking-[0.16em]">Central da plataforma</span>
-              </div>
-              <h2 className="mt-2 font-display text-2xl font-semibold tracking-tight">Acesso rápido a todos os módulos</h2>
-              <p className="mt-1 text-sm text-muted-foreground">Abra qualquer área para conferência operacional sem perder o contexto administrativo.</p>
-            </div>
-            <Button asChild variant="outline" className="h-10 rounded-xl bg-background/60">
-              <Link to="/" target="_blank">
-                Ver site <ExternalLink size={14} className="ml-2" />
-              </Link>
-            </Button>
-          </div>
-
-          <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {PLATFORM_MODULES.map((module) => {
-              const Icon = module.icon;
-              return (
-                <Link
-                  key={module.to}
-                  to={module.to as any}
-                  className="group rounded-2xl border border-border/65 bg-background/55 p-4 transition-all hover:-translate-y-0.5 hover:border-primary/35 hover:bg-primary/[0.04] hover:shadow-lg"
-                >
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary transition-transform group-hover:scale-105">
-                      <Icon size={18} />
-                    </div>
-                    <ArrowRight size={15} className="mt-1 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary" />
-                  </div>
-                  <h3 className="mt-4 text-sm font-semibold">{module.title}</h3>
-                  <p className="mt-1 text-xs leading-5 text-muted-foreground">{module.description}</p>
-                </Link>
-              );
-            })}
-          </div>
-        </section>
-
-        <Tabs defaultValue="licenses" className="space-y-4">
-          <div className="overflow-x-auto pb-1">
-            <TabsList className="h-auto min-w-max rounded-2xl border border-border/70 bg-card/80 p-1.5 backdrop-blur-xl">
-              <TabsTrigger value="licenses" className="rounded-xl px-4 py-2.5 text-xs font-semibold">Licenças</TabsTrigger>
-              <TabsTrigger value="audit" className="rounded-xl px-4 py-2.5 text-xs font-semibold">Auditoria</TabsTrigger>
-              <TabsTrigger value="integrations" className="rounded-xl px-4 py-2.5 text-xs font-semibold">Integrações</TabsTrigger>
-              <TabsTrigger value="webhooks" className="rounded-xl px-4 py-2.5 text-xs font-semibold">Webhooks</TabsTrigger>
-            </TabsList>
-          </div>
-
-          <TabsContent value="licenses" className="mt-0">
-            <Card className="overflow-hidden rounded-[1.75rem] border-border/70 bg-card/78 shadow-xl shadow-black/5 backdrop-blur-xl">
-              <CardHeader className="gap-5 border-b border-border/60 p-5 md:p-6">
-                <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-                  <div>
-                    <CardTitle className="font-display text-2xl font-semibold">Gerenciamento de licenças</CardTitle>
-                    <CardDescription className="mt-1">Pesquise, filtre, copie ou revogue chaves de acesso.</CardDescription>
-                  </div>
-                  <div className="flex flex-col gap-2 sm:flex-row">
-                    <div className="relative min-w-[240px]">
-                      <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
-                      <Input
-                        value={searchTerm}
-                        onChange={(event) => setSearchTerm(event.target.value)}
-                        placeholder="Buscar chave, nome ou e-mail"
-                        className="h-10 rounded-xl bg-background/70 pl-9"
-                      />
-                    </div>
-                    <div className="flex items-center gap-1 rounded-xl border border-border bg-background/70 p-1">
-                      <Filter size={14} className="ml-2 text-muted-foreground" />
-                      {(["all", "active", "unused", "revoked"] as const).map((status) => (
-                        <button
-                          key={status}
-                          onClick={() => setStatusFilter(status)}
-                          className={`rounded-lg px-2.5 py-1.5 text-[10px] font-semibold transition-colors ${statusFilter === status ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}
-                        >
-                          {status === "all" ? "Todas" : status === "active" ? "Ativas" : status === "unused" ? "Livres" : "Revogadas"}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent className="p-0">
-                {isLoadingLicenses ? (
-                  <LoadingState label="Carregando licenças" />
-                ) : (
-                  <div className="overflow-x-auto">
-                    <Table>
-                      <TableHeader>
-                        <TableRow className="hover:bg-transparent">
-                          <TableHead className="pl-6 text-[10px] font-bold uppercase tracking-wider">Chave</TableHead>
-                          <TableHead className="text-[10px] font-bold uppercase tracking-wider">Status</TableHead>
-                          <TableHead className="text-[10px] font-bold uppercase tracking-wider">Usuário</TableHead>
-                          <TableHead className="text-[10px] font-bold uppercase tracking-wider">Expiração</TableHead>
-                          <TableHead className="pr-6 text-right text-[10px] font-bold uppercase tracking-wider">Ações</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {filteredLicenses.map((license: any) => (
-                          <TableRow key={license.id} className="border-border/50">
-                            <TableCell className="pl-6">
-                              <div className="flex items-center gap-2">
-                                <span className="max-w-[220px] truncate font-mono text-xs font-semibold text-primary">{license.license_key}</span>
-                                <button onClick={() => copyLicense(license.license_key)} className="rounded-md p-1 text-muted-foreground hover:bg-muted hover:text-foreground" title="Copiar chave">
-                                  <Copy size={13} />
-                                </button>
-                              </div>
-                            </TableCell>
-                            <TableCell><LicenseStatus status={license.status} /></TableCell>
-                            <TableCell>
-                              {license.profiles ? (
-                                <div>
-                                  <p className="text-sm font-medium">{license.profiles.name || license.profiles.full_name || "Usuário"}</p>
-                                  <p className="text-[11px] text-muted-foreground">{license.profiles.email || "Sem e-mail"}</p>
-                                </div>
-                              ) : (
-                                <span className="text-xs text-muted-foreground">Não vinculada</span>
-                              )}
-                            </TableCell>
-                            <TableCell>
-                              <div className="flex items-center gap-1.5 text-xs">
-                                <Calendar size={13} className="text-muted-foreground" />
-                                {license.expires_at ? format(new Date(license.expires_at), "dd MMM yyyy", { locale: ptBR }) : "Vitalícia"}
-                              </div>
-                            </TableCell>
-                            <TableCell className="pr-6 text-right">
-                              {license.status !== "revoked" && (
-                                <Button variant="ghost" size="sm" className="h-8 rounded-lg text-destructive hover:bg-destructive/10 hover:text-destructive" onClick={() => setLicenseToRevoke(license)}>
-                                  <Trash2 size={14} className="mr-1.5" /> Revogar
-                                </Button>
-                              )}
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                        {filteredLicenses.length === 0 && (
-                          <TableRow>
-                            <TableCell colSpan={5} className="h-28 text-center text-sm text-muted-foreground">Nenhuma licença encontrada com os filtros atuais.</TableCell>
-                          </TableRow>
-                        )}
-                      </TableBody>
-                    </Table>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+          <TabsContent value="customers" className="space-y-4">
+            <SectionTitle title="Gerenciamento de contas" description="Cadastre, edite, bloqueie, desative e recupere acessos dos clientes." action={<Button onClick={() => setCustomerDialog({ mode: 'create' })}><Plus size={15} className="mr-2" />Criar conta</Button>} />
+            <div className="relative max-w-md"><Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/35" /><Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Buscar nome, e-mail, CPF ou status..." className="border-white/10 bg-white/[.04] pl-9" /></div>
+            <AdminTable>
+              <TableHeader><TableRow className="border-white/10"><TH>Cliente</TH><TH>Status</TH><TH>Licença</TH><TH>Última atividade</TH><TH>Cadastro</TH><TH className="text-right">Ações</TH></TableRow></TableHeader>
+              <TableBody>{filteredCustomers.map((c: any) => <TableRow key={c.id} className="border-white/[.06] hover:bg-white/[.03]"><TableCell><div className="font-semibold">{c.name || 'Sem nome'}</div><div className="text-xs text-white/40">{c.email}</div></TableCell><TableCell><StatusBadge value={c.account_status || 'active'} /></TableCell><TableCell><StatusBadge value={c.license_status || 'sem licença'} /></TableCell><TableCell className="text-xs text-white/55">{date(c.last_seen_at)}</TableCell><TableCell className="text-xs text-white/55">{date(c.created_at)}</TableCell><TableCell><div className="flex justify-end gap-1"><IconButton title="Editar" onClick={() => setCustomerDialog({ mode: 'edit', customer: c })}><Edit3 size={15} /></IconButton><IconButton title="Resetar senha" onClick={async () => { try { await sendCustomerPasswordReset(c.email); toast.success('Link de redefinição enviado.'); } catch (e: any) { toast.error(e.message); } }}><Mail size={15} /></IconButton><IconButton title={c.account_status === 'suspended' ? 'Reativar' : 'Suspender'} onClick={async () => { await setCustomerStatus(c.id, c.account_status === 'suspended' ? 'active' : 'suspended'); customers.refetch(); overview.refetch(); }}><Ban size={15} /></IconButton><IconButton title="Excluir/desativar" danger onClick={() => setDeleteCustomer(c)}><Trash2 size={15} /></IconButton></div></TableCell></TableRow>)}</TableBody>
+            </AdminTable>
           </TabsContent>
 
-          <TabsContent value="audit" className="mt-0">
-            <Card className="overflow-hidden rounded-[1.75rem] border-border/70 bg-card/78 shadow-xl shadow-black/5 backdrop-blur-xl">
-              <CardHeader className="border-b border-border/60 p-5 md:p-6">
-                <div className="flex items-center gap-3">
-                  <div className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary"><Activity size={18} /></div>
-                  <div>
-                    <CardTitle className="font-display text-2xl font-semibold">Trilha de auditoria</CardTitle>
-                    <CardDescription className="mt-1">Histórico de movimentações administrativas e de licença.</CardDescription>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent className="p-0">
-                {isLoadingAudit ? (
-                  <LoadingState label="Carregando auditoria" />
-                ) : (
-                  <div className="overflow-x-auto">
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead className="pl-6 text-[10px] font-bold uppercase">Ação</TableHead>
-                          <TableHead className="text-[10px] font-bold uppercase">Usuário afetado</TableHead>
-                          <TableHead className="text-[10px] font-bold uppercase">Responsável</TableHead>
-                          <TableHead className="text-[10px] font-bold uppercase">Data</TableHead>
-                          <TableHead className="pr-6 text-[10px] font-bold uppercase">Detalhes</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {(auditData?.logs || []).map((log: any) => (
-                          <TableRow key={log.id} className="border-border/50">
-                            <TableCell className="pl-6"><Badge variant="secondary" className="text-[9px] font-bold uppercase">{log.action}</Badge></TableCell>
-                            <TableCell className="text-xs">{log.user?.email || "Sistema"}</TableCell>
-                            <TableCell className="text-xs font-medium">{log.admin?.email || "Automação"}</TableCell>
-                            <TableCell className="text-xs text-muted-foreground">{format(new Date(log.created_at), "dd/MM/yyyy HH:mm")}</TableCell>
-                            <TableCell className="max-w-[320px] truncate pr-6 text-[11px] text-muted-foreground">{JSON.stringify(log.details)}</TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+          <TabsContent value="finance" className="space-y-4">
+            <SectionTitle title="Dashboard financeiro" description="Receitas, vendas e desempenho comercial dos planos." />
+            <div className="grid gap-3 md:grid-cols-3"><FinanceCard title="Receita confirmada" value={money.format(overview.data?.revenue ?? 0)} icon={<CircleDollarSign />} /><FinanceCard title="Planos vendidos" value={String(overview.data?.plansSold ?? 0)} icon={<CreditCard />} /><FinanceCard title="Ticket médio" value={money.format((overview.data?.plansSold || 0) > 0 ? (overview.data?.revenue || 0) / (overview.data?.plansSold || 1) : 0)} icon={<BarChart3 />} /></div>
+            <AdminTable><TableHeader><TableRow className="border-white/10"><TH>Venda</TH><TH>Status</TH><TH>Valor</TH><TH>Provedor</TH><TH>Referência</TH><TH>Data</TH></TableRow></TableHeader><TableBody>{(sales.data || []).map((s: any) => <TableRow key={s.id} className="border-white/[.06]"><TableCell className="font-mono text-xs">{s.id.slice(0, 8)}</TableCell><TableCell><StatusBadge value={s.status} /></TableCell><TableCell className="font-semibold text-emerald-300">{money.format(Number(s.amount || 0))}</TableCell><TableCell>{s.provider}</TableCell><TableCell className="text-xs text-white/45">{s.provider_reference || '—'}</TableCell><TableCell className="text-xs text-white/55">{date(s.sold_at)}</TableCell></TableRow>)}</TableBody></AdminTable>
           </TabsContent>
 
-          <TabsContent value="integrations" className="mt-0">
-            <div className="grid gap-4 xl:grid-cols-[1fr_0.72fr]">
-              <Card className="rounded-[1.75rem] border-border/70 bg-card/78 shadow-xl shadow-black/5 backdrop-blur-xl">
-                <CardHeader className="p-5 md:p-6">
-                  <div className="flex items-center gap-3">
-                    <div className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary"><CreditCard size={18} /></div>
-                    <div>
-                      <CardTitle className="font-display text-2xl font-semibold">Mercado Pago</CardTitle>
-                      <CardDescription className="mt-1">Credenciais de cobrança, renovação e validação de eventos.</CardDescription>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-6 px-5 pb-6 md:px-6">
-                  <SettingField
-                    label="Access Token de produção"
-                    value={mpAccessToken}
-                    onChange={setMpAccessToken}
-                    placeholder="APP_USR-..."
-                    actionLabel="Salvar token"
-                    loading={updateTokenMutation.isPending}
-                    onSave={() => updateTokenMutation.mutate(mpAccessToken)}
-                  />
-                  <SettingField
-                    label="Webhook Secret"
-                    value={mpWebhookSecret}
-                    onChange={setMpWebhookSecret}
-                    placeholder="Assinatura secreta do webhook"
-                    actionLabel="Salvar secret"
-                    loading={updateWebhookSecretMutation.isPending}
-                    onSave={() => updateWebhookSecretMutation.mutate(mpWebhookSecret)}
-                  />
-                </CardContent>
-              </Card>
-
-              <Card className="rounded-[1.75rem] border-border/70 bg-card/78 shadow-xl shadow-black/5 backdrop-blur-xl">
-                <CardHeader className="p-5 md:p-6">
-                  <div className="flex items-center gap-3">
-                    <div className="flex size-10 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-500"><Database size={18} /></div>
-                    <div>
-                      <CardTitle className="font-display text-xl font-semibold">Infraestrutura</CardTitle>
-                      <CardDescription className="mt-1">Resumo da arquitetura conectada.</CardDescription>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-3 px-5 pb-6 md:px-6">
-                  <InfraRow icon={Database} label="Banco e autenticação" value="Supabase" />
-                  <InfraRow icon={CreditCard} label="Pagamentos" value="Mercado Pago" />
-                  <InfraRow icon={Webhook} label="Eventos" value="Webhooks" />
-                  <InfraRow icon={ShieldCheck} label="Controle de acesso" value="Admin / Super Admin" />
-                  <div className="rounded-xl border border-border/70 bg-background/55 p-4 text-xs leading-5 text-muted-foreground">
-                    Configurações sensíveis permanecem isoladas da área de usuário e protegidas pelas permissões administrativas do banco.
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
+          <TabsContent value="plans" className="space-y-4">
+            <SectionTitle title="Gerenciamento de planos" description="Crie ofertas, defina preço e duração e ative ou pause planos comerciais." action={<Button onClick={() => setPlanDialog({ name: '', description: '', price: 0, duration_days: 30, is_active: true })}><Plus size={15} className="mr-2" />Novo plano</Button>} />
+            <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">{(plans.data || []).map((p: any) => <Card key={p.id} className="border-white/10 bg-white/[.035]"><CardHeader><div className="flex items-start justify-between gap-3"><div><CardTitle>{p.name}</CardTitle><p className="mt-1 text-sm text-white/45">{p.description || 'Sem descrição'}</p></div><StatusBadge value={p.is_active ? 'active' : 'disabled'} /></div></CardHeader><CardContent><div className="text-3xl font-semibold">{money.format(Number(p.price || 0))}</div><div className="mt-1 text-xs text-white/45">{p.duration_days} dias de acesso</div><div className="mt-5 flex gap-2"><Button size="sm" variant="outline" onClick={() => setPlanDialog(p)}><Edit3 size={14} className="mr-2" />Editar</Button><Button size="sm" variant="outline" className="text-red-300" onClick={async () => { await deletePlan(p.id); plans.refetch(); }}><Trash2 size={14} /></Button></div></CardContent></Card>)}</div>
           </TabsContent>
 
-          <TabsContent value="webhooks" className="mt-0">
-            <Card className="rounded-[1.75rem] border-border/70 bg-card/78 shadow-xl shadow-black/5 backdrop-blur-xl">
-              <CardHeader className="p-5 md:p-6">
-                <div className="flex items-center gap-3">
-                  <div className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary"><Webhook size={18} /></div>
-                  <div>
-                    <CardTitle className="font-display text-2xl font-semibold">Monitor de webhooks</CardTitle>
-                    <CardDescription className="mt-1">Eventos recentes recebidos pela camada de pagamentos.</CardDescription>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent className="px-5 pb-6 md:px-6">
-                <WebhookEventsList listFn={listWebhookEventsFn} />
-              </CardContent>
-            </Card>
+          <TabsContent value="licenses" className="space-y-4">
+            <SectionTitle title="Chaves de acesso" description="Geração e controle das keys de licença da plataforma." action={<div className="flex gap-2"><Button onClick={async () => { await generateLicenseFn({ data: { expiresInDays: 30 } }); licenses.refetch(); overview.refetch(); toast.success('Key de 30 dias gerada.'); }}><Plus size={15} className="mr-2" />30 dias</Button><Button variant="outline" onClick={async () => { await generateLicenseFn({ data: { expiresInDays: 365 } }); licenses.refetch(); overview.refetch(); toast.success('Key anual gerada.'); }}><Plus size={15} className="mr-2" />1 ano</Button></div>} />
+            <AdminTable><TableHeader><TableRow className="border-white/10"><TH>Key</TH><TH>Status</TH><TH>Cliente</TH><TH>Expiração</TH><TH className="text-right">Ação</TH></TableRow></TableHeader><TableBody>{((licenses.data as any)?.licenses || []).map((l: any) => <TableRow key={l.id} className="border-white/[.06]"><TableCell className="font-mono text-xs text-cyan-300">{l.license_key}</TableCell><TableCell><StatusBadge value={l.status} /></TableCell><TableCell className="text-xs">{l.profiles?.email || 'Não vinculada'}</TableCell><TableCell className="text-xs text-white/55">{date(l.expires_at)}</TableCell><TableCell className="text-right">{l.status !== 'revoked' && <Button size="sm" variant="ghost" className="text-red-300" onClick={async () => { await revokeLicenseFn({ data: { licenseId: l.id, reason: 'Revogação manual admin' } }); licenses.refetch(); overview.refetch(); }}><XCircle size={15} /></Button>}</TableCell></TableRow>)}</TableBody></AdminTable>
+          </TabsContent>
+
+          <TabsContent value="ads" className="space-y-4">
+            <SectionTitle title="Publicidade e patrocínios" description="Cadastre banners e campanhas para exibição controlada dentro da plataforma." action={<Button onClick={() => setAdDialog({ title: '', sponsor_name: '', image_url: '', target_url: '', placement: 'dashboard', is_active: true })}><Plus size={15} className="mr-2" />Nova campanha</Button>} />
+            <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">{(ads.data || []).map((ad: any) => <Card key={ad.id} className="overflow-hidden border-white/10 bg-white/[.035]">{ad.image_url && <img src={ad.image_url} alt="" className="h-32 w-full object-cover" />}<CardContent className="p-4"><div className="flex items-start justify-between gap-3"><div><div className="font-semibold">{ad.title}</div><div className="text-xs text-white/45">{ad.sponsor_name} · {ad.placement}</div></div><StatusBadge value={ad.is_active ? 'active' : 'disabled'} /></div><div className="mt-3 text-xs text-white/40">{ad.impressions || 0} impressões · {ad.clicks || 0} cliques</div><div className="mt-4 flex gap-2"><Button size="sm" variant="outline" onClick={() => setAdDialog(ad)}><Edit3 size={14} className="mr-2" />Editar</Button><Button size="sm" variant="outline" className="text-red-300" onClick={async () => { await deleteSponsorAd(ad.id); ads.refetch(); }}><Trash2 size={14} /></Button></div></CardContent></Card>)}</div>
+          </TabsContent>
+
+          <TabsContent value="logs" className="space-y-4">
+            <SectionTitle title="Logs de acesso e segurança" description="Histórico de logins, ações e eventos por cliente." />
+            <AdminTable><TableHeader><TableRow className="border-white/10"><TH>Usuário</TH><TH>Ação</TH><TH>IP</TH><TH>Dispositivo</TH><TH>Data</TH><TH>Detalhes</TH></TableRow></TableHeader><TableBody>{(logs.data || []).map((l: any) => <TableRow key={l.id} className="border-white/[.06]"><TableCell className="font-mono text-xs">{String(l.user_id).slice(0, 8)}…</TableCell><TableCell><Badge variant="outline" className="border-white/10 bg-white/[.04] text-white/70">{l.action}</Badge></TableCell><TableCell className="text-xs text-white/55">{l.ip_address || '—'}</TableCell><TableCell className="max-w-[260px] truncate text-xs text-white/45">{l.user_agent || '—'}</TableCell><TableCell className="text-xs text-white/55">{date(l.created_at)}</TableCell><TableCell><IconButton title={JSON.stringify(l.details || {})}><Eye size={15} /></IconButton></TableCell></TableRow>)}</TableBody></AdminTable>
           </TabsContent>
         </Tabs>
+      </main>
 
-        <section className="flex flex-col gap-4 rounded-[1.75rem] border border-destructive/15 bg-destructive/[0.035] p-5 md:flex-row md:items-center md:justify-between md:p-6">
-          <div className="flex items-start gap-3">
-            <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-destructive/10 text-destructive"><LogOut size={18} /></div>
-            <div>
-              <h2 className="font-display text-lg font-semibold">Encerrar sessão administrativa</h2>
-              <p className="mt-1 max-w-2xl text-sm text-muted-foreground">Use esta ação ao terminar o gerenciamento. A sessão do Supabase e o estado local serão encerrados.</p>
-            </div>
-          </div>
-          <Button variant="destructive" className="h-10 rounded-xl px-5 font-semibold" onClick={() => setShowLogoutConfirm(true)}>
-            <LogOut size={16} className="mr-2" /> Sair do administrador
-          </Button>
-        </section>
-      </div>
+      <CustomerDialog state={customerDialog} onClose={() => setCustomerDialog(null)} onSaved={() => { setCustomerDialog(null); customers.refetch(); overview.refetch(); }} />
+      <PlanDialog state={planDialog} onClose={() => setPlanDialog(null)} onSaved={() => { setPlanDialog(null); plans.refetch(); overview.refetch(); }} />
+      <AdDialog state={adDialog} onClose={() => setAdDialog(null)} onSaved={() => { setAdDialog(null); ads.refetch(); }} />
 
-      <AlertDialog open={showLogoutConfirm} onOpenChange={setShowLogoutConfirm}>
-        <AlertDialogContent className="rounded-2xl">
-          <AlertDialogHeader>
-            <AlertDialogTitle>Encerrar sessão administrativa?</AlertDialogTitle>
-            <AlertDialogDescription>
-              Você será desconectado do painel e precisará informar suas credenciais novamente para retornar à área administrativa.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel className="rounded-xl">Cancelar</AlertDialogCancel>
-            <AlertDialogAction onClick={handleLogout} disabled={isSigningOut} className="rounded-xl bg-destructive text-destructive-foreground hover:bg-destructive/90">
-              {isSigningOut ? "Saindo..." : "Confirmar saída"}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-
-      <AlertDialog open={!!licenseToRevoke} onOpenChange={(open) => !open && setLicenseToRevoke(null)}>
-        <AlertDialogContent className="rounded-2xl">
-          <AlertDialogHeader>
-            <AlertDialogTitle>Revogar esta licença?</AlertDialogTitle>
-            <AlertDialogDescription>
-              O usuário vinculado perderá o acesso imediatamente. Esta ação ficará registrada na trilha de auditoria.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel className="rounded-xl">Cancelar</AlertDialogCancel>
-            <AlertDialogAction
-              className="rounded-xl bg-destructive text-destructive-foreground hover:bg-destructive/90"
-              onClick={() => licenseToRevoke && revokeMutation.mutate(licenseToRevoke.id)}
-            >
-              Confirmar revogação
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <AlertDialog open={!!deleteCustomer} onOpenChange={(open) => !open && setDeleteCustomer(null)}><AlertDialogContent><AlertDialogHeader><AlertDialogTitle>Desativar esta conta?</AlertDialogTitle><AlertDialogDescription>O cliente perderá o acesso e a licença será revogada. O registro fica preservado para auditoria e pode ser recuperado depois.</AlertDialogDescription></AlertDialogHeader><AlertDialogFooter><AlertDialogCancel>Cancelar</AlertDialogCancel><AlertDialogAction className="bg-destructive text-destructive-foreground" onClick={async () => { if (deleteCustomer) { await setCustomerStatus(deleteCustomer.id, 'deleted'); customers.refetch(); overview.refetch(); setDeleteCustomer(null); } }}>Desativar conta</AlertDialogAction></AlertDialogFooter></AlertDialogContent></AlertDialog>
+      <AlertDialog open={logoutOpen} onOpenChange={setLogoutOpen}><AlertDialogContent><AlertDialogHeader><AlertDialogTitle>Sair da área administrativa?</AlertDialogTitle><AlertDialogDescription>Sua sessão administrativa será encerrada neste dispositivo.</AlertDialogDescription></AlertDialogHeader><AlertDialogFooter><AlertDialogCancel>Continuar no painel</AlertDialogCancel><AlertDialogAction onClick={handleLogout}>Confirmar saída</AlertDialogAction></AlertDialogFooter></AlertDialogContent></AlertDialog>
     </div>
   );
 }
 
-function HeroMetric({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-xl border border-white/10 bg-white/[0.06] p-3">
-      <p className="text-2xl font-semibold text-white">{value}</p>
-      <p className="mt-1 text-[10px] uppercase tracking-[0.12em] text-white/45">{label}</p>
-    </div>
-  );
+function CustomerDialog({ state, onClose, onSaved }: any) {
+  const [form, setForm] = useState<any>(() => state?.customer || { name: '', email: '', cpf: '', password: '', admin_notes: '' });
+  if (!state) return null;
+  const set = (key: string, value: any) => setForm((f: any) => ({ ...f, [key]: value }));
+  const save = async () => { try { if (state.mode === 'create') await createCustomer({ name: form.name, email: form.email, password: form.password }); else await updateCustomer(state.customer.id, { name: form.name, email: form.email, cpf: form.cpf || null, admin_notes: form.admin_notes || null }); toast.success(state.mode === 'create' ? 'Conta criada.' : 'Cliente atualizado.'); onSaved(); } catch (e: any) { toast.error(e.message || 'Não foi possível salvar.'); } };
+  return <Dialog open onOpenChange={(o) => !o && onClose()}><DialogContent><DialogHeader><DialogTitle>{state.mode === 'create' ? 'Criar nova conta' : 'Editar cliente'}</DialogTitle><DialogDescription>{state.mode === 'create' ? 'Crie uma conta de cliente sem sair da sessão administrativa.' : 'Atualize os dados administrativos do cadastro.'}</DialogDescription></DialogHeader><div className="grid gap-4 py-2"><Field label="Nome"><Input value={form.name || ''} onChange={(e) => set('name', e.target.value)} /></Field><Field label="E-mail"><Input type="email" value={form.email || ''} onChange={(e) => set('email', e.target.value)} /></Field>{state.mode === 'create' ? <Field label="Senha provisória"><Input type="password" value={form.password || ''} onChange={(e) => set('password', e.target.value)} /></Field> : <><Field label="CPF"><Input value={form.cpf || ''} onChange={(e) => set('cpf', e.target.value)} /></Field><Field label="Observações administrativas"><Input value={form.admin_notes || ''} onChange={(e) => set('admin_notes', e.target.value)} /></Field></>}</div><DialogFooter><Button variant="outline" onClick={onClose}>Cancelar</Button><Button onClick={save}>Salvar</Button></DialogFooter></DialogContent></Dialog>;
 }
 
-function MetricCard({ title, value, description, icon: Icon, emphasis }: { title: string; value: string; description: string; icon: any; emphasis?: "success" | "danger" }) {
-  const iconClass = emphasis === "success" ? "bg-emerald-500/10 text-emerald-500" : emphasis === "danger" ? "bg-destructive/10 text-destructive" : "bg-primary/10 text-primary";
-  return (
-    <Card className="rounded-2xl border-border/70 bg-card/74 shadow-lg shadow-black/5 backdrop-blur-xl">
-      <CardContent className="p-4">
-        <div className="flex items-start justify-between gap-3">
-          <div>
-            <p className="text-[10px] font-bold uppercase tracking-[0.13em] text-muted-foreground">{title}</p>
-            <p className="mt-2 font-display text-3xl font-semibold tracking-tight">{value}</p>
-            <p className="mt-1 text-[11px] text-muted-foreground">{description}</p>
-          </div>
-          <div className={`flex size-9 items-center justify-center rounded-xl ${iconClass}`}><Icon size={17} /></div>
-        </div>
-      </CardContent>
-    </Card>
-  );
-}
+function PlanDialog({ state, onClose, onSaved }: any) { const [form, setForm] = useState<any>(() => state || {}); if (!state) return null; const set=(k:string,v:any)=>setForm((f:any)=>({...f,[k]:v})); return <Dialog open onOpenChange={(o)=>!o&&onClose()}><DialogContent><DialogHeader><DialogTitle>{state.id?'Editar plano':'Novo plano'}</DialogTitle><DialogDescription>Defina a oferta comercial que poderá ser vendida aos clientes.</DialogDescription></DialogHeader><div className="grid gap-4"><Field label="Nome"><Input value={form.name||''} onChange={(e)=>set('name',e.target.value)} /></Field><Field label="Descrição"><Input value={form.description||''} onChange={(e)=>set('description',e.target.value)} /></Field><div className="grid grid-cols-2 gap-3"><Field label="Preço"><Input type="number" value={form.price??0} onChange={(e)=>set('price',Number(e.target.value))} /></Field><Field label="Duração (dias)"><Input type="number" value={form.duration_days??30} onChange={(e)=>set('duration_days',Number(e.target.value))} /></Field></div><label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={!!form.is_active} onChange={(e)=>set('is_active',e.target.checked)} /> Plano ativo</label></div><DialogFooter><Button variant="outline" onClick={onClose}>Cancelar</Button><Button onClick={async()=>{try{await savePlan(form);toast.success('Plano salvo.');onSaved();}catch(e:any){toast.error(e.message)}}}>Salvar plano</Button></DialogFooter></DialogContent></Dialog>; }
+function AdDialog({ state, onClose, onSaved }: any) { const [form,setForm]=useState<any>(()=>state||{}); if(!state)return null; const set=(k:string,v:any)=>setForm((f:any)=>({...f,[k]:v})); return <Dialog open onOpenChange={(o)=>!o&&onClose()}><DialogContent><DialogHeader><DialogTitle>{state.id?'Editar campanha':'Nova campanha'}</DialogTitle><DialogDescription>Configure um patrocínio para exibição controlada na plataforma.</DialogDescription></DialogHeader><div className="grid gap-4"><Field label="Título"><Input value={form.title||''} onChange={(e)=>set('title',e.target.value)} /></Field><Field label="Patrocinador"><Input value={form.sponsor_name||''} onChange={(e)=>set('sponsor_name',e.target.value)} /></Field><Field label="URL da imagem"><Input value={form.image_url||''} onChange={(e)=>set('image_url',e.target.value)} /></Field><Field label="Link de destino"><Input value={form.target_url||''} onChange={(e)=>set('target_url',e.target.value)} /></Field><Field label="Posição"><Input value={form.placement||'dashboard'} onChange={(e)=>set('placement',e.target.value)} /></Field><label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={!!form.is_active} onChange={(e)=>set('is_active',e.target.checked)} /> Campanha ativa</label></div><DialogFooter><Button variant="outline" onClick={onClose}>Cancelar</Button><Button onClick={async()=>{try{await saveSponsorAd(form);toast.success('Campanha salva.');onSaved();}catch(e:any){toast.error(e.message)}}}>Salvar campanha</Button></DialogFooter></DialogContent></Dialog>; }
 
-function LicenseStatus({ status }: { status: string }) {
-  const styles = status === "active"
-    ? "bg-emerald-500/10 text-emerald-500"
-    : status === "unused"
-      ? "bg-amber-500/10 text-amber-500"
-      : "bg-destructive/10 text-destructive";
-  return (
-    <Badge variant="outline" className={`border-0 text-[9px] font-bold uppercase ${styles}`}>
-      {status === "active" ? "Ativa" : status === "unused" ? "Disponível" : "Revogada"}
-    </Badge>
-  );
-}
-
-function LoadingState({ label }: { label: string }) {
-  return (
-    <div className="flex min-h-40 items-center justify-center gap-3 text-sm text-muted-foreground">
-      <RefreshCw size={17} className="animate-spin text-primary" />
-      {label}
-    </div>
-  );
-}
-
-function SettingField({ label, value, onChange, placeholder, actionLabel, onSave, loading }: { label: string; value: string; onChange: (value: string) => void; placeholder: string; actionLabel: string; onSave: () => void; loading: boolean }) {
-  return (
-    <div className="space-y-2">
-      <Label className="text-[10px] font-bold uppercase tracking-[0.13em] text-muted-foreground">{label}</Label>
-      <div className="flex flex-col gap-2 sm:flex-row">
-        <Input type="password" value={value} onChange={(event) => onChange(event.target.value)} placeholder={placeholder} className="h-11 rounded-xl bg-background/70 font-mono text-xs" />
-        <Button onClick={onSave} disabled={loading || !value.trim()} className="h-11 rounded-xl px-5 font-semibold sm:min-w-[145px]">
-          {loading ? "Salvando..." : actionLabel}
-        </Button>
-      </div>
-    </div>
-  );
-}
-
-function InfraRow({ icon: Icon, label, value }: { icon: any; label: string; value: string }) {
-  return (
-    <div className="flex items-center justify-between gap-4 rounded-xl border border-border/65 bg-background/55 px-3.5 py-3">
-      <div className="flex items-center gap-3">
-        <div className="flex size-8 items-center justify-center rounded-lg bg-primary/10 text-primary"><Icon size={14} /></div>
-        <span className="text-xs font-medium">{label}</span>
-      </div>
-      <span className="text-[11px] font-semibold text-muted-foreground">{value}</span>
-    </div>
-  );
-}
-
-function WebhookEventsList({ listFn }: { listFn: any }) {
-  const { data, isLoading } = useQuery({
-    queryKey: ["admin-webhooks"],
-    queryFn: () => listFn(),
-  });
-
-  if (isLoading) return <LoadingState label="Carregando webhooks" />;
-
-  return (
-    <div className="overflow-x-auto rounded-2xl border border-border/65">
-      <Table>
-        <TableHeader className="bg-muted/35">
-          <TableRow>
-            <TableHead className="pl-5 text-[9px] font-bold uppercase">ID do evento</TableHead>
-            <TableHead className="text-[9px] font-bold uppercase">Tópico</TableHead>
-            <TableHead className="text-[9px] font-bold uppercase">Usuário</TableHead>
-            <TableHead className="text-[9px] font-bold uppercase">Status</TableHead>
-            <TableHead className="text-[9px] font-bold uppercase">Data</TableHead>
-            <TableHead className="pr-5 text-right text-[9px] font-bold uppercase">Detalhes</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {(data?.events || []).map((event: any) => (
-            <TableRow key={event.id} className="border-border/50">
-              <TableCell className="max-w-[180px] truncate pl-5 font-mono text-[10px] text-muted-foreground">{event.event_id}</TableCell>
-              <TableCell className="text-[10px] font-semibold">{event.topic}</TableCell>
-              <TableCell className="max-w-[120px] truncate font-mono text-[9px] text-muted-foreground">{event.processed_by_user_id || "-"}</TableCell>
-              <TableCell>
-                <Badge className={`border-0 text-[8px] font-bold uppercase ${event.status === "processed" ? "bg-emerald-500/10 text-emerald-500" : event.status === "failed" ? "bg-destructive/10 text-destructive" : "bg-amber-500/10 text-amber-500"}`}>
-                  {event.status}
-                </Badge>
-              </TableCell>
-              <TableCell className="text-[10px] text-muted-foreground">{format(new Date(event.created_at), "dd/MM HH:mm")}</TableCell>
-              <TableCell className="pr-5 text-right">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-8 w-8 rounded-lg"
-                  onClick={() => alert(`Detalhes do Evento:\n\nMotivo: ${event.failure_reason || "N/A"}\nErro: ${event.error_message || "N/A"}\n\nPayload: ${JSON.stringify(event.payload, null, 2)}`)}
-                >
-                  <Eye size={13} />
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))}
-          {(!data?.events || data.events.length === 0) && (
-            <TableRow>
-              <TableCell colSpan={6} className="h-28 text-center text-xs text-muted-foreground">Nenhum evento registrado.</TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
-    </div>
-  );
-}
+function Metric({ icon, label, value, accent, moneyValue }: any) { return <div className={`rounded-2xl border p-3.5 ${accent ? 'border-cyan-400/20 bg-cyan-400/10' : 'border-white/10 bg-black/25'}`}><div className="flex items-center justify-between text-white/45"><span className="text-[10px] font-bold uppercase tracking-wider">{label}</span><span className={accent?'text-cyan-300':'text-white/55'}>{icon}</span></div><div className={`mt-2 font-display font-semibold tracking-tight ${moneyValue?'text-xl':'text-2xl'}`}>{value}</div></div>; }
+function FinanceCard({ title, value, icon }: any) { return <Card className="border-white/10 bg-gradient-to-br from-white/[.06] to-white/[.02]"><CardContent className="p-5"><div className="flex items-center justify-between text-white/45"><span className="text-xs font-bold uppercase tracking-wider">{title}</span><span className="text-emerald-300">{icon}</span></div><div className="mt-4 text-3xl font-semibold tracking-tight">{value}</div></CardContent></Card>; }
+function SectionTitle({ title, description, action }: any) { return <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between"><div><h2 className="text-xl font-semibold">{title}</h2><p className="mt-1 text-sm text-white/45">{description}</p></div>{action}</div>; }
+function AdminTable({ children }: any) { return <div className="overflow-x-auto rounded-2xl border border-white/10 bg-white/[.025]"><Table>{children}</Table></div>; }
+function TH({ children, className='' }: any) { return <TableHead className={`text-[10px] font-bold uppercase tracking-wider text-white/40 ${className}`}>{children}</TableHead>; }
+function StatusBadge({ value }: { value: string }) { const v=String(value||'').toLowerCase(); const good=['active','paid','processed','unused'].includes(v); const bad=['deleted','disabled','revoked','failed','cancelled'].includes(v); return <Badge variant="outline" className={`${good?'border-emerald-400/20 bg-emerald-400/10 text-emerald-300':bad?'border-red-400/20 bg-red-400/10 text-red-300':'border-amber-400/20 bg-amber-400/10 text-amber-300'} text-[10px] uppercase`}>{value}</Badge>; }
+function IconButton({ children, title, onClick, danger }: any) { return <Button type="button" variant="ghost" size="icon" title={title} onClick={onClick} className={`h-8 w-8 ${danger?'text-red-300':'text-white/60 hover:text-white'}`}>{children}</Button>; }
+function Field({ label, children }: any) { return <div className="grid gap-1.5"><Label>{label}</Label>{children}</div>; }
+function Tab({ value, label, icon }: any) { return <TabsTrigger value={value} className="gap-2 rounded-xl px-3 py-2 text-xs data-[state=active]:bg-cyan-400/15 data-[state=active]:text-cyan-200">{icon}{label}</TabsTrigger>; }
