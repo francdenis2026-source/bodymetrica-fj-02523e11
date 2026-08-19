@@ -147,7 +147,12 @@ function AuthPage() {
     setSession(user);
     localStorage.setItem(RATE_LIMIT_KEY, '{"count":0,"lastAttempt":0}');
     toast.success("Acesso liberado. Bem-vindo ao Body Métrica FJ.");
-    window.location.href = "/dashboard";
+
+    const destination = user?.role === "admin" || user?.role === "super_admin"
+      ? "/admin"
+      : "/dashboard";
+
+    window.location.href = destination;
   }
 
   async function onLoginSubmit(values: z.infer<typeof loginSchema>) {
