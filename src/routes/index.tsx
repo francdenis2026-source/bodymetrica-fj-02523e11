@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { getSession } from "@/lib/auth/auth.functions";
-import { ArrowRight, Droplets, Dumbbell, HeartPulse, Play, Salad, ShieldCheck, Weight } from "lucide-react";
+import { ArrowRight, Droplets, Dumbbell, HeartPulse, Play, Salad, ShieldCheck } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -23,10 +23,39 @@ const modules = [
 
 function Index() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  useEffect(() => setIsLoggedIn(!!getSession()), []);
+
+  useEffect(() => {
+    setIsLoggedIn(!!getSession());
+
+    // The homepage has its own visual hierarchy, so the global theme pill is
+    // intentionally removed here to avoid duplicating controls in the header.
+    const globalThemeToggle = document.getElementById("bodymetrica-global-theme-toggle");
+    globalThemeToggle?.remove();
+
+    // Keep the connectivity indicator available, but make it subtle enough
+    // not to compete with the primary calls to action on the homepage.
+    const statusIndicator = document.querySelector<HTMLElement>(".fixed.bottom-24.right-4");
+    if (statusIndicator) {
+      statusIndicator.style.bottom = "10px";
+      statusIndicator.style.right = "10px";
+      statusIndicator.style.opacity = "0.58";
+      statusIndicator.style.transform = "scale(0.82)";
+      statusIndicator.style.transformOrigin = "bottom right";
+    }
+
+    return () => {
+      if (statusIndicator) {
+        statusIndicator.style.bottom = "";
+        statusIndicator.style.right = "";
+        statusIndicator.style.opacity = "";
+        statusIndicator.style.transform = "";
+        statusIndicator.style.transformOrigin = "";
+      }
+    };
+  }, []);
 
   return (
-    <div className="h-[100dvh] min-h-[620px] overflow-hidden bg-[#06101e] text-white selection:bg-sky-400/30">
+    <div className="home-page h-[100dvh] min-h-[620px] overflow-hidden bg-[#06101e] text-white selection:bg-sky-400/30">
       <div className="relative flex h-full flex-col overflow-hidden">
         <img
           src="https://images.unsplash.com/photo-1594381898411-846e7d193883?auto=format&fit=crop&q=90&w=2200"
