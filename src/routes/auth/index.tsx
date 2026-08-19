@@ -3,8 +3,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { AnimatePresence, motion } from "framer-motion";
-import { ArrowLeft, ArrowRight, KeyRound, Lock, Mail, ShieldCheck, UserPlus } from "lucide-react";
+import { ArrowLeft, ArrowRight, BarChart3, KeyRound, Lock, Mail, ShieldCheck, UserPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -50,7 +49,6 @@ const newPasswordSchema = z
 const RATE_LIMIT_KEY = "auth_attempts";
 const MAX_ATTEMPTS = 5;
 const BLOCK_TIME = 60 * 1000;
-const easeOut = [0.23, 1, 0.32, 1] as const;
 
 function isMissingAccountMessage(message?: string) {
   const text = (message || "").toLowerCase();
@@ -246,179 +244,186 @@ function AuthPage() {
   return (
     <div className="relative min-h-[100dvh] overflow-hidden bg-background text-foreground">
       <img
-        src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&q=86&w=2200"
+        src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&q=82&w=2000"
         alt=""
         aria-hidden="true"
         className="absolute inset-0 h-full w-full object-cover object-center"
       />
-      <div className="absolute inset-0 bg-background/58 dark:bg-background/68" />
-      <div className="absolute inset-0 bg-gradient-to-r from-background/96 via-background/86 to-background/28 dark:from-background/98 dark:via-background/90 dark:to-background/36" />
+      <div className="absolute inset-0 bg-background/62 dark:bg-background/74" />
+      <div className="absolute inset-0 bg-gradient-to-br from-background/96 via-background/82 to-background/48 dark:from-background/98 dark:via-background/90 dark:to-background/62" />
 
-      <div className="relative z-10 mx-auto grid min-h-[100dvh] max-w-7xl items-center gap-10 px-4 py-6 md:px-6 lg:grid-cols-[0.95fr_1.05fr] lg:py-8">
-        <motion.section
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, ease: easeOut }}
-          className="hidden max-w-xl lg:block"
-        >
-          <Link to="/" className="mb-10 inline-flex min-h-11 items-center gap-3 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
-            <span className="flex size-10 items-center justify-center rounded-xl bg-primary font-semibold text-primary-foreground shadow-sm">B</span>
-            <span>
-              <strong className="block font-display text-lg font-semibold tracking-tight">Body Métrica FJ</strong>
-              <span className="text-sm text-muted-foreground">Saúde, composição corporal e evolução</span>
-            </span>
-          </Link>
+      <div className="relative z-10 flex min-h-[100dvh] items-center justify-center px-4 py-5 md:px-6 md:py-7">
+        <div className="grid w-full max-w-5xl overflow-hidden rounded-[2rem] border border-border/80 bg-background/96 shadow-2xl shadow-black/15 lg:grid-cols-[0.9fr_1.1fr]">
+          <section className="relative hidden min-h-[620px] overflow-hidden lg:block">
+            <img
+              src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&q=84&w=1200"
+              alt="Pessoa treinando em ambiente fitness"
+              className="absolute inset-0 h-full w-full object-cover object-center"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/92 via-black/40 to-black/15" />
 
-          <p className="text-sm font-medium text-primary">Acesso seguro à sua evolução</p>
-          <h1 className="mt-3 max-w-lg font-display text-5xl font-semibold leading-[1.02] tracking-[-0.04em] text-balance">
-            Continue de onde parou, com seus dados organizados em uma única visão.
-          </h1>
-          <p className="mt-5 max-w-lg text-base leading-7 text-muted-foreground">
-            Entre para acompanhar medidas, metas, alimentação, hidratação e treino com uma experiência mais clara e consistente.
-          </p>
-
-          <div className="mt-8 grid gap-3 sm:grid-cols-3">
-            {["Dados protegidos", "Acesso rápido", "Evolução contínua"].map((label) => (
-              <div key={label} className="rounded-2xl border border-border/70 bg-background/72 p-4 text-sm font-medium shadow-sm backdrop-blur-md">
-                <ShieldCheck className="mb-3 text-primary" size={18} aria-hidden="true" />
-                {label}
-              </div>
-            ))}
-          </div>
-        </motion.section>
-
-        <motion.main
-          initial={{ opacity: 0, scale: 0.99, y: 8 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ duration: 0.42, delay: 0.05, ease: easeOut }}
-          className="mx-auto w-full max-w-[500px]"
-        >
-          <div className="rounded-[1.75rem] border border-border/80 bg-background/94 p-5 shadow-2xl shadow-black/10 backdrop-blur-xl sm:p-7 md:p-8">
-            <div className="mb-7 flex items-center justify-between gap-4">
-              <Link to="/" className="inline-flex min-h-11 items-center gap-2 rounded-lg px-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
-                <ArrowLeft size={16} />
-                Início
+            <div className="relative flex h-full flex-col justify-between p-7 text-white md:p-8">
+              <Link to="/" className="inline-flex w-fit items-center gap-3 rounded-xl bg-black/20 px-3 py-2">
+                <span className="flex size-9 items-center justify-center rounded-lg bg-primary font-semibold text-primary-foreground">B</span>
+                <span>
+                  <strong className="block font-display text-sm font-semibold">Body Métrica FJ</strong>
+                  <span className="text-[11px] text-white/65">Sua evolução em contexto</span>
+                </span>
               </Link>
-              <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
-                <ShieldCheck size={15} className="text-primary" />
-                Conexão segura
+
+              <div>
+                <div className="inline-flex items-center gap-2 rounded-lg border border-white/15 bg-black/25 px-2.5 py-1.5 text-[11px] font-semibold text-white/85">
+                  <BarChart3 size={14} className="text-primary" />
+                  Acesso ao seu painel
+                </div>
+                <h1 className="mt-4 max-w-sm font-display text-4xl font-semibold leading-[1.03] tracking-[-0.04em]">
+                  Seus dados, metas e progresso em uma experiência mais clara.
+                </h1>
+                <p className="mt-4 max-w-sm text-sm leading-6 text-white/70">
+                  Entre para continuar acompanhando composição corporal, alimentação, hidratação e treinos sem perder o contexto da sua evolução.
+                </p>
+
+                <div className="mt-6 grid grid-cols-3 gap-2">
+                  {["Seguro", "Rápido", "Organizado"].map((item) => (
+                    <div key={item} className="rounded-xl border border-white/12 bg-white/8 px-3 py-3">
+                      <ShieldCheck size={15} className="text-primary" />
+                      <p className="mt-2 text-xs font-semibold text-white/85">{item}</p>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
+          </section>
 
-            {search.reset ? (
-              <Form {...newPasswordForm}>
-                <form onSubmit={newPasswordForm.handleSubmit(onNewPasswordSubmit)} className="space-y-5">
-                  <div>
-                    <div className="mb-4 flex size-11 items-center justify-center rounded-xl bg-primary/10 text-primary"><KeyRound size={20} /></div>
-                    <h2 className="font-display text-3xl font-semibold tracking-tight">Crie uma nova senha</h2>
-                    <p className="mt-2 text-sm leading-6 text-muted-foreground">Use uma senha com pelo menos 6 caracteres.</p>
-                  </div>
+          <main className="flex min-h-[620px] items-center px-5 py-6 sm:px-8 sm:py-8 lg:px-10">
+            <div className="mx-auto w-full max-w-md">
+              <div className="mb-6 flex items-center justify-between gap-4">
+                <Link to="/" className="inline-flex h-10 items-center gap-2 rounded-lg px-2 text-sm font-medium text-muted-foreground hover:text-foreground">
+                  <ArrowLeft size={16} />
+                  Início
+                </Link>
+                <span className="inline-flex items-center gap-2 text-xs font-medium text-muted-foreground">
+                  <ShieldCheck size={14} className="text-primary" />
+                  Ambiente protegido
+                </span>
+              </div>
 
-                  <FormField control={newPasswordForm.control} name="password" render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Nova senha</FormLabel>
-                      <FormControl><Input type="password" autoComplete="new-password" className="h-12 rounded-xl bg-background" {...field} /></FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )} />
-                  <FormField control={newPasswordForm.control} name="confirmPassword" render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Confirmar senha</FormLabel>
-                      <FormControl><Input type="password" autoComplete="new-password" className="h-12 rounded-xl bg-background" {...field} /></FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )} />
-                  <Button type="submit" disabled={isLoading} className="h-12 w-full rounded-xl font-medium active:scale-[0.98]">
-                    {isLoading ? "Atualizando..." : "Atualizar senha"}
-                  </Button>
-                </form>
-              </Form>
-            ) : (
-              <>
-                <div>
-                  <p className="text-sm font-medium text-primary">Bem-vindo de volta</p>
-                  <h2 className="mt-2 font-display text-[clamp(2rem,6vw,2.75rem)] font-semibold leading-tight tracking-[-0.035em]">Entre na sua conta</h2>
-                  <p className="mt-2 max-w-md text-sm leading-6 text-muted-foreground">Informe seu e-mail e senha para acessar o painel Body Métrica FJ.</p>
-                </div>
+              {search.reset ? (
+                <Form {...newPasswordForm}>
+                  <form onSubmit={newPasswordForm.handleSubmit(onNewPasswordSubmit)} className="space-y-5">
+                    <div>
+                      <div className="mb-4 flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary"><KeyRound size={19} /></div>
+                      <h2 className="font-display text-3xl font-semibold tracking-tight">Nova senha</h2>
+                      <p className="mt-2 text-sm leading-6 text-muted-foreground">Defina uma nova senha para recuperar seu acesso.</p>
+                    </div>
 
-                <Form {...loginForm}>
-                  <form onSubmit={loginForm.handleSubmit(onLoginSubmit)} className="mt-7 space-y-5">
-                    <FormField control={loginForm.control} name="email" render={({ field }) => (
+                    <FormField control={newPasswordForm.control} name="password" render={({ field }) => (
                       <FormItem>
-                        <FormLabel>E-mail</FormLabel>
-                        <FormControl>
-                          <div className="relative">
-                            <Mail className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground" size={18} />
-                            <Input type="email" autoComplete="email" placeholder="voce@email.com" className="h-12 rounded-xl bg-background pl-11" {...field} />
-                          </div>
-                        </FormControl>
+                        <FormLabel>Nova senha</FormLabel>
+                        <FormControl><Input type="password" autoComplete="new-password" className="h-11 rounded-xl bg-background" {...field} /></FormControl>
                         <FormMessage />
                       </FormItem>
                     )} />
-
-                    <FormField control={loginForm.control} name="password" render={({ field }) => (
+                    <FormField control={newPasswordForm.control} name="confirmPassword" render={({ field }) => (
                       <FormItem>
-                        <div className="flex items-center justify-between gap-3">
-                          <FormLabel>Senha</FormLabel>
-                          <Link to="/auth/recover" className="text-sm font-medium text-primary hover:underline">Esqueci minha senha</Link>
-                        </div>
-                        <FormControl>
-                          <div className="relative">
-                            <Lock className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground" size={18} />
-                            <Input type="password" autoComplete="current-password" placeholder="Sua senha" className="h-12 rounded-xl bg-background pl-11" {...field} />
-                          </div>
-                        </FormControl>
+                        <FormLabel>Confirmar senha</FormLabel>
+                        <FormControl><Input type="password" autoComplete="new-password" className="h-11 rounded-xl bg-background" {...field} /></FormControl>
                         <FormMessage />
                       </FormItem>
                     )} />
-
-                    <FormField control={loginForm.control} name="rememberMe" render={({ field }) => (
-                      <FormItem className="flex min-h-11 flex-row items-center gap-3 space-y-0 rounded-xl border border-border/70 bg-muted/20 px-3.5 py-2.5">
-                        <FormControl><Checkbox checked={field.value} onCheckedChange={field.onChange} /></FormControl>
-                        <FormLabel className="cursor-pointer text-sm font-normal">Manter minha sessão neste dispositivo</FormLabel>
-                      </FormItem>
-                    )} />
-
-                    {isBlocked && (
-                      <div className="rounded-xl border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm text-destructive">
-                        Muitas tentativas. Tente novamente em {remainingSeconds}s.
-                      </div>
-                    )}
-
-                    <Button type="submit" disabled={isLoading || isBlocked} className="group h-12 w-full rounded-xl font-medium shadow-sm transition-[transform,box-shadow] duration-150 hover:shadow-md active:scale-[0.98] motion-reduce:transition-none">
-                      {isLoading ? "Entrando..." : "Entrar"}
-                      {!isLoading && <ArrowRight size={16} className="ml-2 transition-transform group-hover:translate-x-0.5" />}
+                    <Button type="submit" disabled={isLoading} className="h-11 w-full rounded-xl font-semibold">
+                      {isLoading ? "Atualizando..." : "Atualizar senha"}
                     </Button>
                   </form>
                 </Form>
+              ) : (
+                <>
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-[0.14em] text-primary">Bem-vindo de volta</p>
+                    <h2 className="mt-2 font-display text-[clamp(2rem,5vw,2.75rem)] font-semibold leading-tight tracking-[-0.04em]">Entre na sua conta</h2>
+                    <p className="mt-2 text-sm leading-6 text-muted-foreground">Use seu e-mail e senha para acessar seus módulos e continuar de onde parou.</p>
+                  </div>
 
-                <AnimatePresence initial={false}>
+                  <Form {...loginForm}>
+                    <form onSubmit={loginForm.handleSubmit(onLoginSubmit)} className="mt-6 space-y-4">
+                      <FormField control={loginForm.control} name="email" render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>E-mail</FormLabel>
+                          <FormControl>
+                            <div className="relative">
+                              <Mail className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground" size={17} />
+                              <Input type="email" autoComplete="email" placeholder="voce@email.com" className="h-11 rounded-xl bg-background pl-10" {...field} />
+                            </div>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )} />
+
+                      <FormField control={loginForm.control} name="password" render={({ field }) => (
+                        <FormItem>
+                          <div className="flex items-center justify-between gap-3">
+                            <FormLabel>Senha</FormLabel>
+                            <Link to="/auth/recover" className="text-xs font-semibold text-primary hover:underline">Esqueci minha senha</Link>
+                          </div>
+                          <FormControl>
+                            <div className="relative">
+                              <Lock className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground" size={17} />
+                              <Input type="password" autoComplete="current-password" placeholder="Sua senha" className="h-11 rounded-xl bg-background pl-10" {...field} />
+                            </div>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )} />
+
+                      <FormField control={loginForm.control} name="rememberMe" render={({ field }) => (
+                        <FormItem className="flex min-h-10 flex-row items-center gap-3 space-y-0 rounded-xl border border-border/70 bg-muted/20 px-3.5 py-2.5">
+                          <FormControl><Checkbox checked={field.value} onCheckedChange={field.onChange} /></FormControl>
+                          <FormLabel className="cursor-pointer text-xs font-normal">Manter minha sessão neste dispositivo</FormLabel>
+                        </FormItem>
+                      )} />
+
+                      {isBlocked && (
+                        <div className="rounded-xl border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm text-destructive">
+                          Muitas tentativas. Tente novamente em {remainingSeconds}s.
+                        </div>
+                      )}
+
+                      <Button type="submit" disabled={isLoading || isBlocked} className="h-11 w-full rounded-xl font-semibold shadow-sm">
+                        {isLoading ? "Entrando..." : "Entrar"}
+                        {!isLoading && <ArrowRight size={16} className="ml-2" />}
+                      </Button>
+                    </form>
+                  </Form>
+
                   {showRegisterHint && (
-                    <motion.div initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }} transition={{ duration: 0.18, ease: easeOut }} className="mt-5 rounded-2xl border border-primary/20 bg-primary/5 p-4">
+                    <div className="mt-4 rounded-xl border border-primary/20 bg-primary/5 p-3.5">
                       <div className="flex items-start gap-3">
-                        <div className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary"><UserPlus size={17} /></div>
+                        <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary"><UserPlus size={16} /></div>
                         <div>
-                          <p className="text-sm font-semibold">Ainda não tem conta?</p>
-                          <p className="mt-1 text-sm leading-5 text-muted-foreground">Podemos iniciar seu cadastro com este e-mail já preenchido.</p>
-                          <Button asChild variant="link" className="mt-2 h-auto p-0 text-sm font-medium">
-                            <Link to="/auth/register" search={{ email: loginForm.getValues("email") } as any}>Criar minha conta <ArrowRight size={14} className="ml-1" /></Link>
+                          <p className="text-sm font-semibold">Esse acesso ainda não funcionou?</p>
+                          <p className="mt-1 text-xs leading-5 text-muted-foreground">Se você ainda não possui conta, podemos iniciar seu cadastro usando este e-mail.</p>
+                          <Button asChild variant="link" className="mt-1 h-auto p-0 text-xs font-semibold">
+                            <Link to="/auth/register" search={{ email: loginForm.getValues("email") } as any}>Criar minha conta <ArrowRight size={13} className="ml-1" /></Link>
                           </Button>
                         </div>
                       </div>
-                    </motion.div>
+                    </div>
                   )}
-                </AnimatePresence>
 
-                <div className="mt-7 border-t border-border/70 pt-6 text-center">
-                  <p className="text-sm text-muted-foreground">Novo no Body Métrica FJ?</p>
-                  <Button asChild variant="outline" className="mt-3 h-11 rounded-xl px-5 font-medium">
-                    <Link to="/auth/register" search={{ email: loginForm.getValues("email") } as any}><UserPlus size={16} className="mr-2" />Criar nova conta</Link>
-                  </Button>
-                </div>
-              </>
-            )}
-          </div>
-        </motion.main>
+                  <div className="mt-5 flex items-center justify-between gap-4 border-t border-border/70 pt-5">
+                    <div>
+                      <p className="text-xs font-semibold">Novo por aqui?</p>
+                      <p className="mt-0.5 text-[11px] text-muted-foreground">Crie sua conta em poucos passos.</p>
+                    </div>
+                    <Button asChild variant="outline" size="sm" className="h-9 rounded-lg px-3 font-semibold">
+                      <Link to="/auth/register" search={{ email: loginForm.getValues("email") } as any}><UserPlus size={14} className="mr-1.5" />Criar conta</Link>
+                    </Button>
+                  </div>
+                </>
+              )}
+            </div>
+          </main>
+        </div>
       </div>
 
       <Dialog open={showMfaChallenge} onOpenChange={setShowMfaChallenge}>
