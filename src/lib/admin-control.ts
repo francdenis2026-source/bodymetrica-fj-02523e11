@@ -1,6 +1,13 @@
 import { createClient } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
-import { customerMetadata, normalizeCpf, type UnifiedCustomerInput } from '@/lib/customer-registration';
+import {
+  customerMetadata,
+  getEmailValidationError,
+  isValidCpf,
+  normalizeCpf,
+  normalizeEmail,
+  type UnifiedCustomerInput,
+} from '@/lib/customer-registration';
 
 const db = supabase as any;
 const SUPABASE_URL = import.meta.env['VITE_SUPABASE_URL'];
@@ -50,8 +57,28 @@ export async function listCustomers() {
 
 export async function updateCustomer(id: string, values: Record<string, unknown>) {
   const patch = { ...values } as any;
-  if (typeof patch.cpf === 'string') patch.cpf = normalizeCpf(patch.cpf);
-  if (typeof patch.email === 'string') patch.email = patch.email.trim().toLowerCase();
+
+  if (typeof patch.cpf === 'string') {
+    const normalizedCpf = normalizeCpf(patch.cpf);
+    if (!isValidCpf(normalizedCpf)) throw new Error('CPF inválido. Confira os 11 dígitos informados.');
+
+    const { data: cpfOwner, error: cpfError } = await db.from('profiles').select('id').eq('cpf', normalizedCpf).neq('id', id).maybeSingle();
+    if (cpfError) throw cpfError;
+    if (cpfOwner) throw new Error('Este CPF já está vinculado a outra conta.');
+    patch.cpf = normalizedCpf;
+  }
+
+  if (typeof patch.email === 'string') {
+    const normalizedEmail = normalizeEmail(patch.email);
+    const emailError = getEmailValidationError(normalizedEmail);
+    if (emailError) throw new Error(emailError);
+
+    const { data: emailOwner, error: emailCheckError } = await db.from('profiles').select('id').eq('email', normalizedEmail).neq('id', id).maybeSingle();
+    if (emailCheckError) throw emailCheckError;
+    if (emailOwner) throw new Error('Este e-mail já está vinculado a outra conta.');
+    patch.email = normalizedEmail;
+  }
+
   const { error } = await db.from('profiles').update({ ...patch, updated_at: new Date().toISOString() }).eq('id', id);
   if (error) throw error;
 }
@@ -71,16 +98,26 @@ function generateTemporaryPassword() {
 
 export async function createCustomer(input: UnifiedCustomerInput) {
   const normalizedCpf = normalizeCpf(input.cpf);
-  const { data: cpfOwner, error: cpfError } = await db.from('profiles').select('id').eq('cpf', normalizedCpf).maybeSingle();
+  if (!isValidCpf(normalizedCpf)) throw new Error('CPF inválido. Confira os 11 dígitos informados.');
+
+  const email = normalizeEmail(input.email);
+  const emailError = getEmailValidationError(email);
+  if (emailError) throw new Error(emailError);
+
+  const [{ data: cpfOwner, error: cpfError }, { data: emailOwner, error: emailCheckError }] = await Promise.all([
+    db.from('profiles').select('id').eq('cpf', normalizedCpf).maybeSingle(),
+    db.from('profiles').select('id').eq('email', email).maybeSingle(),
+  ]);
   if (cpfError) throw cpfError;
+  if (emailCheckError) throw emailCheckError;
   if (cpfOwner) throw new Error('Este CPF já está cadastrado.');
+  if (emailOwner) throw new Error('Este e-mail já está cadastrado.');
 
   const transient = createClient(SUPABASE_URL, SUPABASE_KEY, {
     auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
   });
 
   const temporaryPassword = generateTemporaryPassword();
-  const email = input.email.trim().toLowerCase();
   const { data, error } = await transient.auth.signUp({
     email,
     password: temporaryPassword,
@@ -107,8 +144,11 @@ export async function createCustomer(input: UnifiedCustomerInput) {
 }
 
 export async function sendCustomerPasswordReset(email: string) {
+  const normalizedEmail = normalizeEmail(email);
+  const emailError = getEmailValidationError(normalizedEmail);
+  if (emailError) throw new Error(emailError);
   const redirectTo = `${window.location.origin}/auth?reset=true`;
-  const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo });
+  const { error } = await supabase.auth.resetPasswordForEmail(normalizedEmail, { redirectTo });
   if (error) throw error;
 }
 
