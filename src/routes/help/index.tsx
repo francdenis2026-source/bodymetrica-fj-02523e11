@@ -25,7 +25,7 @@ export const Route = createFileRoute("/help/")({
       { name: "description", content: "Respostas rápidas e orientações sobre os principais recursos do Body Métrica FJ." },
       { property: "og:title", content: "Central de Ajuda — Body Métrica FJ" },
       { property: "og:description", content: "Uma central de suporte clara, confortável e organizada para encontrar respostas e acessar os principais módulos." },
-      { property: "og:image", content: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=82&w=1600" },
+      { property: "og:image", content: "/bodymetrica-auth-2026.jpg" },
     ],
   }),
 });
@@ -108,7 +108,7 @@ function HelpCenterPage() {
       <main className="relative isolate overflow-hidden">
         <section className="relative min-h-[430px] overflow-hidden border-b border-border/60">
           <img
-            src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=84&w=2000"
+            src="/bodymetrica-auth-2026.jpg"
             alt=""
             aria-hidden="true"
             className="absolute inset-0 -z-30 h-full w-full object-cover object-center"

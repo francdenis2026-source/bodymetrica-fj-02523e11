@@ -174,13 +174,13 @@ function RegisterPage() {
 
   return (
     <div className="fixed inset-0 z-[200] overflow-y-auto bg-background text-foreground lg:overflow-hidden">
-      <img src="https://images.unsplash.com/photo-1538805060514-97d9cc17730c?auto=format&fit=crop&q=86&w=2200" alt="" aria-hidden className="fixed inset-0 h-full w-full object-cover" />
+      <img src="/bodymetrica-auth-2026.jpg" alt="" aria-hidden className="fixed inset-0 h-full w-full object-cover object-center" />
       <div className="fixed inset-0 bg-background/80 backdrop-blur-[2px] dark:bg-background/88" />
 
       <div className="relative z-10 mx-auto flex min-h-[100dvh] max-w-[1180px] items-center px-3 py-3 sm:px-5 lg:h-[100dvh] lg:min-h-0 lg:py-4">
         <div className="grid w-full overflow-hidden rounded-[1.75rem] border border-border/90 bg-card/96 shadow-[0_28px_90px_rgba(0,0,0,.22)] ring-1 ring-foreground/5 lg:h-[min(720px,calc(100vh-32px))] lg:grid-cols-[0.74fr_1.26fr]">
           <section className="on-media relative hidden overflow-hidden lg:block">
-            <img src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&q=88&w=1400" alt="Pessoa em rotina de treino e bem-estar" className="absolute inset-0 h-full w-full object-cover object-center" />
+            <img src="/bodymetrica-auth-2026.jpg" alt="Ambiente de bem-estar e rotina saudável" className="absolute inset-0 h-full w-full object-cover object-left" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/58 to-black/20" />
             <div className="absolute inset-0 bg-gradient-to-r from-black/28 via-transparent to-black/15" />
             <div className="relative flex h-full flex-col justify-between p-6 text-white xl:p-7">

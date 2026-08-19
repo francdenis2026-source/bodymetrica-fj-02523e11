@@ -166,13 +166,13 @@ function AuthPage() {
 
   return (
     <div className="relative min-h-[100dvh] overflow-hidden bg-background text-foreground">
-      <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&q=82&w=2000" alt="" aria-hidden className="absolute inset-0 h-full w-full object-cover" />
+      <img src="/bodymetrica-auth-2026.jpg" alt="" aria-hidden className="absolute inset-0 h-full w-full object-cover object-center" />
       <div className="absolute inset-0 bg-background/62 dark:bg-background/74" />
       <div className="absolute inset-0 bg-gradient-to-br from-background/96 via-background/82 to-background/48 dark:from-background/98 dark:via-background/90 dark:to-background/62" />
       <div className="relative z-10 flex min-h-[100dvh] items-center justify-center px-4 py-5 md:px-6 md:py-7">
         <div className="grid w-full max-w-5xl overflow-hidden rounded-[2rem] border border-border/80 bg-background/96 shadow-2xl lg:grid-cols-[0.9fr_1.1fr]">
           <section className="on-media relative hidden min-h-[620px] overflow-hidden lg:block">
-            <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&q=84&w=1200" alt="Pessoa treinando" className="absolute inset-0 h-full w-full object-cover" />
+            <img src="/bodymetrica-auth-2026.jpg" alt="Ambiente de bem-estar e treino pessoal" className="absolute inset-0 h-full w-full object-cover object-left" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/92 via-black/40 to-black/15" />
             <div className="relative flex h-full flex-col justify-between p-8 text-white">
               <Link to="/" className="inline-flex w-fit items-center gap-3 rounded-xl bg-black/20 px-3 py-2"><span className="flex size-9 items-center justify-center rounded-lg bg-primary font-semibold">B</span><strong className="text-sm">Body Métrica FJ</strong></Link>

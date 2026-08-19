@@ -87,22 +87,22 @@ function AdminLoginPage() {
   };
 
   return (
-    <div className="on-media admin-login-page relative min-h-[100dvh] overflow-hidden bg-[#04070b] text-white">
+    <div className="on-media admin-login-page relative min-h-[100dvh] overflow-hidden bg-[#131127] text-white">
       <img
-        src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&q=82&w=2200"
+        src="/bodymetrica-admin-2026.jpg"
         alt=""
         aria-hidden="true"
         className="absolute inset-0 h-full w-full object-cover object-center opacity-45"
       />
-      <div className="absolute inset-0 bg-[#03070c]/82" />
-      <div className="absolute inset-0 bg-gradient-to-br from-[#03070c]/96 via-[#07111c]/90 to-[#0b1a28]/76" />
-      <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[#03070c] to-transparent" />
+      <div className="absolute inset-0 bg-[#131127]/76" />
+      <div className="absolute inset-0 bg-gradient-to-br from-[#131127]/96 via-[#211d3d]/88 to-[#6d3d54]/52" />
+      <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[#131127] to-transparent" />
 
       <div className="relative z-10 flex min-h-[100dvh] items-center justify-center px-4 py-4 sm:px-6">
-        <div className="grid w-full max-w-[980px] overflow-hidden rounded-[1.65rem] border border-white/12 bg-[#08111a]/98 shadow-[0_30px_90px_rgba(0,0,0,0.56)] lg:h-[590px] lg:grid-cols-[0.92fr_1.08fr]">
+        <div className="grid w-full max-w-[980px] overflow-hidden rounded-[1.65rem] border border-white/12 bg-[#1b1832]/98 shadow-[0_30px_90px_rgba(0,0,0,0.56)] lg:h-[590px] lg:grid-cols-[0.92fr_1.08fr]">
           <section className="relative min-h-[260px] overflow-hidden border-b border-white/10 lg:min-h-0 lg:border-b-0 lg:border-r">
             <img
-              src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=88&w=1400"
+              src="/bodymetrica-admin-2026.jpg"
               alt="Ambiente tecnológico profissional para gestão do sistema"
               className="absolute inset-0 h-full w-full object-cover object-center"
             />

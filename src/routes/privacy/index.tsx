@@ -10,7 +10,7 @@ export const Route = createFileRoute("/privacy/")({
       { name: "description", content: "Entenda como o Body Métrica FJ trata seus dados pessoais e métricas de evolução." },
       { property: "og:title", content: "Política de Privacidade — Body Métrica FJ" },
       { property: "og:description", content: "Privacidade, controle e transparência sobre seus dados." },
-      { property: "og:image", content: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&q=82&w=1400" },
+      { property: "og:image", content: "/bodymetrica-admin-2026.jpg" },
     ],
   }),
 });
@@ -57,7 +57,7 @@ function PrivacyPage() {
       </header>
 
       <main className="relative isolate min-h-[calc(100dvh-4rem)] overflow-hidden">
-        <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&q=82&w=1800" alt="" aria-hidden="true" className="absolute inset-0 -z-30 h-full w-full object-cover object-center" />
+        <img src="/bodymetrica-admin-2026.jpg" alt="" aria-hidden="true" className="absolute inset-0 -z-30 h-full w-full object-cover object-center" />
         <div className="absolute inset-0 -z-20 bg-background/58 dark:bg-background/68" />
         <div className="absolute inset-0 -z-10 bg-gradient-to-r from-background/98 via-background/91 to-background/62 dark:from-background dark:via-background/94 dark:to-background/72" />
 

@@ -59,11 +59,11 @@ function VerifyEmailPage() {
     <div className="min-h-screen flex items-center justify-center relative p-6 bg-background overflow-hidden">
       <div className="absolute inset-0 z-0">
         <img 
-          src="https://images.unsplash.com/photo-1593079831268-3381b0db4a77?auto=format&fit=crop&q=80&w=1600"
+          src="/bodymetrica-auth-2026.jpg"
           alt="Auth background"
           className="w-full h-full object-cover opacity-20"
         />
-        <div className="absolute inset-0 bg-gradient-to-br from-black via-black/90 to-primary/10" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#151329]/96 via-[#211d3d]/90 to-[#6d3d54]/62" />
       </div>
 
       <div className="relative z-10 w-full max-w-md animate-in fade-in slide-in-from-bottom-4 duration-700">

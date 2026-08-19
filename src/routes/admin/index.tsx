@@ -80,20 +80,20 @@ function AdminControlCenter() {
   }
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="admin-control-center min-h-screen bg-background text-foreground">
       <div className="relative overflow-hidden border-b border-border">
-        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=82&w=2000" alt="" className="absolute inset-0 h-full w-full object-cover opacity-20 dark:opacity-25" />
+        <img src="/bodymetrica-admin-2026.jpg" alt="" className="absolute inset-0 h-full w-full object-cover object-center opacity-20 dark:opacity-30" />
         <div className="absolute inset-0 bg-gradient-to-r from-background via-background/95 to-background/75" />
-        <div className="relative mx-auto max-w-[1600px] px-5 py-7 md:px-8 md:py-9">
+        <div className="relative mx-auto max-w-[1600px] px-5 py-6 md:px-8 md:py-7">
           <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
             <div className="max-w-3xl">
               <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-[11px] font-bold uppercase tracking-[.16em] text-primary"><ShieldCheck size={14} /> Central administrativa</div>
-              <h1 className="mt-4 font-display text-3xl font-semibold tracking-[-.04em] md:text-5xl">Controle total da operação Body Métrica FJ</h1>
-              <p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground">Contas, acessos, planos, vendas, licenças, receita, patrocínios e auditoria em uma única janela administrativa.</p>
+              <h1 className="mt-3 font-display text-3xl font-semibold tracking-[-.04em] md:text-4xl">Centro de controle BodyMetrica</h1>
+              <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">Clientes, acessos, planos, licenças, receita, campanhas e auditoria organizados em uma operação clara e segura.</p>
             </div>
             <div className="flex flex-wrap gap-2"><Button variant="outline" onClick={refreshAll}><RefreshCcw size={15} className="mr-2" />Atualizar</Button><Button variant="outline" onClick={() => setLogoutOpen(true)} className="text-destructive"><LogOut size={15} className="mr-2" />Sair</Button></div>
           </div>
-          <div className="mt-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-8">
+          <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-8">
             <Metric icon={<Users size={17} />} label="Clientes" value={overview.data?.customers ?? 0} />
             <Metric icon={<Wifi size={17} />} label="Online agora" value={overview.data?.online ?? 0} accent />
             <Metric icon={<UserCog size={17} />} label="Novos no mês" value={overview.data?.createdThisMonth ?? 0} />

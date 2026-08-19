@@ -9,7 +9,6 @@ import { toast } from "sonner";
 import { SVGToast } from "@/components/ui/svg-toast";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PageHeaderSkeleton, StatsSkeleton } from "@/components/ui/loading-states";
-import { EmptyState } from "@/components/ui/status-states";
 import { getSession } from "@/lib/auth/auth.functions";
 import { getAdherenceData, DailyAdherence, saveAdherenceRecord, getAuditLogs, AuditLog } from "@/lib/adherence";
 
@@ -57,8 +56,6 @@ function DashboardPage() {
     return () => clearTimeout(timer);
   }, []);
 
-  const hasData = userData?.profile?.weight || false;
-
   if (isLoading) {
     return (
       <div className="flex-1 space-y-12 p-4 md:p-12 pt-10 bg-background animate-in fade-in duration-700">
@@ -73,26 +70,6 @@ function DashboardPage() {
     );
   }
 
-  if (!hasData && !isLoading) {
-    return (
-      <div className="flex-1 p-4 md:p-12 pt-10 bg-background animate-in fade-in duration-700">
-        <PageHeaderSkeleton />
-        <div className="mt-20">
-          <EmptyState 
-            icon={LayoutDashboard}
-            title="SISTEMA PRONTO PARA OPERAÇÃO"
-            description="Nenhum registro de performance detectado. Inicie sua jornada de elite configurando seu perfil agora."
-            action={
-              <Button className="h-16 px-12 rounded-[1.5rem] bg-brand-gradient text-xs font-black uppercase tracking-[0.2em] shadow-2xl hover:scale-105 transition-all" asChild>
-                <Link to="/body">CONFIGURAR PERFIL</Link>
-              </Button>
-            }
-          />
-        </div>
-      </div>
-    );
-  }
-
   const userName = userData?.name || "Visitante";
   const currentGoalMap: Record<string, string> = {
     'loss': 'Emagrecimento',
@@ -103,13 +80,13 @@ function DashboardPage() {
   const weightChange = -0.5;
 
   return (
-    <div className="flex-1 space-y-12 p-4 md:p-12 pt-10 relative overflow-hidden bg-background">
+    <div className="client-dashboard flex-1 space-y-7 p-4 pt-6 md:p-8 md:pt-7 relative overflow-hidden bg-background">
       {/* Decorative Module Hero Image */}
       <div className="absolute top-0 right-0 w-96 h-96 opacity-[0.08] pointer-events-none -z-10 translate-x-1/4 -translate-y-1/4">
         <LayoutDashboard size={384} className="text-primary" />
       </div>
 
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 relative z-10 animate-in fade-in slide-in-from-left-4 duration-700">
+      <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-6 relative z-10 animate-in fade-in slide-in-from-left-4 duration-700">
         <div className="flex flex-col md:flex-row items-center gap-6">
           <Link to="/profile" search={{} as any} className="group">
             <div className="w-20 h-20 bg-brand-gradient rounded-3xl flex items-center justify-center text-white text-3xl font-black shadow-2xl border-2 border-white/20 transform group-hover:scale-105 transition-transform duration-500">
@@ -121,11 +98,11 @@ function DashboardPage() {
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/20 text-primary-foreground text-[10px] font-black uppercase tracking-[0.2em] mb-1 border border-primary/30">
               SISTEMA DE PERFORMANCE
             </div>
-            <h2 className="text-4xl md:text-7xl font-black tracking-tighter font-display text-foreground uppercase italic leading-none">
+            <h2 className="text-4xl md:text-5xl font-semibold tracking-[-.045em] font-display text-foreground leading-none">
               OLÁ, <span className="text-gradient-brand">{userName}</span>
             </h2>
-            <p className="text-foreground/60 text-lg md:text-2xl font-black tracking-tight leading-none uppercase italic">
-              SUA EVOLUÇÃO ESTÁ EM ALTA. O FOCO HOJE É O SEGREDO DO SUCESSO.
+            <p className="text-muted-foreground text-sm md:text-base font-medium leading-6">
+              Seu resumo diário está pronto. Registre o que importa e acompanhe o progresso no seu ritmo.
             </p>
             {userData?.profile?.license_status !== 'active' && (
               <div className="mt-4 p-4 bg-primary/10 border border-primary/20 rounded-2xl inline-block text-left">
@@ -141,7 +118,7 @@ function DashboardPage() {
           </div>
         </div>
         
-        <div className="flex flex-wrap justify-center gap-4">
+        <div className="flex flex-wrap gap-2">
           <Button variant="outline" className="gap-2 h-14 px-8 font-black uppercase tracking-widest border-2 bg-white/5 border-white/10 hover:bg-white/10 hover:scale-105 transition-all" asChild>
             <Link to="/help">CENTRAL DE AJUDA</Link>
           </Button>

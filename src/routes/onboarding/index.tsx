@@ -89,7 +89,7 @@ function OnboardingPage() {
       <div 
         className="absolute inset-0 z-0 pointer-events-none opacity-10 dark:opacity-5"
         style={{
-          backgroundImage: 'url(https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&q=80&w=2000)',
+          backgroundImage: 'url(/bodymetrica-auth-2026.jpg)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}

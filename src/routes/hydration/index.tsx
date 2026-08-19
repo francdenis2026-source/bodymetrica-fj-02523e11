@@ -87,7 +87,7 @@ function HydrationPage() {
     <div className="min-h-full bg-background text-foreground">
       <section className="relative isolate overflow-hidden border-b border-border/70">
         <img
-          src="https://images.unsplash.com/photo-1523362628745-0c100150b504?auto=format&fit=crop&q=84&w=1800"
+          src="/bodymetrica-hero-2026.jpg"
           alt="Garrafa de água em ambiente fitness"
           className="absolute inset-0 -z-30 h-full w-full object-cover object-center"
         />

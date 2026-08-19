@@ -10,7 +10,7 @@ export const Route = createFileRoute("/terms/")({
       { name: "description", content: "Diretrizes de uso, responsabilidades e limites da plataforma Body Métrica FJ." },
       { property: "og:title", content: "Termos de Uso — Body Métrica FJ" },
       { property: "og:description", content: "Um resumo claro das regras e responsabilidades de uso da plataforma." },
-      { property: "og:image", content: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&q=82&w=1400" },
+      { property: "og:image", content: "/bodymetrica-admin-2026.jpg" },
     ],
   }),
 });
@@ -55,7 +55,7 @@ function TermsPage() {
       </header>
 
       <main className="relative isolate min-h-[calc(100dvh-4rem)] overflow-hidden">
-        <img src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&q=82&w=1800" alt="" aria-hidden="true" className="absolute inset-0 -z-30 h-full w-full object-cover object-center" />
+        <img src="/bodymetrica-admin-2026.jpg" alt="" aria-hidden="true" className="absolute inset-0 -z-30 h-full w-full object-cover object-center" />
         <div className="absolute inset-0 -z-20 bg-background/62 dark:bg-background/72" />
         <div className="absolute inset-0 -z-10 bg-gradient-to-r from-background/99 via-background/92 to-background/66 dark:from-background dark:via-background/96 dark:to-background/76" />
 

@@ -46,7 +46,7 @@ export function AccessGate({
   return (
     <div className="relative flex min-h-[calc(100dvh-4rem)] items-center justify-center overflow-hidden px-4 py-8 md:px-6">
       <img
-        src="https://images.unsplash.com/photo-1538805060514-97d9cc17730c?auto=format&fit=crop&q=84&w=1800"
+        src="/bodymetrica-auth-2026.jpg"
         alt=""
         aria-hidden="true"
         className="absolute inset-0 h-full w-full object-cover object-center"
@@ -57,7 +57,7 @@ export function AccessGate({
       <div className="relative z-10 grid w-full max-w-4xl overflow-hidden rounded-[1.75rem] border border-border/80 bg-background/96 shadow-2xl shadow-black/15 md:grid-cols-[0.95fr_1.05fr]">
         <section className="on-media relative min-h-[300px] overflow-hidden md:min-h-[430px]">
           <img
-            src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?auto=format&fit=crop&q=86&w=1200"
+            src="/bodymetrica-hero-2026.jpg"
             alt="Pessoa treinando com foco e acompanhamento"
             className="absolute inset-0 h-full w-full object-cover object-center"
           />

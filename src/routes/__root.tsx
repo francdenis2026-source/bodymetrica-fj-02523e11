@@ -466,7 +466,7 @@ function RootComponent() {
         </div>
       </div>
 
-      <div className="flex min-h-screen w-full flex-col md:flex-row bg-background transition-colors duration-300">
+      <div className="app-shell flex min-h-screen w-full flex-col md:flex-row bg-background transition-colors duration-300">
         {showSidebar && (
           <>
             {/* Desktop Sidebar */}
@@ -482,9 +482,9 @@ function RootComponent() {
                   </div>
                   <div className="overflow-hidden transition-all duration-300 group-hover/sidebar:opacity-100 opacity-0 group-hover/sidebar:translate-x-0 -translate-x-4">
                     <h1 className="text-xl font-black font-display text-primary leading-none tracking-tighter uppercase italic whitespace-nowrap">
-                      BODY MÉTTRICA <span className="text-foreground">FJ</span>
+                      BODYMETRICA <span className="text-foreground/65">FJ</span>
                     </h1>
-                    <p className="text-[8px] font-black uppercase tracking-[0.4em] text-foreground/20 mt-1">Performance Suite</p>
+                    <p className="text-[8px] font-bold uppercase tracking-[0.32em] text-foreground/35 mt-1">Saúde em contexto</p>
                   </div>
                 </div>
               </div>
@@ -544,7 +544,7 @@ function RootComponent() {
           <footer className="relative py-20 px-6 text-center border-t border-white/5 mt-auto overflow-hidden">
             <div className="absolute inset-0 z-0 opacity-10 grayscale pointer-events-none">
               <img 
-                src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&q=80&w=800" 
+                src="/bodymetrica-hero-2026.jpg"
                 alt="Footer background" 
                 className="w-full h-full object-cover"
               />

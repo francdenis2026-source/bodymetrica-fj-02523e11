@@ -10,7 +10,7 @@ export const Route = createFileRoute("/tools/")({
       { name: "description", content: "Explore os módulos de composição corporal, nutrição, treino, hidratação e acompanhamento do Body Métrica FJ." },
       { property: "og:title", content: "Ferramentas — Body Métrica FJ" },
       { property: "og:description", content: "Um ecossistema compacto para acompanhar sua evolução." },
-      { property: "og:image", content: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&q=82&w=1400" },
+      { property: "og:image", content: "/bodymetrica-hero-2026.jpg" },
     ],
   }),
 });
@@ -45,7 +45,7 @@ function ToolsPage() {
       </header>
 
       <main className="relative isolate min-h-[calc(100dvh-4rem)] overflow-hidden">
-        <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&q=82&w=1800" alt="" aria-hidden="true" className="absolute inset-0 -z-30 h-full w-full object-cover object-center" />
+        <img src="/bodymetrica-hero-2026.jpg" alt="" aria-hidden="true" className="absolute inset-0 -z-30 h-full w-full object-cover object-center" />
         <div className="absolute inset-0 -z-20 bg-background/50 dark:bg-background/62" />
         <div className="absolute inset-0 -z-10 bg-gradient-to-r from-background/98 via-background/88 to-background/54 dark:from-background dark:via-background/94 dark:to-background/66" />
 
