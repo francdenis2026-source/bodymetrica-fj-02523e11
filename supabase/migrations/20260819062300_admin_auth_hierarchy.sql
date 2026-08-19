@@ -26,8 +26,7 @@ REVOKE ALL ON FUNCTION public.has_role(uuid, public.app_role) FROM PUBLIC;
 REVOKE ALL ON FUNCTION public.has_role(uuid, public.app_role) FROM anon;
 GRANT EXECUTE ON FUNCTION public.has_role(uuid, public.app_role) TO authenticated, service_role;
 
--- Administrative gate used by RLS and the frontend. Text comparison avoids coupling
--- the function body to enum-literal creation order inside this migration.
+-- Operational administration: admin OR super_admin.
 CREATE OR REPLACE FUNCTION public.has_admin_role(_user_id uuid)
 RETURNS boolean
 LANGUAGE sql
@@ -48,6 +47,28 @@ $$;
 REVOKE ALL ON FUNCTION public.has_admin_role(uuid) FROM PUBLIC;
 REVOKE ALL ON FUNCTION public.has_admin_role(uuid) FROM anon;
 GRANT EXECUTE ON FUNCTION public.has_admin_role(uuid) TO authenticated, service_role;
+
+-- Highest privilege level: super_admin only.
+CREATE OR REPLACE FUNCTION public.has_super_admin_role(_user_id uuid)
+RETURNS boolean
+LANGUAGE sql
+STABLE
+SECURITY DEFINER
+SET search_path = public
+AS $$
+  SELECT
+    _user_id = auth.uid()
+    AND EXISTS (
+      SELECT 1
+      FROM public.user_roles
+      WHERE user_id = _user_id
+        AND role::text = 'super_admin'
+    );
+$$;
+
+REVOKE ALL ON FUNCTION public.has_super_admin_role(uuid) FROM PUBLIC;
+REVOKE ALL ON FUNCTION public.has_super_admin_role(uuid) FROM anon;
+GRANT EXECUTE ON FUNCTION public.has_super_admin_role(uuid) TO authenticated, service_role;
 
 -- Single source of truth for the administrative login flow.
 -- Returns only the currently authenticated user's own administrative role.
@@ -77,7 +98,7 @@ REVOKE ALL ON FUNCTION public.admin_session() FROM PUBLIC;
 REVOKE ALL ON FUNCTION public.admin_session() FROM anon;
 GRANT EXECUTE ON FUNCTION public.admin_session() TO authenticated, service_role;
 
--- Rebuild admin-sensitive policies to recognize both admin levels.
+-- ADMIN + SUPER ADMIN: operational license management.
 DROP POLICY IF EXISTS "Admins can manage licenses" ON public.licenses;
 CREATE POLICY "Admins can manage licenses"
 ON public.licenses
@@ -86,14 +107,16 @@ TO authenticated
 USING (public.has_admin_role(auth.uid()))
 WITH CHECK (public.has_admin_role(auth.uid()));
 
+-- SUPER ADMIN ONLY: sensitive system/payment configuration.
 DROP POLICY IF EXISTS "Admins can manage settings" ON public.admin_settings;
-CREATE POLICY "Admins can manage settings"
+CREATE POLICY "Super admins can manage settings"
 ON public.admin_settings
 FOR ALL
 TO authenticated
-USING (public.has_admin_role(auth.uid()))
-WITH CHECK (public.has_admin_role(auth.uid()));
+USING (public.has_super_admin_role(auth.uid()))
+WITH CHECK (public.has_super_admin_role(auth.uid()));
 
+-- ADMIN + SUPER ADMIN: audit visibility.
 DROP POLICY IF EXISTS "Admins can view audit logs" ON public.license_audit_logs;
 CREATE POLICY "Admins can view audit logs"
 ON public.license_audit_logs
@@ -101,14 +124,24 @@ FOR SELECT
 TO authenticated
 USING (public.has_admin_role(auth.uid()));
 
+-- SUPER ADMIN ONLY: changing authorization roles can elevate privileges.
 DROP POLICY IF EXISTS "Admins can manage user roles" ON public.user_roles;
-CREATE POLICY "Admins can manage user roles"
+CREATE POLICY "Super admins can manage user roles"
 ON public.user_roles
 FOR ALL
 TO authenticated
-USING (public.has_admin_role(auth.uid()))
-WITH CHECK (public.has_admin_role(auth.uid()));
+USING (public.has_super_admin_role(auth.uid()))
+WITH CHECK (public.has_super_admin_role(auth.uid()));
 
+-- Preserve each authenticated user's ability to read their own role.
+DROP POLICY IF EXISTS "Users can see their own role" ON public.user_roles;
+CREATE POLICY "Users can see their own role"
+ON public.user_roles
+FOR SELECT
+TO authenticated
+USING (user_id = auth.uid());
+
+-- ADMIN + SUPER ADMIN: webhook/audit operational visibility.
 DROP POLICY IF EXISTS "Admins can view webhook events" ON public.webhook_events;
 CREATE POLICY "Admins can view webhook events"
 ON public.webhook_events
@@ -117,4 +150,4 @@ TO authenticated
 USING (public.has_admin_role(auth.uid()));
 
 COMMENT ON FUNCTION public.admin_session() IS
-'Returns the authenticated user administrative session. admin has operational access; super_admin is the highest administrative level.';
+'Returns the authenticated administrative session. admin handles operations; super_admin additionally controls roles and sensitive settings.';
