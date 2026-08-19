@@ -12,11 +12,9 @@ import {
   Dumbbell,
   HeartPulse,
   LockKeyhole,
-  Moon,
   Salad,
   ShieldCheck,
   Sparkles,
-  Sun,
   Target,
   TrendingUp,
   UserRoundCheck,
@@ -129,26 +127,10 @@ const steps = [
 
 function Index() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
     setIsLoggedIn(!!getSession());
-
-    const root = document.documentElement;
-    const stored = localStorage.getItem("bodymetrica_theme");
-    const systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const dark = stored ? stored === "dark" : root.classList.contains("dark") || systemDark;
-
-    root.classList.toggle("dark", dark);
-    setIsDark(dark);
   }, []);
-
-  const toggleTheme = () => {
-    const next = !isDark;
-    document.documentElement.classList.toggle("dark", next);
-    localStorage.setItem("bodymetrica_theme", next ? "dark" : "light");
-    setIsDark(next);
-  };
 
   return (
     <div className="home-page min-h-[100dvh] overflow-x-hidden bg-background text-foreground selection:bg-primary/20">
@@ -175,16 +157,6 @@ function Index() {
           </nav>
 
           <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={toggleTheme}
-              aria-label={isDark ? "Ativar modo claro" : "Ativar modo escuro"}
-              title={isDark ? "Modo claro" : "Modo escuro"}
-              className="flex size-10 items-center justify-center rounded-full border border-border bg-card text-muted-foreground shadow-sm transition-all hover:border-foreground/20 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-            >
-              {isDark ? <Sun size={17} /> : <Moon size={17} />}
-            </button>
-
             {isLoggedIn ? (
               <Button asChild className="h-10 rounded-full px-5 font-semibold">
                 <Link to="/dashboard">Abrir painel</Link>
