@@ -39,7 +39,7 @@ function installGlobalThemeControl() {
     if (document.getElementById("bodymetrica-global-theme-toggle")) return;
 
     const path = window.location.pathname;
-    const showGlobally = path === "/" || path.startsWith("/auth") || path.startsWith("/admin") || ["/terms", "/privacy", "/about", "/help", "/tools"].includes(path);
+    const showGlobally = path.startsWith("/auth") || path.startsWith("/admin") || ["/terms", "/privacy", "/about", "/help", "/tools"].includes(path);
     if (!showGlobally) return;
 
     const style = document.createElement("style");
