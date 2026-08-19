@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
+import { customerMetadata, normalizeCpf, type UnifiedCustomerInput } from '@/lib/customer-registration';
 
 const db = supabase as any;
 const SUPABASE_URL = import.meta.env['VITE_SUPABASE_URL'];
@@ -41,14 +42,17 @@ export async function getAdminOverview() {
 export async function listCustomers() {
   const { data, error } = await db
     .from('profiles')
-    .select('id,name,email,cpf,birth_date,goal,weight,height,activity_level,license_status,license_expires_at,account_status,admin_notes,created_at,updated_at,last_seen_at')
+    .select('id,name,email,cpf,birth_date,biological_sex,goal,weight,height,activity_level,registration_source,license_status,license_expires_at,account_status,admin_notes,created_at,updated_at,last_seen_at')
     .order('created_at', { ascending: false });
   if (error) throw error;
   return data || [];
 }
 
 export async function updateCustomer(id: string, values: Record<string, unknown>) {
-  const { error } = await db.from('profiles').update({ ...values, updated_at: new Date().toISOString() }).eq('id', id);
+  const patch = { ...values } as any;
+  if (typeof patch.cpf === 'string') patch.cpf = normalizeCpf(patch.cpf);
+  if (typeof patch.email === 'string') patch.email = patch.email.trim().toLowerCase();
+  const { error } = await db.from('profiles').update({ ...patch, updated_at: new Date().toISOString() }).eq('id', id);
   if (error) throw error;
 }
 
@@ -59,19 +63,46 @@ export async function setCustomerStatus(id: string, status: 'active' | 'suspende
   if (error) throw error;
 }
 
-export async function createCustomer(input: { name: string; email: string; password: string }) {
+function generateTemporaryPassword() {
+  const bytes = new Uint32Array(4);
+  crypto.getRandomValues(bytes);
+  return `Bm!${Array.from(bytes).map((n) => n.toString(36)).join('')}9a`;
+}
+
+export async function createCustomer(input: UnifiedCustomerInput) {
+  const normalizedCpf = normalizeCpf(input.cpf);
+  const { data: cpfOwner, error: cpfError } = await db.from('profiles').select('id').eq('cpf', normalizedCpf).maybeSingle();
+  if (cpfError) throw cpfError;
+  if (cpfOwner) throw new Error('Este CPF já está cadastrado.');
+
   const transient = createClient(SUPABASE_URL, SUPABASE_KEY, {
     auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
   });
+
+  const temporaryPassword = generateTemporaryPassword();
+  const email = input.email.trim().toLowerCase();
   const { data, error } = await transient.auth.signUp({
-    email: input.email,
-    password: input.password,
-    options: { data: { name: input.name } },
+    email,
+    password: temporaryPassword,
+    options: {
+      emailRedirectTo: `${window.location.origin}/auth/verify`,
+      data: customerMetadata(input, 'admin'),
+    },
   });
   if (error) throw error;
-  if (data.user) {
-    await db.from('profiles').update({ name: input.name, email: input.email, account_status: 'active' }).eq('id', data.user.id);
-  }
+  if (!data.user) throw new Error('Não foi possível criar a conta.');
+
+  await db.from('profiles').update({
+    ...customerMetadata(input, 'admin'),
+    account_status: 'active',
+    updated_at: new Date().toISOString(),
+  }).eq('id', data.user.id);
+
+  const { error: resetError } = await transient.auth.resetPasswordForEmail(email, {
+    redirectTo: `${window.location.origin}/auth?reset=true`,
+  });
+  if (resetError) throw resetError;
+
   return data.user;
 }
 
@@ -99,9 +130,7 @@ export async function listPlans() {
 
 export async function savePlan(plan: any) {
   const payload = { ...plan, updated_at: new Date().toISOString() };
-  const query = plan.id
-    ? db.from('subscription_plans').update(payload).eq('id', plan.id)
-    : db.from('subscription_plans').insert(payload);
+  const query = plan.id ? db.from('subscription_plans').update(payload).eq('id', plan.id) : db.from('subscription_plans').insert(payload);
   const { error } = await query;
   if (error) throw error;
 }
@@ -125,9 +154,7 @@ export async function listSponsorAds() {
 
 export async function saveSponsorAd(ad: any) {
   const payload = { ...ad, updated_at: new Date().toISOString() };
-  const query = ad.id
-    ? db.from('sponsor_ads').update(payload).eq('id', ad.id)
-    : db.from('sponsor_ads').insert(payload);
+  const query = ad.id ? db.from('sponsor_ads').update(payload).eq('id', ad.id) : db.from('sponsor_ads').insert(payload);
   const { error } = await query;
   if (error) throw error;
 }
