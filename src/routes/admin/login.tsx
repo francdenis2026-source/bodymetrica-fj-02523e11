@@ -87,7 +87,7 @@ function AdminLoginPage() {
   };
 
   return (
-    <div className="relative min-h-[100dvh] overflow-hidden bg-[#04070b] text-white">
+    <div className="on-media admin-login-page relative min-h-[100dvh] overflow-hidden bg-[#04070b] text-white">
       <img
         src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&q=82&w=2200"
         alt=""
@@ -100,7 +100,7 @@ function AdminLoginPage() {
 
       <div className="relative z-10 flex min-h-[100dvh] items-center justify-center px-4 py-4 sm:px-6">
         <div className="grid w-full max-w-[980px] overflow-hidden rounded-[1.65rem] border border-white/12 bg-[#08111a]/98 shadow-[0_30px_90px_rgba(0,0,0,0.56)] lg:h-[590px] lg:grid-cols-[0.92fr_1.08fr]">
-          <section className="on-media relative min-h-[260px] overflow-hidden border-b border-white/10 lg:min-h-0 lg:border-b-0 lg:border-r">
+          <section className="relative min-h-[260px] overflow-hidden border-b border-white/10 lg:min-h-0 lg:border-b-0 lg:border-r">
             <img
               src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=88&w=1400"
               alt="Ambiente tecnológico profissional para gestão do sistema"
@@ -155,20 +155,20 @@ function AdminLoginPage() {
           <main className="flex items-center justify-center bg-[#08121c]/98 px-5 py-6 sm:px-7 lg:px-9">
             <div className="w-full max-w-[410px]">
               <div className="mb-5 flex items-center justify-between gap-4">
-                <Button asChild variant="ghost" size="sm" className="-ml-2 h-8 rounded-lg px-2 text-white/55 hover:bg-white/5 hover:text-white">
+                <Button asChild variant="ghost" size="sm" className="-ml-2 h-8 rounded-lg border border-transparent bg-transparent px-2 text-white/60 hover:border-white/10 hover:bg-[#102232] hover:text-white">
                   <Link to="/" search={{} as any}>
                     <ArrowLeft size={14} className="mr-1.5" />
                     Voltar
                   </Link>
                 </Button>
-                <span className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.035] px-2.5 py-1.5 text-[9px] font-bold uppercase tracking-[0.12em] text-white/55">
+                <span className="inline-flex items-center gap-1.5 rounded-lg border border-white/12 bg-[#0d1b27] px-2.5 py-1.5 text-[9px] font-bold uppercase tracking-[0.12em] text-white/65">
                   <LockKeyhole size={11} className="text-sky-300" />
                   admin
                 </span>
               </div>
 
               <div className="mb-5">
-                <span className="flex size-10 items-center justify-center rounded-xl bg-sky-400/10 text-sky-300 ring-1 ring-sky-300/12">
+                <span className="flex size-10 items-center justify-center rounded-xl border border-sky-300/12 bg-[#0b2233] text-sky-300">
                   <ShieldCheck size={19} />
                 </span>
                 <p className="mt-4 text-[10px] font-bold uppercase tracking-[0.16em] text-sky-300">Credenciais administrativas</p>
@@ -188,7 +188,7 @@ function AdminLoginPage() {
                     onChange={(event) => setEmail(event.target.value)}
                     required
                     disabled={isLoading}
-                    className="h-11 rounded-xl border-white/12 bg-[#0b1722] px-3.5 text-sm text-white placeholder:text-white/30 focus-visible:ring-sky-400/55"
+                    className="h-11 rounded-xl border-white/14 bg-[#0b1722] px-3.5 text-sm text-white placeholder:text-white/30 focus-visible:border-sky-400/45 focus-visible:ring-sky-400/55"
                   />
                 </div>
 
@@ -204,12 +204,12 @@ function AdminLoginPage() {
                       onChange={(event) => setPassword(event.target.value)}
                       required
                       disabled={isLoading}
-                      className="h-11 rounded-xl border-white/12 bg-[#0b1722] px-3.5 pr-11 text-sm text-white placeholder:text-white/30 focus-visible:ring-sky-400/55"
+                      className="h-11 rounded-xl border-white/14 bg-[#0b1722] px-3.5 pr-11 text-sm text-white placeholder:text-white/30 focus-visible:border-sky-400/45 focus-visible:ring-sky-400/55"
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword((value) => !value)}
-                      className="absolute right-2 top-1/2 flex size-8 -translate-y-1/2 items-center justify-center rounded-lg text-white/42 transition-colors hover:bg-white/5 hover:text-white"
+                      className="absolute right-2 top-1/2 flex size-8 -translate-y-1/2 items-center justify-center rounded-lg border border-white/10 bg-[#0d1b27] text-white/55 transition-colors hover:border-sky-300/25 hover:bg-[#12283a] hover:text-sky-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/55"
                       aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
                     >
                       {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
@@ -220,17 +220,17 @@ function AdminLoginPage() {
                 <Button
                   type="submit"
                   disabled={isLoading}
-                  className="h-11 w-full rounded-xl bg-sky-400 text-sm font-semibold text-slate-950 shadow-lg shadow-sky-950/25 hover:bg-sky-300"
+                  className="h-11 w-full rounded-xl border border-sky-300/20 bg-sky-400 text-sm font-semibold text-slate-950 shadow-lg shadow-sky-950/25 hover:bg-sky-300"
                 >
                   <ShieldCheck size={16} className="mr-2" />
                   {isLoading ? "Validando..." : "Acessar administração"}
                 </Button>
               </form>
 
-              <div className="mt-4 rounded-xl border border-white/10 bg-white/[0.035] px-3.5 py-3">
+              <div className="mt-4 rounded-xl border border-white/10 bg-[#0d1b27]/80 px-3.5 py-3">
                 <div className="flex items-start gap-2.5">
                   <LockKeyhole size={14} className="mt-0.5 shrink-0 text-sky-300" />
-                  <p className="text-[11px] leading-5 text-white/52">
+                  <p className="text-[11px] leading-5 text-white/55">
                     Não existe criação de conta nesta área. O acesso depende de credenciais válidas e papel administrativo ativo.
                   </p>
                 </div>
