@@ -186,6 +186,7 @@ function RootComponent() {
   const [syncStatus, setSyncStatus] = useState<'idle' | 'syncing' | 'synced'>('idle');
   const [syncHistory, setSyncHistory] = useState<{lastSync: number | null, totalSynced: number, failures: number}>({lastSync: null, totalSynced: 0, failures: 0});
   const checkLicenseStatusFn = useServerFn(checkLicenseStatus);
+  const isAdminRoute = location.pathname === "/admin" || location.pathname.startsWith("/admin/");
 
   const handleManualSync = async () => {
     if (!isOnline) {
@@ -216,9 +217,9 @@ function RootComponent() {
   };
 
   useEffect(() => {
-    // Polling license status periodically
+    // Consumer license checks never apply to the administrative area.
     const pollLicense = async () => {
-      if (isLoggedIn && isOnline) {
+      if (isLoggedIn && isOnline && !isAdminRoute) {
         const res = await checkLicenseStatusFn();
         if (res.success && (res.status === 'revoked' || res.status === 'expired')) {
           handleLogout();
@@ -251,7 +252,7 @@ function RootComponent() {
         window.removeEventListener('focus', handleFocus);
       }
     };
-  }, [isLoggedIn, isOnline]);
+  }, [isLoggedIn, isOnline, isAdminRoute]);
 
 
   useEffect(() => {
@@ -414,7 +415,7 @@ function RootComponent() {
   
   const publicRoutes = ["/", "/auth", "/auth/verify", "/terms", "/privacy", "/about", "/tools", "/help", "/goals"];
   const isPublicRoute = publicRoutes.includes(location.pathname);
-  const showSidebar = !isPublicRoute && isLoggedIn;
+  const showSidebar = !isPublicRoute && !isAdminRoute && isLoggedIn;
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -528,9 +529,9 @@ function RootComponent() {
         )}>
           <div className="flex-1">
             <AccessGate 
-              isAllowed={isPublicRoute || (isLoggedIn && !needsVerification && !needsLicense)} 
-              needsVerification={needsVerification}
-              needsLicense={needsLicense && !isPublicRoute}
+              isAllowed={isAdminRoute || isPublicRoute || (isLoggedIn && !needsVerification && !needsLicense)} 
+              needsVerification={!isAdminRoute && needsVerification}
+              needsLicense={!isAdminRoute && needsLicense && !isPublicRoute}
             >
               <Outlet />
             </AccessGate>
