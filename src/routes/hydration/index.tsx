@@ -1,305 +1,301 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState, useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { SVGToast } from "@/components/ui/svg-toast";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { 
-  Plus, 
-  Droplets, 
-  Zap, 
-  Settings, 
-  History,
-  Calendar,
+import {
   AlertTriangle,
+  Bell,
+  CalendarDays,
+  Droplets,
+  History,
   Info,
-  LifeBuoy
+  Plus,
+  ShieldCheck,
+  Sparkles,
+  TrendingUp,
 } from "lucide-react";
 import { queueOfflineAction } from "@/lib/offline-sync";
 import { getSession } from "@/lib/auth/auth.functions";
-import { ModuleHeader } from "@/components/module-header";
 
 export const Route = createFileRoute("/hydration/")({
   component: HydrationPage,
 });
 
+const WEEK = [90, 100, 85, 95, 40, 0, 0];
+const DAYS = ["S", "T", "Q", "Q", "S", "S", "D"];
+
 function HydrationPage() {
-  const [currentAmount, setCurrentAmount] = useState(0); // Iniciar zerado para simular empty state
+  const [currentAmount, setCurrentAmount] = useState(0);
   const [isSyncing, setIsSyncing] = useState(false);
   const [userData, setUserData] = useState<any>(null);
   const goalAmount = 3000;
-  const percentage = Math.round((currentAmount / goalAmount) * 100);
 
   useEffect(() => {
     const session = getSession();
-    if (session) {
-      setUserData(session);
-    }
+    if (session) setUserData(session);
   }, []);
+
+  const percentage = useMemo(() => Math.min(100, Math.round((currentAmount / goalAmount) * 100)), [currentAmount]);
+  const remainingAmount = Math.max(goalAmount - currentAmount, 0);
 
   const addWater = async (amount: number) => {
     setIsSyncing(true);
-    const newTotal = currentAmount + amount;
-    setCurrentAmount(prev => Math.min(newTotal, 5000));
-    
+    const newTotal = Math.min(currentAmount + amount, 5000);
+    setCurrentAmount(newTotal);
+
     if (newTotal >= goalAmount * 0.9 && currentAmount < goalAmount * 0.9) {
       toast.custom((t) => (
-        <SVGToast 
+        <SVGToast
           type="success"
-          title="META ATINGIDA"
-          message="Parabéns! Você atingiu 90% da sua meta de hidratação! Mais um pouco e você conclui o dia."
+          title="Meta quase concluída"
+          message="Você chegou a 90% da sua meta diária de hidratação."
           onClose={() => toast.dismiss(t)}
         />
       ));
     }
 
     queueOfflineAction({
-      type: 'WATER_LOG',
-      data: { amount, currentTotal: newTotal }
+      type: "WATER_LOG",
+      data: { amount, currentTotal: newTotal },
     });
 
-    // Simular delay de sincronização
-    setTimeout(() => setIsSyncing(false), 800);
+    window.setTimeout(() => setIsSyncing(false), 650);
 
-    // Check for goal proximity for notifications
-    if (newTotal < goalAmount && newTotal >= goalAmount * 0.8) {
-      if ("Notification" in window && Notification.permission === "granted") {
-        new Notification("Body Métrica FJ", {
-          body: `Você atingiu ${percentage}% da sua meta de água. Quase lá!`,
-          icon: "/favicon.svg"
-        });
-      }
+    if (newTotal < goalAmount && newTotal >= goalAmount * 0.8 && "Notification" in window && Notification.permission === "granted") {
+      new Notification("Body Métrica FJ", {
+        body: `Você atingiu ${Math.round((newTotal / goalAmount) * 100)}% da sua meta de água.`,
+        icon: "/favicon.svg",
+      });
     }
   };
 
+  const enableReminders = () => {
+    if (!("Notification" in window)) {
+      toast.info("Seu navegador não oferece suporte a notificações.");
+      return;
+    }
+
+    Notification.requestPermission().then((permission) => {
+      if (permission === "granted") toast.success("Lembretes de hidratação ativados.");
+      else toast.info("Permissão de notificações não concedida.");
+    });
+  };
+
   return (
-    <div className="flex-1 space-y-12 p-4 md:p-12 pt-10 relative overflow-hidden bg-background">
-      {/* Decorative Module Hero Image */}
-      <div className="absolute top-0 right-0 w-96 h-96 opacity-[0.08] pointer-events-none -z-10 translate-x-1/4 -translate-y-1/4">
-        <Droplets size={384} className="text-info" />
-      </div>
-
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 relative z-10 animate-in fade-in slide-in-from-left-4 duration-700">
-        <ModuleHeader 
-          title="Hidratação"
-          description="Controle rigoroso de ingestão de fluídos para otimização metabólica e performance."
-          icon={Droplets}
-          iconClassName="bg-info text-info-foreground shadow-info/40 border-info/20"
+    <div className="min-h-full bg-background text-foreground">
+      <section className="relative isolate overflow-hidden border-b border-border/70">
+        <img
+          src="https://images.unsplash.com/photo-1523362628745-0c100150b504?auto=format&fit=crop&q=84&w=1800"
+          alt="Garrafa de água em ambiente fitness"
+          className="absolute inset-0 -z-30 h-full w-full object-cover object-center"
         />
-        <div className="flex flex-wrap justify-center gap-4">
-          <Button variant="outline" className="gap-2 h-14 px-8 font-black uppercase tracking-widest border-2 bg-white/5 border-white/10 hover:bg-white/10 hover:scale-105 transition-all" asChild>
-            <Link to="/help">CENTRAL DE AJUDA</Link>
-          </Button>
-          <Button 
-            variant="outline" 
-            size="icon" 
-            className="rounded-2xl h-14 w-14 border-2 bg-white/5 border-white/10 hover:bg-white/10 hover:scale-105 transition-all"
-            onClick={() => {
-              if ("Notification" in window) {
-                Notification.requestPermission().then(permission => {
-                  if (permission === "granted") {
-                    alert("Lembretes de hidratação ativados!");
-                  }
-                });
-              }
-            }}
-          >
-            <Settings size={22} />
-          </Button>
-        </div>
-      </div>
+        <div className="absolute inset-0 -z-20 bg-background/48 dark:bg-background/58" />
+        <div className="absolute inset-0 -z-10 bg-gradient-to-r from-background/98 via-background/84 to-background/44 dark:from-background dark:via-background/91 dark:to-background/56" />
 
-
-
-      <div className="grid gap-6 md:grid-cols-3">
-        <Card className="surface border-none flex flex-col items-center justify-center p-8 text-center space-y-6 md:col-span-2">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full items-center">
-            <div className="relative w-48 h-48 mx-auto">
-              <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
-                <circle
-                  cx="50"
-                  cy="50"
-                  r="45"
-                  fill="none"
-                  stroke="oklch(var(--info) / 0.1)"
-                  strokeWidth="8"
-                />
-                <circle
-                  cx="50"
-                  cy="50"
-                  r="45"
-                  fill="none"
-                  stroke="oklch(var(--info))"
-                  strokeWidth="8"
-                  strokeDasharray={2 * Math.PI * 45}
-                  strokeDashoffset={2 * Math.PI * 45 * (1 - percentage / 100)}
-                  strokeLinecap="round"
-                  className="transition-all duration-700 ease-in-out"
-                />
-              </svg>
-              <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <Droplets className={isSyncing ? "text-primary animate-pulse" : "text-info"} size={24} />
-                <span className="text-3xl font-black font-display italic tracking-tighter uppercase">{percentage}%</span>
-                <span className="text-[10px] text-muted-foreground uppercase font-black tracking-widest">{isSyncing ? "SINCRONIZANDO..." : "DIÁRIO"}</span>
-              </div>
+        <div className="mx-auto grid max-w-7xl gap-8 px-4 py-8 md:px-6 md:py-10 lg:grid-cols-[1.12fr_0.88fr] lg:items-end lg:py-12">
+          <div className="max-w-2xl">
+            <div className="inline-flex items-center gap-2 rounded-xl border border-primary/20 bg-background/92 px-3.5 py-1.5 text-sm font-semibold shadow-sm">
+              <Sparkles size={15} className="text-primary" />
+              Hidratação diária
             </div>
-            
-            <div className="space-y-6 text-left">
-              <div className="space-y-1">
-                <div className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">META CALCULADA</div>
-                <div className="text-3xl font-black font-display italic tracking-tighter uppercase text-gradient-brand">{(goalAmount / 1000).toFixed(1)}L / DIA</div>
-                <p className="text-xs text-muted-foreground font-bold">Baseado em 35ml por kg de peso corporal.</p>
-              </div>
+            <h1 className="mt-4 font-display text-[clamp(2.7rem,6vw,5rem)] font-semibold leading-[1.01] tracking-[-0.045em] text-balance">
+              Água no ritmo certo, <span className="text-primary">sem complicação.</span>
+            </h1>
+            <p className="mt-4 max-w-xl text-base font-medium leading-7 text-foreground/72 md:text-lg md:leading-8">
+              Registre sua ingestão ao longo do dia, acompanhe a meta e mantenha uma visão simples do seu hábito de hidratação.
+            </p>
 
-              <div className="space-y-2">
-                <div className="flex justify-between text-[10px] font-black uppercase tracking-widest">
-                  <span>STATUS ATUAL</span>
-                  <span className="text-info">{(currentAmount / 1000).toFixed(1)}L REGISTRADOS</span>
-                </div>
-                <Progress value={percentage} className="h-2 bg-info/10" indicatorClassName="bg-info" />
-                <p className="text-[10px] text-muted-foreground font-bold uppercase italic">Faltam {( (goalAmount - currentAmount) / 1000 ).toFixed(1)}L para a meta de elite.</p>
-              </div>
+            <div className="mt-6 flex flex-wrap items-center gap-3">
+              <Button onClick={() => addWater(500)} className="h-11 rounded-xl px-5 font-semibold">
+                <Plus size={16} className="mr-2" />
+                Adicionar 500 ml
+              </Button>
+              <Button variant="outline" onClick={enableReminders} className="h-11 rounded-xl bg-background/92 px-5 font-semibold">
+                <Bell size={16} className="mr-2" />
+                Lembretes
+              </Button>
+              <Button variant="ghost" asChild className="h-11 rounded-xl px-4">
+                <Link to="/help">Central de ajuda</Link>
+              </Button>
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-3 w-full border-t border-white/5 pt-8">
-            <Button variant="outline" className="flex flex-col h-auto py-5 gap-1 rounded-2xl border-white/5 bg-white/[0.02] hover:bg-white/5 hover:scale-105 transition-all" onClick={() => addWater(200)}>
-              <span className="text-xs font-black uppercase italic tracking-tighter">200ml</span>
-              <span className="text-[9px] text-muted-foreground uppercase font-bold">Copo</span>
-            </Button>
-            <Button variant="outline" className="flex flex-col h-auto py-5 gap-1 rounded-2xl border-white/5 bg-white/[0.02] hover:bg-white/5 hover:scale-105 transition-all" onClick={() => addWater(500)}>
-              <span className="text-xs font-black uppercase italic tracking-tighter">500ml</span>
-              <span className="text-[9px] text-muted-foreground uppercase font-bold">Garrafa</span>
-            </Button>
-            <Button variant="outline" className="flex flex-col h-auto py-5 gap-1 rounded-2xl border-white/5 bg-white/[0.02] hover:bg-white/5 hover:scale-105 transition-all" onClick={() => addWater(1000)}>
-              <span className="text-xs font-black uppercase italic tracking-tighter">1.0L</span>
-              <span className="text-[9px] text-muted-foreground uppercase font-bold">Pack</span>
-            </Button>
+          <div className="rounded-[1.6rem] border border-border/80 bg-background/94 p-5 shadow-xl shadow-black/10 md:p-6">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-primary">Progresso de hoje</p>
+                <p className="mt-1 text-sm text-foreground/52">Meta diária de {(goalAmount / 1000).toFixed(1)} L</p>
+              </div>
+              <div className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                <Droplets size={20} />
+              </div>
+            </div>
+
+            <div className="mt-5 flex items-end justify-between gap-4">
+              <div>
+                <p className="font-display text-5xl font-semibold tracking-[-0.04em]">{(currentAmount / 1000).toFixed(1)} L</p>
+                <p className="mt-1 text-sm text-foreground/52">{percentage}% da meta</p>
+              </div>
+              <p className="text-right text-sm font-medium text-foreground/62">
+                {remainingAmount > 0 ? `${(remainingAmount / 1000).toFixed(1)} L restantes` : "Meta concluída"}
+              </p>
+            </div>
+
+            <Progress value={percentage} className="mt-5 h-2.5" />
+            <div className="mt-4 flex items-center justify-between text-xs text-foreground/45">
+              <span>{isSyncing ? "Sincronizando registro..." : "Atualizado agora"}</span>
+              <span>{userData?.email ? "Conta conectada" : "Modo local"}</span>
+            </div>
           </div>
-        </Card>
-
-        <div className="space-y-4">
-          <Card className="surface border-none p-5 space-y-4">
-            <CardTitle className="text-lg font-display flex items-center gap-2">
-              <Zap size={18} className="text-warning" />
-              Sequência e Hábitos
-            </CardTitle>
-            <div className="flex justify-between p-3 rounded-xl bg-muted/50">
-              <div className="text-center space-y-1">
-                <span className="text-[10px] text-muted-foreground uppercase font-bold">Atual</span>
-                <div className="text-xl font-bold font-display">5 dias</div>
-              </div>
-              <div className="w-px bg-border my-2" />
-              <div className="text-center space-y-1">
-                <span className="text-[10px] text-muted-foreground uppercase font-bold">Recorde</span>
-                <div className="text-xl font-bold font-display">12 dias</div>
-              </div>
-              <div className="w-px bg-border my-2" />
-              <div className="text-center space-y-1">
-                <span className="text-[10px] text-muted-foreground uppercase font-bold">Média</span>
-                <div className="text-xl font-bold font-display">2.8L</div>
-              </div>
-            </div>
-          </Card>
-
-          <Card className="surface border-none">
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-lg font-display flex items-center gap-2">
-                <History size={18} className="text-primary" />
-                Registros de Hoje
-              </CardTitle>
-              {currentAmount > 0 && (
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  className="h-8 text-[10px] font-black uppercase tracking-widest"
-                  onClick={() => {
-                    if ("Notification" in window && Notification.permission === "granted") {
-                      new Notification("Body Métrica FJ", {
-                        body: "Não esqueça de beber água! Sua meta é 3L hoje.",
-                        icon: "/favicon.ico"
-                      });
-                    } else {
-                      alert("Ative as notificações nas configurações para receber lembretes.");
-                    }
-                  }}
-                >
-                  TESTAR LEMBRETE
-                </Button>
-              )}
-            </CardHeader>
-            <CardContent>
-              {currentAmount === 0 ? (
-                <div className="py-12 text-center space-y-4">
-                  <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center mx-auto">
-                    <Droplets className="text-muted-foreground/30" size={20} />
-                  </div>
-                  <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">NENHUM REGISTRO HOJE</p>
-                  <Button variant="ghost" className="text-[9px] font-black uppercase tracking-widest hover:text-primary" onClick={() => addWater(200)}>
-                    REGISTRAR AGORA
-                  </Button>
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  <WaterLogEntry time="Agora" amount={`${currentAmount}ml (Total)`} />
-                </div>
-              )}
-            </CardContent>
-          </Card>
-
-          {currentAmount > 4500 && (
-            <div className="bg-destructive/10 border border-destructive/20 rounded-xl p-4 flex gap-3">
-              <AlertTriangle className="text-destructive shrink-0" size={20} />
-              <div className="space-y-1">
-                <p className="text-xs font-bold text-destructive">Atenção ao excesso</p>
-                <p className="text-xs text-destructive/80 leading-relaxed">
-                  Beber água demais em um intervalo curto pode ser prejudicial. 
-                  Mantenha a hidratação equilibrada.
-                </p>
-              </div>
-            </div>
-          )}
         </div>
-      </div>
-      
-      <Card className="surface border-none">
-        <CardHeader>
-          <CardTitle className="text-lg font-display flex items-center gap-2">
-            <Calendar size={18} className="text-primary" />
-            Visão Semanal
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex justify-between items-end h-24 gap-1.5">
-            {[90, 100, 85, 95, 40, 0, 0].map((val, i) => (
-              <div key={i} className="flex-1 flex flex-col items-center gap-2">
-                <div 
-                  className={`w-full rounded-t-sm transition-all ${val >= 90 ? 'bg-info' : 'bg-info/30'}`} 
-                  style={{ height: `${val || 5}%` }}
-                />
-                <span className="text-[10px] text-muted-foreground font-medium">
-                  {['S', 'T', 'Q', 'Q', 'S', 'S', 'D'][i]}
+      </section>
+
+      <main className="mx-auto max-w-7xl px-4 py-7 md:px-6 md:py-9">
+        <div className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
+          <section className="space-y-6">
+            <div className="rounded-[1.6rem] border border-border/80 bg-card p-5 md:p-6">
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-primary">Registro rápido</p>
+                  <h2 className="mt-1 font-display text-2xl font-semibold tracking-tight">Quanto você bebeu?</h2>
+                </div>
+                <span className="hidden items-center gap-2 text-xs font-medium text-foreground/45 sm:flex">
+                  <ShieldCheck size={15} className="text-primary" />
+                  Salvo localmente até sincronizar
                 </span>
               </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+
+              <div className="mt-5 grid grid-cols-3 gap-3">
+                {[
+                  { amount: 200, label: "Copo", value: "200 ml" },
+                  { amount: 500, label: "Garrafa", value: "500 ml" },
+                  { amount: 1000, label: "Volume maior", value: "1,0 L" },
+                ].map((item) => (
+                  <button
+                    key={item.amount}
+                    type="button"
+                    onClick={() => addWater(item.amount)}
+                    className="rounded-2xl border border-border/75 bg-background px-4 py-5 text-left transition-colors hover:border-primary/30 hover:bg-primary/[0.035]"
+                  >
+                    <span className="flex size-9 items-center justify-center rounded-xl bg-primary/10 text-primary"><Droplets size={17} /></span>
+                    <p className="mt-4 font-display text-xl font-semibold">{item.value}</p>
+                    <p className="mt-1 text-xs text-foreground/45">{item.label}</p>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="rounded-[1.6rem] border border-border/80 bg-card p-5 md:p-6">
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-primary">Visão semanal</p>
+                  <h2 className="mt-1 font-display text-2xl font-semibold tracking-tight">Consistência da semana</h2>
+                </div>
+                <CalendarDays size={20} className="text-primary" />
+              </div>
+
+              <div className="mt-6 grid grid-cols-7 items-end gap-2 sm:gap-3">
+                {WEEK.map((value, index) => (
+                  <div key={`${value}-${index}`} className="flex flex-col items-center gap-2">
+                    <div className="flex h-28 w-full items-end overflow-hidden rounded-xl bg-muted/35">
+                      <div className="w-full rounded-xl bg-primary/70 transition-[height]" style={{ height: `${Math.max(value, 6)}%` }} />
+                    </div>
+                    <span className="text-[11px] font-semibold text-foreground/45">{DAYS[index]}</span>
+                    <span className="text-[10px] text-foreground/32">{value}%</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          <aside className="space-y-6">
+            <div className="rounded-[1.6rem] border border-border/80 bg-card p-5 md:p-6">
+              <div className="flex items-center gap-3">
+                <span className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary"><TrendingUp size={19} /></span>
+                <div>
+                  <p className="text-sm font-semibold">Hábitos de hidratação</p>
+                  <p className="text-xs text-foreground/45">Resumo dos seus padrões recentes</p>
+                </div>
+              </div>
+
+              <div className="mt-5 grid grid-cols-3 divide-x divide-border/70 rounded-xl border border-border/70 bg-background/65">
+                {[
+                  ["5 dias", "Sequência"],
+                  ["12 dias", "Recorde"],
+                  ["2,8 L", "Média"],
+                ].map(([value, label]) => (
+                  <div key={label} className="px-3 py-4 text-center">
+                    <p className="font-display text-lg font-semibold">{value}</p>
+                    <p className="mt-1 text-[10px] uppercase tracking-[0.1em] text-foreground/40">{label}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="rounded-[1.6rem] border border-border/80 bg-card p-5 md:p-6">
+              <div className="flex items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <span className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary"><History size={19} /></span>
+                  <div>
+                    <p className="text-sm font-semibold">Registros de hoje</p>
+                    <p className="text-xs text-foreground/45">Últimas adições do dia</p>
+                  </div>
+                </div>
+                {currentAmount > 0 && <span className="text-xs font-semibold text-primary">{(currentAmount / 1000).toFixed(1)} L</span>}
+              </div>
+
+              {currentAmount === 0 ? (
+                <div className="py-9 text-center">
+                  <span className="mx-auto flex size-11 items-center justify-center rounded-xl bg-muted/50 text-foreground/35"><Droplets size={20} /></span>
+                  <p className="mt-3 text-sm font-semibold">Nenhum registro hoje</p>
+                  <p className="mt-1 text-xs text-foreground/45">Adicione seu primeiro consumo para iniciar o acompanhamento.</p>
+                  <Button variant="outline" size="sm" onClick={() => addWater(200)} className="mt-4 rounded-lg">Registrar 200 ml</Button>
+                </div>
+              ) : (
+                <div className="mt-5 rounded-xl border border-border/70 bg-background/65">
+                  <WaterLogEntry time="Agora" amount={`${currentAmount} ml no total`} />
+                </div>
+              )}
+            </div>
+
+            <div className="rounded-[1.4rem] border border-border/80 bg-muted/35 p-4">
+              <div className="flex gap-3">
+                <Info size={18} className="mt-0.5 shrink-0 text-primary" />
+                <div>
+                  <p className="text-sm font-semibold">Use a meta como referência</p>
+                  <p className="mt-1 text-xs leading-5 text-foreground/50">Necessidades de hidratação variam com clima, treino, alimentação e características individuais.</p>
+                </div>
+              </div>
+            </div>
+
+            {currentAmount > 4500 && (
+              <div className="rounded-[1.4rem] border border-destructive/25 bg-destructive/5 p-4">
+                <div className="flex gap-3">
+                  <AlertTriangle size={18} className="mt-0.5 shrink-0 text-destructive" />
+                  <div>
+                    <p className="text-sm font-semibold text-destructive">Atenção ao excesso</p>
+                    <p className="mt-1 text-xs leading-5 text-destructive/80">Grandes volumes em pouco tempo podem ser inadequados. Mantenha a ingestão distribuída ao longo do dia.</p>
+                  </div>
+                </div>
+              </div>
+            )}
+          </aside>
+        </div>
+      </main>
     </div>
   );
 }
 
 function WaterLogEntry({ time, amount }: { time: string; amount: string }) {
   return (
-    <div className="flex items-center justify-between py-2 border-b border-muted/50 last:border-0">
+    <div className="flex items-center justify-between gap-4 px-4 py-3.5">
       <div className="flex items-center gap-3">
-        <div className="w-8 h-8 rounded-full bg-info/10 text-info flex items-center justify-center">
-          <Droplets size={14} />
-        </div>
+        <span className="flex size-8 items-center justify-center rounded-lg bg-primary/10 text-primary"><Droplets size={14} /></span>
         <span className="text-sm font-medium">{time}</span>
       </div>
-      <span className="text-sm font-bold font-display">{amount}</span>
+      <span className="text-sm font-semibold text-foreground/70">{amount}</span>
     </div>
   );
 }
