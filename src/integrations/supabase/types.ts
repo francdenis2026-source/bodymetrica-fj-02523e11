@@ -127,7 +127,10 @@ export type Database = {
       }
       profiles: {
         Row: {
+          account_status: string
           activity_level: string | null
+          admin_notes: string | null
+          biological_sex: string | null
           birth_date: string | null
           cpf: string | null
           created_at: string | null
@@ -135,17 +138,22 @@ export type Database = {
           goal: string | null
           height: number | null
           id: string
+          last_seen_at: string | null
           license_expires_at: string | null
           license_key: string | null
           license_status: string | null
           mfa_enabled: boolean | null
           name: string | null
+          registration_source: string
           theme_preference: string | null
           updated_at: string | null
           weight: number | null
         }
         Insert: {
+          account_status?: string
           activity_level?: string | null
+          admin_notes?: string | null
+          biological_sex?: string | null
           birth_date?: string | null
           cpf?: string | null
           created_at?: string | null
@@ -153,17 +161,22 @@ export type Database = {
           goal?: string | null
           height?: number | null
           id: string
+          last_seen_at?: string | null
           license_expires_at?: string | null
           license_key?: string | null
           license_status?: string | null
           mfa_enabled?: boolean | null
           name?: string | null
+          registration_source?: string
           theme_preference?: string | null
           updated_at?: string | null
           weight?: number | null
         }
         Update: {
+          account_status?: string
           activity_level?: string | null
+          admin_notes?: string | null
+          biological_sex?: string | null
           birth_date?: string | null
           cpf?: string | null
           created_at?: string | null
@@ -171,11 +184,13 @@ export type Database = {
           goal?: string | null
           height?: number | null
           id?: string
+          last_seen_at?: string | null
           license_expires_at?: string | null
           license_key?: string | null
           license_status?: string | null
           mfa_enabled?: boolean | null
           name?: string | null
+          registration_source?: string
           theme_preference?: string | null
           updated_at?: string | null
           weight?: number | null
@@ -291,6 +306,7 @@ export type Database = {
         }
         Returns: undefined
       }
+      resolve_login_email: { Args: { _identifier: string }; Returns: string }
       use_mfa_recovery_code: {
         Args: { _code: string; _user_id: string }
         Returns: boolean
