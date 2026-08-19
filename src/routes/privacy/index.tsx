@@ -1,90 +1,104 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowLeft, Lock, Eye, ShieldCheck } from "lucide-react";
+import { ArrowLeft, Database, Eye, LockKeyhole, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ResponsiveHero } from "@/components/responsive-hero";
 
 export const Route = createFileRoute("/privacy/")({
   component: PrivacyPage,
   head: () => ({
     title: "Política de Privacidade — Body Métrica FJ",
     meta: [
-      { name: "description", content: "Entenda como protegemos seus dados de saúde, medidas e fotos de evolução no Body Métrica FJ." },
+      { name: "description", content: "Entenda como o Body Métrica FJ trata seus dados pessoais e métricas de evolução." },
       { property: "og:title", content: "Política de Privacidade — Body Métrica FJ" },
-      { property: "og:description", content: "Sua privacidade é nossa prioridade. Conheça como seus dados são protegidos." },
-      { property: "og:image", content: "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&q=80&w=1200" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ]
-  })
+      { property: "og:description", content: "Privacidade, controle e transparência sobre seus dados." },
+      { property: "og:image", content: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&q=82&w=1400" },
+    ],
+  }),
 });
+
+const ITEMS = [
+  {
+    icon: Database,
+    label: "COLETA",
+    title: "Somente o necessário",
+    text: "O Body Métrica FJ utiliza informações necessárias para o acompanhamento, como medidas, peso, registros de evolução e dados do perfil. O objetivo é oferecer contexto ao usuário, sem coleta excessiva.",
+  },
+  {
+    icon: LockKeyhole,
+    label: "PROTEÇÃO",
+    title: "Acesso controlado",
+    text: "Registros pessoais e imagens de evolução ficam associados à conta autenticada. O acesso deve permanecer restrito ao titular e aos fluxos autorizados da plataforma.",
+  },
+  {
+    icon: Eye,
+    label: "CONTROLE",
+    title: "Seus dados, suas decisões",
+    text: "Você pode revisar suas informações e solicitar correção ou exclusão dos dados vinculados à sua conta, observadas as necessidades técnicas e legais aplicáveis.",
+  },
+];
 
 function PrivacyPage() {
   return (
-    <div className="min-h-screen bg-background pb-20 relative overflow-hidden text-foreground">
-      <div className="fixed inset-0 z-0 opacity-10 pointer-events-none">
-        <img 
-          src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=1600" 
-          alt="Privacy background" 
-          className="w-full h-full object-cover"
-        />
-      </div>
-
-      <header className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-md border-b border-white/5">
-        <div className="container mx-auto px-4 h-16 flex items-center gap-4">
-          <Button variant="ghost" size="icon" asChild>
-            <Link to="/" search={{} as any}><ArrowLeft size={20} /></Link>
+    <div className="min-h-[100dvh] bg-background text-foreground">
+      <header className="relative z-50 border-b border-border/70 bg-background/95">
+        <div className="container mx-auto flex h-16 max-w-7xl items-center justify-between px-4 md:px-6">
+          <div className="flex items-center gap-3">
+            <Button variant="ghost" size="icon" asChild className="rounded-xl">
+              <Link to="/" search={{} as any} aria-label="Voltar para a página inicial"><ArrowLeft size={18} /></Link>
+            </Button>
+            <div className="leading-tight">
+              <p className="font-display text-base font-semibold tracking-tight">Privacidade</p>
+              <p className="hidden text-xs text-muted-foreground sm:block">Dados, segurança e controle</p>
+            </div>
+          </div>
+          <Button asChild size="sm" variant="outline" className="min-h-10 rounded-xl bg-background px-4">
+            <Link to="/terms">Ver termos</Link>
           </Button>
-          <h1 className="text-lg font-bold font-display uppercase tracking-tighter italic">Privacidade</h1>
         </div>
       </header>
 
-      <main className="relative z-10 pt-16 container mx-auto px-4 max-w-3xl space-y-12 py-12">
-        <ResponsiveHero 
-          imageUrl="https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&q=80&w=1600"
-          overlayOpacity={0.8}
-          height="h-[30vh] min-h-[250px]"
-          className="rounded-[2rem] shadow-2xl"
-        >
-          <div className="flex flex-col items-center justify-center h-full text-center space-y-4 px-6">
-            <Lock className="text-primary w-12 h-12 mb-2" />
-            <h2 className="text-3xl md:text-5xl font-black font-display tracking-tighter text-white uppercase italic">
-              DADOS <span className="text-primary">PROTEGIDOS</span>
-            </h2>
-          </div>
-        </ResponsiveHero>
+      <main className="relative isolate min-h-[calc(100dvh-4rem)] overflow-hidden">
+        <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&q=82&w=1800" alt="" aria-hidden="true" className="absolute inset-0 -z-30 h-full w-full object-cover object-center" />
+        <div className="absolute inset-0 -z-20 bg-background/58 dark:bg-background/68" />
+        <div className="absolute inset-0 -z-10 bg-gradient-to-r from-background/98 via-background/91 to-background/62 dark:from-background dark:via-background/94 dark:to-background/72" />
 
-        <section className="surface p-8 md:p-12 space-y-8 border-white/5 bg-card/40 backdrop-blur-2xl rounded-[2.5rem] shadow-2xl">
-          <div className="space-y-4">
-            <h3 className="text-xl font-bold font-display flex items-center gap-2 text-primary">
-              <Eye className="w-5 h-5" />
-              1. COLETA DE DADOS
-            </h3>
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              Coletamos apenas as informações necessárias para seu acompanhamento corporal: peso, medidas, idade e fotos de evolução. Estes dados são armazenados de forma segura no Lovable Cloud e nunca são compartilhados com terceiros sem sua permissão explícita.
+        <section className="container mx-auto grid min-h-[calc(100dvh-4rem)] max-w-7xl items-center gap-8 px-4 py-8 md:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:gap-12 lg:py-10">
+          <div className="max-w-xl">
+            <div className="inline-flex items-center gap-2 rounded-xl border border-primary/20 bg-background/92 px-3.5 py-1.5 text-sm font-semibold shadow-sm">
+              <ShieldCheck size={15} className="text-primary" />
+              Privacidade por padrão
+            </div>
+            <h1 className="mt-5 font-display text-[clamp(2.55rem,5.5vw,4.5rem)] font-semibold leading-[1.02] tracking-[-0.045em] text-balance">
+              Seus dados devem ser <span className="text-primary">claros para você e discretos para o sistema.</span>
+            </h1>
+            <p className="mt-5 max-w-lg text-base font-medium leading-7 text-foreground/74 md:text-lg md:leading-8">
+              A política do Body Métrica FJ parte de três princípios simples: coletar menos, proteger melhor e manter o usuário no controle.
             </p>
+            <div className="mt-7 flex flex-wrap gap-3">
+              <Button asChild size="lg" className="h-12 rounded-xl px-6"><Link to="/help">Central de ajuda</Link></Button>
+              <Button asChild size="lg" variant="outline" className="h-12 rounded-xl bg-background/92 px-6"><Link to="/about">Sobre o projeto</Link></Button>
+            </div>
           </div>
 
-          <div className="space-y-4">
-            <h3 className="text-xl font-bold font-display flex items-center gap-2 text-primary">
-              <ShieldCheck className="w-5 h-5" />
-              2. CRIPTOGRAFIA E ACESSO
-            </h3>
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              Suas fotos de evolução são privadas e protegidas por autenticação de alto nível. O sistema utiliza infraestrutura segura para garantir que apenas o proprietário da conta tenha acesso aos registros visuais de evolução.
-            </p>
-          </div>
-
-          <div className="space-y-4">
-            <h3 className="text-xl font-bold font-display flex items-center gap-2 text-primary">
-              <Lock className="w-5 h-5" />
-              3. SEUS DIREITOS
-            </h3>
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              Você tem o direito de exportar seus dados a qualquer momento através do dashboard administrativo ou solicitar a exclusão total da sua conta e registros de nossos servidores.
-            </p>
-          </div>
-
-          <div className="pt-8 border-t border-white/5 text-[10px] text-muted-foreground/40 text-center uppercase tracking-widest font-black">
-            Body Métrica FJ • Compromisso com a Segurança
+          <div className="overflow-hidden rounded-[1.75rem] border border-border/80 bg-background/95 shadow-xl shadow-black/10">
+            <div className="border-b border-border/70 px-5 py-4 md:px-6">
+              <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-primary">Como tratamos seus dados</p>
+              <p className="mt-1 text-sm text-foreground/62">Resumo direto dos compromissos centrais da plataforma.</p>
+            </div>
+            <div className="divide-y divide-border/70">
+              {ITEMS.map(({ icon: Icon, label, title, text }) => (
+                <article key={title} className="grid grid-cols-[auto_1fr] gap-4 px-5 py-4 md:px-6 md:py-5">
+                  <div className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary"><Icon size={19} /></div>
+                  <div>
+                    <p className="text-[10px] font-bold tracking-[0.14em] text-primary/80">{label}</p>
+                    <h2 className="mt-1 font-display text-base font-semibold tracking-tight md:text-lg">{title}</h2>
+                    <p className="mt-1 text-sm leading-6 text-foreground/62">{text}</p>
+                  </div>
+                </article>
+              ))}
+            </div>
+            <div className="border-t border-border/70 bg-muted/35 px-5 py-4 text-xs leading-5 text-foreground/58 md:px-6">
+              Esta página resume os princípios de privacidade do produto e pode ser atualizada conforme a plataforma evolui.
+            </div>
           </div>
         </section>
       </main>
