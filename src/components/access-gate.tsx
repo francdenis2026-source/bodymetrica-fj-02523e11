@@ -12,7 +12,7 @@ interface AccessGateProps {
   needsLicense?: boolean;
 }
 
-const PUBLIC_AUTH_ROUTES = ['/auth', '/auth/register', '/auth/verify', '/auth/recover'];
+const PUBLIC_AUTH_ROUTES = ['/auth', '/auth/register', '/auth/verify', '/auth/recover', '/admin/login'];
 
 export function AccessGate({
   title = 'Acesso protegido',
