@@ -33,7 +33,7 @@ function AdminLayout() {
         return;
       }
 
-      const { data: adminSession, error: adminError } = await supabase.rpc("admin_session");
+      const { data: adminSession, error: adminError } = await supabase.rpc("admin_session" as never);
       if (!active) return;
 
       const sessionRow = Array.isArray(adminSession) ? adminSession[0] : adminSession;

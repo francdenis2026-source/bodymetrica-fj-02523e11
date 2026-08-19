@@ -32,7 +32,7 @@ const loginSchema = z.object({
     return isValidCpf(value);
   }, "Informe um e-mail ou CPF válido"),
   password: z.string().min(6, "A senha deve ter pelo menos 6 caracteres"),
-  rememberMe: z.boolean().default(false),
+  rememberMe: z.boolean(),
 });
 
 const newPasswordSchema = z.object({

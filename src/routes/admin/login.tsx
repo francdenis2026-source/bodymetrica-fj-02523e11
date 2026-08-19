@@ -67,7 +67,7 @@ function AdminLoginPage() {
         return;
       }
 
-      const { data: adminSession, error: adminError } = await supabase.rpc("admin_session");
+      const { data: adminSession, error: adminError } = await supabase.rpc("admin_session" as never);
       const sessionRow = Array.isArray(adminSession) ? adminSession[0] : adminSession;
 
       if (adminError || !sessionRow?.user_id) {

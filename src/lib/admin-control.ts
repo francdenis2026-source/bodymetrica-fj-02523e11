@@ -58,7 +58,7 @@ export async function updateCustomer(id: string, values: Record<string, unknown>
 
 export async function setCustomerStatus(id: string, status: 'active' | 'suspended' | 'disabled' | 'deleted') {
   const patch: Record<string, unknown> = { account_status: status, updated_at: new Date().toISOString() };
-  if (status !== 'active') patch.license_status = 'revoked';
+  if (status !== 'active') patch['license_status'] = 'revoked';
   const { error } = await db.from('profiles').update(patch).eq('id', id);
   if (error) throw error;
 }
