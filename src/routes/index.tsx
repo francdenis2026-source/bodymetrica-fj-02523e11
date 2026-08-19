@@ -7,12 +7,19 @@ import {
   ArrowRight,
   BarChart3,
   Check,
+  ChevronRight,
   Droplets,
   Dumbbell,
-  Flame,
+  HeartPulse,
+  LockKeyhole,
+  Moon,
+  Salad,
   ShieldCheck,
-  Smartphone,
+  Sparkles,
+  Sun,
   Target,
+  TrendingUp,
+  UserRoundCheck,
   Weight,
 } from "lucide-react";
 
@@ -29,18 +36,18 @@ export const Route = createFileRoute("/")({
     activityLevel: (search["activityLevel"] as string) || undefined,
   } as any),
   head: () => ({
-    title: "Body Métrica FJ — Evolução com dados que transformam",
+    title: "Body Métrica FJ — Seu progresso, organizado",
     meta: [
       {
         name: "description",
         content:
-          "Acompanhe composição corporal, alimentação, hidratação, treino e evolução em uma experiência integrada.",
+          "Organize composição corporal, nutrição, hidratação, treinos e metas em uma experiência clara e integrada.",
       },
       { property: "og:title", content: "Body Métrica FJ" },
       {
         property: "og:description",
         content:
-          "Seu corpo, seus dados e sua evolução reunidos em uma plataforma simples e inteligente.",
+          "Uma visão integrada da sua rotina para acompanhar evolução com mais clareza.",
       },
     ],
   }),
@@ -57,164 +64,372 @@ const authSearch = {
   activityLevel: "",
 } as any;
 
-const benefits = [
-  { icon: ShieldCheck, title: "Dados confiáveis", description: "Informações organizadas para decisões mais claras." },
-  { icon: BarChart3, title: "Evolução contínua", description: "Visualize tendências e acompanhe mudanças ao longo do tempo." },
-  { icon: ShieldCheck, title: "Segurança total", description: "Privacidade e controle sobre os seus registros." },
-  { icon: Smartphone, title: "Acesso em qualquer lugar", description: "Sua rotina disponível no computador e no celular." },
+const modules = [
+  {
+    icon: Weight,
+    title: "Corpo",
+    description: "Peso, medidas, composição e histórico em uma leitura contínua.",
+    detail: "Métricas conectadas",
+  },
+  {
+    icon: Salad,
+    title: "Nutrição",
+    description: "Registros alimentares e metas nutricionais organizados no mesmo fluxo.",
+    detail: "Rotina alimentar",
+  },
+  {
+    icon: Droplets,
+    title: "Hidratação",
+    description: "Acompanhe ingestão de água sem perder o contexto do seu objetivo.",
+    detail: "Meta diária",
+  },
+  {
+    icon: Dumbbell,
+    title: "Treino",
+    description: "Sessões, constância e evolução reunidas para facilitar o acompanhamento.",
+    detail: "Histórico de treino",
+  },
 ];
 
-const resourceCards = [
-  { icon: Flame, label: "Calorias", value: "2.350 kcal", hint: "Meta personalizada" },
-  { icon: Dumbbell, label: "Treinos", value: "5", hint: "Nesta semana" },
-  { icon: Droplets, label: "Água", value: "2,1 L", hint: "Meta diária" },
-  { icon: Activity, label: "Evolução", value: "Contínua", hint: "Histórico integrado" },
+const principles = [
+  {
+    icon: TrendingUp,
+    title: "Evolução compreensível",
+    description: "Informação organizada para você identificar tendências sem se perder em telas ou números soltos.",
+  },
+  {
+    icon: Target,
+    title: "Metas com contexto",
+    description: "Objetivos, registros e rotina aparecem conectados para deixar o progresso mais fácil de interpretar.",
+  },
+  {
+    icon: ShieldCheck,
+    title: "Privacidade por princípio",
+    description: "A experiência foi pensada para manter seus registros pessoais sob controle e com acesso protegido.",
+  },
 ];
 
-const workflow = [
-  { number: "01", title: "Crie sua conta", description: "Cadastre-se com segurança e configure seu perfil." },
-  { number: "02", title: "Registre seus dados", description: "Informe medidas, objetivo, alimentação, água e treinos." },
-  { number: "03", title: "Evolua com inteligência", description: "Acompanhe tendências, metas e resultados em um só painel." },
+const steps = [
+  {
+    number: "01",
+    title: "Defina seu ponto de partida",
+    description: "Crie sua conta e informe os dados básicos que ajudam a personalizar sua experiência.",
+  },
+  {
+    number: "02",
+    title: "Registre sua rotina",
+    description: "Adicione corpo, alimentação, água e treino de forma simples, no ritmo do seu dia.",
+  },
+  {
+    number: "03",
+    title: "Leia sua evolução",
+    description: "Use histórico, metas e tendências para entender o que está mudando com mais clareza.",
+  },
 ];
 
 function Index() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
     setIsLoggedIn(!!getSession());
+
+    const root = document.documentElement;
+    const stored = localStorage.getItem("bodymetrica_theme");
+    const systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const dark = stored ? stored === "dark" : root.classList.contains("dark") || systemDark;
+
+    root.classList.toggle("dark", dark);
+    setIsDark(dark);
   }, []);
 
+  const toggleTheme = () => {
+    const next = !isDark;
+    document.documentElement.classList.toggle("dark", next);
+    localStorage.setItem("bodymetrica_theme", next ? "dark" : "light");
+    setIsDark(next);
+  };
+
   return (
-    <div className="home-page min-h-screen overflow-x-hidden bg-background text-foreground">
-      <header className="sticky top-0 z-50 border-b border-white/10 bg-[#06111e]/95 text-white shadow-sm backdrop-blur-xl">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 md:px-6">
-          <Link to="/" className="flex items-center gap-3 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400">
-            <div className="flex size-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 text-sm font-bold shadow-[0_8px_28px_rgba(37,99,235,.35)]">B</div>
+    <div className="home-page min-h-[100dvh] overflow-x-hidden bg-background text-foreground selection:bg-primary/20">
+      <header className="sticky top-0 z-50 border-b border-border/70 bg-background/88 backdrop-blur-xl">
+        <div className="mx-auto flex h-[68px] max-w-7xl items-center justify-between gap-4 px-4 md:px-6">
+          <Link
+            to="/"
+            aria-label="Body Métrica FJ — página inicial"
+            className="group flex min-h-11 items-center gap-3 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          >
+            <div className="flex size-10 items-center justify-center rounded-[14px] bg-foreground text-sm font-black text-background shadow-sm transition-transform duration-300 group-hover:-rotate-3">
+              B
+            </div>
             <div className="leading-tight">
-              <span className="block font-display text-base font-semibold tracking-tight md:text-lg">Body Métrica FJ</span>
-              <span className="hidden text-[11px] text-slate-300 sm:block">Saúde e composição corporal</span>
+              <span className="block font-display text-[15px] font-semibold tracking-[-0.02em] sm:text-base">Body Métrica FJ</span>
+              <span className="hidden text-[11px] font-medium text-muted-foreground sm:block">Saúde, rotina e evolução</span>
             </div>
           </Link>
 
-          <nav className="hidden items-center gap-6 text-sm font-medium text-slate-300 lg:flex" aria-label="Navegação principal">
-            <a href="#recursos" className="transition-colors hover:text-white">Recursos</a>
-            <a href="#beneficios" className="transition-colors hover:text-white">Benefícios</a>
-            <a href="#como-funciona" className="transition-colors hover:text-white">Como funciona</a>
-            <Link to="/about" className="transition-colors hover:text-white">Sobre</Link>
+          <nav className="hidden items-center gap-1 rounded-full border border-border/80 bg-card/80 p-1 text-sm font-medium md:flex" aria-label="Navegação principal">
+            <a href="#plataforma" className="rounded-full px-4 py-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">Plataforma</a>
+            <a href="#como-funciona" className="rounded-full px-4 py-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">Como funciona</a>
+            <Link to="/about" className="rounded-full px-4 py-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">Sobre</Link>
           </nav>
 
-          {isLoggedIn ? (
-            <Button asChild className="h-10 rounded-xl bg-blue-600 px-5 text-white hover:bg-blue-500"><Link to="/dashboard">Abrir painel</Link></Button>
-          ) : (
-            <Button asChild className="h-10 rounded-xl bg-blue-600 px-5 text-white shadow-[0_8px_24px_rgba(37,99,235,.25)] hover:bg-blue-500"><Link to="/auth" search={authSearch}>Entrar</Link></Button>
-          )}
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={toggleTheme}
+              aria-label={isDark ? "Ativar modo claro" : "Ativar modo escuro"}
+              title={isDark ? "Modo claro" : "Modo escuro"}
+              className="flex size-10 items-center justify-center rounded-full border border-border bg-card text-muted-foreground shadow-sm transition-all hover:border-foreground/20 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            >
+              {isDark ? <Sun size={17} /> : <Moon size={17} />}
+            </button>
+
+            {isLoggedIn ? (
+              <Button asChild className="h-10 rounded-full px-5 font-semibold">
+                <Link to="/dashboard">Abrir painel</Link>
+              </Button>
+            ) : (
+              <Button asChild className="h-10 rounded-full px-5 font-semibold">
+                <Link to="/auth" search={authSearch}>Entrar</Link>
+              </Button>
+            )}
+          </div>
         </div>
       </header>
 
       <main>
-        <section className="relative isolate overflow-hidden bg-[#06111e] text-white">
-          <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&q=88&w=2000" alt="Ambiente de treino profissional" className="absolute inset-0 -z-30 h-full w-full object-cover object-center opacity-85 saturate-110" fetchPriority="high" />
-          <div className="absolute inset-0 -z-20 bg-gradient-to-r from-[#030912]/98 via-[#06111e]/88 to-[#06111e]/36" />
-          <div className="absolute inset-0 -z-10 bg-gradient-to-t from-[#06111e] via-transparent to-[#06111e]/30" />
+        <section className="relative isolate overflow-hidden bg-[#08111d] text-white">
+          <img
+            src="https://images.unsplash.com/photo-1571902943202-507ec2618e8f?auto=format&fit=crop&q=88&w=2200"
+            alt="Pessoa treinando em academia com equipamentos ao fundo"
+            className="absolute inset-0 -z-30 h-full w-full object-cover object-[center_42%] saturate-[.92]"
+            fetchPriority="high"
+          />
+          <div className="absolute inset-0 -z-20 bg-[linear-gradient(90deg,rgba(4,10,18,.98)_0%,rgba(6,16,29,.92)_43%,rgba(6,16,29,.42)_100%)]" />
+          <div className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(5,12,21,.15)_0%,rgba(5,12,21,.12)_55%,rgba(5,12,21,.92)_100%)]" />
 
-          <div className="mx-auto max-w-7xl px-4 py-12 md:px-6 md:py-16 lg:py-20">
-            <div className="grid items-center gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-12">
-              <div className="max-w-2xl">
-                <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-sky-400/30 bg-sky-400/10 px-3.5 py-1.5 text-xs font-bold uppercase tracking-[0.13em] text-sky-300 backdrop-blur-md"><ShieldCheck size={14} /> Plataforma completa</div>
-                <h1 className="font-display text-[clamp(2.7rem,6.3vw,5.35rem)] font-semibold leading-[0.97] tracking-[-0.055em] text-balance">Sua evolução, com dados que <span className="text-blue-400">transformam.</span></h1>
-                <p className="mt-6 max-w-xl text-base leading-7 text-slate-200 md:text-lg md:leading-8">Acompanhe métricas corporais, alimentação, hidratação, treino e metas em um só lugar. Informações claras para entender o que muda e tomar melhores decisões sobre sua rotina.</p>
+          <div className="mx-auto max-w-7xl px-4 py-14 md:px-6 md:py-20 lg:py-24">
+            <div className="grid items-end gap-12 lg:grid-cols-[1.05fr_.95fr] lg:gap-16">
+              <div className="max-w-[700px]">
+                <div className="mb-6 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.16em] text-sky-200">
+                  <span className="h-px w-9 bg-sky-300/70" aria-hidden="true" />
+                  Uma visão integrada da sua rotina
+                </div>
+
+                <h1 className="font-display text-[clamp(3.1rem,7.2vw,6.6rem)] font-semibold leading-[0.9] tracking-[-0.065em] text-balance">
+                  Seu corpo conta uma história.
+                  <span className="mt-2 block text-sky-300">Organize os sinais.</span>
+                </h1>
+
+                <p className="mt-7 max-w-[610px] text-base font-medium leading-7 text-slate-200 md:text-lg md:leading-8">
+                  Corpo, alimentação, hidratação, treino e metas deixam de ser registros isolados e passam a formar uma leitura mais clara da sua evolução.
+                </p>
+
                 <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                   {isLoggedIn ? (
-                    <Button asChild size="lg" className="h-12 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 px-6 font-semibold text-white shadow-[0_14px_35px_rgba(37,99,235,.35)] hover:from-blue-500 hover:to-blue-400"><Link to="/dashboard" className="gap-2">Abrir painel <ArrowRight size={17} /></Link></Button>
+                    <Button asChild size="lg" className="h-12 rounded-full bg-white px-6 font-semibold text-[#08111d] shadow-[0_14px_36px_rgba(0,0,0,.22)] hover:bg-slate-100">
+                      <Link to="/dashboard" className="gap-2">Ir para meu painel <ArrowRight size={17} /></Link>
+                    </Button>
                   ) : (
-                    <Button asChild size="lg" className="h-12 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 px-6 font-semibold text-white shadow-[0_14px_35px_rgba(37,99,235,.35)] hover:from-blue-500 hover:to-blue-400"><Link to="/auth" search={authSearch} className="gap-2">Começar agora <ArrowRight size={17} /></Link></Button>
+                    <Button asChild size="lg" className="h-12 rounded-full bg-white px-6 font-semibold text-[#08111d] shadow-[0_14px_36px_rgba(0,0,0,.22)] hover:bg-slate-100">
+                      <Link to="/auth" search={authSearch} className="gap-2">Começar agora <ArrowRight size={17} /></Link>
+                    </Button>
                   )}
-                  <Button asChild variant="outline" size="lg" className="h-12 rounded-xl border-white/20 bg-black/20 px-6 font-semibold text-white backdrop-blur-md hover:bg-white/10 hover:text-white"><a href="#recursos" className="gap-2"><BarChart3 size={17} /> Ver recursos</a></Button>
+                  <Button asChild variant="outline" size="lg" className="h-12 rounded-full border-white/25 bg-white/5 px-6 font-semibold text-white backdrop-blur-md hover:bg-white/10 hover:text-white">
+                    <a href="#plataforma" className="gap-2">Conhecer a plataforma <ChevronRight size={17} /></a>
+                  </Button>
                 </div>
-                <p className="mt-5 text-sm text-slate-300">Corpo, nutrição, água e treino conectados ao mesmo objetivo.</p>
               </div>
 
-              <div className="relative">
-                <div className="rounded-[1.75rem] border border-white/15 bg-[#09182a]/88 p-4 shadow-[0_32px_90px_rgba(0,0,0,.45)] backdrop-blur-xl md:p-5">
-                  <div className="mb-4 flex items-center justify-between gap-4"><div><p className="text-xs font-semibold uppercase tracking-[0.13em] text-sky-300">Visão geral</p><h2 className="mt-1 font-display text-xl font-semibold">Seu progresso em contexto</h2></div><span className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-slate-300">Últimos 30 dias</span></div>
-                  <div className="grid gap-3 sm:grid-cols-2">
-                    <MetricCard icon={Weight} label="Peso atual" value="72,5 kg" trend="-1,2 kg no período" />
-                    <MetricCard icon={Activity} label="IMC" value="23,1" trend="Faixa saudável" />
-                    <MetricCard icon={Target} label="Meta" value="70 kg" trend="2,5 kg para alcançar" />
-                    <MetricCard icon={BarChart3} label="Consistência" value="87%" trend="Registros completos" />
+              <div className="lg:pb-1">
+                <div className="relative overflow-hidden rounded-[28px] border border-white/15 bg-[#0b1726]/82 p-4 shadow-[0_35px_95px_rgba(0,0,0,.45)] backdrop-blur-xl sm:p-5">
+                  <div className="flex items-start justify-between gap-4 border-b border-white/10 pb-4">
+                    <div>
+                      <p className="text-[11px] font-bold uppercase tracking-[0.15em] text-sky-300">Visão integrada</p>
+                      <h2 className="mt-1 font-display text-xl font-semibold tracking-[-0.025em]">O essencial, no mesmo contexto</h2>
+                    </div>
+                    <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-[11px] font-semibold text-slate-300">Prévia da experiência</span>
                   </div>
-                  <div className="mt-3 rounded-2xl border border-white/10 bg-black/20 p-4"><div className="mb-4 flex items-center justify-between"><div><p className="text-xs text-slate-400">Evolução do peso</p><p className="mt-1 text-sm font-semibold text-white">Tendência das últimas semanas</p></div><span className="text-xs font-semibold text-emerald-400">Dentro da meta</span></div><div className="flex h-28 items-end gap-2">{[78,68,72,58,61,51,54,44,47,39,41,33].map((height,index)=><div key={index} className="flex-1 rounded-t-md bg-gradient-to-t from-blue-600/55 to-cyan-400/95" style={{height:`${height}%`}} />)}</div></div>
+
+                  <div className="mt-4 grid grid-cols-2 gap-3">
+                    {modules.map(({ icon: Icon, title, detail }) => (
+                      <div key={title} className="rounded-2xl border border-white/10 bg-white/[.055] p-4">
+                        <div className="flex items-center justify-between gap-3">
+                          <div className="flex size-9 items-center justify-center rounded-xl bg-sky-300/10 text-sky-300"><Icon size={18} /></div>
+                          <span className="size-1.5 rounded-full bg-emerald-300" aria-hidden="true" />
+                        </div>
+                        <p className="mt-4 font-display text-lg font-semibold">{title}</p>
+                        <p className="mt-1 text-xs leading-5 text-slate-400">{detail}</p>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="mt-3 rounded-2xl border border-white/10 bg-black/15 p-4">
+                    <div className="flex items-center justify-between gap-4">
+                      <div>
+                        <p className="text-xs text-slate-400">Linha de evolução</p>
+                        <p className="mt-1 text-sm font-semibold">Tendências sem números fora de contexto</p>
+                      </div>
+                      <BarChart3 size={18} className="text-sky-300" />
+                    </div>
+                    <div className="mt-5 flex h-16 items-end gap-1.5" aria-hidden="true">
+                      {[34, 48, 42, 58, 54, 68, 63, 75, 72, 84, 79, 92].map((height, index) => (
+                        <div key={index} className="flex-1 rounded-t-[4px] bg-gradient-to-t from-sky-500/20 to-sky-300/85" style={{ height: `${height}%` }} />
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-
-            <div id="beneficios" className="mt-10 grid overflow-hidden rounded-2xl border border-white/12 bg-[#071525]/88 backdrop-blur-xl md:grid-cols-4">
-              {benefits.map(({icon:Icon,title,description},index)=><div key={title} className={`p-5 ${index>0?"border-t border-white/10 md:border-l md:border-t-0":""}`}><div className="flex size-10 items-center justify-center rounded-xl bg-blue-500/12 text-sky-300 ring-1 ring-blue-400/20"><Icon size={19}/></div><h3 className="mt-3 font-display text-base font-semibold">{title}</h3><p className="mt-1 text-sm leading-6 text-slate-300">{description}</p></div>)}
             </div>
           </div>
         </section>
 
-        <section id="recursos" className="bg-background py-16 md:py-20">
+        <section id="plataforma" className="border-b border-border bg-background py-16 md:py-24">
           <div className="mx-auto max-w-7xl px-4 md:px-6">
-            <div className="grid gap-10 lg:grid-cols-[0.72fr_1.28fr] lg:items-start">
-              <div className="lg:sticky lg:top-24">
-                <p className="text-xs font-bold uppercase tracking-[0.14em] text-primary">Inteligência a seu favor</p>
-                <h2 className="mt-3 max-w-md font-display text-3xl font-semibold tracking-tight md:text-4xl">Tudo o que você precisa para evoluir de verdade</h2>
-                <p className="mt-4 max-w-md text-base leading-7 text-muted-foreground">Uma visão integrada para reduzir informações soltas e transformar registros em decisões mais claras.</p>
-                <div className="mt-6 space-y-3">{["Métricas corporais detalhadas","Metas e histórico de evolução","Acompanhamento nutricional","Controle de hidratação","Treinos e rotina conectados"].map(item=><div key={item} className="flex items-center gap-3 text-sm font-medium"><span className="flex size-6 items-center justify-center rounded-full bg-primary/10 text-primary"><Check size={14} strokeWidth={3}/></span>{item}</div>)}</div>
-                <Button asChild variant="outline" className="mt-7 h-11 rounded-xl border-border bg-card px-5 shadow-sm"><Link to="/tools" className="gap-2">Explorar ferramentas <ArrowRight size={16}/></Link></Button>
-              </div>
-
+            <div className="grid gap-12 lg:grid-cols-[.68fr_1.32fr] lg:gap-20">
               <div>
-                <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">{resourceCards.map(({icon:Icon,label,value,hint})=><div key={label} className="rounded-2xl border border-border bg-card p-4 shadow-sm transition-transform hover:-translate-y-0.5"><div className="flex size-9 items-center justify-center rounded-xl bg-primary/10 text-primary"><Icon size={18}/></div><p className="mt-3 text-xs font-semibold text-muted-foreground">{label}</p><p className="mt-1 font-display text-xl font-semibold tracking-tight">{value}</p><p className="mt-1 text-xs text-muted-foreground">{hint}</p></div>)}</div>
+                <p className="text-xs font-bold uppercase tracking-[0.16em] text-primary">Plataforma</p>
+                <h2 className="mt-4 max-w-md font-display text-4xl font-semibold leading-[1.02] tracking-[-0.045em] md:text-5xl">Menos telas soltas. Mais entendimento.</h2>
+                <p className="mt-5 max-w-md text-base leading-7 text-muted-foreground">O Body Métrica FJ reúne os principais registros da rotina para facilitar acompanhamento e consistência sem transformar o processo em um painel complicado.</p>
+                <Button asChild variant="outline" className="mt-7 h-11 rounded-full border-border bg-card px-5 font-semibold shadow-sm">
+                  <Link to="/tools" className="gap-2">Explorar ferramentas <ArrowRight size={16} /></Link>
+                </Button>
+              </div>
 
-                <div className="mt-3 grid gap-3 md:grid-cols-2">
-                  <div className="rounded-2xl border border-border bg-card p-5 shadow-sm"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold text-muted-foreground">Composição corporal</p><h3 className="mt-1 font-display text-lg font-semibold">Distribuição atual</h3></div><span className="rounded-lg bg-primary/10 px-2.5 py-1 text-xs font-semibold text-primary">Atualizado</span></div><div className="mt-6 flex items-center gap-6"><div className="relative flex size-32 items-center justify-center rounded-full border-[15px] border-primary/20 shadow-[inset_0_0_0_9px_hsl(var(--card))]"><div className="flex size-20 flex-col items-center justify-center rounded-full bg-card"><span className="font-display text-2xl font-semibold">72,5</span><span className="text-xs text-muted-foreground">kg</span></div></div><div className="space-y-3 text-sm"><Legend label="Massa magra" value="59,1 kg"/><Legend label="Massa gorda" value="13,4 kg"/></div></div></div>
-                  <div className="rounded-2xl border border-border bg-card p-5 shadow-sm"><p className="text-xs font-semibold text-muted-foreground">Ingestão calórica</p><h3 className="mt-1 font-display text-lg font-semibold">Últimos 7 dias</h3><div className="mt-7 flex h-36 items-end gap-3">{[63,52,67,79,58,69,61].map((height,index)=><div key={index} className="flex flex-1 flex-col items-center gap-2"><div className="w-full rounded-t-lg bg-gradient-to-t from-blue-600 to-cyan-400" style={{height:`${height}%`}}/><span className="text-[10px] text-muted-foreground">{["Seg","Ter","Qua","Qui","Sex","Sáb","Dom"][index]}</span></div>)}</div></div>
-                </div>
+              <div className="grid gap-px overflow-hidden rounded-[28px] border border-border bg-border sm:grid-cols-2">
+                {modules.map(({ icon: Icon, title, description }, index) => (
+                  <article key={title} className="group bg-card p-6 transition-colors hover:bg-muted/45 md:p-7">
+                    <div className="flex items-center justify-between">
+                      <div className="flex size-11 items-center justify-center rounded-2xl border border-border bg-background text-primary shadow-sm"><Icon size={20} /></div>
+                      <span className="font-mono text-[11px] text-muted-foreground">0{index + 1}</span>
+                    </div>
+                    <h3 className="mt-8 font-display text-2xl font-semibold tracking-[-0.035em]">{title}</h3>
+                    <p className="mt-3 max-w-sm text-sm leading-6 text-muted-foreground">{description}</p>
+                  </article>
+                ))}
               </div>
             </div>
           </div>
         </section>
 
-        <section id="como-funciona" className="border-y border-border bg-muted/25 py-16 md:py-20">
+        <section className="bg-muted/35 py-16 md:py-24">
           <div className="mx-auto max-w-7xl px-4 md:px-6">
-            <div className="mx-auto max-w-2xl text-center"><p className="text-xs font-bold uppercase tracking-[0.14em] text-primary">Simples, rápido e eficiente</p><h2 className="mt-3 font-display text-3xl font-semibold tracking-tight md:text-4xl">Como funciona</h2><p className="mt-4 text-muted-foreground">Você registra o essencial e a plataforma organiza o contexto para acompanhar sua evolução.</p></div>
-            <div className="mt-10 grid gap-4 md:grid-cols-3">{workflow.map(item=><div key={item.number} className="rounded-2xl border border-border bg-card p-6 shadow-sm"><div className="flex items-center justify-between"><span className="font-display text-3xl font-semibold text-primary/35">{item.number}</span><div className="mx-4 h-px flex-1 bg-border"/><ArrowRight size={17} className="text-muted-foreground"/></div><h3 className="mt-5 font-display text-xl font-semibold">{item.title}</h3><p className="mt-2 text-sm leading-6 text-muted-foreground">{item.description}</p></div>)}</div>
+            <div className="mb-10 max-w-2xl md:mb-14">
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-primary">Por que funciona melhor</p>
+              <h2 className="mt-4 font-display text-4xl font-semibold tracking-[-0.045em] md:text-5xl">Clareza antes de complexidade.</h2>
+            </div>
+
+            <div className="grid gap-4 lg:grid-cols-3">
+              {principles.map(({ icon: Icon, title, description }, index) => (
+                <article key={title} className={`rounded-[26px] border border-border bg-card p-6 shadow-sm md:p-7 ${index === 1 ? "lg:translate-y-6" : ""}`}>
+                  <div className="flex size-11 items-center justify-center rounded-2xl bg-primary/10 text-primary"><Icon size={20} /></div>
+                  <h3 className="mt-7 font-display text-2xl font-semibold tracking-[-0.035em]">{title}</h3>
+                  <p className="mt-3 text-sm leading-6 text-muted-foreground">{description}</p>
+                </article>
+              ))}
+            </div>
           </div>
         </section>
 
-        <section className="bg-background py-14 md:py-16">
+        <section id="como-funciona" className="bg-background py-16 md:py-24">
           <div className="mx-auto max-w-7xl px-4 md:px-6">
-            <div className="rounded-[1.75rem] border border-border bg-gradient-to-r from-[#08182b] via-[#0a2140] to-[#071728] p-6 text-white shadow-[0_22px_55px_rgba(2,8,23,.18)] md:flex md:items-center md:justify-between md:p-8">
-              <div><p className="text-xs font-bold uppercase tracking-[0.14em] text-sky-300">Pronto para começar?</p><h2 className="mt-2 font-display text-2xl font-semibold md:text-3xl">Transforme seus registros em progresso visível.</h2><p className="mt-2 max-w-2xl text-sm leading-6 text-slate-300">Crie sua conta, centralize suas informações e acompanhe seu objetivo de forma mais organizada.</p></div>
-              {isLoggedIn ? <Button asChild size="lg" className="mt-6 h-12 shrink-0 rounded-xl bg-blue-600 px-7 font-semibold text-white hover:bg-blue-500 md:mt-0"><Link to="/dashboard" className="gap-2">Abrir painel <ArrowRight size={17}/></Link></Button> : <Button asChild size="lg" className="mt-6 h-12 shrink-0 rounded-xl bg-blue-600 px-7 font-semibold text-white hover:bg-blue-500 md:mt-0"><Link to="/auth" search={authSearch} className="gap-2">Começar agora <ArrowRight size={17}/></Link></Button>}
+            <div className="grid gap-12 lg:grid-cols-[.78fr_1.22fr] lg:items-start lg:gap-20">
+              <div className="lg:sticky lg:top-28">
+                <p className="text-xs font-bold uppercase tracking-[0.16em] text-primary">Como funciona</p>
+                <h2 className="mt-4 max-w-md font-display text-4xl font-semibold leading-[1.02] tracking-[-0.045em] md:text-5xl">Comece simples. Evolua com consistência.</h2>
+                <p className="mt-5 max-w-md text-base leading-7 text-muted-foreground">Sem exigir que você preencha tudo de uma vez. O sistema acompanha sua rotina conforme os registros ganham contexto.</p>
+              </div>
+
+              <div className="space-y-3">
+                {steps.map((step) => (
+                  <article key={step.number} className="grid gap-5 rounded-[24px] border border-border bg-card p-5 shadow-sm sm:grid-cols-[70px_1fr] sm:p-6">
+                    <div className="font-display text-3xl font-semibold tracking-[-0.04em] text-primary/55">{step.number}</div>
+                    <div>
+                      <h3 className="font-display text-xl font-semibold tracking-[-0.03em]">{step.title}</h3>
+                      <p className="mt-2 max-w-xl text-sm leading-6 text-muted-foreground">{step.description}</p>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="border-y border-border bg-card py-12 md:py-16">
+          <div className="mx-auto grid max-w-7xl gap-4 px-4 sm:grid-cols-3 md:px-6">
+            <TrustItem icon={LockKeyhole} title="Acesso protegido" text="Autenticação separa seus registros pessoais da experiência pública." />
+            <TrustItem icon={UserRoundCheck} title="Conta individual" text="Cada usuário acompanha apenas os dados associados ao próprio perfil." />
+            <TrustItem icon={HeartPulse} title="Apoio à rotina" text="A plataforma organiza informações; decisões de saúde exigem orientação adequada quando necessário." />
+          </div>
+        </section>
+
+        <section className="relative overflow-hidden bg-[#08111d] py-16 text-white md:py-20">
+          <div className="absolute -right-24 -top-24 size-80 rounded-full bg-sky-400/10 blur-3xl" aria-hidden="true" />
+          <div className="mx-auto grid max-w-7xl items-center gap-8 px-4 md:px-6 lg:grid-cols-[1fr_auto]">
+            <div>
+              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-sky-300"><Sparkles size={15} /> Próximo passo</div>
+              <h2 className="mt-4 max-w-3xl font-display text-4xl font-semibold leading-[1] tracking-[-0.045em] md:text-5xl">Transforme registros em uma rotina que você entende.</h2>
+              <p className="mt-4 max-w-2xl text-base leading-7 text-slate-300">Crie sua conta para começar a reunir seus dados e acompanhar sua evolução em um só lugar.</p>
+            </div>
+            <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
+              {isLoggedIn ? (
+                <Button asChild size="lg" className="h-12 rounded-full bg-white px-7 font-semibold text-[#08111d] hover:bg-slate-100">
+                  <Link to="/dashboard" className="gap-2">Abrir painel <ArrowRight size={17} /></Link>
+                </Button>
+              ) : (
+                <Button asChild size="lg" className="h-12 rounded-full bg-white px-7 font-semibold text-[#08111d] hover:bg-slate-100">
+                  <Link to="/auth" search={authSearch} className="gap-2">Criar minha conta <ArrowRight size={17} /></Link>
+                </Button>
+              )}
+              <Button asChild variant="outline" className="h-11 rounded-full border-white/20 bg-transparent px-6 text-white hover:bg-white/10 hover:text-white">
+                <Link to="/about">Conhecer o projeto</Link>
+              </Button>
             </div>
           </div>
         </section>
       </main>
 
-      <footer className="border-t border-border bg-background py-10">
-        <div className="mx-auto grid max-w-7xl gap-8 px-4 md:grid-cols-[1.2fr_.8fr_.8fr_.8fr] md:px-6">
-          <div><div className="flex items-center gap-3"><div className="flex size-10 items-center justify-center rounded-xl bg-primary font-semibold text-primary-foreground">B</div><div><p className="font-display font-semibold">Body Métrica FJ</p><p className="text-xs text-muted-foreground">Saúde e composição corporal</p></div></div><p className="mt-4 max-w-xs text-sm leading-6 text-muted-foreground">Tecnologia para organizar dados de corpo, alimentação, água, treino e metas em um único contexto.</p></div>
-          <FooterGroup title="Produto" links={[{label:"Ferramentas",to:"/tools"},{label:"Sobre",to:"/about"},{label:"Ajuda",to:"/help"}]}/>
-          <FooterGroup title="Conta" links={[{label:"Entrar",to:"/auth"},{label:"Cadastro",to:"/auth/register"},{label:"Administração",to:"/admin/login"}]}/>
-          <FooterGroup title="Legal" links={[{label:"Termos",to:"/terms"},{label:"Ajuda",to:"/help"}]}/>
+      <footer className="border-t border-border bg-background">
+        <div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 md:grid-cols-[1.3fr_.7fr] md:px-6">
+          <div>
+            <div className="flex items-center gap-3">
+              <div className="flex size-9 items-center justify-center rounded-xl bg-foreground text-xs font-black text-background">B</div>
+              <div>
+                <p className="font-display text-sm font-semibold">Body Métrica FJ</p>
+                <p className="text-xs text-muted-foreground">Saúde e composição corporal</p>
+              </div>
+            </div>
+            <p className="mt-4 max-w-md text-sm leading-6 text-muted-foreground">Uma plataforma para organizar registros de corpo, alimentação, hidratação, treino e evolução em uma experiência integrada.</p>
+          </div>
+
+          <nav className="grid grid-cols-2 gap-x-8 gap-y-2 text-sm" aria-label="Links do rodapé">
+            <Link to="/about" className="rounded-md py-2 text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">Sobre</Link>
+            <Link to="/tools" className="rounded-md py-2 text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">Ferramentas</Link>
+            <Link to="/help" className="rounded-md py-2 text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">Ajuda</Link>
+            <Link to="/terms" className="rounded-md py-2 text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">Termos</Link>
+            <Link to="/admin/login" className="rounded-md py-2 text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">Área administrativa</Link>
+          </nav>
         </div>
-        <div className="mx-auto mt-8 max-w-7xl border-t border-border px-4 pt-6 text-xs text-muted-foreground md:px-6">© 2026 Body Métrica FJ. Todos os direitos reservados.</div>
+        <div className="border-t border-border">
+          <div className="mx-auto flex max-w-7xl flex-col gap-2 px-4 py-4 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between md:px-6">
+            <p>© 2026 Body Métrica FJ.</p>
+            <p>Feijó, Acre · desenvolvido por Franc D'nis</p>
+          </div>
+        </div>
       </footer>
     </div>
   );
 }
 
-function MetricCard({ icon: Icon, label, value, trend }: { icon: React.ElementType; label: string; value: string; trend: string }) {
-  return <div className="rounded-2xl border border-white/10 bg-white/[0.045] p-4"><div className="flex items-start justify-between gap-3"><div><p className="text-xs text-slate-400">{label}</p><p className="mt-1 font-display text-2xl font-semibold tracking-tight text-white">{value}</p><p className="mt-1 text-xs text-emerald-400">{trend}</p></div><div className="flex size-9 shrink-0 items-center justify-center rounded-full border border-blue-400/30 bg-blue-500/10 text-sky-300"><Icon size={17}/></div></div></div>;
-}
-
-function Legend({ label, value }: { label: string; value: string }) {
-  return <div><div className="flex items-center gap-2"><span className="size-2 rounded-full bg-primary"/><span className="font-medium">{label}</span></div><p className="ml-4 mt-0.5 text-xs text-muted-foreground">{value}</p></div>;
-}
-
-function FooterGroup({ title, links }: { title: string; links: Array<{ label: string; to: string }> }) {
-  return <div><h3 className="text-sm font-semibold">{title}</h3><div className="mt-3 flex flex-col gap-2.5">{links.map(link=><Link key={link.label} to={link.to as any} className="text-sm text-muted-foreground transition-colors hover:text-foreground">{link.label}</Link>)}</div></div>;
+function TrustItem({ icon: Icon, title, text }: { icon: React.ElementType; title: string; text: string }) {
+  return (
+    <div className="flex gap-4 rounded-2xl p-3">
+      <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary"><Icon size={18} /></div>
+      <div>
+        <h3 className="text-sm font-semibold">{title}</h3>
+        <p className="mt-1 text-xs leading-5 text-muted-foreground">{text}</p>
+      </div>
+    </div>
+  );
 }
