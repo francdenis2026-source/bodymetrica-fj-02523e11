@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
-import { Lock } from 'lucide-react';
+import React from 'react';
+import { ArrowRight, Lock, ShieldCheck, Sparkles, UserPlus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Link, useLocation, useNavigate } from '@tanstack/react-router';
+import { Link, useLocation } from '@tanstack/react-router';
 
 interface AccessGateProps {
   title?: string;
@@ -15,106 +15,122 @@ interface AccessGateProps {
 const PUBLIC_AUTH_ROUTES = ['/auth', '/auth/register', '/auth/verify', '/auth/recover'];
 
 export function AccessGate({
-  title = 'ACESSO RESTRITO',
-  description = 'ESTA ÁREA REQUER AUTENTICAÇÃO DE ALTO NÍVEL PARA SER ACESSADA.',
+  title = 'Acesso protegido',
+  description = 'Entre na sua conta para continuar e acessar este módulo com seus dados sincronizados.',
   children,
   isAllowed,
   needsVerification = false,
   needsLicense = false,
 }: AccessGateProps) {
-  const navigate = useNavigate();
   const location = useLocation();
   const isPublicAuthRoute = PUBLIC_AUTH_ROUTES.includes(location.pathname);
   const effectiveAllowed = isAllowed || isPublicAuthRoute;
 
-  useEffect(() => {
-    const redirectTarget = needsVerification ? '/auth/verify' : needsLicense ? '/settings' : '/auth';
-
-    let timer: ReturnType<typeof setTimeout> | undefined;
-    if (!effectiveAllowed) {
-      timer = setTimeout(() => {
-        navigate({
-          to: redirectTarget,
-          search: {
-            registerMode: false,
-            name: '',
-            birthDate: '',
-            goal: '',
-            weight: '',
-            height: '',
-            activityLevel: '',
-          },
-        } as any);
-      }, 3500);
-    }
-
-    return () => {
-      if (timer) clearTimeout(timer);
-    };
-  }, [effectiveAllowed, navigate, needsLicense, needsVerification]);
-
   if (effectiveAllowed) return <>{children}</>;
 
   const displayTitle = needsVerification
-    ? 'E-MAIL NÃO CONFIRMADO'
+    ? 'Confirme seu e-mail'
     : needsLicense
-      ? 'LICENÇA NECESSÁRIA'
+      ? 'Licença necessária'
       : title;
+
   const displayDescription = needsVerification
-    ? 'POR FAVOR, CONFIRME SEU E-MAIL PARA LIBERAR O ACESSO ÀS FERRAMENTAS.'
+    ? 'Confirme seu endereço de e-mail para liberar o acesso aos módulos protegidos.'
     : needsLicense
-      ? 'ESTA FERRAMENTA REQUER UMA LICENÇA ATIVA. ADQUIRA A SUA NOS AJUSTES.'
+      ? 'Este recurso precisa de uma licença ativa. Você pode revisar sua situação nas configurações.'
       : description;
+
   const redirectTarget = needsVerification ? '/auth/verify' : needsLicense ? '/settings' : '/auth';
+  const primaryLabel = needsVerification ? 'Verificar agora' : needsLicense ? 'Revisar licença' : 'Entrar na conta';
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center p-6 animate-in fade-in duration-700">
-      <div className="surface max-w-xl w-full p-12 md:p-20 text-center space-y-10 relative overflow-hidden border-white/5 shadow-[0_50px_100px_rgba(0,0,0,0.6)] rounded-[3.5rem] bg-black/40 backdrop-blur-3xl group">
-        <div className="absolute inset-0 bg-gradient-to-tr from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+    <div className="relative flex min-h-[calc(100dvh-4rem)] items-center justify-center overflow-hidden px-4 py-8 md:px-6">
+      <img
+        src="https://images.unsplash.com/photo-1538805060514-97d9cc17730c?auto=format&fit=crop&q=84&w=1800"
+        alt=""
+        aria-hidden="true"
+        className="absolute inset-0 h-full w-full object-cover object-center"
+      />
+      <div className="absolute inset-0 bg-background/68 dark:bg-background/78" />
+      <div className="absolute inset-0 bg-gradient-to-br from-background/96 via-background/82 to-background/48 dark:from-background/98 dark:via-background/90 dark:to-background/62" />
 
-        <div className="relative z-10 space-y-8">
-          <div className="mx-auto w-28 h-28 bg-brand-gradient rounded-[2rem] flex items-center justify-center text-primary-foreground shadow-[0_20px_50px_rgba(oklch(0.65_0.22_260),0.3)] border-2 border-white/20 animate-in zoom-in duration-700">
-            <Lock size={56} className="group-hover:scale-110 transition-transform duration-500" />
-          </div>
+      <div className="relative z-10 grid w-full max-w-4xl overflow-hidden rounded-[1.75rem] border border-border/80 bg-background/96 shadow-2xl shadow-black/15 md:grid-cols-[0.95fr_1.05fr]">
+        <section className="relative min-h-[300px] overflow-hidden md:min-h-[430px]">
+          <img
+            src="https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?auto=format&fit=crop&q=86&w=1200"
+            alt="Pessoa treinando com foco e acompanhamento"
+            className="absolute inset-0 h-full w-full object-cover object-center"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/38 to-black/10" />
+          <div className="relative flex h-full flex-col justify-between p-5 text-white sm:p-6 md:p-7">
+            <div className="inline-flex w-fit items-center gap-2 rounded-lg border border-white/15 bg-black/25 px-2.5 py-1.5 text-[11px] font-semibold text-white/85">
+              <Sparkles size={14} className="text-primary" />
+              Acesso aos módulos
+            </div>
 
-          <div className="space-y-4">
-            <h2 className="text-5xl md:text-6xl font-black font-display tracking-tighter text-white uppercase italic leading-none">
-              {displayTitle}
-            </h2>
-            <p className="text-white/40 font-bold uppercase tracking-[0.3em] text-[10px] md:text-xs max-w-sm mx-auto leading-relaxed">
-              {displayDescription}
-            </p>
-            <div className="flex items-center justify-center gap-3 py-2">
-              <div className="w-1.5 h-1.5 rounded-full bg-primary animate-ping" />
-              <p className="text-primary font-black uppercase tracking-[0.2em] text-[10px]">
-                Sincronizando segurança...
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-white/55">Body Métrica FJ</p>
+              <h1 className="mt-2 max-w-sm font-display text-3xl font-semibold leading-[1.04] tracking-[-0.035em] sm:text-4xl">
+                Seus dados ficam melhores quando continuam conectados.
+              </h1>
+              <p className="mt-3 max-w-sm text-sm leading-6 text-white/68">
+                Entre para abrir o módulo com seu histórico, metas e registros disponíveis no mesmo contexto.
               </p>
             </div>
           </div>
+        </section>
 
-          <div className="pt-6">
-            <Button
-              size="lg"
-              className="w-full sm:w-auto px-16 h-16 font-black uppercase tracking-[0.2em] bg-brand-gradient shadow-[0_20px_40px_rgba(oklch(0.65_0.22_260),0.4)] hover:scale-105 transition-all border-none rounded-[1.5rem]"
-              asChild
-            >
-              <Link
-                to={redirectTarget as any}
-                search={{
-                  registerMode: false,
-                  name: '',
-                  birthDate: '',
-                  goal: '',
-                  weight: '',
-                  height: '',
-                  activityLevel: '',
-                } as any}
-              >
-                {needsVerification ? 'VERIFICAR AGORA' : needsLicense ? 'ADQUIRIR LICENÇA' : 'ENTRAR AGORA'}
-              </Link>
-            </Button>
+        <section className="flex items-center p-5 sm:p-7 md:p-8">
+          <div className="mx-auto w-full max-w-sm">
+            <div className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+              <Lock size={19} />
+            </div>
+            <p className="mt-5 text-[11px] font-bold uppercase tracking-[0.15em] text-primary">Área protegida</p>
+            <h2 className="mt-2 font-display text-3xl font-semibold leading-tight tracking-[-0.035em]">{displayTitle}</h2>
+            <p className="mt-3 text-sm leading-6 text-muted-foreground">{displayDescription}</p>
+
+            <div className="mt-5 rounded-xl border border-border/70 bg-muted/35 p-3.5">
+              <div className="flex items-start gap-3">
+                <ShieldCheck size={17} className="mt-0.5 shrink-0 text-primary" />
+                <div>
+                  <p className="text-xs font-semibold">Por que pedimos autenticação?</p>
+                  <p className="mt-1 text-xs leading-5 text-muted-foreground">Para manter métricas, histórico e preferências associados à conta correta.</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-6 grid gap-2.5">
+              <Button asChild className="h-11 rounded-xl font-semibold">
+                <Link
+                  to={redirectTarget as any}
+                  search={{
+                    registerMode: false,
+                    name: '',
+                    birthDate: '',
+                    goal: '',
+                    weight: '',
+                    height: '',
+                    activityLevel: '',
+                  } as any}
+                >
+                  {primaryLabel}
+                  <ArrowRight size={16} className="ml-2" />
+                </Link>
+              </Button>
+
+              {!needsVerification && !needsLicense && (
+                <Button asChild variant="outline" className="h-11 rounded-xl bg-background font-medium">
+                  <Link to="/auth/register" search={{} as any}>
+                    <UserPlus size={16} className="mr-2" />
+                    Criar nova conta
+                  </Link>
+                </Button>
+              )}
+            </div>
+
+            <p className="mt-4 text-center text-[11px] text-muted-foreground">Você escolhe quando continuar. Não há redirecionamento automático.</p>
           </div>
-        </div>
+        </section>
       </div>
     </div>
   );
