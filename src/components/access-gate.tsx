@@ -24,7 +24,11 @@ export function AccessGate({
 }: AccessGateProps) {
   const location = useLocation();
   const isPublicAuthRoute = PUBLIC_AUTH_ROUTES.includes(location.pathname);
-  const effectiveAllowed = isAllowed || isPublicAuthRoute;
+
+  // Licensing is no longer a global navigation gate. A valid authenticated
+  // session may enter the application even when the plan/license is pending.
+  // Paid capabilities can still enforce their own entitlement rules locally.
+  const effectiveAllowed = isAllowed || isPublicAuthRoute || (needsLicense && !needsVerification);
 
   if (effectiveAllowed) return <>{children}</>;
 
