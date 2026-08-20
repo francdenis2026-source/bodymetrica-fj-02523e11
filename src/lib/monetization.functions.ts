@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
 import { requireAdminAuth } from "./admin.middleware";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 const licenseSchema = z.object({
   licenseKey: z.string().min(10, "Chave de licença inválida"),
@@ -143,30 +144,85 @@ export const revokeLicense = createServerFn({ method: "POST" })
   });
 
 export const createCheckoutSession = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((data) => z.object({ userId: z.string().uuid() }).parse(data))
-  .handler(async ({ data }) => {
+  .handler(async ({ data, context }) => {
+    if (context.userId !== data.userId) {
+      return { success: false, message: "Sessão inválida para esta compra." };
+    }
+
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { data: setting } = await supabaseAdmin.from('admin_settings').select('value').eq('key', 'mercadopago_access_token').single();
+    const { data: setting } = await supabaseAdmin.from('admin_settings').select('value').eq('key', 'mercadopago_access_token').maybeSingle();
     if (!setting?.value) return { success: false, message: "Pagamento não configurado." };
+
+    const { data: profile } = await supabaseAdmin
+      .from('profiles')
+      .select('id,email')
+      .eq('id', context.userId)
+      .maybeSingle();
+
+    const { data: plans } = await supabaseAdmin
+      .from('subscription_plans')
+      .select('id,name,description,price,duration_days,is_active')
+      .eq('is_active', true)
+      .order('duration_days', { ascending: false });
+
+    const selectedPlan = (plans || []).find((p: any) => Number(p.duration_days) === 365) || (plans || [])[0] || null;
+    const planName = selectedPlan?.name || "Assinatura Anual Body Métrica FJ";
+    const planPrice = Number(selectedPlan?.price || 299.90);
+    const durationDays = Number(selectedPlan?.duration_days || 365);
+    const durationMinutes = durationDays * 24 * 60;
+    const appUrl = process.env['VITE_APP_URL'] || 'https://bodymetrica-fj.lovable.app';
 
     try {
       const response = await fetch("https://api.mercadopago.com/checkout/preferences", {
         method: "POST",
-        headers: { Authorization: `Bearer ${setting.value}`, "Content-Type": "application/json" },
+        headers: {
+          Authorization: `Bearer ${setting.value}`,
+          "Content-Type": "application/json",
+          "X-Idempotency-Key": `checkout-${context.userId}-${selectedPlan?.id || 'annual'}-${Date.now()}`,
+        },
         body: JSON.stringify({
-          items: [{ title: "Assinatura Anual Body Métrica FJ", unit_price: 299.90, quantity: 1, currency_id: "BRL" }],
-          external_reference: data.userId,
+          items: [{
+            id: selectedPlan?.id || 'bodymetrica-annual',
+            title: planName,
+            description: selectedPlan?.description || 'Acesso Body Métrica FJ',
+            unit_price: planPrice,
+            quantity: 1,
+            currency_id: "BRL",
+          }],
+          external_reference: context.userId,
+          payer: profile?.email ? { email: profile.email } : undefined,
+          metadata: {
+            user_id: context.userId,
+            email: profile?.email || null,
+            plan_id: selectedPlan?.id || null,
+            duration_minutes: durationMinutes,
+          },
+          notification_url: `${appUrl}/api/public/webhook`,
           back_urls: {
-            success: `${process.env['VITE_APP_URL'] || 'https://bodymetrica-fj.lovable.app'}/settings`,
-            failure: `${process.env['VITE_APP_URL'] || 'https://bodymetrica-fj.lovable.app'}/settings`,
-            pending: `${process.env['VITE_APP_URL'] || 'https://bodymetrica-fj.lovable.app'}/settings`,
+            success: `${appUrl}/settings?payment=approved`,
+            failure: `${appUrl}/settings?payment=failure`,
+            pending: `${appUrl}/settings?payment=pending`,
           },
           auto_return: "approved",
         }),
       });
+
       const preference = await response.json();
-      return { success: response.ok, init_point: preference.init_point, message: response.ok ? undefined : 'Erro ao criar sessão de pagamento.' };
-    } catch {
+      if (!response.ok || !preference?.init_point) {
+        console.error('[Checkout] Mercado Pago rejected preference:', preference);
+        return { success: false, message: preference?.message || 'Erro ao criar sessão de pagamento.' };
+      }
+
+      return {
+        success: true,
+        init_point: preference.init_point,
+        preferenceId: preference.id,
+        plan: { id: selectedPlan?.id || null, name: planName, price: planPrice, durationDays },
+      };
+    } catch (error) {
+      console.error('[Checkout] Error:', error);
       return { success: false, message: "Erro ao criar sessão de pagamento." };
     }
   });
