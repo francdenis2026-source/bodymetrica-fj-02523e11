@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
+import { SUPABASE_PUBLISHABLE_KEY, SUPABASE_URL } from '@/integrations/supabase/config';
 import {
   customerMetadata,
   getEmailValidationError,
@@ -10,8 +11,7 @@ import {
 } from '@/lib/customer-registration';
 
 const db = supabase as any;
-const SUPABASE_URL = import.meta.env['VITE_SUPABASE_URL'];
-const SUPABASE_KEY = import.meta.env['VITE_SUPABASE_PUBLISHABLE_KEY'];
+const SUPABASE_KEY = SUPABASE_PUBLISHABLE_KEY;
 
 export async function getAdminOverview() {
   const [profilesRes, licensesRes, salesRes, logsRes, plansRes] = await Promise.all([
@@ -49,7 +49,7 @@ export async function getAdminOverview() {
 export async function listCustomers() {
   const { data, error } = await db
     .from('profiles')
-    .select('id,name,email,cpf,birth_date,biological_sex,goal,weight,height,activity_level,registration_source,license_status,license_expires_at,account_status,admin_notes,created_at,updated_at,last_seen_at')
+    .select('id,name,email,cpf,birth_date,biological_sex,goal,weight,height,activity_level,registration_source,license_status,license_expires_at,account_status,admin_notes,access_tier,access_source,current_plan_id,access_updated_at,created_at,updated_at,last_seen_at')
     .order('created_at', { ascending: false });
   if (error) throw error;
   return data || [];
@@ -114,7 +114,7 @@ export async function createCustomer(input: UnifiedCustomerInput) {
   if (emailOwner) throw new Error('Este e-mail já está cadastrado.');
 
   const transient = createClient(SUPABASE_URL, SUPABASE_KEY, {
-    auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
+    auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false, storageKey: 'bodymetrica-admin-create-user' },
   });
 
   const temporaryPassword = generateTemporaryPassword();
@@ -132,6 +132,7 @@ export async function createCustomer(input: UnifiedCustomerInput) {
   await db.from('profiles').update({
     ...customerMetadata(input, 'admin'),
     account_status: 'active',
+    access_tier: 'free',
     updated_at: new Date().toISOString(),
   }).eq('id', data.user.id);
 
