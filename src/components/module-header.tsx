@@ -21,21 +21,18 @@ export function ModuleHeader({
     <div className={cn("flex flex-col gap-3 relative z-10 animate-in fade-in slide-in-from-left-4 duration-500", className)}>
       <div className="flex items-center gap-4">
         <div className={cn(
-          "bg-brand-gradient p-3 rounded-2xl shadow-2xl border border-white/20 group",
+          "bg-brand-gradient p-3 rounded-2xl shadow-brand border border-white/10 group shrink-0",
           iconClassName
         )}>
-          <Icon className="text-primary-foreground group-hover:scale-110 transition-transform" size={28} />
+          <Icon className="text-primary-foreground group-hover:scale-110 transition-transform" size={24} />
         </div>
-        <h2 className="text-3xl md:text-6xl font-black tracking-tighter font-display text-foreground uppercase italic leading-none">
+        <h2 className="text-2xl md:text-4xl font-semibold tracking-tight font-display text-foreground leading-tight">
           {title}
         </h2>
-
       </div>
-      <p className="text-foreground/60 text-sm md:text-xl max-w-2xl font-bold tracking-tight leading-snug">
+      <p className="text-muted-foreground text-sm md:text-base max-w-2xl leading-relaxed">
         {description}
       </p>
-
     </div>
-
   );
 }

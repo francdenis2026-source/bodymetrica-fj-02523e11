@@ -69,10 +69,10 @@ function TrainingPage() {
         <div className="mt-20">
           <EmptyState 
             icon={Dumbbell}
-            title="SEM TREINOS ATIVOS"
+            title="Sem treinos ativos"
             description="Nenhuma ficha de treinamento detectada. Crie sua primeira rotina de performance agora."
             action={
-              <Button className="h-14 px-10 rounded-xl bg-brand-gradient text-xs font-black uppercase tracking-widest shadow-2xl hover:scale-105 transition-all">
+              <Button className="h-14 px-10 rounded-xl bg-brand-gradient text-xs font-semibold uppercase tracking-wide shadow-2xl hover:scale-105 transition-all">
                 <Plus size={18} className="mr-2" /> CRIAR FICHA
               </Button>
             }
@@ -96,12 +96,12 @@ function TrainingPage() {
           icon={Dumbbell}
         />
         <div className="flex flex-wrap justify-center gap-4 relative z-10">
-          <Button variant="outline" className="gap-2 h-14 px-8 font-black uppercase tracking-widest border-2 bg-white/5 border-white/10 hover:bg-white/10 hover:scale-105 transition-all" asChild>
+          <Button variant="outline" className="gap-2 h-14 px-8 font-semibold uppercase tracking-wide border-2 bg-white/5 border-white/10 hover:bg-white/10 hover:scale-105 transition-all" asChild>
             <Link to="/help">
               CENTRAL DE AJUDA
             </Link>
           </Button>
-          <Button className="gap-3 h-14 px-8 font-black uppercase tracking-widest bg-brand-gradient shadow-2xl shadow-primary/40 hover:scale-105 transition-all border-none">
+          <Button className="gap-3 h-14 px-8 font-semibold uppercase tracking-wide bg-brand-gradient shadow-2xl shadow-primary/40 hover:scale-105 transition-all border-none">
             <Play size={20} fill="currentColor" /> INICIAR TREINO
           </Button>
         </div>
@@ -136,15 +136,15 @@ function TrainingPage() {
           <TabsContent value="calendar" className="space-y-6">
             <Card className="surface border-none p-6">
               <div className="flex items-center justify-between mb-6">
-                <CardTitle className="text-xl font-display uppercase italic">Calendário de Treinos</CardTitle>
+                <CardTitle className="text-xl font-display ">Calendário de Treinos</CardTitle>
                 <div className="flex items-center gap-2">
-                   <Button variant="outline" size="sm" className="h-8 text-[10px] font-black uppercase">Agosto 2026</Button>
+                   <Button variant="outline" size="sm" className="h-8 text-[10px] font-semibold uppercase">Agosto 2026</Button>
                 </div>
               </div>
               
               <div className="grid grid-cols-7 gap-2 mb-2">
                 {['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'].map(day => (
-                  <div key={day} className="text-center text-[10px] font-black text-muted-foreground uppercase">{day}</div>
+                  <div key={day} className="text-center text-[10px] font-semibold text-muted-foreground uppercase">{day}</div>
                 ))}
               </div>
               
@@ -172,7 +172,7 @@ function TrainingPage() {
               </div>
 
               <div className="mt-8 space-y-4">
-                <h4 className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Treinos da Semana</h4>
+                <h4 className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Treinos da Semana</h4>
                 <div className="space-y-2">
                   {[
                     { day: 'Segunda', type: 'A - Puxada', status: 'completed' },
@@ -183,7 +183,7 @@ function TrainingPage() {
                     <div key={idx} className="flex items-center justify-between p-3 rounded-xl bg-white/[0.03] border border-white/5">
                       <div className="flex items-center gap-3">
                         <div className={`w-2 h-2 rounded-full ${item.status === 'completed' ? 'bg-success' : item.status === 'rest' ? 'bg-muted-foreground' : 'bg-warning animate-pulse'}`} />
-                        <span className="text-[10px] font-black uppercase tracking-widest">{item.day}</span>
+                        <span className="text-[10px] font-semibold uppercase tracking-wide">{item.day}</span>
                       </div>
                       <span className="text-xs font-bold text-foreground/70">{item.type}</span>
                     </div>
@@ -196,14 +196,14 @@ function TrainingPage() {
           <TabsContent value="history" className="space-y-6">
             <Card className="surface border-none p-6">
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-                <CardTitle className="text-xl font-display uppercase italic">Evolução de Performance</CardTitle>
+                <CardTitle className="text-xl font-display ">Evolução de Performance</CardTitle>
                 <div className="flex gap-2">
                   <select className="h-8 bg-white/5 border border-white/10 rounded px-2 text-[10px] font-bold uppercase focus:outline-none">
                     <option>Peitoral</option>
                     <option>Costas</option>
                     <option>Pernas</option>
                   </select>
-                  <Button variant="outline" size="sm" className="h-8 text-[9px] font-black uppercase">Comparar Semanas</Button>
+                  <Button variant="outline" size="sm" className="h-8 text-[9px] font-semibold uppercase">Comparar Semanas</Button>
                 </div>
               </div>
               <div className="h-64 flex items-end justify-between gap-2">
@@ -213,7 +213,7 @@ function TrainingPage() {
                         <div className="absolute bottom-full mb-2 bg-background border border-white/10 p-2 rounded text-[8px] invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all whitespace-nowrap">
                           Volume: {val * 10}kg
                         </div>
-                        <span className="text-[10px] font-black text-muted-foreground uppercase">Sem {i+1}</span>
+                        <span className="text-[10px] font-semibold text-muted-foreground uppercase">Sem {i+1}</span>
                     </div>
                  ))}
               </div>
@@ -223,35 +223,35 @@ function TrainingPage() {
         <TabsContent value="manage" className="space-y-6">
           <Card className="surface border-none p-6">
             <CardHeader className="px-0 pt-0">
-              <CardTitle className="text-xl font-display uppercase italic">Cadastrar Novo Exercício</CardTitle>
+              <CardTitle className="text-xl font-display ">Cadastrar Novo Exercício</CardTitle>
             </CardHeader>
             <CardContent className="px-0 space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Nome do Exercício</label>
+                  <label className="text-[10px] font-bold uppercase tracking-wide text-muted-foreground">Nome do Exercício</label>
                   <Input placeholder="Ex: Supino Reto" className="bg-white/5 border-white/10" />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Grupo Muscular</label>
+                  <label className="text-[10px] font-bold uppercase tracking-wide text-muted-foreground">Grupo Muscular</label>
                   <Input placeholder="Ex: Peitoral" className="bg-white/5 border-white/10" />
                 </div>
               </div>
               <div className="grid grid-cols-3 gap-4">
                 <div className="space-y-2">
-                  <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Séries</label>
+                  <label className="text-[10px] font-bold uppercase tracking-wide text-muted-foreground">Séries</label>
                   <Input type="number" placeholder="4" className="bg-white/5 border-white/10" />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Repetições</label>
+                  <label className="text-[10px] font-bold uppercase tracking-wide text-muted-foreground">Repetições</label>
                   <Input placeholder="8-12" className="bg-white/5 border-white/10" />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Carga Inicial (kg)</label>
+                  <label className="text-[10px] font-bold uppercase tracking-wide text-muted-foreground">Carga Inicial (kg)</label>
                   <Input type="number" placeholder="20" className="bg-white/5 border-white/10" />
                 </div>
               </div>
               <Button 
-                className="w-full bg-brand-gradient border-none font-black uppercase tracking-widest h-12"
+                className="w-full bg-brand-gradient border-none font-semibold uppercase tracking-wide h-12"
                 onClick={() => {
                   toast.custom((t) => (
                     <SVGToast 

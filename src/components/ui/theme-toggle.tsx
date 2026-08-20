@@ -14,7 +14,7 @@ function applyTheme(theme: Theme) {
   setLocalTheme(theme);
 
   const metaThemeColor = document.querySelector('meta[name="theme-color"]');
-  if (metaThemeColor) metaThemeColor.setAttribute("content", theme === "dark" ? "#0a0a0a" : "#f8fafc");
+  if (metaThemeColor) metaThemeColor.setAttribute("content", theme === "dark" ? "#0a1317" : "#f5f8f9");
   window.dispatchEvent(new CustomEvent("bodymetrica-theme-change", { detail: theme }));
 }
 

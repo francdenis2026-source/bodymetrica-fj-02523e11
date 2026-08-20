@@ -73,10 +73,10 @@ function SupplementsPage() {
           icon={Pill}
         />
         <div className="flex flex-wrap justify-center gap-4 relative z-10">
-          <Button variant="outline" className="gap-2 h-14 px-8 font-black uppercase tracking-widest border-2 bg-white/5 border-white/10 hover:bg-white/10 hover:scale-105 transition-all" asChild>
+          <Button variant="outline" className="gap-2 h-14 px-8 font-semibold uppercase tracking-wide border-2 bg-white/5 border-white/10 hover:bg-white/10 hover:scale-105 transition-all" asChild>
             <Link to="/help">CENTRAL DE AJUDA</Link>
           </Button>
-          <Button className="gap-3 h-14 px-8 font-black uppercase tracking-widest bg-brand-gradient shadow-2xl shadow-primary/40 hover:scale-105 transition-all border-none">
+          <Button className="gap-3 h-14 px-8 font-semibold uppercase tracking-wide bg-brand-gradient shadow-2xl shadow-primary/40 hover:scale-105 transition-all border-none">
             <Plus size={20} /> ADICIONAR PROTOCOLO
           </Button>
         </div>
@@ -158,7 +158,7 @@ function SupplementsPage() {
                     <Progress value={25} className="h-2" />
                   </div>
                   <div className="pt-4 border-t space-y-4">
-                    <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Adesão Semanal</div>
+                    <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">Adesão Semanal</div>
                     <div className="text-4xl font-bold font-display text-primary">92%</div>
                   </div>
                 </div>

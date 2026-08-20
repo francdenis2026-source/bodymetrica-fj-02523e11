@@ -222,7 +222,7 @@ function SettingsPage() {
           icon={Settings}
         />
         <div className="flex gap-4">
-          <Button variant="outline" className="gap-2 h-14 px-8 font-black uppercase tracking-widest border-2 bg-white/5 border-white/10 hover:bg-white/10 hover:scale-105 transition-all" asChild>
+          <Button variant="outline" className="gap-2 h-14 px-8 font-semibold uppercase tracking-wide border-2 bg-white/5 border-white/10 hover:bg-white/10 hover:scale-105 transition-all" asChild>
             <Link to="/help">CENTRAL DE AJUDA</Link>
           </Button>
         </div>
@@ -235,25 +235,25 @@ function SettingsPage() {
           isLicensed ? "bg-primary/5 border-primary/20" : "bg-destructive/5 border-destructive/20"
         )}>
           <CardHeader>
-            <CardTitle className="text-xl font-display uppercase italic flex items-center gap-2 text-primary">
+            <CardTitle className="text-xl font-display flex items-center gap-2 text-primary">
               <Shield size={20} />
               Licença de Uso
             </CardTitle>
-            <CardDescription className="text-[10px] font-bold uppercase tracking-widest opacity-60">Status da sua assinatura Body Métrica FJ</CardDescription>
+            <CardDescription className="text-[10px] font-bold uppercase tracking-wide opacity-60">Status da sua assinatura Body Métrica FJ</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="grid grid-cols-2 gap-4">
               <div className="p-4 bg-background/50 rounded-2xl border border-white/5 space-y-1">
-                <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">STATUS ATUAL</p>
+                <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">STATUS ATUAL</p>
                 <p className={cn(
-                  "text-sm font-black uppercase",
+                  "text-sm font-semibold uppercase",
                   isLicensed ? "text-success" : "text-destructive"
                 )}>
                   {isLicensed ? 'Licença Ativa' : licenseStatus === 'revoked' ? 'Revogada' : licenseStatus === 'expired' ? 'Expirada' : 'Pendente'}
                 </p>
               </div>
               <div className="p-4 bg-background/50 rounded-2xl border border-white/5 space-y-1">
-                <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">DIAS RESTANTES</p>
+                <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">DIAS RESTANTES</p>
                 <p className="text-sm font-bold uppercase">
                   {isLicensed ? `${daysRemaining} DIAS` : '0 DIAS'}
                 </p>
@@ -263,13 +263,13 @@ function SettingsPage() {
             {isLicensed && (
               <div className="flex items-center justify-between p-4 bg-background/50 rounded-2xl border border-white/5">
                 <div className="space-y-1">
-                  <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">DATA DE EXPIRAÇÃO</p>
+                  <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">DATA DE EXPIRAÇÃO</p>
                   <p className="text-sm font-bold uppercase">
                     {expiresAt ? format(new Date(expiresAt), "dd 'de' MMMM, yyyy", { locale: ptBR }) : 'Não disponível'}
                   </p>
                 </div>
                 {isNearExpiration && (
-                  <Badge className="bg-warning text-warning-foreground font-black animate-pulse">RENOVE AGORA</Badge>
+                  <Badge className="bg-warning text-warning-foreground font-semibold animate-pulse">RENOVE AGORA</Badge>
                 )}
               </div>
             )}
@@ -278,8 +278,8 @@ function SettingsPage() {
               <div className="p-4 bg-destructive/10 rounded-2xl border border-destructive/20 flex items-start gap-3">
                 <AlertCircle size={18} className="text-destructive shrink-0 mt-0.5" />
                 <div className="space-y-1">
-                  <p className="text-xs font-bold text-destructive uppercase tracking-widest">Acesso Restrito</p>
-                  <p className="text-[10px] text-muted-foreground leading-relaxed italic">
+                  <p className="text-xs font-bold text-destructive uppercase tracking-wide">Acesso Restrito</p>
+                  <p className="text-[10px] text-muted-foreground leading-relaxed ">
                     Sua licença não está ativa. Por favor, insira uma chave válida ou realize a renovação para liberar os módulos de performance.
                   </p>
                 </div>
@@ -288,7 +288,7 @@ function SettingsPage() {
 
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase tracking-widest text-primary ml-1">
+                <Label className="text-[10px] font-semibold uppercase tracking-wide text-primary ml-1">
                   {isLicensed ? "CHAVE ATIVA" : "ATIVAR CHAVE DE LICENÇA"}
                 </Label>
                 <div className="flex gap-2">
@@ -303,7 +303,7 @@ function SettingsPage() {
                     <Button 
                       onClick={handleActivateLicense}
                       disabled={isLoading}
-                      className="h-12 bg-brand-gradient border-none font-black uppercase tracking-widest px-6 rounded-xl"
+                      className="h-12 bg-brand-gradient border-none font-semibold uppercase tracking-wide px-6 rounded-xl"
                     >
                       ATIVAR
                     </Button>
@@ -316,13 +316,13 @@ function SettingsPage() {
                   <p className="text-xs font-bold text-primary flex items-center gap-2">
                     <Smartphone size={14} /> SIMULAR AQUISIÇÃO
                   </p>
-                  <p className="text-[10px] text-muted-foreground leading-relaxed italic">
+                  <p className="text-[10px] text-muted-foreground leading-relaxed ">
                     Clique abaixo para simular o fluxo de pagamento e receber sua chave automaticamente via Mercado Pago.
                   </p>
                   <Button 
                     variant="outline" 
                     size="sm" 
-                    className="w-full text-[10px] font-black border-primary/30 hover:bg-primary/20"
+                    className="w-full text-[10px] font-semibold border-primary/30 hover:bg-primary/20"
                     onClick={handlePurchase}
                     disabled={isLoading}
                   >
@@ -388,11 +388,11 @@ function SettingsPage() {
 
         <Card className="surface border-none">
           <CardHeader>
-            <CardTitle className="text-xl font-display uppercase italic flex items-center gap-2">
+            <CardTitle className="text-xl font-display flex items-center gap-2">
               <Bell size={20} className="text-primary" />
               Alertas de Performance
             </CardTitle>
-            <CardDescription className="text-[10px] font-bold uppercase tracking-widest opacity-60">Configure lembretes estratégicos para suas metas</CardDescription>
+            <CardDescription className="text-[10px] font-bold uppercase tracking-wide opacity-60">Configure lembretes estratégicos para suas metas</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="space-y-6">
@@ -404,7 +404,7 @@ function SettingsPage() {
                   </div>
                   <div className="flex items-center gap-4">
                     <Select defaultValue="medium">
-                      <SelectTrigger className="h-8 w-24 text-[10px] uppercase font-black">
+                      <SelectTrigger className="h-8 w-24 text-[10px] uppercase font-semibold">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -418,7 +418,7 @@ function SettingsPage() {
                 </div>
                 <div className="pl-4 space-y-4 border-l-2 border-primary/20 ml-2">
                    <div className="flex flex-col gap-3">
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
+                      <span className="text-[10px] font-bold uppercase tracking-wide text-muted-foreground flex items-center gap-2">
                         <Clock size={12} /> Horários de Lembrete
                       </span>
                       <div className="flex flex-wrap gap-2">
@@ -440,7 +440,7 @@ function SettingsPage() {
                     <Button 
                       size="sm" 
                       variant="outline" 
-                      className="h-8 text-[9px] font-black uppercase tracking-widest border-primary/20 hover:bg-primary/10"
+                      className="h-8 text-[9px] font-semibold uppercase tracking-wide border-primary/20 hover:bg-primary/10"
                       onClick={handleTestNotification}
                       disabled={isLoading}
                     >
@@ -463,7 +463,7 @@ function SettingsPage() {
                   </div>
                   <div className="flex flex-wrap items-center gap-3">
                     <Select value={String(weekly.weekday)} onValueChange={(v) => persistWeekly({ ...weekly, weekday: Number(v) })}>
-                      <SelectTrigger className="h-8 w-36 text-[10px] uppercase font-black">
+                      <SelectTrigger className="h-8 w-36 text-[10px] uppercase font-semibold">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -481,7 +481,7 @@ function SettingsPage() {
                     <Button
                       size="sm"
                       variant="outline"
-                      className="h-8 text-[9px] font-black uppercase tracking-widest border-primary/20 hover:bg-primary/10"
+                      className="h-8 text-[9px] font-semibold uppercase tracking-wide border-primary/20 hover:bg-primary/10"
                       onClick={handleWeeklyNow}
                       disabled={isLoading}
                     >
@@ -491,12 +491,12 @@ function SettingsPage() {
                 </div>
 
                 <div className="mt-6 space-y-3">
-                  <h4 className="text-[10px] font-black uppercase tracking-widest text-primary flex items-center gap-2">
+                  <h4 className="text-[10px] font-semibold uppercase tracking-wide text-primary flex items-center gap-2">
                     <HistoryIcon size={12} /> Central de Notificações
                   </h4>
                   <div className="flex flex-wrap gap-2">
                     <Select value={historyPeriod} onValueChange={(v) => setHistoryPeriod(v as typeof historyPeriod)}>
-                      <SelectTrigger className="h-8 w-36 text-[10px] uppercase font-black">
+                      <SelectTrigger className="h-8 w-36 text-[10px] uppercase font-semibold">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -506,7 +506,7 @@ function SettingsPage() {
                       </SelectContent>
                     </Select>
                     <Select value={historyStatus} onValueChange={(v) => setHistoryStatus(v as typeof historyStatus)}>
-                      <SelectTrigger className="h-8 w-32 text-[10px] uppercase font-black">
+                      <SelectTrigger className="h-8 w-32 text-[10px] uppercase font-semibold">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -529,7 +529,7 @@ function SettingsPage() {
                             </p>
                           </div>
                           <Badge variant="outline" className={cn(
-                            "text-[8px] font-black uppercase px-2 py-0",
+                            "text-[8px] font-semibold uppercase px-2 py-0",
                             log.status === 'read' ? "border-success text-success" : 
                             log.status === 'sent' ? "border-primary text-primary" : "border-warning text-warning"
                           )}>
@@ -538,7 +538,7 @@ function SettingsPage() {
                         </div>
                       ))
                     ) : (
-                      <p className="text-[10px] text-muted-foreground italic text-center py-4">Nenhuma notificação no período selecionado.</p>
+                      <p className="text-[10px] text-muted-foreground  text-center py-4">Nenhuma notificação no período selecionado.</p>
                     )}
                   </div>
                 </div>
@@ -560,7 +560,7 @@ function SettingsPage() {
               </div>
             </div>
 
-            <Button className="w-full bg-brand-gradient border-none font-black uppercase tracking-widest h-12 gap-2 mt-4" onClick={() => {
+            <Button className="w-full bg-brand-gradient border-none font-semibold uppercase tracking-wide h-12 gap-2 mt-4" onClick={() => {
               // Trigger permission and push settings
               requestNotificationPermission().then(() => {
                 scheduleNotifications();
@@ -611,7 +611,7 @@ function SettingsPage() {
         </div>
 
         <div className="text-center space-y-1 py-8 opacity-40">
-          <p className="text-[10px] font-bold uppercase tracking-widest">Body Métrica FJ</p>
+          <p className="text-[10px] font-bold uppercase tracking-wide">Body Métrica FJ</p>
           <p className="text-[8px]">Versão 1.0.0-demo (2026)</p>
         </div>
       </div>

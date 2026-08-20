@@ -98,7 +98,7 @@ function OnboardingPage() {
 
       <div className="max-w-md mx-auto w-full flex-1 flex flex-col space-y-8 pt-8 relative z-10">
         <div className="space-y-4">
-          <div className="flex items-center justify-between text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
+          <div className="flex items-center justify-between text-[10px] font-bold text-muted-foreground uppercase tracking-wide">
             <span>Passo {step} de {totalSteps}</span>
             <span>{Math.round((step / totalSteps) * 100)}%</span>
           </div>
@@ -254,7 +254,7 @@ function OnboardingPage() {
                 </p>
               </div>
               <div className="surface p-6 text-left space-y-3">
-                <h3 className="font-bold text-xs uppercase tracking-widest text-muted-foreground">Resumo do Perfil</h3>
+                <h3 className="font-bold text-xs uppercase tracking-wide text-muted-foreground">Resumo do Perfil</h3>
                 <div className="space-y-1 text-sm">
                   <div className="flex justify-between"><span>Nome:</span> <span className="font-bold">{formData.name}</span></div>
                   <div className="flex justify-between"><span>Objetivo:</span> <span className="font-bold">{formData.goal === 'loss' ? 'Emagrecimento' : formData.goal === 'gain' ? 'Hipertrofia' : 'Manutenção'}</span></div>

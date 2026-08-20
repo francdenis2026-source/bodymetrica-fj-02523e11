@@ -157,10 +157,10 @@ function BodyPage() {
         <div className="mt-20">
           <EmptyState 
             icon={Scale}
-            title="SEM MÉTRICAS REGISTRADAS"
+            title="Sem métricas registradas"
             description="Você ainda não possui dados de composição corporal. Registre seu peso e medidas para começar a acompanhar sua evolução."
             action={
-              <Button className="h-14 px-10 rounded-xl bg-brand-gradient text-xs font-black uppercase tracking-widest shadow-2xl hover:scale-105 transition-all">
+              <Button className="h-14 px-10 rounded-xl bg-brand-gradient text-xs font-semibold uppercase tracking-wide shadow-2xl hover:scale-105 transition-all">
                 <Plus size={18} className="mr-2" /> PRIMEIRO REGISTRO
               </Button>
             }
@@ -245,11 +245,11 @@ function BodyPage() {
 
       <Tabs defaultValue="overview" className="space-y-8" onValueChange={setActiveTab}>
         <TabsList className="inline-flex h-14 items-center justify-center rounded-2xl bg-white/5 p-1.5 text-foreground/60 w-full md:w-auto border border-white/5 backdrop-blur-3xl">
-          <TabsTrigger value="overview" className="h-11 px-10 rounded-xl font-black uppercase tracking-widest text-[10px] data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all">GERAL</TabsTrigger>
-          <TabsTrigger value="measurements" className="h-11 px-10 rounded-xl font-black uppercase tracking-widest text-[10px] data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all">MEDIDAS</TabsTrigger>
-          <TabsTrigger value="photos" className="h-11 px-10 rounded-xl font-black uppercase tracking-widest text-[10px] data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all">EVOLUÇÃO</TabsTrigger>
-          <TabsTrigger value="comparison" className="h-11 px-10 rounded-xl font-black uppercase tracking-widest text-[10px] data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all">COMPARATIVO MENSAL</TabsTrigger>
-          <TabsTrigger value="exports" className="h-11 px-10 rounded-xl font-black uppercase tracking-widest text-[10px] data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all">EXPORTAÇÕES</TabsTrigger>
+          <TabsTrigger value="overview" className="h-11 px-10 rounded-xl font-semibold uppercase tracking-wide text-[10px] data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all">GERAL</TabsTrigger>
+          <TabsTrigger value="measurements" className="h-11 px-10 rounded-xl font-semibold uppercase tracking-wide text-[10px] data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all">MEDIDAS</TabsTrigger>
+          <TabsTrigger value="photos" className="h-11 px-10 rounded-xl font-semibold uppercase tracking-wide text-[10px] data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all">EVOLUÇÃO</TabsTrigger>
+          <TabsTrigger value="comparison" className="h-11 px-10 rounded-xl font-semibold uppercase tracking-wide text-[10px] data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all">COMPARATIVO MENSAL</TabsTrigger>
+          <TabsTrigger value="exports" className="h-11 px-10 rounded-xl font-semibold uppercase tracking-wide text-[10px] data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all">EXPORTAÇÕES</TabsTrigger>
         </TabsList>
 
 
@@ -338,12 +338,12 @@ function BodyPage() {
           <Card className="surface border-white/5 bg-white/[0.03] backdrop-blur-3xl rounded-[2.5rem] overflow-hidden">
             <CardHeader className="flex flex-col md:flex-row md:items-center justify-between p-8 gap-6">
               <div className="space-y-1">
-                <CardTitle className="text-xl font-black uppercase tracking-widest italic">HISTÓRICO DE PERFORMANCE</CardTitle>
+                <CardTitle className="text-xl font-semibold  tracking-wide ">Histórico de Performance</CardTitle>
                 <div className="flex items-center gap-2">
-                  <p className="text-[10px] font-bold text-foreground/40 uppercase tracking-widest">ANÁLISE DETALHADA E DRILL-DOWN</p>
+                  <p className="text-[10px] font-bold text-foreground/40 uppercase tracking-wide">ANÁLISE DETALHADA E DRILL-DOWN</p>
                   <Button 
                     variant="link" 
-                    className="text-[9px] font-black p-0 h-auto text-primary"
+                    className="text-[9px] font-semibold p-0 h-auto text-primary"
                     onClick={() => setCompareMode(!compareMode)}
                   >
                     {compareMode ? "SAIR DO COMPARATIVO" : "ATIVAR COMPARATIVO"}
@@ -351,7 +351,7 @@ function BodyPage() {
                   {compareMode && selectedForComparison.length === 2 && (
                     <Button 
                       variant="link" 
-                      className="text-[9px] font-black p-0 h-auto text-success ml-2"
+                      className="text-[9px] font-semibold p-0 h-auto text-success ml-2"
                       onClick={saveComparisonPreset}
                     >
                       SALVAR PRESET
@@ -365,12 +365,12 @@ function BodyPage() {
                         setSelectedForComparison(preset.ids);
                       }
                     }}>
-                      <SelectTrigger className="h-6 w-24 text-[8px] uppercase font-black ml-2 border-white/10">
+                      <SelectTrigger className="h-6 w-24 text-[8px] uppercase font-semibold ml-2 border-white/10">
                         <SelectValue placeholder="PRESETS" />
                       </SelectTrigger>
                       <SelectContent>
                         {comparisonPresets.map(p => (
-                          <SelectItem key={p.id} value={p.id} className="text-[8px] uppercase font-black">
+                          <SelectItem key={p.id} value={p.id} className="text-[8px] uppercase font-semibold">
                             {p.name}
                           </SelectItem>
                         ))}
@@ -383,7 +383,7 @@ function BodyPage() {
               <div className="flex items-center gap-3">
                 <Button 
                   variant="outline" 
-                  className="gap-2 h-12 px-6 font-black uppercase tracking-widest border-2 bg-primary/10 border-primary/20 hover:bg-primary/20 text-primary"
+                  className="gap-2 h-12 px-6 font-semibold uppercase tracking-wide border-2 bg-primary/10 border-primary/20 hover:bg-primary/20 text-primary"
                   onClick={() => {
                     generateMonthlyPDF({
                       userName: userData?.name || "Usuário",
@@ -415,17 +415,17 @@ function BodyPage() {
                 >
                   <FileDown size={18} /> RELATÓRIO MENSAL PDF
                 </Button>
-                <Button variant="outline" className="gap-2 h-12 px-6 font-black uppercase tracking-widest border-2 bg-white/5 border-white/10" asChild>
+                <Button variant="outline" className="gap-2 h-12 px-6 font-semibold uppercase tracking-wide border-2 bg-white/5 border-white/10" asChild>
                   <Link to="/help">
                     ENTENDER MÉTRICAS
                   </Link>
                 </Button>
-                <Button className="gap-2 h-12 px-6 font-black uppercase tracking-widest bg-brand-gradient shadow-2xl shadow-primary/40 hover:scale-105 transition-all border-none">
+                <Button className="gap-2 h-12 px-6 font-semibold uppercase tracking-wide bg-brand-gradient shadow-2xl shadow-primary/40 hover:scale-105 transition-all border-none">
                   <Plus size={18} /> REGISTRAR
                 </Button>
                 <Button 
                   variant="outline"
-                  className="gap-2 h-12 px-6 font-black uppercase tracking-widest border-2 bg-white/5 border-white/10"
+                  className="gap-2 h-12 px-6 font-semibold uppercase tracking-wide border-2 bg-white/5 border-white/10"
                   onClick={() => exportToCSV(mockWeightData, 'Peso_BodyMetrica')}
                 >
                   <FileDown size={18} /> CSV
@@ -472,19 +472,19 @@ function BodyPage() {
                     }
                   }}>
                     <div className="flex flex-col gap-1">
-                      <span className="text-xs font-black uppercase tracking-[0.2em] text-foreground/80 group-hover:text-primary transition-colors">{item.date}</span>
-                      <span className="text-[10px] font-bold text-foreground/40 uppercase tracking-widest italic">{item.desc}</span>
+                      <span className="text-xs font-semibold uppercase tracking-[0.2em] text-foreground/80 group-hover:text-primary transition-colors">{item.date}</span>
+                      <span className="text-[10px] font-bold text-foreground/40 uppercase tracking-wide ">{item.desc}</span>
                     </div>
                     <div className="text-right space-y-1">
-                      <div className="text-2xl font-black font-display tracking-tighter italic uppercase group-hover:scale-110 transition-transform">{item.value}</div>
-                      <div className="text-[10px] font-black uppercase tracking-widest text-success bg-success/10 px-2 py-0.5 rounded-full inline-block">{item.change}</div>
+                      <div className="text-2xl font-semibold font-display tracking-tighter  uppercase group-hover:scale-110 transition-transform">{item.value}</div>
+                      <div className="text-[10px] font-semibold uppercase tracking-wide text-success bg-success/10 px-2 py-0.5 rounded-full inline-block">{item.change}</div>
                     </div>
                   </div>
                 ))}
               </div>
 
               <div className="p-8 text-center bg-white/[0.01]">
-                <Button variant="ghost" className="text-[10px] font-black uppercase tracking-[0.3em] text-foreground/40 hover:text-foreground gap-3">
+                <Button variant="ghost" className="text-[10px] font-semibold uppercase tracking-[0.3em] text-foreground/40 hover:text-foreground gap-3">
                   <History size={16} /> VER HISTÓRICO COMPLETO
                 </Button>
               </div>
@@ -496,8 +496,8 @@ function BodyPage() {
         <TabsContent value="comparison" className="space-y-6">
           <Card className="surface border-none p-8">
             <CardHeader className="px-0 pt-0">
-              <CardTitle className="text-2xl font-black font-display uppercase tracking-tighter italic">Variação Mês a Mês</CardTitle>
-              <CardDescription className="text-[10px] font-bold uppercase tracking-widest opacity-60">Análise técnica de variação percentual e consistência</CardDescription>
+              <CardTitle className="text-2xl font-semibold font-display tracking-tighter ">Variação Mês a Mês</CardTitle>
+              <CardDescription className="text-[10px] font-bold uppercase tracking-wide opacity-60">Análise técnica de variação percentual e consistência</CardDescription>
             </CardHeader>
             <CardContent className="px-0 space-y-8">
               <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -510,9 +510,9 @@ function BodyPage() {
               <div className="p-6 rounded-[2.5rem] bg-primary/5 border border-primary/10">
                 <div className="flex items-center gap-3 mb-4">
                   <TrendingUp className="text-primary" size={20} />
-                  <h3 className="text-sm font-black uppercase tracking-widest italic">Diagnóstico de Evolução</h3>
+                  <h3 className="text-sm font-semibold uppercase tracking-wide ">Diagnóstico de Evolução</h3>
                 </div>
-                  <p className="text-xs font-bold leading-relaxed text-foreground/70 italic">
+                  <p className="text-xs font-bold leading-relaxed text-foreground/70 ">
                     {generateInsights(mockWeightData, { protein: 180 })}
                   </p>
               </div>
@@ -572,7 +572,7 @@ function BodyPage() {
           <div className="mt-8 space-y-8">
             <Card className="surface border-none p-6" id="comparison-report-content">
               <div className="flex items-center justify-between mb-6">
-                <CardTitle className="text-xl font-display uppercase italic">Relatório Comparativo (Mensal)</CardTitle>
+                <CardTitle className="text-xl font-display ">Relatório Comparativo (Mensal)</CardTitle>
                 <div className="flex gap-2 no-print">
                   <Button 
                     variant="ghost" 
@@ -599,7 +599,7 @@ function BodyPage() {
 
               <div className="grid md:grid-cols-2 gap-8">
                 <div className="space-y-4">
-                  <h4 className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Evolução de Peso</h4>
+                  <h4 className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Evolução de Peso</h4>
                   <div className="flex items-end justify-between h-32 gap-2">
                     {[85, 84, 83.5, 82.4].map((v, i) => (
                       <div key={i} className="flex-1 flex flex-col items-center gap-2 group relative">
@@ -611,12 +611,12 @@ function BodyPage() {
                 </div>
                 <div className="flex flex-col justify-center gap-4">
                   <div className="p-4 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-between">
-                    <span className="text-[10px] font-black uppercase text-muted-foreground">Peso Médio</span>
-                    <span className="text-xl font-black italic text-primary">83.2 KG</span>
+                    <span className="text-[10px] font-semibold uppercase text-muted-foreground">Peso Médio</span>
+                    <span className="text-xl font-semibold  text-primary">83.2 KG</span>
                   </div>
                   <div className="p-4 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-between">
-                    <span className="text-[10px] font-black uppercase text-muted-foreground">Variação Total</span>
-                    <span className="text-xl font-black italic text-success">-2.6 KG</span>
+                    <span className="text-[10px] font-semibold uppercase text-muted-foreground">Variação Total</span>
+                    <span className="text-xl font-semibold  text-success">-2.6 KG</span>
                   </div>
                 </div>
               </div>
@@ -640,28 +640,28 @@ function BodyPage() {
         <TabsContent value="exports" className="space-y-6">
           <Card className="surface border-none p-6">
             <CardHeader className="px-0 pt-0">
-              <CardTitle className="text-xl font-black font-display uppercase italic tracking-tighter">HISTÓRICO DE EXPORTAÇÕES</CardTitle>
+              <CardTitle className="text-xl font-semibold font-display   tracking-tighter">Histórico de Exportações</CardTitle>
               <div className="flex flex-col md:flex-row gap-4 mt-6">
                 <div className="relative flex-1">
                   <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" size={16} />
                   <Input 
                     placeholder="BUSCAR NO HISTÓRICO..." 
-                    className="pl-12 h-12 bg-white/5 border-white/10 text-[10px] font-black uppercase tracking-widest"
+                    className="pl-12 h-12 bg-white/5 border-white/10 text-[10px] font-semibold uppercase tracking-wide"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
                 </div>
                 <Select value={filterType} onValueChange={setFilterType}>
-                  <SelectTrigger className="w-full md:w-[180px] h-12 bg-white/5 border-white/10 rounded-xl text-[10px] font-black uppercase tracking-widest px-6">
+                  <SelectTrigger className="w-full md:w-[180px] h-12 bg-white/5 border-white/10 rounded-xl text-[10px] font-semibold uppercase tracking-wide px-6">
                     <div className="flex items-center gap-2">
                       <Filter size={14} />
                       <SelectValue placeholder="FILTRAR" />
                     </div>
                   </SelectTrigger>
                   <SelectContent className="bg-background border-white/10 rounded-xl">
-                    <SelectItem value="ALL" className="text-[10px] font-black uppercase tracking-widest focus:bg-primary/20">TODOS</SelectItem>
-                    <SelectItem value="PDF" className="text-[10px] font-black uppercase tracking-widest focus:bg-primary/20">PDF</SelectItem>
-                    <SelectItem value="PNG" className="text-[10px] font-black uppercase tracking-widest focus:bg-primary/20">IMAGEM</SelectItem>
+                    <SelectItem value="ALL" className="text-[10px] font-semibold uppercase tracking-wide focus:bg-primary/20">TODOS</SelectItem>
+                    <SelectItem value="PDF" className="text-[10px] font-semibold uppercase tracking-wide focus:bg-primary/20">PDF</SelectItem>
+                    <SelectItem value="PNG" className="text-[10px] font-semibold uppercase tracking-wide focus:bg-primary/20">IMAGEM</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -670,7 +670,7 @@ function BodyPage() {
               {filteredHistory.length === 0 ? (
                 <EmptyState 
                   icon={FileDown}
-                  title={searchQuery || filterType !== "ALL" ? "NENHUM RESULTADO" : "NENHUMA EXPORTAÇÃO"}
+                  title={searchQuery || filterType !== "ALL" ? "Nenhum resultado" : "Nenhuma exportação"}
                   description={searchQuery || filterType !== "ALL" ? "Tente ajustar seus filtros ou busca." : "Seus relatórios gerados aparecerão aqui para acesso rápido e compartilhamento."}
                 />
               ) : (
@@ -682,18 +682,18 @@ function BodyPage() {
                           {item.type === 'PDF' ? <FileDown size={20} /> : <ImageIcon size={20} />}
                         </div>
                         <div>
-                          <div className="text-xs font-black uppercase tracking-widest">{item.fileName}</div>
+                          <div className="text-xs font-semibold uppercase tracking-wide">{item.fileName}</div>
                           <div className="text-[9px] font-bold text-muted-foreground uppercase mt-1">
                             {new Date(item.date).toLocaleDateString()} • Expira em: {new Date(item.expiresAt).toLocaleDateString()}
                           </div>
                           <div className="flex gap-2 mt-2">
                             {item.password && (
-                              <div className="flex items-center gap-1 text-[8px] font-black text-primary uppercase tracking-widest bg-primary/10 px-2 py-0.5 rounded-full">
+                              <div className="flex items-center gap-1 text-[8px] font-semibold text-primary uppercase tracking-wide bg-primary/10 px-2 py-0.5 rounded-full">
                                 <Lock size={10} /> PROTEGIDO
                               </div>
                             )}
                             {item.viewLimit && (
-                              <div className="flex items-center gap-1 text-[8px] font-black text-info uppercase tracking-widest bg-info/10 px-2 py-0.5 rounded-full">
+                              <div className="flex items-center gap-1 text-[8px] font-semibold text-info uppercase tracking-wide bg-info/10 px-2 py-0.5 rounded-full">
                                 <Eye size={10} /> {item.viewsCount || 0}/{item.viewLimit} VISUALIZAÇÕES
                               </div>
                             )}
@@ -747,37 +747,37 @@ function BodyPage() {
       <Dialog open={isExportSettingsOpen} onOpenChange={setIsExportSettingsOpen}>
         <DialogContent className="surface border-white/10 bg-background/95 backdrop-blur-3xl rounded-[2.5rem] p-8 max-w-md">
           <DialogHeader className="space-y-3">
-            <DialogTitle className="text-xl font-black font-display tracking-tighter italic uppercase text-primary">Configurações de Segurança</DialogTitle>
-            <DialogDescription className="text-[10px] font-bold text-foreground/40 uppercase tracking-widest leading-relaxed">
+            <DialogTitle className="text-xl font-semibold font-display tracking-tighter text-primary">Configurações de Segurança</DialogTitle>
+            <DialogDescription className="text-[10px] font-bold text-foreground/40 uppercase tracking-wide leading-relaxed">
               Adicione uma camada extra de proteção ao seu link público de {pendingExportType}.
             </DialogDescription>
           </DialogHeader>
           
           <div className="space-y-6 py-6">
             <div className="space-y-3">
-              <label className="text-[10px] font-black uppercase tracking-widest text-foreground/60 flex items-center gap-2">
+              <label className="text-[10px] font-semibold uppercase tracking-wide text-foreground/60 flex items-center gap-2">
                 <Lock size={14} className="text-primary" /> Senha de Acesso (Opcional)
               </label>
               <Input 
                 type="password"
                 placeholder="DIGITE UMA SENHA..."
-                className="h-14 bg-white/5 border-white/10 focus:border-primary/50 text-xs font-black tracking-[0.2em]"
+                className="h-14 bg-white/5 border-white/10 focus:border-primary/50 text-xs font-semibold tracking-[0.2em]"
                 value={exportPassword}
                 onChange={(e) => setExportPassword(e.target.value)}
               />
             <div className="space-y-3">
-              <label className="text-[10px] font-black uppercase tracking-widest text-foreground/60 flex items-center gap-2">
+              <label className="text-[10px] font-semibold uppercase tracking-wide text-foreground/60 flex items-center gap-2">
                 <Calendar size={14} className="text-warning" /> Expiração do Link
               </label>
               <Select value={exportExpiration} onValueChange={setExportExpiration}>
-                <SelectTrigger className="h-14 bg-white/5 border-white/10 focus:border-warning/50 text-[10px] font-black uppercase tracking-[0.2em] px-6">
+                <SelectTrigger className="h-14 bg-white/5 border-white/10 focus:border-warning/50 text-[10px] font-semibold uppercase tracking-[0.2em] px-6">
                   <SelectValue placeholder="7 DIAS (PADRÃO)" />
                 </SelectTrigger>
                 <SelectContent className="bg-background border-white/10 rounded-xl">
-                  <SelectItem value="1" className="text-[10px] font-black uppercase tracking-widest focus:bg-primary/20">24 HORAS</SelectItem>
-                  <SelectItem value="7" className="text-[10px] font-black uppercase tracking-widest focus:bg-primary/20">7 DIAS</SelectItem>
-                  <SelectItem value="30" className="text-[10px] font-black uppercase tracking-widest focus:bg-primary/20">30 DIAS</SelectItem>
-                  <SelectItem value="0" className="text-[10px] font-black uppercase tracking-widest focus:bg-primary/20">NUNCA EXPIRA</SelectItem>
+                  <SelectItem value="1" className="text-[10px] font-semibold uppercase tracking-wide focus:bg-primary/20">24 HORAS</SelectItem>
+                  <SelectItem value="7" className="text-[10px] font-semibold uppercase tracking-wide focus:bg-primary/20">7 DIAS</SelectItem>
+                  <SelectItem value="30" className="text-[10px] font-semibold uppercase tracking-wide focus:bg-primary/20">30 DIAS</SelectItem>
+                  <SelectItem value="0" className="text-[10px] font-semibold uppercase tracking-wide focus:bg-primary/20">NUNCA EXPIRA</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -787,13 +787,13 @@ function BodyPage() {
           <DialogFooter className="gap-3">
             <Button 
               variant="outline" 
-              className="h-14 px-8 rounded-xl font-black uppercase tracking-widest text-[10px] border-white/10 hover:bg-white/5"
+              className="h-14 px-8 rounded-xl font-semibold uppercase tracking-wide text-[10px] border-white/10 hover:bg-white/5"
               onClick={() => setIsExportSettingsOpen(false)}
             >
               Cancelar
             </Button>
             <Button 
-              className="h-14 flex-1 rounded-xl font-black uppercase tracking-widest text-[10px] bg-brand-gradient shadow-2xl hover:scale-[1.02] transition-all"
+              className="h-14 flex-1 rounded-xl font-semibold uppercase tracking-wide text-[10px] bg-brand-gradient shadow-2xl hover:scale-[1.02] transition-all"
               onClick={executeExport}
             >
               Gerar {pendingExportType}
@@ -813,10 +813,10 @@ function MetricCard({ label, value, change, trend, icon }: { label: string; valu
           {icon}
         </div>
         <div className="space-y-1">
-          <span className="text-[10px] font-black text-foreground/40 uppercase tracking-[0.2em]">{label}</span>
+          <span className="text-[10px] font-semibold text-foreground/40 uppercase tracking-[0.2em]">{label}</span>
           <div className="flex items-baseline gap-3">
-            <span className="text-3xl font-black font-display tracking-tighter italic uppercase">{value}</span>
-            <span className={`text-xs font-black uppercase tracking-widest px-2 py-0.5 rounded-full ${trend === 'up' && label === 'Massa Muscular' ? 'bg-success/20 text-success' : trend === 'down' ? 'bg-success/20 text-success' : 'bg-destructive/20 text-destructive'}`}>
+            <span className="text-3xl font-semibold font-display tracking-tighter  uppercase">{value}</span>
+            <span className={`text-xs font-semibold uppercase tracking-wide px-2 py-0.5 rounded-full ${trend === 'up' && label === 'Massa Muscular' ? 'bg-success/20 text-success' : trend === 'down' ? 'bg-success/20 text-success' : 'bg-destructive/20 text-destructive'}`}>
               {change}
             </span>
           </div>
@@ -839,11 +839,11 @@ function MeasurementItem({ label, value }: { label: string; value: number }) {
 function VariationItem({ label, value, percent, trend }: { label: string; value: string; percent: string; trend: 'up' | 'down' }) {
   return (
     <div className="p-6 rounded-[2rem] bg-white/5 border border-white/10 space-y-2 group hover:bg-white/10 transition-all">
-      <p className="text-[9px] font-black text-muted-foreground uppercase tracking-widest">{label}</p>
+      <p className="text-[9px] font-semibold text-muted-foreground uppercase tracking-wide">{label}</p>
       <div className="flex items-baseline gap-2">
-        <span className="text-2xl font-black font-display italic uppercase tracking-tighter">{value}</span>
+        <span className="text-2xl font-semibold font-display  uppercase tracking-tighter">{value}</span>
         <span className={cn(
-          "text-[10px] font-black px-2 py-0.5 rounded-full",
+          "text-[10px] font-semibold px-2 py-0.5 rounded-full",
           trend === 'up' ? "bg-success/10 text-success" : "bg-destructive/10 text-destructive"
         )}>
           {percent}

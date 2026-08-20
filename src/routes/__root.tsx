@@ -46,19 +46,19 @@ import appCss from "../styles.css?url";
 function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md w-full text-center surface border-none p-12 md:p-16 rounded-[3.5rem] shadow-[0_50px_100px_rgba(0,0,0,0.6)] animate-in fade-in zoom-in duration-700">
-        <h1 className="text-8xl md:text-9xl font-black font-display text-primary tracking-tighter italic leading-none">404</h1>
-        <h2 className="mt-6 text-2xl font-black uppercase tracking-[0.2em] text-foreground italic leading-none">PÁGINA NÃO ENCONTRADA</h2>
-        <p className="mt-6 text-base text-muted-foreground leading-tight font-medium">
-          O caminho que você está tentando acessar não existe ou foi movido para uma nova zona de performance.
+      <div className="max-w-md w-full text-center surface border-none p-12 md:p-16 rounded-[2.5rem] animate-in fade-in zoom-in duration-700">
+        <h1 className="text-7xl md:text-8xl font-semibold font-display text-primary tracking-tight leading-none">404</h1>
+        <h2 className="mt-5 text-xl font-semibold text-foreground leading-none">Página não encontrada</h2>
+        <p className="mt-4 text-base text-muted-foreground leading-relaxed">
+          O caminho que você está tentando acessar não existe ou foi movido.
         </p>
-        <div className="mt-10">
+        <div className="mt-8">
           <Link
             to="/"
             search={{} as any}
-            className="inline-flex items-center justify-center rounded-[1.5rem] bg-brand-gradient px-12 h-16 text-xs font-black uppercase tracking-[0.2em] text-primary-foreground transition-all hover:scale-105 shadow-[0_20px_40px_rgba(oklch(0.65_0.22_260),0.4)]"
+            className="inline-flex items-center justify-center rounded-2xl bg-brand-gradient px-10 h-12 text-sm font-semibold text-primary-foreground transition-all hover:scale-105 shadow-brand"
           >
-            VOLTAR AO INÍCIO
+            Voltar ao início
           </Link>
         </div>
       </div>
@@ -111,6 +111,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:description", content: "Suíte completa para acompanhamento de composição corporal, alimentação, hidratação, suplementação e treinos." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "theme-color", content: "#0a1317" },
     ],
     links: [
       {
@@ -132,7 +133,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
       { rel: "manifest", href: "/manifest.json" },
-      { rel: "theme-color", content: "#0a0a0a" },
       { rel: "apple-touch-icon", href: "/favicon.svg" },
     ],
   }),
@@ -432,7 +432,7 @@ function RootComponent() {
           ) : (
             <StatusIcon isOnline={actualIsOnline} />
           )}
-          <span className="text-[10px] font-black uppercase tracking-widest text-foreground/60">
+          <span className="text-[10px] font-semibold uppercase tracking-wide text-foreground/60">
             {syncStatus === 'syncing' ? 'Sincronizando...' : actualIsOnline ? 'Online' : 'Offline'}
           </span>
 
@@ -449,7 +449,7 @@ function RootComponent() {
           )}
 
           {/* Sync History Tooltip-like details */}
-          <div className="absolute top-full right-0 mt-2 w-48 surface p-3 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all z-[110] text-[9px] uppercase font-black tracking-tighter space-y-2">
+          <div className="absolute top-full right-0 mt-2 w-48 surface p-3 invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all z-[110] text-[9px] uppercase font-semibold tracking-tighter space-y-2">
              <div className="flex justify-between">
                 <span className="text-muted-foreground">Última Sinc:</span>
                 <span>{syncHistory.lastSync ? new Date(syncHistory.lastSync).toLocaleTimeString() : 'Nunca'}</span>
@@ -481,10 +481,10 @@ function RootComponent() {
                     B
                   </div>
                   <div className="overflow-hidden transition-all duration-300 group-hover/sidebar:opacity-100 opacity-0 group-hover/sidebar:translate-x-0 -translate-x-4">
-                    <h1 className="text-xl font-black font-display text-primary leading-none tracking-tighter uppercase italic whitespace-nowrap">
-                      BODYMETRICA <span className="text-foreground/65">FJ</span>
+                    <h1 className="text-lg font-semibold font-display text-foreground leading-none tracking-tight whitespace-nowrap">
+                      Body Métrica <span className="text-primary">FJ</span>
                     </h1>
-                    <p className="text-[8px] font-bold uppercase tracking-[0.32em] text-foreground/35 mt-1">Saúde em contexto</p>
+                    <p className="text-[9px] font-medium uppercase tracking-[0.22em] text-foreground/35 mt-1.5">Saúde em contexto</p>
                   </div>
                 </div>
               </div>
@@ -500,13 +500,13 @@ function RootComponent() {
               </nav>
               <div className="p-4 border-t border-white/5 space-y-4">
                 <div className="flex items-center justify-between px-3 py-2 bg-white/[0.03] rounded-xl border border-white/5 overflow-hidden transition-all duration-300 group-hover/sidebar:opacity-100">
-                  <span className="text-[8px] font-black tracking-[0.2em] text-foreground/40 uppercase whitespace-nowrap opacity-0 group-hover/sidebar:opacity-100 transition-opacity">TEMA</span>
+                  <span className="text-[8px] font-semibold tracking-[0.2em] text-foreground/40 uppercase whitespace-nowrap opacity-0 group-hover/sidebar:opacity-100 transition-opacity">TEMA</span>
                   <ThemeToggle />
                 </div>
                 <SidebarLink to="/settings" icon={<Settings size={20} />} label="AJUSTES" />
                 <button 
                   onClick={handleLogout}
-                  className="w-full flex items-center gap-4 px-4 py-3 text-[11px] font-black tracking-widest text-destructive hover:bg-destructive/10 rounded-xl transition-all uppercase border-2 border-transparent group overflow-hidden"
+                  className="w-full flex items-center gap-4 px-4 py-3 text-[11px] font-semibold tracking-wide text-destructive hover:bg-destructive/10 rounded-xl transition-all uppercase border-2 border-transparent group overflow-hidden"
                 >
                   <LogOut size={20} className="group-hover:scale-110 transition-transform shrink-0" />
                   <span className="opacity-0 group-hover/sidebar:opacity-100 transition-opacity whitespace-nowrap">SAIR</span>
@@ -541,20 +541,8 @@ function RootComponent() {
               <Outlet />
             </AccessGate>
           </div>
-          <footer className="relative py-20 px-6 text-center border-t border-white/5 mt-auto overflow-hidden">
-            <div className="absolute inset-0 z-0 opacity-10 grayscale pointer-events-none">
-              <img 
-                src="/bodymetrica-hero-2026.jpg"
-                alt="Footer background" 
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div className="relative z-10 space-y-4">
-              <h4 className="text-[10px] font-black tracking-[0.4em] text-white/20 uppercase">BODY MÉTTRICA FJ • PERFORMANCE SUITE</h4>
-              <p className="text-[10px] text-muted-foreground/40 uppercase tracking-[0.3em] font-black italic">
-                dev Franc D'nis Feijó, AC
-              </p>
-            </div>
+          <footer className="py-8 px-6 text-center border-t border-border/60 mt-auto">
+            <p className="text-[10px] font-semibold tracking-[0.3em] text-muted-foreground/50 uppercase">Body Métrica FJ · Suíte de Performance</p>
           </footer>
         </main>
       </div>
@@ -569,7 +557,7 @@ function SidebarLink({ to, icon, label }: { to: string; icon: React.ReactNode; l
       to={to}
       activeProps={{ className: "bg-primary text-primary-foreground shadow-xl shadow-primary/20 scale-[1.02] border-primary" }}
       inactiveProps={{ className: "text-foreground/60 hover:bg-white/5 hover:text-foreground border-transparent" }}
-      className="flex items-center gap-4 px-4 py-3 text-[11px] font-black tracking-widest rounded-xl transition-all uppercase group border-2 overflow-hidden whitespace-nowrap focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background outline-none"
+      className="flex items-center gap-4 px-4 py-3 text-[11px] font-semibold tracking-wide rounded-xl transition-all uppercase group border-2 overflow-hidden whitespace-nowrap focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background outline-none"
     >
       <span className="group-hover:scale-110 transition-transform shrink-0">{icon}</span>
       <span className="opacity-0 group-hover/sidebar:opacity-100 transition-opacity duration-300 pointer-events-none group-focus-within/sidebar:opacity-100">{label}</span>
@@ -587,7 +575,7 @@ function MobileNavLink({ to, icon, label }: { to: string; icon: React.ReactNode;
       className="flex flex-col items-center gap-1 p-2 min-w-[56px] transition-all duration-300"
     >
       {icon}
-      <span className="text-[9px] font-black uppercase tracking-tighter">{label}</span>
+      <span className="text-[9px] font-semibold uppercase tracking-tighter">{label}</span>
     </Link>
   );
 }

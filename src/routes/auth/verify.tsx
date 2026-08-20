@@ -1,6 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { ModuleHeader } from "@/components/module-header";
-import { Mail, ArrowLeft, RefreshCw } from "lucide-react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { Mail, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
@@ -31,18 +30,18 @@ function VerifyEmailPage() {
 
       if (error) {
         toast.custom((t) => (
-          <SVGToast 
+          <SVGToast
             type="error"
-            title="ERRO NO ENVIO"
+            title="Erro no envio"
             message={error.message}
             onClose={() => toast.dismiss(t)}
           />
         ));
       } else {
         toast.custom((t) => (
-          <SVGToast 
+          <SVGToast
             type="success"
-            title="LINK ENVIADO"
+            title="Link enviado"
             message="Um novo link de confirmação foi enviado para o seu e-mail."
             onClose={() => toast.dismiss(t)}
           />
@@ -56,56 +55,49 @@ function VerifyEmailPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center relative p-6 bg-background overflow-hidden">
+    <div className="on-media relative flex min-h-[100dvh] items-center justify-center overflow-hidden bg-background p-6">
       <div className="absolute inset-0 z-0">
-        <img 
+        <img
           src="/bodymetrica-auth-2026.jpg"
-          alt="Auth background"
-          className="w-full h-full object-cover opacity-20"
+          alt=""
+          aria-hidden
+          className="h-full w-full object-cover opacity-25 [filter:saturate(0.85)]"
         />
-        <div className="absolute inset-0 bg-gradient-to-br from-[#151329]/96 via-[#211d3d]/90 to-[#6d3d54]/62" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#0a1418]/96 via-[#0d1c22]/90 to-[#0c6478]/32" />
       </div>
 
       <div className="relative z-10 w-full max-w-md animate-in fade-in slide-in-from-bottom-4 duration-700">
-        <div className="text-center mb-8">
-          <div className="mx-auto w-20 h-20 bg-brand-gradient rounded-3xl flex items-center justify-center text-primary-foreground font-black text-3xl shadow-2xl border-2 border-white/20 mb-6">
+        <div className="mb-7 text-center">
+          <div className="mx-auto mb-5 flex size-16 items-center justify-center rounded-2xl bg-primary text-2xl font-semibold text-primary-foreground shadow-brand">
             B
           </div>
-          <h1 className="text-4xl font-black font-display tracking-tighter text-white uppercase italic leading-none">
-            CONFIRME SEU <span className="text-gradient-brand">E-MAIL</span>
+          <h1 className="font-display text-3xl font-semibold tracking-tight text-white">
+            Confirme seu <span className="text-gradient-brand">e-mail</span>
           </h1>
         </div>
 
-        <Card className="surface border-white/5 shadow-2xl bg-black/60 backdrop-blur-3xl rounded-[2.5rem] overflow-hidden text-center">
-          <CardHeader className="pt-10">
-            <div className="mx-auto w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-4">
-              <Mail size={32} />
+        <Card className="overflow-hidden rounded-[2rem] border-none bg-card text-center shadow-2xl">
+          <CardHeader className="pt-9">
+            <div className="mx-auto mb-3.5 flex size-14 items-center justify-center rounded-full bg-primary/10 text-primary">
+              <Mail size={26} />
             </div>
-            <CardTitle className="text-xl font-black text-white uppercase tracking-widest italic">VERIFICAÇÃO PENDENTE</CardTitle>
-            <CardDescription className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40 px-6">
+            <CardTitle className="text-xl">Verificação pendente</CardTitle>
+            <CardDescription className="px-4 text-sm leading-6">
               Para sua segurança, confirme sua identidade através do link enviado ao seu e-mail.
             </CardDescription>
           </CardHeader>
-          <CardContent className="pb-10 space-y-6">
-            <p className="text-sm text-white/60 leading-relaxed italic">
+          <CardContent className="space-y-5 pb-9">
+            <p className="text-sm leading-relaxed text-muted-foreground">
               Ainda não recebeu? Verifique sua pasta de spam ou clique no botão abaixo para reenviar.
             </p>
-            
-            <div className="flex flex-col gap-4">
-              <Button 
-                onClick={resendVerification}
-                disabled={isLoading}
-                className="h-14 w-full bg-brand-gradient border-none font-black uppercase tracking-widest rounded-2xl"
-              >
-                {isLoading ? "ENVIANDO..." : "REENVIAR E-MAIL"}
+
+            <div className="flex flex-col gap-3">
+              <Button onClick={resendVerification} disabled={isLoading} className="h-11 w-full">
+                {isLoading ? "Enviando..." : "Reenviar e-mail"}
               </Button>
-              
-              <Button 
-                variant="outline" 
-                className="h-14 w-full border-white/10 bg-white/5 font-black uppercase tracking-widest rounded-2xl flex items-center justify-center gap-2"
-                onClick={() => window.location.href = "/auth"}
-              >
-                <ArrowLeft size={16} /> VOLTAR AO LOGIN
+
+              <Button asChild variant="outline" className="h-11 w-full">
+                <Link to="/auth" search={{} as any}><ArrowLeft size={16} /> Voltar ao login</Link>
               </Button>
             </div>
           </CardContent>

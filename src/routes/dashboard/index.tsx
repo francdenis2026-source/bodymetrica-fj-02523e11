@@ -89,13 +89,13 @@ function DashboardPage() {
       <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-6 relative z-10 animate-in fade-in slide-in-from-left-4 duration-700">
         <div className="flex flex-col md:flex-row items-center gap-6">
           <Link to="/profile" search={{} as any} className="group">
-            <div className="w-20 h-20 bg-brand-gradient rounded-3xl flex items-center justify-center text-white text-3xl font-black shadow-2xl border-2 border-white/20 transform group-hover:scale-105 transition-transform duration-500">
+            <div className="w-20 h-20 bg-brand-gradient rounded-3xl flex items-center justify-center text-white text-3xl font-semibold shadow-2xl border-2 border-white/20 transform group-hover:scale-105 transition-transform duration-500">
               {userName[0]}
             </div>
           </Link>
 
           <div className="text-center md:text-left space-y-2">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/20 text-primary-foreground text-[10px] font-black uppercase tracking-[0.2em] mb-1 border border-primary/30">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/20 text-primary-foreground text-[10px] font-semibold uppercase tracking-[0.2em] mb-1 border border-primary/30">
               SISTEMA DE PERFORMANCE
             </div>
             <h2 className="text-4xl md:text-5xl font-semibold tracking-[-.045em] font-display text-foreground leading-none">
@@ -106,11 +106,11 @@ function DashboardPage() {
             </p>
             {userData?.profile?.license_status !== 'active' && (
               <div className="mt-4 p-4 bg-primary/10 border border-primary/20 rounded-2xl inline-block text-left">
-                <p className="text-[10px] font-black uppercase tracking-widest text-primary mb-2">LICENÇA PENDENTE</p>
+                <p className="text-[10px] font-semibold uppercase tracking-wide text-primary mb-2">LICENÇA PENDENTE</p>
                 <p className="text-xs text-foreground/70 font-bold mb-3 max-w-xs">
                   Adquira sua licença para desbloquear todas as ferramentas de elite e suporte direto.
                 </p>
-                <Button size="sm" className="h-8 text-[10px] font-black uppercase tracking-widest bg-brand-gradient" asChild>
+                <Button size="sm" className="h-8 text-[10px] font-semibold uppercase tracking-wide bg-brand-gradient" asChild>
                   <Link to="/settings">ATIVAR AGORA</Link>
                 </Button>
               </div>
@@ -119,11 +119,11 @@ function DashboardPage() {
         </div>
         
         <div className="flex flex-wrap gap-2">
-          <Button variant="outline" className="gap-2 h-14 px-8 font-black uppercase tracking-widest border-2 bg-white/5 border-white/10 hover:bg-white/10 hover:scale-105 transition-all" asChild>
+          <Button variant="outline" className="gap-2 h-14 px-8 font-semibold uppercase tracking-wide border-2 bg-white/5 border-white/10 hover:bg-white/10 hover:scale-105 transition-all" asChild>
             <Link to="/help">CENTRAL DE AJUDA</Link>
           </Button>
           <Button 
-            className="gap-3 h-14 px-8 font-black uppercase tracking-widest bg-brand-gradient shadow-2xl shadow-primary/40 hover:scale-105 transition-all border-none"
+            className="gap-3 h-14 px-8 font-semibold uppercase tracking-wide bg-brand-gradient shadow-2xl shadow-primary/40 hover:scale-105 transition-all border-none"
             onClick={() => generatePDFReport({
               userName: userName,
               period: "Últimos 30 dias",
@@ -139,14 +139,14 @@ function DashboardPage() {
             <FileDown size={20} /> RELATÓRIO PDF
           </Button>
           <Button 
-            className="gap-3 h-14 px-8 font-black uppercase tracking-widest bg-brand-gradient shadow-2xl shadow-primary/40 hover:scale-105 transition-all border-none"
+            className="gap-3 h-14 px-8 font-semibold uppercase tracking-wide bg-brand-gradient shadow-2xl shadow-primary/40 hover:scale-105 transition-all border-none"
             onClick={() => generateAdherenceReport(userName, adherenceData, 'pdf')}
           >
             <FileDown size={20} /> ADERÊNCIA PDF
           </Button>
           <Button 
             variant="outline"
-            className="gap-3 h-14 px-8 font-black uppercase tracking-widest border-2 bg-white/5 border-white/10 hover:bg-white/10 hover:scale-105 transition-all"
+            className="gap-3 h-14 px-8 font-semibold uppercase tracking-wide border-2 bg-white/5 border-white/10 hover:bg-white/10 hover:scale-105 transition-all"
             onClick={() => {
               const data = auditLogs.map(log => ({
                 Data: new Date(log.timestamp).toLocaleString(),
@@ -161,7 +161,7 @@ function DashboardPage() {
           </Button>
           <Button 
             variant="outline"
-            className="gap-3 h-14 px-8 font-black uppercase tracking-widest border-2 bg-white/5 border-white/10 hover:bg-white/10 hover:scale-105 transition-all"
+            className="gap-3 h-14 px-8 font-semibold uppercase tracking-wide border-2 bg-white/5 border-white/10 hover:bg-white/10 hover:scale-105 transition-all"
             onClick={() => generateAdherenceReport(userName, adherenceData, 'csv')}
           >
             <FileDown size={20} /> ADERÊNCIA CSV
@@ -177,7 +177,7 @@ function DashboardPage() {
               <User className="h-4 w-4 text-primary" />
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-black font-display italic tracking-tighter uppercase">{userData?.profile?.weight || "82.4"} kg</div>
+              <div className="text-3xl font-semibold font-display  tracking-tighter uppercase">{userData?.profile?.weight || "82.4"} kg</div>
               <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
                 <TrendingUp size={12} className="text-success" />
                 {weightChange}kg desde a última semana
@@ -193,7 +193,7 @@ function DashboardPage() {
               <ArrowRight className="h-4 w-4 text-primary" />
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-black font-display italic tracking-tighter uppercase">{currentGoal}</div>
+              <div className="text-3xl font-semibold font-display  tracking-tighter uppercase">{currentGoal}</div>
               <div className="mt-2">
                 <div className="flex justify-between text-[10px] mb-1">
                   <span>Progresso</span>
@@ -212,7 +212,7 @@ function DashboardPage() {
               <Droplets className="h-4 w-4 text-info" />
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-black font-display italic tracking-tighter uppercase">1.2L / 3.0L</div>
+              <div className="text-3xl font-semibold font-display  tracking-tighter uppercase">1.2L / 3.0L</div>
               <div className="mt-2">
                 <Progress value={40} className="h-1.5" />
               </div>
@@ -227,7 +227,7 @@ function DashboardPage() {
               <Dumbbell className="h-4 w-4 text-warning" />
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-black font-display italic tracking-tighter uppercase">Puxada (A)</div>
+              <div className="text-3xl font-semibold font-display  tracking-tighter uppercase">Puxada (A)</div>
               <p className="text-xs text-muted-foreground mt-1">
                 Programado para hoje às 18:00
               </p>
@@ -317,7 +317,7 @@ function DashboardPage() {
               <Button 
                 variant="ghost" 
                 size="sm" 
-                className="text-[9px] font-black uppercase tracking-widest hover:bg-primary/10"
+                className="text-[9px] font-semibold uppercase tracking-wide hover:bg-primary/10"
                 onClick={() => generateAdherenceReport(userName, adherenceData, 'pdf')}
               >
                 <FileDown size={14} className="mr-1" /> PDF
@@ -325,7 +325,7 @@ function DashboardPage() {
               <Button 
                 variant="ghost" 
                 size="sm" 
-                className="text-[9px] font-black uppercase tracking-widest hover:bg-primary/10"
+                className="text-[9px] font-semibold uppercase tracking-wide hover:bg-primary/10"
                 onClick={() => generateAdherenceReport(userName, adherenceData, 'csv')}
               >
                 <FileDown size={14} className="mr-1" /> CSV
@@ -357,15 +357,15 @@ function DashboardPage() {
                                 <div className="space-y-2">
                                   <p className="text-[13px]">Performance: <span className={color}>{record.macros}% Macros</span> e <span className={record.water < 80 ? 'text-warning' : 'text-info'}>{record.water}% Água</span>.</p>
                                   <div className="mt-2 pt-2 border-t border-white/5">
-                                    <p className="text-[10px] font-black uppercase text-primary mb-1">Tendência Semanal</p>
+                                    <p className="text-[10px] font-semibold uppercase text-primary mb-1">Tendência Semanal</p>
                                     <div className="flex items-center gap-2">
                                       <TrendingUp size={12} className={record.macros > 80 ? "text-success" : "text-warning"} />
-                                      <span className="text-[9px] font-bold italic">
+                                      <span className="text-[9px] font-bold ">
                                         {record.macros > 80 ? "+12% acima da média da semana" : "-5% abaixo da média da semana"}
                                       </span>
                                     </div>
                                   </div>
-                                  <p className="text-[11px] opacity-70 italic">
+                                  <p className="text-[11px] opacity-70 ">
                                     {status === 'abaixo' 
                                       ? "Dica: Tente aumentar a ingestão de proteínas na próxima refeição." 
                                       : "Parabéns! Você manteve a disciplina de elite hoje."}
@@ -394,7 +394,7 @@ function DashboardPage() {
                               message={
                                 <div className="space-y-2">
                                   <p className="text-[13px]">Performance: <span className={color}>{record.macros}% Macros</span> e <span className={record.water < 80 ? 'text-warning' : 'text-info'}>{record.water}% Água</span>.</p>
-                                  <p className="text-[11px] opacity-70 italic">
+                                  <p className="text-[11px] opacity-70 ">
                                     {status === 'abaixo' 
                                       ? "Dica: Tente aumentar a ingestão de proteínas na próxima refeição." 
                                       : "Parabéns! Você manteve a disciplina de elite hoje."}
@@ -408,7 +408,7 @@ function DashboardPage() {
                       }}
                     />
                   </div>
-                  <div className="absolute bottom-full mb-3 bg-card border border-white/10 p-3 rounded-xl text-[9px] font-black uppercase tracking-widest invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all whitespace-nowrap z-50 shadow-2xl backdrop-blur-xl">
+                  <div className="absolute bottom-full mb-3 bg-card border border-white/10 p-3 rounded-xl text-[9px] font-semibold uppercase tracking-wide invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all whitespace-nowrap z-50 shadow-2xl backdrop-blur-xl">
                     <div className="flex flex-col gap-1">
                       <div className="flex items-center gap-2">
                         <div className={`w-2 h-2 rounded-full ${record.macros > 80 ? 'bg-success' : 'bg-warning'}`} />
@@ -424,7 +424,7 @@ function DashboardPage() {
                       </div>
                     </div>
                   </div>
-                  <span className="text-[10px] text-muted-foreground font-black uppercase tracking-tighter">
+                  <span className="text-[10px] text-muted-foreground font-semibold uppercase tracking-tighter">
                     {record.date.split('-')[2]}
                   </span>
                 </div>
@@ -435,7 +435,7 @@ function DashboardPage() {
                       className="w-full bg-primary/20 rounded-t-xl transition-all hover:bg-primary/40 cursor-help border-t-2 border-primary/40" 
                       style={{ height: `${val}%` }}
                     />
-                    <span className="text-[10px] text-muted-foreground font-black uppercase tracking-tighter">
+                    <span className="text-[10px] text-muted-foreground font-semibold uppercase tracking-tighter">
                       {['SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB', 'DOM'][i]}
                     </span>
                   </div>
@@ -446,8 +446,8 @@ function DashboardPage() {
             <div className="md:w-72 space-y-4">
               <div className="p-4 rounded-[2rem] bg-white/[0.03] border border-white/5 space-y-2">
                 <div className="flex justify-between items-center">
-                  <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Consistência</span>
-                  <span className="text-sm font-black text-primary">82%</span>
+                  <span className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Consistência</span>
+                  <span className="text-sm font-semibold text-primary">82%</span>
                 </div>
                 <Progress value={82} className="h-2" />
               </div>
@@ -455,9 +455,9 @@ function DashboardPage() {
               <div className="p-4 rounded-[2rem] bg-success/5 border border-success/10 space-y-2">
                 <div className="flex items-center gap-2 mb-1">
                   <TrendingUp className="text-success" size={14} />
-                  <span className="text-[10px] font-black uppercase tracking-widest text-success">Recomendação</span>
+                  <span className="text-[10px] font-semibold uppercase tracking-wide text-success">Recomendação</span>
                 </div>
-                <p className="text-[11px] font-bold text-foreground/80 leading-relaxed italic">
+                <p className="text-[11px] font-bold text-foreground/80 leading-relaxed ">
                   "Sua performance matinal está 15% acima da média. Considere concentrar seus treinos de força neste período para maximizar ganhos."
                 </p>
               </div>
@@ -479,7 +479,7 @@ function DashboardPage() {
                 <div className="flex justify-between items-start mb-2">
                   <div className="flex items-center gap-3">
                     <span className={cn(
-                      "px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest",
+                      "px-2 py-0.5 rounded text-[8px] font-semibold uppercase tracking-wide",
                       log.type === 'meal' ? 'bg-info/20 text-info' :
                       log.type === 'goal' ? 'bg-warning/20 text-warning' :
                       log.type === 'weight' ? 'bg-success/20 text-success' :
@@ -487,18 +487,18 @@ function DashboardPage() {
                     )}>
                       {log.type}
                     </span>
-                    <span className="text-sm font-black italic tracking-tight">{log.action}</span>
+                    <span className="text-sm font-semibold  tracking-tight">{log.action}</span>
                   </div>
                   <span className="text-[9px] font-bold text-muted-foreground uppercase">
                     {new Date(log.timestamp).toLocaleString('pt-BR')}
                   </span>
                 </div>
-                <p className="text-[11px] text-foreground/60 leading-relaxed italic">
+                <p className="text-[11px] text-foreground/60 leading-relaxed ">
                   {log.details}
                 </p>
               </div>
             )) : (
-              <div className="text-center py-12 opacity-40 italic text-sm">
+              <div className="text-center py-12 opacity-40  text-sm">
                 Nenhuma atividade registrada no sistema de auditoria.
               </div>
             )}

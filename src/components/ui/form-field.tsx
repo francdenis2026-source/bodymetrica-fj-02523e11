@@ -20,7 +20,7 @@ export const FormField = React.forwardRef<HTMLInputElement, FormFieldProps>(
       <div className="space-y-2 w-full">
         <Label 
           htmlFor={inputId} 
-          className="text-[10px] font-black uppercase tracking-widest text-foreground/60 px-1"
+          className="text-[10px] font-semibold uppercase tracking-wide text-foreground/60 px-1"
         >
           {label}
         </Label>

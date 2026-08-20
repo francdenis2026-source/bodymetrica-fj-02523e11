@@ -72,7 +72,7 @@ export const SVGToast = ({ type, title, message, action, onClose }: SVGToastProp
         </div>
         
         <div className="flex-1 min-w-0 space-y-1">
-          <h4 className={cn("text-xs font-black uppercase tracking-[0.2em] italic", config.titleColor)}>
+          <h4 className={cn("text-xs font-semibold uppercase tracking-[0.2em] ", config.titleColor)}>
             {title}
           </h4>
           <p className="text-[13px] font-medium text-foreground/70 leading-snug">
@@ -87,7 +87,7 @@ export const SVGToast = ({ type, title, message, action, onClose }: SVGToastProp
                   action.onClick();
                 }}
                 className={cn(
-                  "px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all hover:scale-105 active:scale-95 focus:ring-2 focus:ring-primary focus:outline-none",
+                  "px-4 py-2 rounded-lg text-[10px] font-semibold uppercase tracking-wide transition-all hover:scale-105 active:scale-95 focus:ring-2 focus:ring-primary focus:outline-none",
                   "bg-white/5 border border-white/10 text-foreground hover:bg-white/10 hover:border-white/20"
                 )}
               >

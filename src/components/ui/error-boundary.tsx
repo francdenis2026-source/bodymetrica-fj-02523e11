@@ -16,7 +16,7 @@ export function AppErrorBoundary({ error, reset, title, message }: ErrorBoundary
       <div className="w-16 h-16 rounded-full bg-destructive/10 flex items-center justify-center mb-6">
         <AlertCircle className="w-8 h-8 text-destructive" />
       </div>
-      <h2 className="text-2xl font-black font-display tracking-tight uppercase italic mb-2">
+      <h2 className="text-2xl font-semibold font-display tracking-tight uppercase  mb-2">
         {title || "Ops! Algo deu errado"}
       </h2>
       <p className="text-muted-foreground mb-8 max-w-sm">
@@ -24,11 +24,11 @@ export function AppErrorBoundary({ error, reset, title, message }: ErrorBoundary
       </p>
       <div className="flex gap-4">
         {reset && (
-          <Button onClick={reset} className="gap-2 font-black uppercase tracking-widest h-12 px-6">
+          <Button onClick={reset} className="gap-2 font-semibold uppercase tracking-wide h-12 px-6">
             <RefreshCcw size={16} /> RECARREGAR
           </Button>
         )}
-        <Button variant="outline" onClick={() => window.location.href = "/"} className="font-black uppercase tracking-widest h-12 px-6">
+        <Button variant="outline" onClick={() => window.location.href = "/"} className="font-semibold uppercase tracking-wide h-12 px-6">
           VOLTAR AO INÍCIO
         </Button>
       </div>

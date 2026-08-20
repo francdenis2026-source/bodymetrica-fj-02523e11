@@ -39,7 +39,7 @@ export function WeeklySummaryPreview({ userName, data, trigger }: Props) {
           <Button
             variant="ghost"
             size="sm"
-            className="text-[9px] font-black uppercase tracking-widest hover:bg-primary/10"
+            className="text-[9px] font-semibold uppercase tracking-wide hover:bg-primary/10"
           >
             <FileDown size={14} className="mr-1" /> Resumo Semanal
           </Button>
@@ -47,18 +47,18 @@ export function WeeklySummaryPreview({ userName, data, trigger }: Props) {
       </DialogTrigger>
       <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-sm font-black uppercase tracking-widest">
+          <DialogTitle className="text-sm font-semibold tracking-wide">
             Pré-visualização do Resumo Semanal
           </DialogTitle>
         </DialogHeader>
 
-        <p className="text-[10px] uppercase tracking-widest text-muted-foreground">
+        <p className="text-[10px] uppercase tracking-wide text-muted-foreground">
           Selecione as semanas para confirmar o período antes de exportar. Sem seleção, todas são incluídas.
         </p>
 
         <div className="space-y-3">
           {weeks.length === 0 && (
-            <p className="text-xs italic text-muted-foreground py-6 text-center">
+            <p className="text-xs  text-muted-foreground py-6 text-center">
               Ainda não há dados de aderência para resumir.
             </p>
           )}
@@ -78,14 +78,14 @@ export function WeeklySummaryPreview({ userName, data, trigger }: Props) {
                     className="text-left flex-1"
                     onClick={() => toggleWeek(w.start)}
                   >
-                    <p className="text-xs font-black uppercase tracking-widest">{w.label}</p>
+                    <p className="text-xs font-semibold uppercase tracking-wide">{w.label}</p>
                     <p className="text-[10px] text-muted-foreground">
                       Macros {w.avgMacros}% • Água {w.avgWater}% • {w.trainings} treino(s)
                     </p>
                   </button>
                   <span
                     className={cn(
-                      "flex items-center gap-1 text-[10px] font-black uppercase",
+                      "flex items-center gap-1 text-[10px] font-semibold uppercase",
                       w.trend === "up" ? "text-success" : w.trend === "down" ? "text-destructive" : "text-muted-foreground",
                     )}
                   >
@@ -95,7 +95,7 @@ export function WeeklySummaryPreview({ userName, data, trigger }: Props) {
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="text-[9px] font-black uppercase"
+                    className="text-[9px] font-semibold uppercase"
                     onClick={() => setExpanded(expanded === w.start ? null : w.start)}
                   >
                     {expanded === w.start ? "Fechar" : "Detalhar"}
@@ -112,7 +112,7 @@ export function WeeklySummaryPreview({ userName, data, trigger }: Props) {
                         </span>
                         <span
                           className={cn(
-                            "font-black uppercase",
+                            "font-semibold uppercase",
                             d.macros >= w.avgMacros ? "text-success" : "text-warning",
                           )}
                         >
@@ -129,7 +129,7 @@ export function WeeklySummaryPreview({ userName, data, trigger }: Props) {
 
         <div className="flex flex-wrap gap-3 pt-2">
           <Button
-            className="flex-1 gap-2 font-black uppercase tracking-widest bg-brand-gradient border-none"
+            className="flex-1 gap-2 font-semibold uppercase tracking-wide bg-brand-gradient border-none"
             disabled={filteredData.length === 0}
             onClick={() => generateWeeklyAdherenceReport(userName, filteredData, "pdf")}
           >
@@ -137,7 +137,7 @@ export function WeeklySummaryPreview({ userName, data, trigger }: Props) {
           </Button>
           <Button
             variant="outline"
-            className="flex-1 gap-2 font-black uppercase tracking-widest"
+            className="flex-1 gap-2 font-semibold uppercase tracking-wide"
             disabled={filteredData.length === 0}
             onClick={() => generateWeeklyAdherenceReport(userName, filteredData, "csv")}
           >

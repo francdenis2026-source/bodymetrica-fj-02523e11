@@ -87,7 +87,7 @@ export const alertOnDeviation = (
               {l}
             </p>
           ))}
-          <p className="pt-1 text-[10px] uppercase font-black tracking-widest text-muted-foreground">
+          <p className="pt-1 text-[10px] uppercase font-semibold tracking-wide text-muted-foreground">
             Origem: {origin}
           </p>
         </div>

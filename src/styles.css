@@ -49,115 +49,124 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
-  --shadow-card: 0 1px 2px oklch(0.1 0.05 240 / 0.08), 0 12px 30px oklch(0.1 0.05 240 / 0.08);
-  --container-max-width: 1200px;
+  --shadow-card: var(--shadow-card-value);
+  --container-max-width: 1240px;
   --section-padding: 3rem;
   --card-padding: 1.5rem;
 }
 
 @custom-variant dark (&:is(.dark *));
 
+/*
+  Body Métrica FJ — professional design system.
+  Primary: deep petrol/teal blue (trust, clinical precision, performance).
+  Success: emerald green (goals completed, positive evolution).
+  Warning: controlled amber/orange (alerts, reminders — never alarming).
+  Destructive: red (reserved for risk / destructive actions only).
+  Info: indigo (secondary informational accent, distinct from primary).
+*/
+
 :root {
   color-scheme: light;
-  --radius: 0.75rem;
-  --background: #f7f3ee;
-  --foreground: #19172d;
-  --card: #fffaf6;
-  --card-foreground: #19172d;
-  --popover: #fffaf6;
-  --popover-foreground: #19172d;
-  --primary: #e96859;
-  --primary-foreground: #1b172d;
-  --secondary: #e9e5f6;
-  --secondary-foreground: #302b55;
-  --muted: #eee9e6;
-  --muted-foreground: #6b6577;
-  --accent: #dfe2fb;
-  --accent-foreground: #27234b;
-  --destructive: #c93f50;
-  --destructive-foreground: #fff7f4;
-  --success: #718f70;
-  --success-foreground: #fffaf6;
-  --warning: #d09045;
-  --warning-foreground: #251b19;
-  --info: #6874bf;
-  --info-foreground: #fffaff;
-  --border: #ded6dc;
-  --input: #d7ced7;
-  --ring: #e96859;
-  --chart-1: #e96859;
-  --chart-2: #7d70c7;
-  --chart-3: #d09045;
-  --chart-4: #6874bf;
-  --chart-5: #b65f8c;
-  --sidebar: #201d3a;
-  --sidebar-foreground: #f9f4f0;
-  --sidebar-primary: #f07867;
-  --sidebar-primary-foreground: #1b172d;
-  --sidebar-accent: #312c55;
-  --sidebar-accent-foreground: #fffaf6;
-  --sidebar-border: #3c365e;
-  --sidebar-ring: #f07867;
+  --radius: 0.875rem;
+  --background: #f5f8f9;
+  --foreground: #101c22;
+  --card: #ffffff;
+  --card-foreground: #101c22;
+  --popover: #ffffff;
+  --popover-foreground: #101c22;
+  --primary: #0c6478;
+  --primary-foreground: #ffffff;
+  --secondary: #eaf1f3;
+  --secondary-foreground: #163540;
+  --muted: #eef2f4;
+  --muted-foreground: #5a6d75;
+  --accent: #e2f2f4;
+  --accent-foreground: #0b4b58;
+  --destructive: #cf3241;
+  --destructive-foreground: #fff6f6;
+  --success: #158244;
+  --success-foreground: #ffffff;
+  --warning: #b1650a;
+  --warning-foreground: #fffaf0;
+  --info: #3452c6;
+  --info-foreground: #ffffff;
+  --border: #dbe4e7;
+  --input: #d5e0e3;
+  --ring: #0c6478;
+  --chart-1: #0c6478;
+  --chart-2: #158244;
+  --chart-3: #b1650a;
+  --chart-4: #3452c6;
+  --chart-5: #7a4fc9;
+  --sidebar: #0d1b21;
+  --sidebar-foreground: #ecf5f6;
+  --sidebar-primary: #1fb0c2;
+  --sidebar-primary-foreground: #062026;
+  --sidebar-accent: #16323b;
+  --sidebar-accent-foreground: #ecf5f6;
+  --sidebar-border: #1b3038;
+  --sidebar-ring: #1fb0c2;
+  --shadow-card-value: 0 1px 2px oklch(0.2 0.03 210 / 0.06), 0 14px 32px oklch(0.2 0.04 210 / 0.09);
 }
 
 .dark {
   color-scheme: dark;
-  --background: #121124;
-  --foreground: #f7f2ef;
-  --card: #1d1a35;
-  --card-foreground: #f8f3ef;
-  --popover: #211d3b;
-  --popover-foreground: #fff9f6;
-  --primary: #f07867;
-  --primary-foreground: #1b172d;
-  --secondary: #2d294d;
-  --secondary-foreground: #f4effa;
-  --muted: #27233f;
-  --muted-foreground: #b7afc1;
-  --accent: #37325c;
-  --accent-foreground: #fff9f6;
-  --destructive: #ef6472;
-  --destructive-foreground: #fff7f6;
-  --success: #90aa88;
-  --success-foreground: #111022;
-  --warning: #e0a45e;
-  --warning-foreground: #191326;
-  --info: #9ca8ff;
-  --info-foreground: #151329;
-  --border: #3a3555;
-  --input: #433c60;
-  --ring: #f07867;
-  --chart-1: #f07867;
-  --chart-2: #9c8fea;
-  --chart-3: #e0a45e;
-  --chart-4: #9ca8ff;
-  --chart-5: #d47da8;
-  --sidebar: #17142c;
-  --sidebar-foreground: #f7f2ef;
-  --sidebar-primary: #f07867;
-  --sidebar-primary-foreground: #1b172d;
-  --sidebar-accent: #302b50;
-  --sidebar-accent-foreground: #fff9f6;
-  --sidebar-border: #3b355e;
-  --sidebar-ring: #f07867;
-  --shadow-card: 0 1px 0 oklch(1 0 0 / 0.035), 0 16px 40px oklch(0 0 0 / 0.32);
+  --background: #0a1317;
+  --foreground: #edf5f6;
+  --card: #101c21;
+  --card-foreground: #edf5f6;
+  --popover: #101f25;
+  --popover-foreground: #f1f8f9;
+  --primary: #22b8cc;
+  --primary-foreground: #052227;
+  --secondary: #16262c;
+  --secondary-foreground: #e7f1f3;
+  --muted: #15252b;
+  --muted-foreground: #9db1b8;
+  --accent: #1b333b;
+  --accent-foreground: #e9f7f9;
+  --destructive: #f0707a;
+  --destructive-foreground: #2a0709;
+  --success: #45cf82;
+  --success-foreground: #05230f;
+  --warning: #f3ab3d;
+  --warning-foreground: #291702;
+  --info: #7f95ff;
+  --info-foreground: #0b1240;
+  --border: #1d3038;
+  --input: #1f333a;
+  --ring: #22b8cc;
+  --chart-1: #22b8cc;
+  --chart-2: #45cf82;
+  --chart-3: #f3ab3d;
+  --chart-4: #7f95ff;
+  --chart-5: #c199f2;
+  --sidebar: #070f13;
+  --sidebar-foreground: #e8f3f4;
+  --sidebar-primary: #22b8cc;
+  --sidebar-primary-foreground: #052227;
+  --sidebar-accent: #12232a;
+  --sidebar-accent-foreground: #e8f3f4;
+  --sidebar-border: #142329;
+  --sidebar-ring: #22b8cc;
+  --shadow-card-value: 0 1px 0 oklch(1 0 0 / 0.035), 0 18px 42px oklch(0 0 0 / 0.38);
 }
 
 @layer base {
   html { font-size: 15px; background: var(--background); transition: background-color .25s ease, color .25s ease; }
   body {
     @apply text-foreground bg-background;
-    min-height: 100dvh; margin: 0; line-height: 1.5;
+    min-height: 100dvh; margin: 0; line-height: 1.55;
     background-color: var(--background); color: var(--foreground);
     font-family: var(--font-sans); font-feature-settings: "cv11", "ss01", "cv08";
     text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased;
     transition: background-color .25s ease, color .25s ease;
   }
-  * { border-color: var(--border); scrollbar-width: none; -ms-overflow-style: none; }
-  *::-webkit-scrollbar { display: none; }
+  * { border-color: var(--border); scrollbar-width: thin; scrollbar-color: color-mix(in oklch, var(--foreground) 18%, transparent) transparent; }
   html { -webkit-tap-highlight-color: transparent; }
-  h1, h2, h3, h4 { font-family: var(--font-display); letter-spacing: -0.015em; }
-  :focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+  h1, h2, h3, h4 { font-family: var(--font-display); letter-spacing: -0.02em; font-weight: 600; }
+  :focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; border-radius: 4px; }
   @media (prefers-reduced-motion: reduce) {
     *, ::before, ::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
   }
@@ -166,21 +175,19 @@
 
 @layer components {
   .surface {
-    background-color: color-mix(in oklch, var(--card) 94%, transparent);
+    background-color: color-mix(in oklch, var(--card) 96%, transparent);
     color: var(--card-foreground); border: 1px solid var(--border);
-    border-radius: var(--radius-xl); box-shadow: var(--shadow-card); backdrop-filter: blur(20px);
+    border-radius: var(--radius-xl); box-shadow: var(--shadow-card); backdrop-filter: blur(16px);
     transition: background-color .25s ease, border-color .25s ease, color .25s ease, box-shadow .25s ease;
   }
 
+  /* Safety net: legacy inline utility colors (white/black/slate) written before the
+     token system existed still resolve to sane values in both themes. */
   html:not(.dark) [class*="text-white"]:not(.on-media):not(.on-media *) { color: var(--foreground); }
   html:not(.dark) [class*="text-white/"]:not(.on-media):not(.on-media *) { color: var(--muted-foreground); }
   html:not(.dark) [class*="border-white"]:not(.on-media):not(.on-media *) { border-color: var(--border); }
-  html:not(.dark) [class*="bg-white/"]:not(.on-media):not(.on-media *),
-  html:not(.dark) [class*="bg-white["]:not(.on-media):not(.on-media *) { background-color: color-mix(in oklch, var(--card) 88%, var(--muted)); }
+  html:not(.dark) [class*="bg-white/"]:not(.on-media):not(.on-media *) { background-color: color-mix(in oklch, var(--card) 88%, var(--muted)); }
   html:not(.dark) [class*="bg-black/"]:not(.on-media):not(.on-media *) { background-color: color-mix(in oklch, var(--muted) 70%, var(--card)); }
-  html:not(.dark) [class*="bg-[#0"]:not(.on-media):not(.on-media *) { background-color: var(--background); }
-  html:not(.dark) [class*="bg-[#0"][class*="/9"]:not(.on-media):not(.on-media *),
-  html:not(.dark) [class*="bg-[#0"][class*="rounded"]:not(.on-media):not(.on-media *) { background-color: var(--card); color: var(--card-foreground); }
   html:not(.dark) input:not(.on-media *), html:not(.dark) textarea:not(.on-media *) { color: var(--foreground); }
   html:not(.dark) input::placeholder, html:not(.dark) textarea::placeholder { color: color-mix(in oklch, var(--muted-foreground) 85%, transparent); }
 
@@ -204,263 +211,65 @@
   }
 
   .on-media { color: oklch(0.99 0 0); }
-  .media-scrim { background: linear-gradient(to top, oklch(0.12 0.02 245 / .82), oklch(0.12 0.02 245 / .34) 55%, oklch(0.12 0.02 245 / .18)); }
-  .dark .media-scrim { background: linear-gradient(to top, oklch(0.04 0.01 245 / .92), oklch(0.04 0.01 245 / .48) 55%, oklch(0.04 0.01 245 / .26)); }
-  html:not(.dark) .on-media img { filter: saturate(1.06) brightness(1.02); }
-  .dark .on-media img { filter: saturate(.98) brightness(.92) contrast(1.05); }
+  .media-scrim { background: linear-gradient(to top, oklch(0.14 0.03 215 / .85), oklch(0.14 0.03 215 / .38) 55%, oklch(0.14 0.03 215 / .16)); }
+  .dark .media-scrim { background: linear-gradient(to top, oklch(0.05 0.02 215 / .92), oklch(0.05 0.02 215 / .48) 55%, oklch(0.05 0.02 215 / .24)); }
+  html:not(.dark) .on-media img { filter: saturate(1.05) brightness(1.02); }
+  .dark .on-media img { filter: saturate(.97) brightness(.9) contrast(1.06); }
 }
 
 @utility surface { background-color: var(--card); color: var(--card-foreground); border: 1px solid var(--border); border-radius: var(--radius-xl); box-shadow: var(--shadow-card); }
-@utility text-gradient-brand { background-image: linear-gradient(100deg, var(--primary), color-mix(in oklch, var(--success) 65%, var(--primary))); background-clip: text; color: transparent; }
-@utility bg-brand-gradient { background-image: linear-gradient(135deg, var(--primary), color-mix(in oklch, var(--primary) 55%, var(--info))); }
+@utility text-gradient-brand { background-image: linear-gradient(100deg, var(--primary), color-mix(in oklch, var(--success) 60%, var(--primary))); background-clip: text; color: transparent; }
+@utility bg-brand-gradient { background-image: linear-gradient(135deg, var(--primary), color-mix(in oklch, var(--primary) 45%, var(--info))); }
+@utility shadow-brand { box-shadow: 0 16px 36px -12px color-mix(in oklch, var(--primary) 55%, transparent); }
+@utility bg-mesh-brand {
+  background-image:
+    radial-gradient(60% 55% at 15% 15%, color-mix(in oklch, var(--primary) 38%, transparent), transparent 70%),
+    radial-gradient(55% 50% at 90% 10%, color-mix(in oklch, var(--info) 30%, transparent), transparent 70%),
+    radial-gradient(65% 60% at 80% 95%, color-mix(in oklch, var(--success) 22%, transparent), transparent 70%);
+}
+@utility bg-grid-brand {
+  background-image: linear-gradient(color-mix(in oklch, var(--foreground) 6%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in oklch, var(--foreground) 6%, transparent) 1px, transparent 1px);
+  background-size: 34px 34px;
+}
 @utility custom-scrollbar {
-  &::-webkit-scrollbar { display: block; width: 4px; }
+  &::-webkit-scrollbar { display: block; width: 5px; height: 5px; }
   &::-webkit-scrollbar-track { background: transparent; }
-  &::-webkit-scrollbar-thumb { background: color-mix(in oklch, var(--foreground) 12%, transparent); border-radius: 10px; }
-  &::-webkit-scrollbar-thumb:hover { background: color-mix(in oklch, var(--foreground) 22%, transparent); }
+  &::-webkit-scrollbar-thumb { background: color-mix(in oklch, var(--foreground) 14%, transparent); border-radius: 10px; }
+  &::-webkit-scrollbar-thumb:hover { background: color-mix(in oklch, var(--foreground) 24%, transparent); }
 }
 
-body main.flex-1.flex.flex-col.min-w-0 > footer.py-20.mt-auto { display: none; }
-
-@media (min-width: 768px) {
-  html, body { width: 100%; height: 100vh; min-height: 100vh; overflow: hidden; overscroll-behavior: none; scrollbar-gutter: stable; }
-  body { position: relative; }
-  body > * { max-width: 100vw; }
-  body main.flex-1.flex.flex-col.min-w-0 { height: 100vh; min-height: 0; overflow: hidden; overscroll-behavior: none; }
-  body main.flex-1.flex.flex-col.min-w-0 > div.flex-1 { height: 100%; min-height: 0; overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; scrollbar-gutter: stable; }
-}
-
-@media (min-width: 1024px) {
-  body main.flex-1.flex.flex-col.min-w-0 > div.flex-1 > div[class*="min-h-[100dvh]"] { width: 100%; height: 100vh; min-height: 100vh; overflow: hidden; }
-  body main.flex-1.flex.flex-col.min-w-0 > div.flex-1 > div[class*="min-h-[100dvh]"] > header { height: 4rem; flex: 0 0 4rem; }
-  body main.flex-1.flex.flex-col.min-w-0 > div.flex-1 > div[class*="min-h-[100dvh]"] > main { height: calc(100vh - 4rem); min-height: 0; overflow: hidden; overscroll-behavior: none; }
-  body main.flex-1.flex.flex-col.min-w-0 > div.flex-1 > div[class*="min-h-[100dvh]"] > main > section { height: 100%; min-height: 0; overflow: hidden; }
-}
-
-/* Homepage: one-window desktop composition. */
-@media (min-width: 1024px) {
-  .home-page {
-    height: 100dvh !important;
-    min-height: 100dvh !important;
-    overflow: hidden !important;
-  }
-
-  .home-page > header {
-    height: 3.5rem !important;
-  }
-
-  .home-page > header > div {
-    height: 3.5rem !important;
-  }
-
-  .home-page > main {
-    height: calc(100dvh - 3.5rem) !important;
-    min-height: 0 !important;
-    overflow: hidden !important;
-  }
-
-  .home-page > main > section {
-    height: 100% !important;
-    min-height: 0 !important;
-    overflow: hidden !important;
-  }
-
-  .home-page > main > section > div:first-of-type {
-    min-height: 0;
-    gap: clamp(.9rem, 1.5vw, 1.5rem) !important;
-    padding-top: .65rem !important;
-    padding-bottom: .45rem !important;
-  }
-
-  .home-page > main > section > div:first-of-type > div:first-child {
-    padding: clamp(.9rem, 1.6vw, 1.2rem) !important;
-    border-radius: 1.35rem !important;
-  }
-
-  .home-page h1 {
-    font-size: clamp(2rem, 4.5vw, 3.3rem) !important;
-    line-height: 1 !important;
-  }
-
-  .home-page h1 + p {
-    margin-top: .7rem !important;
-    font-size: .96rem !important;
-    line-height: 1.45rem !important;
-  }
-
-  .home-page h1 ~ div,
-  .home-page h1 ~ div + div {
-    margin-top: .8rem !important;
-  }
-
-  .home-page > main > section > div:first-of-type > div:first-child > div:last-child {
-    margin-top: .8rem !important;
-  }
-
-  .home-page > main > section > div:first-of-type > div:first-child > div:last-child > div {
-    padding: .72rem !important;
-  }
-
-  .home-page > main > section > div:first-of-type > div:first-child > div:last-child h2 {
-    margin-top: .55rem !important;
-    font-size: .92rem !important;
-  }
-
-  .home-page > main > section > div:first-of-type > div:first-child > div:last-child p {
-    font-size: .69rem !important;
-    line-height: 1.05rem !important;
-  }
-
-  .home-page > main > section > div:first-of-type > div:nth-child(2) {
-    max-width: 25.5rem !important;
-  }
-
-  .home-page > main > section > div:first-of-type > div:nth-child(2) .on-media {
-    height: min(58vh, 31rem) !important;
-    aspect-ratio: auto !important;
-  }
-
-  .home-page footer {
-    min-height: 2.55rem;
-    padding-top: .35rem !important;
-    padding-bottom: .35rem !important;
-    font-size: .69rem !important;
-  }
-
-  .home-page footer a {
-    min-height: 1.9rem !important;
-    padding-left: .42rem !important;
-    padding-right: .42rem !important;
-  }
-}
-
-@media (min-width: 1024px) and (max-height: 760px) {
-  .home-page > main > section > div:first-of-type {
-    padding-top: .4rem !important;
-    padding-bottom: .3rem !important;
-  }
-
-  .home-page > main > section > div:first-of-type > div:first-child {
-    padding: .75rem !important;
-  }
-
-  .home-page h1 {
-    font-size: clamp(1.85rem, 4vw, 2.8rem) !important;
-  }
-
-  .home-page h1 + p {
-    margin-top: .45rem !important;
-    font-size: .86rem !important;
-    line-height: 1.25rem !important;
-  }
-
-  .home-page > main > section > div:first-of-type > div:nth-child(2) .on-media {
-    height: min(54vh, 26rem) !important;
-  }
-
-  .home-page footer {
-    min-height: 2.2rem;
-    font-size: .65rem !important;
-  }
-}
-
-/* BodyMetrica 2026 landing page: allow the editorial homepage to scroll while
-   preserving the app shell's fixed desktop behavior everywhere else. */
-@media (min-width: 768px) {
-  body:has(.bm-landing) { height: auto; min-height: 100dvh; overflow-y: auto; }
-  body:has(.bm-landing) main.flex-1.flex.flex-col.min-w-0 { height: auto; min-height: 100dvh; overflow: visible; }
-  body:has(.bm-landing) main.flex-1.flex.flex-col.min-w-0 > div.flex-1 { height: auto; overflow: visible; }
-}
-
-@media (min-width: 1024px) {
-  body main.flex-1.flex.flex-col.min-w-0 > div.flex-1 > .bm-landing { height: auto; min-height: 100dvh; overflow: visible; }
-  body main.flex-1.flex.flex-col.min-w-0 > div.flex-1 > .bm-landing > main { height: auto; min-height: 0; overflow: visible; }
-  body main.flex-1.flex.flex-col.min-w-0 > div.flex-1 > .bm-landing > main > section { height: auto; min-height: 0; overflow: visible; }
-}
-
-.bm-landing { font-family: "Inter", ui-sans-serif, system-ui, sans-serif; }
-.bm-landing h1, .bm-landing h2, .bm-landing h3 { font-family: Georgia, "Times New Roman", serif; }
-.bm-landing em { font-family: Georgia, "Times New Roman", serif; }
-
-/* 2026 visual system — midnight plum, coral and warm ivory. */
+/* App shell — subtle ambient backdrop behind the authenticated experience. */
 .app-shell {
   background-image:
-    linear-gradient(135deg, color-mix(in oklch, var(--background) 97%, transparent), color-mix(in oklch, var(--background) 89%, transparent)),
-    url('/bodymetrica-auth-2026.jpg');
-  background-size: cover;
-  background-position: center;
+    linear-gradient(160deg, color-mix(in oklch, var(--background) 98%, transparent), color-mix(in oklch, var(--background) 92%, transparent)),
+    radial-gradient(120% 60% at 100% 0%, color-mix(in oklch, var(--primary) 6%, transparent), transparent 60%);
   background-attachment: fixed;
+  background-size: cover;
 }
 
 .app-shell .surface,
 .app-shell [data-slot="card"] {
   border-color: color-mix(in oklch, var(--border) 88%, transparent);
-  box-shadow: 0 18px 45px color-mix(in oklch, var(--foreground) 8%, transparent);
 }
 
-.client-dashboard {
-  background-color: color-mix(in oklch, var(--background) 91%, transparent) !important;
-  backdrop-filter: blur(18px);
+.client-dashboard { background-color: color-mix(in oklch, var(--background) 94%, transparent) !important; }
+.admin-control-center { background-color: var(--background); }
+
+/* Landing page — compact, single-viewport composition on desktop. Sized with
+   clamp() so it fits common laptop/desktop viewports without relying on
+   forced overflow hacks; it scrolls gracefully on short viewports instead
+   of breaking. */
+.landing {
+  --landing-gap: clamp(1rem, 2vw, 1.75rem);
 }
-
-.client-dashboard .bg-brand-gradient,
-.admin-control-center .bg-brand-gradient {
-  background-image: linear-gradient(135deg, #f07867, #d25f83);
-}
-
-.client-dashboard > div:first-of-type + div .font-display,
-.client-dashboard .font-display {
-  font-style: normal !important;
-  text-transform: none !important;
-  letter-spacing: -.025em !important;
-}
-
-.client-dashboard button,
-.client-dashboard a {
-  letter-spacing: normal;
-}
-
-.admin-control-center {
-  background-image: linear-gradient(135deg, color-mix(in oklch, var(--background) 96%, transparent), color-mix(in oklch, var(--background) 86%, transparent)), url('/bodymetrica-admin-2026.jpg');
-  background-size: cover;
-  background-position: center top;
-  background-attachment: fixed;
-}
-
-.admin-login-page [class*="text-sky-300"],
-.admin-login-page [class*="text-emerald-300"] { color: #ff9a89 !important; }
-.admin-login-page [class*="border-sky-300"] { border-color: rgb(240 120 103 / .3) !important; }
-.admin-login-page [class*="bg-sky-400"] { background-color: rgb(240 120 103 / .14) !important; }
-
-.home-v2 { font-family: "Inter", ui-sans-serif, system-ui, sans-serif; }
-.home-v2 h1, .home-v2 h2 { font-family: Georgia, "Times New Roman", serif; }
 
 @media (min-width: 1024px) {
-  body main.flex-1.flex.flex-col.min-w-0 > div.flex-1 > .home-v2 {
-    height: 100dvh !important;
-    min-height: 100dvh !important;
-    overflow: hidden !important;
-  }
-  body main.flex-1.flex.flex-col.min-w-0 > div.flex-1 > .home-v2 > main {
-    height: calc(100dvh - 4rem) !important;
-    min-height: 0 !important;
-    overflow: hidden !important;
-  }
-  body main.flex-1.flex.flex-col.min-w-0 > div.flex-1 > .home-v2 > main > section {
-    height: auto !important;
-    min-height: 0 !important;
-    overflow: visible !important;
-  }
+  .landing-viewport { min-height: calc(100dvh - 3.75rem); }
+  .landing h1 { font-size: clamp(2.2rem, 3.6vw, 3.4rem); }
 }
 
-@media (min-width: 1024px) and (max-height: 760px) {
-  .home-v2 main { gap: .65rem !important; padding-top: .65rem !important; padding-bottom: .65rem !important; }
-  .home-v2 h1 { font-size: clamp(2.65rem, 5vw, 4.15rem) !important; }
-  .home-v2 h1 + p { margin-top: .8rem !important; font-size: .88rem !important; line-height: 1.35rem !important; }
-  .home-v2 section[aria-label="Prévia do aplicativo"] > div { transform: scale(.88); transform-origin: center right; }
-  .home-v2 section[aria-label="Áreas do aplicativo"] a { min-height: 4rem !important; padding-top: .55rem !important; padding-bottom: .55rem !important; }
-}
-
-@media (max-width: 1023px) {
-  .home-v2 { min-height: 100dvh; overflow-y: auto; }
+@media (min-width: 1024px) and (max-height: 780px) {
+  .landing h1 { font-size: clamp(1.9rem, 3.2vw, 2.7rem); }
+  .landing-viewport { padding-top: .5rem; padding-bottom: .5rem; }
 }

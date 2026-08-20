@@ -81,17 +81,17 @@ function GoalsPage() {
                     <div className="p-2 rounded-lg bg-white/5 border border-white/10">
                       {goal.icon}
                     </div>
-                    <CardTitle className="text-lg font-display uppercase italic tracking-tighter">{goal.title}</CardTitle>
+                    <CardTitle className="text-lg font-display tracking-tighter">{goal.title}</CardTitle>
                   </div>
                   <TrendingUp size={16} className="text-muted-foreground opacity-50" />
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <div className="flex justify-between items-end">
                     <div className="space-y-1">
-                      <div className="text-3xl font-black font-display tracking-tighter italic">
+                      <div className="text-3xl font-semibold font-display tracking-tighter ">
                         {goal.current} <span className="text-sm font-normal text-muted-foreground uppercase">{goal.unit}</span>
                       </div>
-                      <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
+                      <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">
                         Meta: {goal.target} {goal.unit}
                       </p>
                     </div>
@@ -100,9 +100,9 @@ function GoalsPage() {
                         type="number" 
                         value={goal.target}
                         onChange={(e) => updateGoal(idx, parseFloat(e.target.value))}
-                        className="w-20 text-right bg-transparent text-2xl font-black italic text-primary focus:outline-none"
+                        className="w-20 text-right bg-transparent text-2xl font-semibold  text-primary focus:outline-none"
                       />
-                      <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{goal.status}</p>
+                      <p className="text-[10px] font-bold uppercase tracking-wide text-muted-foreground">{goal.status}</p>
                     </div>
                   </div>
                   <Progress value={progress} className={`h-2 ${goal.color}`} />

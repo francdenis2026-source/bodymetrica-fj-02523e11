@@ -333,7 +333,7 @@ function ProfilePage() {
         <Button 
           variant="ghost" 
           size="sm" 
-          className="rounded-xl text-[10px] font-black uppercase tracking-widest text-white/40 hover:text-primary hover:bg-primary/10"
+          className="rounded-xl text-[10px] font-semibold uppercase tracking-wide text-white/40 hover:text-primary hover:bg-primary/10"
           onClick={() => window.history.back()}
         >
           <ArrowLeft size={14} className="mr-2" /> VOLTAR
@@ -355,7 +355,7 @@ function ProfilePage() {
                 <User size={24} />
               </div>
               <div>
-                <CardTitle className="text-xl font-black uppercase italic tracking-widest">DADOS PESSOAIS</CardTitle>
+                <CardTitle className="text-xl font-semibold   tracking-wide">Dados Pessoais</CardTitle>
                 <CardDescription className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">
                   INFORMAÇÕES DE PERFORMANCE E CONTATO
                 </CardDescription>
@@ -366,34 +366,34 @@ function ProfilePage() {
             <form onSubmit={handleUpdateProfile} className="space-y-6">
               <div className="space-y-4">
                 <div className="grid gap-2">
-                  <Label className="text-[10px] font-black uppercase tracking-widest text-white/60 ml-1">NOME COMPLETO</Label>
+                  <Label className="text-[10px] font-semibold uppercase tracking-wide text-white/60 ml-1">NOME COMPLETO</Label>
                   <Input 
                     value={profileForm.name}
                     onChange={(e) => setProfileForm({...profileForm, name: e.target.value})}
                     placeholder="Seu nome"
-                    className="h-14 bg-white/5 border-white/10 rounded-2xl focus:ring-primary font-bold italic"
+                    className="h-14 bg-white/5 border-white/10 rounded-2xl focus:ring-primary font-bold "
                   />
                 </div>
                 <div className="grid gap-2">
-                  <Label className="text-[10px] font-black uppercase tracking-widest text-white/60 ml-1">E-MAIL ATUAL</Label>
+                  <Label className="text-[10px] font-semibold uppercase tracking-wide text-white/60 ml-1">E-MAIL ATUAL</Label>
                   <div className="relative">
                     <Input 
                       value={profileForm.email}
                       disabled
-                      className="h-14 bg-white/5 border-white/10 rounded-2xl opacity-50 font-bold italic pr-12"
+                      className="h-14 bg-white/5 border-white/10 rounded-2xl opacity-50 font-bold  pr-12"
                     />
                     <Mail className="absolute right-4 top-1/2 -translate-y-1/2 text-white/20" size={18} />
                   </div>
                 </div>
                 <div className="grid gap-2">
-                  <Label className="text-[10px] font-black uppercase tracking-widest text-white/60 ml-1">ALTERAR E-MAIL</Label>
+                  <Label className="text-[10px] font-semibold uppercase tracking-wide text-white/60 ml-1">ALTERAR E-MAIL</Label>
                   <div className="flex gap-2">
                     <Input 
                       type="email"
                       value={newEmail}
                       onChange={(e) => setNewEmail(e.target.value)}
                       placeholder="Novo e-mail"
-                      className="h-14 bg-white/5 border-white/10 rounded-2xl focus:ring-primary font-bold italic"
+                      className="h-14 bg-white/5 border-white/10 rounded-2xl focus:ring-primary font-bold "
                     />
                     <Button 
                       type="button"
@@ -407,22 +407,22 @@ function ProfilePage() {
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="grid gap-2">
-                    <Label className="text-[10px] font-black uppercase tracking-widest text-white/60 ml-1">PESO (KG)</Label>
+                    <Label className="text-[10px] font-semibold uppercase tracking-wide text-white/60 ml-1">PESO (KG)</Label>
                     <Input 
                       type="number"
                       step="0.1"
                       value={profileForm.weight}
                       onChange={(e) => setProfileForm({...profileForm, weight: e.target.value})}
-                      className="h-14 bg-white/5 border-white/10 rounded-2xl focus:ring-primary font-bold italic"
+                      className="h-14 bg-white/5 border-white/10 rounded-2xl focus:ring-primary font-bold "
                     />
                   </div>
                   <div className="grid gap-2">
-                    <Label className="text-[10px] font-black uppercase tracking-widest text-white/60 ml-1">ALTURA (CM)</Label>
+                    <Label className="text-[10px] font-semibold uppercase tracking-wide text-white/60 ml-1">ALTURA (CM)</Label>
                     <Input 
                       type="number"
                       value={profileForm.height}
                       onChange={(e) => setProfileForm({...profileForm, height: e.target.value})}
-                      className="h-14 bg-white/5 border-white/10 rounded-2xl focus:ring-primary font-bold italic"
+                      className="h-14 bg-white/5 border-white/10 rounded-2xl focus:ring-primary font-bold "
                     />
                   </div>
                 </div>
@@ -431,7 +431,7 @@ function ProfilePage() {
               <Button 
                 type="submit" 
                 disabled={isSaving}
-                className="w-full h-14 bg-brand-gradient border-none font-black uppercase tracking-widest rounded-2xl shadow-xl hover:scale-[1.02] transition-all"
+                className="w-full h-14 bg-brand-gradient border-none font-semibold uppercase tracking-wide rounded-2xl shadow-xl hover:scale-[1.02] transition-all"
               >
                 {isSaving ? "SALVANDO..." : "ATUALIZAR DADOS"}
                 <Save className="ml-2" size={18} />
@@ -449,7 +449,7 @@ function ProfilePage() {
                   <Shield size={24} />
                 </div>
                 <div>
-                  <CardTitle className="text-xl font-black uppercase italic tracking-widest">SEGURANÇA</CardTitle>
+                  <CardTitle className="text-xl font-semibold   tracking-wide">Segurança</CardTitle>
                   <CardDescription className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">
                     ALTERAÇÃO DE SENHA E ACESSO
                   </CardDescription>
@@ -460,7 +460,7 @@ function ProfilePage() {
               <form onSubmit={handleChangePassword} className="space-y-6">
                 <div className="space-y-4">
                   <div className="grid gap-2">
-                    <Label className="text-[10px] font-black uppercase tracking-widest text-white/60 ml-1">SENHA ATUAL</Label>
+                    <Label className="text-[10px] font-semibold uppercase tracking-wide text-white/60 ml-1">SENHA ATUAL</Label>
                     <Input 
                       type="password"
                       value={passwordForm.currentPassword}
@@ -469,7 +469,7 @@ function ProfilePage() {
                     />
                   </div>
                   <div className="grid gap-2">
-                    <Label className="text-[10px] font-black uppercase tracking-widest text-white/60 ml-1">NOVA SENHA</Label>
+                    <Label className="text-[10px] font-semibold uppercase tracking-wide text-white/60 ml-1">NOVA SENHA</Label>
                     <Input 
                       type="password"
                       value={passwordForm.newPassword}
@@ -478,7 +478,7 @@ function ProfilePage() {
                     />
                   </div>
                   <div className="grid gap-2">
-                    <Label className="text-[10px] font-black uppercase tracking-widest text-white/60 ml-1">CONFIRMAR NOVA SENHA</Label>
+                    <Label className="text-[10px] font-semibold uppercase tracking-wide text-white/60 ml-1">CONFIRMAR NOVA SENHA</Label>
                     <Input 
                       type="password"
                       value={passwordForm.confirmPassword}
@@ -492,7 +492,7 @@ function ProfilePage() {
                   type="submit" 
                   disabled={isSaving}
                   variant="outline"
-                  className="w-full h-14 border-white/10 bg-white/5 font-black uppercase tracking-widest rounded-2xl hover:bg-white/10 transition-all"
+                  className="w-full h-14 border-white/10 bg-white/5 font-semibold uppercase tracking-wide rounded-2xl hover:bg-white/10 transition-all"
                 >
                   {isSaving ? "ALTERANDO..." : "ALTERAR SENHA"}
                   <Key className="ml-2" size={18} />
@@ -511,20 +511,20 @@ function ProfilePage() {
               
               <div className="p-6 rounded-3xl bg-white/[0.03] border border-white/5 flex items-center justify-between">
                 <div>
-                  <div className="text-sm font-black uppercase italic">CÓDIGOS DE RECUPERAÇÃO</div>
-                  <div className="text-[10px] font-bold text-white/40 uppercase tracking-widest mt-1">ACESSO DE EMERGÊNCIA AO 2FA</div>
+                  <div className="text-sm font-semibold uppercase ">CÓDIGOS DE RECUPERAÇÃO</div>
+                  <div className="text-[10px] font-bold text-white/40 uppercase tracking-wide mt-1">ACESSO DE EMERGÊNCIA AO 2FA</div>
                 </div>
                 <Button 
                   onClick={handleGenerateRecoveryCodes}
                   disabled={isSaving}
                   variant="outline"
-                  className="rounded-2xl border-white/10 bg-white/5 text-white/60 text-[10px] font-black uppercase"
+                  className="rounded-2xl border-white/10 bg-white/5 text-white/60 text-[10px] font-semibold uppercase"
                 >
                   REGENERAR
                 </Button>
               </div>
                 <div>
-                  <CardTitle className="text-xl font-black uppercase italic tracking-widest">PROTEÇÃO EXTRA</CardTitle>
+                  <CardTitle className="text-xl font-semibold   tracking-wide">Proteção Extra</CardTitle>
                   <CardDescription className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">
                     MFA E GERENCIAMENTO DE ACESSO
                   </CardDescription>
@@ -534,13 +534,13 @@ function ProfilePage() {
             <CardContent className="space-y-4">
               <div className="p-6 rounded-3xl bg-white/[0.03] border border-white/5 flex items-center justify-between">
                 <div>
-                  <div className="text-sm font-black uppercase italic">2FA (AUTENTICAÇÃO 2 FATORES)</div>
-                  <div className="text-[10px] font-bold text-white/40 uppercase tracking-widest mt-1">MAIS SEGURANÇA NO SEU LOGIN</div>
+                  <div className="text-sm font-semibold uppercase ">2FA (AUTENTICAÇÃO 2 FATORES)</div>
+                  <div className="text-[10px] font-bold text-white/40 uppercase tracking-wide mt-1">MAIS SEGURANÇA NO SEU LOGIN</div>
                 </div>
                 <Button 
                   onClick={() => setShowMfaSetup(true)}
                   variant="outline"
-                  className="rounded-2xl border-primary/20 bg-primary/5 text-primary text-[10px] font-black uppercase"
+                  className="rounded-2xl border-primary/20 bg-primary/5 text-primary text-[10px] font-semibold uppercase"
                 >
                   CONFIGURAR
                 </Button>
@@ -550,14 +550,14 @@ function ProfilePage() {
                 <Button 
                   variant="outline"
                   onClick={() => handleLogoutSession('others')}
-                  className="h-16 border-white/10 bg-white/5 text-[10px] font-black uppercase tracking-widest rounded-2xl"
+                  className="h-16 border-white/10 bg-white/5 text-[10px] font-semibold uppercase tracking-wide rounded-2xl"
                 >
                   SAIR DE OUTROS
                 </Button>
                 <Button 
                   variant="destructive"
                   onClick={() => handleLogoutSession('global')}
-                  className="h-16 bg-destructive/10 border-destructive/20 text-destructive text-[10px] font-black uppercase tracking-widest rounded-2xl"
+                  className="h-16 bg-destructive/10 border-destructive/20 text-destructive text-[10px] font-semibold uppercase tracking-wide rounded-2xl"
                 >
                   SAIR DE TUDO
                 </Button>
@@ -573,7 +573,7 @@ function ProfilePage() {
                   <Activity size={24} />
                 </div>
                 <div>
-                  <CardTitle className="text-xl font-black uppercase italic tracking-widest">HISTÓRICO</CardTitle>
+                  <CardTitle className="text-xl font-semibold   tracking-wide">Histórico</CardTitle>
                   <CardDescription className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">
                     ATIVIDADES DE SEGURANÇA RECENTES
                   </CardDescription>
@@ -583,7 +583,7 @@ function ProfilePage() {
             <CardContent>
               <div className="space-y-3">
                 {securityLogs.length === 0 ? (
-                  <div className="text-center py-8 text-[10px] font-bold text-white/20 uppercase tracking-widest italic">
+                  <div className="text-center py-8 text-[10px] font-bold text-white/20 uppercase tracking-wide ">
                     NENHUMA ATIVIDADE REGISTRADA
                   </div>
                 ) : (
@@ -594,7 +594,7 @@ function ProfilePage() {
                           <Clock size={14} />
                         </div>
                         <div>
-                          <div className="text-[10px] font-black uppercase italic tracking-wider">
+                          <div className="text-[10px] font-semibold uppercase  tracking-wider">
                             {log.action.replace(/_/g, ' ')}
                           </div>
                           <div className="text-[8px] font-bold text-white/30 uppercase tracking-[0.2em]">
@@ -618,12 +618,12 @@ function ProfilePage() {
           <Card className="surface border-none rounded-[2.5rem] overflow-hidden shadow-2xl bg-destructive/5 border-destructive/10">
             <CardContent className="pt-8 flex items-center justify-between">
               <div>
-                <div className="text-xs font-black uppercase italic text-destructive">ZONA DE PERIGO</div>
-                <div className="text-[9px] font-bold text-white/30 uppercase tracking-widest">ESSA AÇÃO NÃO PODE SER DESFEITA</div>
+                <div className="text-xs font-semibold uppercase  text-destructive">ZONA DE PERIGO</div>
+                <div className="text-[9px] font-bold text-white/30 uppercase tracking-wide">ESSA AÇÃO NÃO PODE SER DESFEITA</div>
               </div>
               <Dialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
                 <DialogTrigger asChild>
-                  <Button variant="ghost" className="text-destructive hover:bg-destructive/10 rounded-2xl px-6 h-12 text-[10px] font-black uppercase tracking-widest">
+                  <Button variant="ghost" className="text-destructive hover:bg-destructive/10 rounded-2xl px-6 h-12 text-[10px] font-semibold uppercase tracking-wide">
                     EXCLUIR CONTA
                   </Button>
                 </DialogTrigger>
@@ -632,7 +632,7 @@ function ProfilePage() {
                     <div className="w-16 h-16 rounded-3xl bg-destructive/10 flex items-center justify-center text-destructive mx-auto mb-4">
                       <AlertTriangle size={32} />
                     </div>
-                    <DialogTitle className="text-center text-xl font-black italic uppercase tracking-widest">TEM CERTEZA?</DialogTitle>
+                    <DialogTitle className="text-center text-xl font-semibold   tracking-wide">Tem Certeza?</DialogTitle>
                     <DialogDescription className="text-center text-[11px] font-bold uppercase leading-relaxed text-white/40">
                       AO EXCLUIR SUA CONTA, TODOS OS SEUS DADOS, TREINOS E EVOLUÇÕES SERÃO REMOVIDOS PERMANENTEMENTE.
                     </DialogDescription>
@@ -641,14 +641,14 @@ function ProfilePage() {
                     <Button 
                       variant="destructive" 
                       onClick={handleDeleteAccount}
-                      className="w-full h-14 rounded-2xl font-black uppercase tracking-widest"
+                      className="w-full h-14 rounded-2xl font-semibold uppercase tracking-wide"
                     >
                       SIM, EXCLUIR TUDO
                     </Button>
                     <Button 
                       variant="ghost" 
                       onClick={() => setShowDeleteConfirm(false)}
-                      className="w-full h-14 rounded-2xl font-black uppercase tracking-widest text-white/60"
+                      className="w-full h-14 rounded-2xl font-semibold uppercase tracking-wide text-white/60"
                     >
                       CANCELAR
                     </Button>
@@ -667,7 +667,7 @@ function ProfilePage() {
             <div className="w-16 h-16 rounded-3xl bg-primary/10 flex items-center justify-center text-primary mx-auto mb-4">
               <Shield size={32} />
             </div>
-            <DialogTitle className="text-center text-xl font-black italic uppercase tracking-widest">CONFIGURAR 2FA</DialogTitle>
+            <DialogTitle className="text-center text-xl font-semibold   tracking-wide">Configurar 2FA</DialogTitle>
             <DialogDescription className="text-center text-[11px] font-bold uppercase leading-relaxed text-white/40">
               ESCANEIE O CÓDIGO QR COM SEU APLICATIVO DE AUTENTICAÇÃO (GOOGLE AUTHENTICATOR, AUTHY, ETC).
             </DialogDescription>
@@ -680,10 +680,10 @@ function ProfilePage() {
               </div>
             </div>
             <div className="w-full space-y-2">
-              <Label className="text-[10px] font-black uppercase text-white/60 ml-1">CÓDIGO DE VERIFICAÇÃO</Label>
+              <Label className="text-[10px] font-semibold uppercase text-white/60 ml-1">CÓDIGO DE VERIFICAÇÃO</Label>
               <Input 
                 placeholder="000000"
-                className="h-14 bg-white/5 border-white/10 rounded-2xl text-center text-2xl font-black tracking-[0.5em]"
+                className="h-14 bg-white/5 border-white/10 rounded-2xl text-center text-2xl font-semibold tracking-[0.5em]"
                 maxLength={6}
               />
             </div>
@@ -692,7 +692,7 @@ function ProfilePage() {
             <Button 
               onClick={handleMfaToggle}
               disabled={isSaving}
-              className="w-full h-14 bg-brand-gradient border-none font-black uppercase tracking-widest rounded-2xl"
+              className="w-full h-14 bg-brand-gradient border-none font-semibold uppercase tracking-wide rounded-2xl"
             >
               {isSaving ? "VERIFICANDO..." : "ATIVAR PROTEÇÃO"}
             </Button>
@@ -707,7 +707,7 @@ function ProfilePage() {
             <div className="w-16 h-16 rounded-3xl bg-primary/10 flex items-center justify-center text-primary mx-auto mb-4">
               <Key size={32} />
             </div>
-            <DialogTitle className="text-center text-xl font-black italic uppercase tracking-widest">CÓDIGOS DE RECUPERAÇÃO</DialogTitle>
+            <DialogTitle className="text-center text-xl font-semibold   tracking-wide">Códigos de Recuperação</DialogTitle>
             <DialogDescription className="text-center text-[11px] font-bold uppercase leading-relaxed text-white/40">
               GUARDE ESTES CÓDIGOS EM LOCAL SEGURO. CADA CÓDIGO SÓ PODE SER USADO UMA VEZ PARA RECUPERAR SEU ACESSO CASO PERCA SEU DISPOSITIVO 2FA.
             </DialogDescription>
@@ -716,8 +716,8 @@ function ProfilePage() {
             <div className="grid grid-cols-2 gap-3 bg-black/40 p-6 rounded-3xl border border-white/5">
               {recoveryCodes.map((code, index) => (
                 <div key={index} className="flex items-center gap-2">
-                  <span className="text-[8px] font-black text-white/20">{index + 1}.</span>
-                  <code className="text-sm font-black tracking-widest text-primary font-mono">{code}</code>
+                  <span className="text-[8px] font-semibold text-white/20">{index + 1}.</span>
+                  <code className="text-sm font-semibold tracking-wide text-primary font-mono">{code}</code>
                 </div>
               ))}
             </div>
@@ -729,13 +729,13 @@ function ProfilePage() {
                 navigator.clipboard.writeText(text);
                 toast.success("Códigos copiados!");
               }}
-              className="w-full h-14 bg-white/5 border border-white/10 font-black uppercase tracking-widest rounded-2xl"
+              className="w-full h-14 bg-white/5 border border-white/10 font-semibold uppercase tracking-wide rounded-2xl"
             >
               COPIAR CÓDIGOS
             </Button>
             <Button 
               onClick={() => setShowRecoveryCodes(false)}
-              className="w-full h-14 bg-brand-gradient border-none font-black uppercase tracking-widest rounded-2xl"
+              className="w-full h-14 bg-brand-gradient border-none font-semibold uppercase tracking-wide rounded-2xl"
             >
               CONCLUÍDO
             </Button>
