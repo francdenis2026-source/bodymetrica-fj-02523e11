@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
+import { createClient } from "@supabase/supabase-js";
 import {
   ArrowLeft,
   Eye,
@@ -47,6 +48,19 @@ const ADMIN_FEATURES = [
   { icon: SlidersHorizontal, title: "Permissões", description: "Papéis e acessos" },
 ];
 
+function createIsolatedAuthClient() {
+  const url = import.meta.env["VITE_SUPABASE_URL"];
+  const key = import.meta.env["VITE_SUPABASE_PUBLISHABLE_KEY"];
+  if (!url || !key) throw new Error("Configuração do Supabase ausente.");
+  return createClient(url, key, {
+    auth: {
+      persistSession: false,
+      autoRefreshToken: false,
+      detectSessionInUrl: false,
+    },
+  });
+}
+
 function AdminLoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -59,36 +73,35 @@ function AdminLoginPage() {
     if (isLoading) return;
 
     setIsLoading(true);
+    const normalizedEmail = email.trim().toLowerCase();
+
     try {
-      const normalizedEmail = email.trim().toLowerCase();
-
-      // Remove only the app's stale local role/session marker before authenticating.
-      // Supabase's own auth storage is preserved until signInWithPassword completes.
-      localStorage.removeItem("bodymetrica_auth_session");
-
-      const { data: authData, error: loginError } = await supabase.auth.signInWithPassword({
+      // IMPORTANT: validate credentials with an isolated client first.
+      // This prevents a temporary SIGNED_IN event from being interpreted by the
+      // global customer session handler before the admin role is validated.
+      const probe = createIsolatedAuthClient();
+      const { data: authData, error: loginError } = await probe.auth.signInWithPassword({
         email: normalizedEmail,
         password,
       });
 
-      if (loginError || !authData.user || !authData.session?.access_token) {
-        showAdminToast("error", "Credenciais inválidas", "Verifique o e-mail e a senha informados.");
+      if (loginError || !authData.user || !authData.session?.access_token || !authData.session.refresh_token) {
+        showAdminToast("error", "Credenciais inválidas", "O e-mail ou a senha estão incorretos.");
         return;
       }
 
-      // Resolve the administrative role on the server with the service-role client.
-      // This avoids false negatives caused by RLS on public.user_roles.
       const adminResult = await resolveAdminRoleFn({
         data: { accessToken: authData.session.access_token },
       });
 
       if (!adminResult.success || !adminResult.user) {
-        await supabase.auth.signOut();
-        localStorage.removeItem("bodymetrica_auth_session");
+        await probe.auth.signOut();
         showAdminToast("warning", "Acesso negado", adminResult.message || "Esta conta não possui papel administrativo ativo.");
         return;
       }
 
+      // Store the admin role before activating the shared Supabase session.
+      // The global auth listener will therefore preserve admin/super_admin.
       setSession({
         id: adminResult.user.id,
         email: adminResult.user.email || normalizedEmail,
@@ -99,12 +112,21 @@ function AdminLoginPage() {
         licenseStatus: "active",
       });
 
+      const { error: sessionError } = await supabase.auth.setSession({
+        access_token: authData.session.access_token,
+        refresh_token: authData.session.refresh_token,
+      });
+
+      if (sessionError) {
+        localStorage.removeItem("bodymetrica_auth_session");
+        showAdminToast("error", "Sessão não iniciada", "As credenciais foram validadas, mas não foi possível iniciar a sessão administrativa.");
+        return;
+      }
+
       showAdminToast("success", "Acesso autorizado", "Abrindo o painel administrativo.");
       window.location.replace("/admin");
     } catch (error) {
       console.error("Admin login failed:", error);
-      try { await supabase.auth.signOut(); } catch {}
-      localStorage.removeItem("bodymetrica_auth_session");
       showAdminToast("error", "Falha inesperada", "Não foi possível validar o acesso administrativo. Tente novamente.");
     } finally {
       setIsLoading(false);
@@ -186,7 +208,7 @@ function AdminLoginPage() {
               </form>
 
               <div className="mt-4 rounded-xl border border-white/10 bg-white/[.03] px-3.5 py-3">
-                <div className="flex items-start gap-2.5"><LockKeyhole size={14} className="mt-0.5 shrink-0 text-primary" /><p className="text-[11px] leading-5 text-white/55">Não existe criação de conta nesta área. O acesso depende de credenciais válidas e papel administrativo ativo.</p></div>
+                <div className="flex items-start gap-2.5"><LockKeyhole size={14} className="mt-0.5 shrink-0 text-primary" /><p className="text-[11px] leading-5 text-white/55">Credenciais inválidas permanecem nesta tela. O acesso só é liberado após autenticação e validação do papel administrativo.</p></div>
               </div>
 
               <p className="mt-4 text-center text-[9px] uppercase tracking-[0.1em] text-white/30">Acesso restrito · sessão protegida</p>
