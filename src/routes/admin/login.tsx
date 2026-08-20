@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { setSession } from "@/lib/auth/auth.functions";
 import { SVGToast } from "@/components/ui/svg-toast";
 
 const TOAST_DURATION = 4500;
@@ -57,27 +58,55 @@ function AdminLoginPage() {
 
     setIsLoading(true);
     try {
-      const { error: loginError } = await supabase.auth.signInWithPassword({
-        email: email.trim().toLowerCase(),
+      const normalizedEmail = email.trim().toLowerCase();
+      const { data: authData, error: loginError } = await supabase.auth.signInWithPassword({
+        email: normalizedEmail,
         password,
       });
 
-      if (loginError) {
+      if (loginError || !authData.user) {
         showAdminToast("error", "Credenciais inválidas", "Verifique o e-mail e a senha informados.");
         return;
       }
 
-      const { data: adminSession, error: adminError } = await (supabase.rpc as any)("admin_session");
-      const sessionRow = Array.isArray(adminSession) ? adminSession[0] : adminSession;
+      const { data: roleRows, error: roleError } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", authData.user.id);
 
-      if (adminError || !sessionRow?.user_id) {
+      let role = (roleRows || [])
+        .map((row: any) => String(row.role))
+        .find((value) => value === "super_admin" || value === "admin");
+
+      // Backward-compatible fallback for installations that still expose admin_session().
+      if ((!role || roleError) && typeof (supabase.rpc as any) === "function") {
+        try {
+          const { data: adminSession } = await (supabase.rpc as any)("admin_session");
+          const sessionRow = Array.isArray(adminSession) ? adminSession[0] : adminSession;
+          if (sessionRow?.user_id) role = sessionRow?.role === "super_admin" ? "super_admin" : "admin";
+        } catch {
+          // Ignore fallback errors; direct role lookup above is authoritative.
+        }
+      }
+
+      if (!role) {
         await supabase.auth.signOut();
-        showAdminToast("warning", "Acesso negado", "Esta conta não possui papel administrativo ativo.");
+        showAdminToast("warning", "Acesso negado", "Esta conta autenticou, mas não possui papel administrativo ativo.");
         return;
       }
 
+      setSession({
+        id: authData.user.id,
+        email: authData.user.email || normalizedEmail,
+        name: authData.user.user_metadata?.["name"] || "Administrador",
+        role,
+        profile: null,
+        isLicensed: true,
+        licenseStatus: "active",
+      });
+
       showAdminToast("success", "Acesso autorizado", "Redirecionando para o painel administrativo.");
-      navigate({ to: "/admin" as any, replace: true });
+      window.location.href = "/admin";
     } catch {
       await supabase.auth.signOut();
       showAdminToast("error", "Falha inesperada", "Não foi possível validar o acesso. Tente novamente.");
