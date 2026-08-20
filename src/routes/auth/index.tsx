@@ -1,5 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -10,7 +11,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { login, setSession, updatePassword, verifyRecoveryCode } from "@/lib/auth/auth.functions";
+import { setSession, updatePassword, verifyRecoveryCode } from "@/lib/auth/auth.functions";
+import { resolveAdminRole } from "@/lib/admin-auth.functions";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { SVGToast } from "@/components/ui/svg-toast";
@@ -44,14 +46,10 @@ const RATE_LIMIT_KEY = "auth_attempts";
 const MAX_ATTEMPTS = 5;
 const BLOCK_TIME = 60 * 1000;
 
-function isMissingAccountMessage(message?: string) {
-  const text = (message || "").toLowerCase();
-  return ["user not found", "email not found", "no user", "not registered", "invalid login", "usuário não encontrado", "não cadastrado"].some((item) => text.includes(item));
-}
-
 function AuthPage() {
   const navigate = useNavigate();
   const search = Route.useSearch();
+  const resolveAdminRoleFn = useServerFn(resolveAdminRole);
   const [isLoading, setIsLoading] = useState(false);
   const [isBlocked, setIsBlocked] = useState(false);
   const [remainingSeconds, setRemainingSeconds] = useState(0);
@@ -90,11 +88,15 @@ function AuthPage() {
   };
 
   async function completeLogin(user: any, rememberMe: boolean) {
-    await supabase.rpc("log_security_activity", { _user_id: user.id, _action: "LOGIN_SUCCESS", _details: { remember: rememberMe } });
+    try {
+      await supabase.rpc("log_security_activity", { _user_id: user.id, _action: "LOGIN_SUCCESS", _details: { remember: rememberMe } });
+    } catch {
+      // Logging must never block a valid login.
+    }
     setSession(user);
     localStorage.setItem(RATE_LIMIT_KEY, '{"count":0,"lastAttempt":0}');
     toast.success("Acesso liberado. Bem-vindo ao Body Métrica FJ.");
-    window.location.href = user?.role === "admin" || user?.role === "super_admin" ? "/admin" : "/dashboard";
+    window.location.replace(user?.role === "admin" || user?.role === "super_admin" ? "/admin" : "/dashboard");
   }
 
   async function resolveIdentifier(identifier: string) {
@@ -118,21 +120,53 @@ function AuthPage() {
         return;
       }
 
-      const authValues = { ...values, email: resolvedEmail };
-      const result = await login({ data: authValues });
-      if (result.success) {
-        setLoginValues(authValues);
-        setTempUserData(result.user);
-        const { data: mfaData } = await supabase.auth.mfa.listFactors();
-        const activeFactors = mfaData?.all?.filter((factor) => factor.status === "verified") || [];
-        if (activeFactors.length > 0) { setShowMfaChallenge(true); return; }
-        await completeLogin(result.user, values.rememberMe);
+      // Authenticate in the browser so Supabase persists the real session.
+      const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+        email: resolvedEmail,
+        password: values.password,
+      });
+
+      if (authError || !authData.user || !authData.session?.access_token) {
+        toast.custom((t) => <SVGToast type="error" title="Não foi possível entrar" message="Confira o e-mail/CPF e a senha informados." onClose={() => toast.dismiss(t)} />, { duration: 4500 });
+        trackAttempt();
         return;
       }
-      if (result.needsVerification) { toast.info("Confirme seu e-mail antes do primeiro acesso."); navigate({ to: "/auth/verify" as any, search: {} as any }); return; }
-      if (isMissingAccountMessage(result.message)) setShowRegisterHint(true);
-      toast.custom((t) => <SVGToast type="error" title="Não foi possível entrar" message="Confira o e-mail/CPF e a senha informados." onClose={() => toast.dismiss(t)} />, { duration: 4500 });
-      trackAttempt();
+
+      if (!authData.user.email_confirmed_at) {
+        await supabase.auth.signOut();
+        toast.info("Confirme seu e-mail antes do primeiro acesso.");
+        navigate({ to: "/auth/verify" as any, search: {} as any });
+        return;
+      }
+
+      const { data: profile } = await supabase.from("profiles").select("*").eq("id", authData.user.id).maybeSingle();
+
+      let role: "user" | "admin" | "super_admin" = "user";
+      try {
+        const adminResult = await resolveAdminRoleFn({ data: { accessToken: authData.session.access_token } });
+        if (adminResult.success && adminResult.user?.role) role = adminResult.user.role;
+      } catch {
+        // A normal user is allowed to continue even when admin-role resolution is unavailable.
+      }
+
+      const user = {
+        id: authData.user.id,
+        email: authData.user.email || resolvedEmail,
+        name: profile?.name || authData.user.user_metadata?.["name"] || (role === "user" ? "Usuário" : "Administrador"),
+        role,
+        profile: profile || null,
+        isLicensed: role !== "user" || profile?.license_status === "active",
+        licenseStatus: role !== "user" ? "active" : (profile?.license_status || "pending"),
+      };
+
+      setLoginValues({ ...values, email: resolvedEmail });
+      setTempUserData(user);
+
+      const { data: mfaData } = await supabase.auth.mfa.listFactors();
+      const activeFactors = mfaData?.all?.filter((factor) => factor.status === "verified") || [];
+      if (activeFactors.length > 0) { setShowMfaChallenge(true); return; }
+
+      await completeLogin(user, values.rememberMe);
     } catch {
       toast.error("Não foi possível conectar. Verifique sua conexão e tente novamente.");
       trackAttempt();
@@ -198,10 +232,7 @@ function AuthPage() {
                   {showRegisterHint && <div className="mt-4 rounded-xl border border-primary/20 bg-primary/5 p-3.5"><div className="flex gap-3"><div className="flex size-8 items-center justify-center rounded-lg bg-primary/10 text-primary"><UserPlus size={16} /></div><div><p className="text-sm font-semibold">Ainda não possui conta?</p><p className="mt-1 text-xs text-muted-foreground">Crie seu cadastro unificado com os dados necessários para suas métricas.</p><Button asChild variant="link" className="h-auto p-0 text-xs"><Link to="/auth/register" search={{ email: registerPrefill } as any}>Criar minha conta <ArrowRight size={13} className="ml-1" /></Link></Button></div></div></div>}
                   <div className="mt-5 flex items-center justify-between border-t border-border pt-5"><div><p className="text-xs font-semibold">Novo por aqui?</p><p className="text-[11px] text-muted-foreground">Cadastre e-mail, CPF e dados de perfil.</p></div><Button asChild variant="outline" size="sm"><Link to="/auth/register" search={{ email: registerPrefill } as any}><UserPlus size={14} className="mr-1.5" />Criar conta</Link></Button></div>
                   <div className="mt-4 flex items-center justify-center border-t border-border/60 pt-3">
-                    <Link
-                      to="/admin/login"
-                      className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-[11px] font-medium text-muted-foreground/70 transition-colors hover:bg-muted/50 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
-                    >
+                    <Link to="/admin/login" className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-[11px] font-medium text-muted-foreground/70 transition-colors hover:bg-muted/50 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40">
                       <ShieldCheck size={13} />
                       Acesso administrativo
                     </Link>
