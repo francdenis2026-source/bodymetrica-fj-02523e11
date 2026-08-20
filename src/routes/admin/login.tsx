@@ -1,7 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { createClient } from "@supabase/supabase-js";
 import {
   ArrowLeft,
   Eye,
@@ -19,7 +18,7 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { setSession } from "@/lib/auth/auth.functions";
-import { resolveAdminRole } from "@/lib/admin-auth.functions";
+import { authenticateAdmin } from "@/lib/admin-auth.functions";
 import { SVGToast } from "@/components/ui/svg-toast";
 
 const TOAST_DURATION = 4500;
@@ -48,25 +47,12 @@ const ADMIN_FEATURES = [
   { icon: SlidersHorizontal, title: "Permissões", description: "Papéis e acessos" },
 ];
 
-function createIsolatedAuthClient() {
-  const url = import.meta.env["VITE_SUPABASE_URL"];
-  const key = import.meta.env["VITE_SUPABASE_PUBLISHABLE_KEY"];
-  if (!url || !key) throw new Error("Configuração do Supabase ausente.");
-  return createClient(url, key, {
-    auth: {
-      persistSession: false,
-      autoRefreshToken: false,
-      detectSessionInUrl: false,
-    },
-  });
-}
-
 function AdminLoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const resolveAdminRoleFn = useServerFn(resolveAdminRole);
+  const authenticateAdminFn = useServerFn(authenticateAdmin);
 
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -76,45 +62,34 @@ function AdminLoginPage() {
     const normalizedEmail = email.trim().toLowerCase();
 
     try {
-      // IMPORTANT: validate credentials with an isolated client first.
-      // This prevents a temporary SIGNED_IN event from being interpreted by the
-      // global customer session handler before the admin role is validated.
-      const probe = createIsolatedAuthClient();
-      const { data: authData, error: loginError } = await probe.auth.signInWithPassword({
-        email: normalizedEmail,
-        password,
+      // Authenticate and validate the administrative role on the server.
+      // Only the single shared browser Supabase client is allowed to own
+      // the persistent GoTrue session/storage key.
+      const result = await authenticateAdminFn({
+        data: { email: normalizedEmail, password },
       });
 
-      if (loginError || !authData.user || !authData.session?.access_token || !authData.session.refresh_token) {
-        showAdminToast("error", "Credenciais inválidas", "O e-mail ou a senha estão incorretos.");
+      if (!result.success || !result.user || !result.accessToken || !result.refreshToken) {
+        const title = result.kind === "credentials" ? "Credenciais inválidas" : "Acesso negado";
+        showAdminToast("warning", title, result.message || "Não foi possível validar o acesso administrativo.");
         return;
       }
 
-      const adminResult = await resolveAdminRoleFn({
-        data: { accessToken: authData.session.access_token },
-      });
-
-      if (!adminResult.success || !adminResult.user) {
-        await probe.auth.signOut();
-        showAdminToast("warning", "Acesso negado", adminResult.message || "Esta conta não possui papel administrativo ativo.");
-        return;
-      }
-
-      // Store the admin role before activating the shared Supabase session.
-      // The global auth listener will therefore preserve admin/super_admin.
+      // Persist the role before activating the shared Supabase session so the
+      // root auth listener never downgrades an administrator to a client user.
       setSession({
-        id: adminResult.user.id,
-        email: adminResult.user.email || normalizedEmail,
-        name: adminResult.user.name || "Administrador",
-        role: adminResult.user.role,
+        id: result.user.id,
+        email: result.user.email || normalizedEmail,
+        name: result.user.name || "Administrador",
+        role: result.user.role,
         profile: null,
         isLicensed: true,
         licenseStatus: "active",
       });
 
       const { error: sessionError } = await supabase.auth.setSession({
-        access_token: authData.session.access_token,
-        refresh_token: authData.session.refresh_token,
+        access_token: result.accessToken,
+        refresh_token: result.refreshToken,
       });
 
       if (sessionError) {
