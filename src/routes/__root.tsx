@@ -105,6 +105,7 @@ function RootComponent() {
   const location = useLocation();
   const [authChecked, setAuthChecked] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [sessionRole, setSessionRole] = useState<string | null>(null);
   const [needsVerification, setNeedsVerification] = useState(false);
   const [needsLicense, setNeedsLicense] = useState(false);
   const [isOnline, setIsOnline] = useState(true);
@@ -113,12 +114,14 @@ function RootComponent() {
   const checkLicenseStatusFn = useServerFn(checkLicenseStatus);
 
   const isAdminRoute = location.pathname === "/admin" || location.pathname.startsWith("/admin/");
+  const isAdminLoginRoute = location.pathname === "/admin/login";
   const publicRoutes = ["/", "/auth", "/auth/register", "/auth/recover", "/auth/verify", "/terms", "/privacy", "/about", "/tools", "/help"];
   const isPublicRoute = publicRoutes.includes(location.pathname);
-  const showSidebar = !isPublicRoute && !isAdminRoute && isLoggedIn;
+  const isAdminRole = sessionRole === "admin" || sessionRole === "super_admin";
+  const showSidebar = !isPublicRoute && !isAdminRoute && isLoggedIn && !isAdminRole;
 
   const refreshLicenseStatus = async () => {
-    if (!isLoggedIn || !isOnline || isAdminRoute) return;
+    if (!isLoggedIn || !isOnline || isAdminRoute || isAdminRole) return;
     try {
       const result = await checkLicenseStatusFn();
       if (result.success) setNeedsLicense(result.status !== "active");
@@ -150,6 +153,7 @@ function RootComponent() {
     try { await supabase.auth.signOut(); } catch {}
     clearSession();
     setIsLoggedIn(false);
+    setSessionRole(null);
     queryClient.clear();
     window.location.href = "/auth";
   };
@@ -157,6 +161,7 @@ function RootComponent() {
   useEffect(() => {
     const local = normalizeClientSession(getSession());
     setIsLoggedIn(Boolean(local));
+    setSessionRole(local?.role ? String(local.role) : null);
     setNeedsVerification(Boolean(local?.needsVerification));
     setNeedsLicense(Boolean(local && local.licenseStatus !== "active"));
     setAuthChecked(true);
@@ -165,6 +170,7 @@ function RootComponent() {
 
     const cleanupLogout = setupLogoutListener(() => {
       setIsLoggedIn(false);
+      setSessionRole(null);
       queryClient.clear();
       window.location.href = "/auth";
     });
@@ -173,25 +179,29 @@ function RootComponent() {
       if (event === "SIGNED_OUT") {
         if (getSession()) clearSession();
         setIsLoggedIn(false);
+        setSessionRole(null);
         return;
       }
 
       if ((event === "SIGNED_IN" || event === "USER_UPDATED" || event === "TOKEN_REFRESHED") && session?.user) {
         const previous = normalizeClientSession(getSession()) || {};
+        const previousRole = previous?.role ? String(previous.role) : "user";
         const { data: profile } = await supabase.from("profiles").select("*").eq("id", session.user.id).maybeSingle();
         const merged = normalizeClientSession({
           ...previous,
           id: session.user.id,
           email: session.user.email,
+          role: previousRole,
           name: profile?.name || previous.name || session.user.user_metadata?.["name"] || "Usuário",
           profile: { ...(previous.profile || {}), ...(profile || {}) },
           licenseStatus: profile?.license_status || previous.licenseStatus || "pending",
-          isLicensed: profile?.license_status === "active",
+          isLicensed: previousRole === "admin" || previousRole === "super_admin" ? true : profile?.license_status === "active",
         });
         setSession(merged);
         setIsLoggedIn(true);
+        setSessionRole(previousRole);
         setNeedsVerification(!session.user.email_confirmed_at);
-        setNeedsLicense(merged?.licenseStatus !== "active");
+        setNeedsLicense(previousRole === "admin" || previousRole === "super_admin" ? false : merged?.licenseStatus !== "active");
       }
     });
 
@@ -214,21 +224,38 @@ function RootComponent() {
   }, []);
 
   useEffect(() => {
-    if (!isLoggedIn || isAdminRoute) return;
+    if (!authChecked) return;
+
+    if (isLoggedIn && isAdminRole && !isAdminRoute && !isPublicRoute) {
+      window.location.replace("/admin");
+      return;
+    }
+
+    if (isAdminRoute && !isAdminLoginRoute) {
+      if (!isLoggedIn || (sessionRole !== null && !isAdminRole)) {
+        window.location.replace("/admin/login");
+      }
+    }
+  }, [authChecked, isLoggedIn, isAdminRole, isAdminRoute, isAdminLoginRoute, isPublicRoute, sessionRole]);
+
+  useEffect(() => {
+    if (!isLoggedIn || isAdminRoute || isAdminRole) return;
     refreshLicenseStatus();
     const interval = window.setInterval(refreshLicenseStatus, 5 * 60 * 1000);
     return () => window.clearInterval(interval);
-  }, [isLoggedIn, isOnline, isAdminRoute]);
+  }, [isLoggedIn, isOnline, isAdminRoute, isAdminRole]);
 
-  const allowed = isAdminRoute || isPublicRoute || (isLoggedIn && !needsVerification);
+  const allowed = isAdminRoute
+    ? isAdminLoginRoute || (isLoggedIn && isAdminRole)
+    : isPublicRoute || (isLoggedIn && !needsVerification && !isAdminRole);
 
-  if (!authChecked && !isPublicRoute && !isAdminRoute) {
+  if (!authChecked && !isPublicRoute && !isAdminLoginRoute) {
     return <QueryClientProvider client={queryClient}><div className="flex min-h-screen items-center justify-center bg-background"><Loader2 className="size-6 animate-spin text-primary" /></div></QueryClientProvider>;
   }
 
   return (
     <QueryClientProvider client={queryClient}>
-      {!isPublicRoute && (
+      {!isPublicRoute && !isAdminRoute && (
         <div className="fixed bottom-4 right-4 z-[70] md:bottom-6 md:right-6">
           <button type="button" onClick={handleManualSync} className="group flex items-center gap-2 rounded-full border border-border/70 bg-background/88 px-2.5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-muted-foreground shadow-md backdrop-blur transition-opacity hover:opacity-100 md:opacity-70" title="Sincronizar agora">
             {syncStatus === "syncing" ? <Loader2 className="size-3 animate-spin text-primary" /> : <StatusIcon isOnline={isOnline} />}
@@ -247,7 +274,7 @@ function RootComponent() {
               <Outlet />
             </AccessGate>
           </div>
-          {!isPublicRoute && <footer className="mt-auto border-t border-border/60 px-6 py-5 text-center"><p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground/55">Body Métrica FJ · Saúde em contexto</p></footer>}
+          {!isPublicRoute && !isAdminRoute && <footer className="mt-auto border-t border-border/60 px-6 py-5 text-center"><p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground/55">Body Métrica FJ · Saúde em contexto</p></footer>}
         </main>
       </div>
       <Toaster position="top-center" richColors closeButton />
