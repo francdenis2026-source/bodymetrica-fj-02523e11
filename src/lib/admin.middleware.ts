@@ -9,7 +9,7 @@ export const requireAdminAuth = createMiddleware({ type: "function" })
       .from('user_roles')
       .select('role')
       .eq('user_id', context.userId)
-      .in('role', ['admin', 'super_admin']);
+      .in('role', ['admin', 'super_admin'] as any);
 
     const hasAdminRole = !error && (roleData || []).some((row: any) =>
       row?.role === 'admin' || row?.role === 'super_admin'

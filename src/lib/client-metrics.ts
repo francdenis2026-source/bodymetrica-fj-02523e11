@@ -35,7 +35,7 @@ export function addHydration(amount: number): HydrationDay {
   const date = todayKey();
   const history = getHydrationHistory();
   const index = history.findIndex((item) => item.date === date);
-  const current = index >= 0 ? history[index] : { date, totalMl: 0, entries: [] };
+  const current: HydrationDay = (index >= 0 ? history[index] : undefined) ?? { date, totalMl: 0, entries: [] };
   const next: HydrationDay = {
     ...current,
     totalMl: Math.min(current.totalMl + safeAmount, 7000),

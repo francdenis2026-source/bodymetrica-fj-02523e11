@@ -7,11 +7,11 @@ import { Badge } from '@/components/ui/badge';
 export const Route = createFileRoute('/admin/infrastructure')({ component: InfrastructurePage });
 
 function safeProjectId() {
-  return String(import.meta.env.VITE_SUPABASE_PROJECT_ID || 'não configurado');
+  return String(import.meta.env['VITE_SUPABASE_PROJECT_ID'] || 'não configurado');
 }
 
 function safeUrl() {
-  return String(import.meta.env.VITE_SUPABASE_URL || 'não configurada');
+  return String(import.meta.env['VITE_SUPABASE_URL'] || 'não configurada');
 }
 
 function InfrastructurePage() {
