@@ -197,6 +197,15 @@ function AuthPage() {
                   </form></Form>
                   {showRegisterHint && <div className="mt-4 rounded-xl border border-primary/20 bg-primary/5 p-3.5"><div className="flex gap-3"><div className="flex size-8 items-center justify-center rounded-lg bg-primary/10 text-primary"><UserPlus size={16} /></div><div><p className="text-sm font-semibold">Ainda não possui conta?</p><p className="mt-1 text-xs text-muted-foreground">Crie seu cadastro unificado com os dados necessários para suas métricas.</p><Button asChild variant="link" className="h-auto p-0 text-xs"><Link to="/auth/register" search={{ email: registerPrefill } as any}>Criar minha conta <ArrowRight size={13} className="ml-1" /></Link></Button></div></div></div>}
                   <div className="mt-5 flex items-center justify-between border-t border-border pt-5"><div><p className="text-xs font-semibold">Novo por aqui?</p><p className="text-[11px] text-muted-foreground">Cadastre e-mail, CPF e dados de perfil.</p></div><Button asChild variant="outline" size="sm"><Link to="/auth/register" search={{ email: registerPrefill } as any}><UserPlus size={14} className="mr-1.5" />Criar conta</Link></Button></div>
+                  <div className="mt-4 flex items-center justify-center border-t border-border/60 pt-3">
+                    <Link
+                      to="/admin/login"
+                      className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-[11px] font-medium text-muted-foreground/70 transition-colors hover:bg-muted/50 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+                    >
+                      <ShieldCheck size={13} />
+                      Acesso administrativo
+                    </Link>
+                  </div>
                 </>
               )}
             </div>
