@@ -106,3 +106,67 @@ export const authenticateAdmin = createServerFn({ method: "POST" })
       },
     };
   });
+
+const resolveAdminRoleSchema = z.object({
+  accessToken: z.string().min(10),
+});
+
+/**
+ * Resolve the administrative role for an already authenticated session.
+ */
+export const resolveAdminRole = createServerFn({ method: "POST" })
+  .inputValidator((data) => resolveAdminRoleSchema.parse(data))
+  .handler(async ({ data }) => {
+    const SUPABASE_URL = process.env["SUPABASE_URL"] || process.env["VITE_SUPABASE_URL"];
+    const SUPABASE_PUBLISHABLE_KEY =
+      process.env["SUPABASE_PUBLISHABLE_KEY"] || process.env["VITE_SUPABASE_PUBLISHABLE_KEY"];
+
+    if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
+      return { success: false as const, user: null };
+    }
+
+    const userResponse = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
+      headers: {
+        apikey: SUPABASE_PUBLISHABLE_KEY,
+        Authorization: `Bearer ${data.accessToken}`,
+      },
+    }).catch(() => null);
+
+    const userPayload = userResponse && userResponse.ok
+      ? ((await userResponse.json().catch(() => null)) as any)
+      : null;
+
+    if (!userPayload?.id) {
+      return { success: false as const, user: null };
+    }
+
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: roleRows, error } = await supabaseAdmin
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", userPayload.id);
+
+    if (error) {
+      return { success: false as const, user: null };
+    }
+
+    const roles = (roleRows || []).map((row: any) => String(row.role));
+    const role = roles.includes("super_admin")
+      ? ("super_admin" as const)
+      : roles.includes("admin")
+        ? ("admin" as const)
+        : null;
+
+    if (!role) {
+      return { success: true as const, user: null };
+    }
+
+    return {
+      success: true as const,
+      user: {
+        id: String(userPayload.id),
+        email: String(userPayload.email || "").toLowerCase(),
+        role,
+      },
+    };
+  });
