@@ -262,6 +262,10 @@
    of breaking. */
 .landing {
   --landing-gap: clamp(1rem, 2vw, 1.75rem);
+  /* Homepage accent: emerald (health, vitality, performance) over the Deep Night base. */
+  --primary: #34d399;
+  --primary-foreground: #032117;
+  --ring: #34d399;
 }
 
 @media (min-width: 1024px) {

@@ -91,7 +91,10 @@ function AdminControlCenter() {
 
   async function makeKey(minutes: number) {
     const result = await generateKeyFn({ data: { durationMinutes: minutes, tier: keyTier } });
-    if (!result.success || !result.license) return toast.error(result.message || 'Não foi possível gerar a key.');
+    if (!result.success || !result.license) {
+      toast.error(result.message || 'Não foi possível gerar a key.');
+      return;
+    }
     await navigator.clipboard?.writeText(result.license.license_key).catch(() => undefined);
     toast.success(`Key ${KEY_PRESETS.find((p) => p.minutes === minutes)?.label || ''} criada e copiada.`);
     licenses.refetch(); overview.refetch();
@@ -183,8 +186,14 @@ function CustomerDialog({ state, plans, setAccessFn, provisionPaidFn, onClose, o
 
   const save = async () => {
     try {
-      if (!form.name?.trim() || !form.email?.includes('@') || !isValidCpf(form.cpf) || !form.birthDate || !form.goal || !form.activityLevel) return toast.error('Preencha nome, e-mail, CPF válido, nascimento, objetivo e atividade.');
-      if (Number(form.weight) < 25 || Number(form.height) < 100) return toast.error('Confira peso e altura.');
+      if (!form.name?.trim() || !form.email?.includes('@') || !isValidCpf(form.cpf) || !form.birthDate || !form.goal || !form.activityLevel) {
+        toast.error('Preencha nome, e-mail, CPF válido, nascimento, objetivo e atividade.');
+        return;
+      }
+      if (Number(form.weight) < 25 || Number(form.height) < 100) {
+        toast.error('Confira peso e altura.');
+        return;
+      }
       if (state.mode === 'create') {
         await createCustomer({ name: form.name.trim(), email: form.email.trim().toLowerCase(), cpf: normalizeCpf(form.cpf), birthDate: form.birthDate, biologicalSex: form.biologicalSex, goal: form.goal, weight: Number(form.weight), height: Number(form.height), activityLevel: form.activityLevel });
         toast.success('Conta criada. O cliente receberá um e-mail seguro para definir a senha.');
